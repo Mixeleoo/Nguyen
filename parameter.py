@@ -1,0 +1,234 @@
+
+from random import randint
+from tkinter import font
+
+MAX_WIDTH = 1024
+MAX_HEIGHT = 600
+
+CARRE_PAR_LIGNE = 60
+CARRE_PAR_COLONNE = 40
+SPS = 25
+
+HEIGHT_BOTTOM_HUD = 80
+PADY_BOTTOM_HUD = 5
+PADX_BOTTOM_HUD = 5
+SIZE_ACTION_ADDITIONAL_COST_TEXT = 8
+
+PADY_BUILD_CITY_HUD = 10
+PADY_BUILD_CITY_HUD_HIDING = 20
+
+HIGHLIGHT_TAG_INDEX = 0
+TRIGGER_TAG_INDEX = 1
+DRAG_TAG_INDEX = 2
+COLOR_TAG_INDEX = 3
+
+PA = 10
+
+DELTA_MS_ANIMATION = 1000 // 60  # 1000 ms = 1s / 60 (pour avoir 60 images par secondes)
+
+"""
+Sans hiérarchie des tags, il est plus fastidieux de savoir quel élément se comporte comment, alors qu'avec une hiérarchie,
+    on peut regrouper certains comportements, comme le comportement des clickable par exemple, qui auront leur fonction pour
+    les mettre en surbrillance
+
+Hiérarchie des tags:
+                                                      HUD_TAG
+                                      NOTHING_TAG     TEXT_TAG     CLICKABLE_TAG
+                                                  _{id_rectangle}  {tag_function_triggered}
+                                            
+                                            
+                                            
+                                                       MAP_TAG
+                                PLAINE_TAG FOREST_TAG MOUNTAIN_TAG LAKE_TAG VILLAGE_TAG
+                                
+Tags sans hiérarchie (placés à la fin) :
+MAP_SQUARE_TOP_LEFT_TAG
+MAP_SQUARE_BOTTOM_RIGHT_TAG
+HUD_BOTTOM
+HUD_RIGHT_SIDE
+HISTORY_TEXT
+TEXT_PAGE
+TEXT_ACTION
+TEMP_TAG
+"""
+
+# RIEN
+NOTHING_TAG = "NOTHING"
+
+# Hiérarchie MAP
+MAP_TAG = "MAP"
+PLAINE_TAG = "PLAIN"
+FOREST_TAG = "FOREST"
+MOUNTAIN_TAG = "MOUNTAIN"
+LAKE_TAG = "LAKE"
+VILLAGE_TAG = "VILLAGE"
+
+# Tas de tag MAP
+MAP_SQUARE_TOP_LEFT_TAG = "map_square_top_left"
+MAP_SQUARE_BOTTOM_RIGHT_TAG = "map_square_bottom_right"
+
+# Highlight tags
+CLICKABLE_TAG = "CLICKABLE"
+TOGGLEABLE_TAG = "TOGGLEABLE"
+
+# Tas de tags HUD
+TEXT_TAG = "TEXT"
+HUD_BOTTOM = "HUD_BOTTOM"
+HUD_RIGHT_SIDE = "HUD_RIGHT_SIDE"
+HUD_BUILD_CITY = "HUD_BUILD_CITY"
+HUD_BUILD_CHURCH = "HUD_BUILD_CHURCH"
+HUD_EVENT = "HUD_EVENT"
+HUD_BIG_RECTANGLE_BUILD_CITY = "HUD_BIG_RECTANGLE_BUILD_CITY"
+HUD_BIG_RECTANGLE_BUILD_CHURCH = "HUD_BIG_RECTANGLE_BUILD_CHURCH"
+HISTORY_TEXT = "HISTORY_TEXT"
+TEXT_PAGE = "TEXT_PAGE"
+TEXT_NB_IMMIGRANTS = "TEXT_NB_IMMIGRANTS"
+TEXT_ACTION = "TEXT_ACTION"
+TEMP_TAG = "TEMP"
+TEMP_YAUNVILLAGEICIGROS_TAG = "TEMP_YAUNVILLAGEICIGROS"
+TEMP_VILLAGE_INFO_TAG = "TEMP_VILLAGE_INFO"
+PAYSAN_OR_ARTISAN_WINDOW_TAG = "PAYSAN_OR_ARTISAN_WINDOW"
+RECTANGLE_HIDING_TOP_HISTORY_TEXT = "RECTANGLE_HIDING_TOP_HISTORY_TEXT"
+RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT = "RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT"
+MORE_INFO_WINDOW = "MORE_INFO_WINDOW"
+
+# Tag qui trigger les fonctions appropriées
+MORE_INFO_TAG = "MORE_INFO"
+CHANGE_PAGE_MINUS = "CPM"
+CHANGE_PAGE_PLUS = "CPP"
+HIDE_PAGE = "HIDE_PAGE"
+SHOW_PAGE = "SHOW_PAGE"
+HIDE_HISTORY = "HIDE_HISTORY"
+SHOW_HISTORY = "SHOW_HISTORY"
+SCROLLBAR_TAG = "SCROLLBAR_TAG"
+RECTANGLE_ACTION = "RECTANGLE_ACTION"
+BUILD_CITY = "BUILD_CITY"
+CANCEL_BUILD_CITY_TAG = "CANCEL_BUILD_CITY"
+BUILD_CHURCH = "BUILD_CHURCH"
+CANCEL_BUILD_CHURCH = "CANCEL_BUILD_CHURCH"
+IMMIGRATE_TAG = "IMMIGRATE"
+CANCEL_IMMIGRATION_TAG = "CANCEL_IMMIGRATE"
+PLUS_IMMIGRANTS_TAG = "ADD_IMMIGRANTS"
+MINUS_IMMIGRANTS_TAG = "MINUS_IMMIGRANTS"
+OK_EVENT_TAG = "OK_EVENT"
+INFO_EVENT_TAG = "INFO_EVENT"
+PAYSAN_OR_ARTISAN_TAG = "PAYSAN_OR_ARTISAN"
+MOVE_WINDOW = "MOVE_WINDOW"
+CLOSE_MORE_INFO_WINDOW = "CLOSE_MORE_INFO_WINDOW"
+PIN_MORE_INFO_WINDOW = "PIN_MORE_INFO_WINDOW"
+DRAG_CORNER_MORE_INFO_WINDOW_TAG = "DRAG_CORNER_MORE_INFO_WINDOW"
+
+# si
+si = 'si'
+
+
+text_categories = ["text", "PA", "additionalcost"]
+# LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
+ACTION_FOR_YOUR_TURN = [
+    {
+        "text": "Immigration",
+        "PA": "1 PA",
+        "additionalcost": "",
+        "do": PAYSAN_OR_ARTISAN_TAG
+    },
+    {
+        "text": "Construire une église",
+        "PA": "6 PA",
+        "additionalcost": "100 arg, 50 res",
+        "do": BUILD_CHURCH
+    },
+    {
+        "text": "Vassaliser",
+        "PA": "4 PA",
+        "additionalcost": "Y arg, Z res",
+        "do": NOTHING_TAG
+    },
+    {
+        "text": "Construire un village",
+        "PA": "8 PA",
+        "additionalcost": "300 arg, 150 res",
+        "do": BUILD_CITY
+    },
+    {
+        "text": "Impôt",
+        "PA": "5 PA",
+        "additionalcost": "",
+        "do": NOTHING_TAG
+    },
+    {
+        "text": "Recruter soldat",
+        "PA": "2 PA",
+        "additionalcost": "40 arg, 40 res",
+        "do": NOTHING_TAG
+    },
+    {
+        "text": "Déclarer la guerre",
+        "PA": "8 PA",
+        "additionalcost": "100 res",
+        "do": NOTHING_TAG
+    },
+    {
+        "text": "H",
+        "PA": "X PA",
+        "additionalcost": "Y arg, Z res",
+        "do": NOTHING_TAG
+    }
+]
+NB_ACTIONS = len(ACTION_FOR_YOUR_TURN)
+NB_ACTION_PER_PAGE = 2
+
+def rgb_to_hex(r, g, b):
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+def mountain_color():
+    a = randint(120, 200)
+    return rgb_to_hex(a, a, a)
+
+couleurs = {
+    PLAINE_TAG: lambda: rgb_to_hex(randint(63, 139), randint(200, 230), randint(17, 114)),
+    FOREST_TAG: lambda: rgb_to_hex(randint(20, 50), randint(120, 150), randint(20, 50)),
+    MOUNTAIN_TAG: mountain_color,
+    LAKE_TAG: lambda: rgb_to_hex(randint(50 , 127), randint(144, 160), 255)
+}
+
+FILL_ACTION_BOX = "#646464"
+FILL_CANCEL = "#D43353"
+FILL_OK = "#31BC25"
+FILL_INFO = "#266CB6"
+
+fill_brighter = {
+    FILL_ACTION_BOX: "#A5A5A5",
+    FILL_CANCEL: "#DC657C",
+    FILL_OK: "#68E35D",
+    FILL_INFO: "#5397E0"
+}
+
+fill_darker = {
+    FILL_ACTION_BOX: "#474646",
+}
+
+
+def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG, color_tag=FILL_ACTION_BOX):
+    return highlight_tag, trigger_tag, drag_tag, color_tag
+
+ACTION_FOR_VILLAGE = ["{} Villageois", "{} Ressources", "{} Bonheur", "Plus d'info"]
+ACTION_ID_FOR_VILLAGE = [set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG) + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
+ACTION_TEXT_TAG_FOR_VILLAGE = [
+    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
+
+pad_from_borders = 15
+
+def get_width_text(text: str):
+
+    # On récupère la font de base pour calculer la taille des rectangles
+    text_font = font.nametofont("TkDefaultFont")
+
+    # Mesurer la largeur et la hauteur du texte
+    # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
+    return text_font.measure(text) + pad_from_borders
