@@ -30,6 +30,4 @@ class HUDWindowMoreInfoSupervisor:
 
         self.current_group_id += 1
 
-    def get_active_window(self) -> HUDWindowMoreInfo:
-
-        return self.windows[self.canvas.gettags("active")[GROUP_TAG_INDEX]]
+    def get_active_window(self) -> HUDWindowMoreInfo: return self.windows[self.canvas.gettags("active")[GROUP_TAG_INDEX]]

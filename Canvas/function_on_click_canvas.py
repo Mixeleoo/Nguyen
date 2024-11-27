@@ -43,7 +43,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hud_paysan_or_artisan.show
         self.basic_mode_tag_foc[NOTHING_TAG] = lambda e: None
 
-        #test
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.build_city_on_plain
         self.build_city_mode_tag_foc[SHOW_PAGE] = lambda e: None
         self.build_city_mode_tag_foc[CHANGE_PAGE_MINUS] = lambda e: None
