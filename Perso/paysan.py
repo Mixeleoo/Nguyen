@@ -8,4 +8,4 @@ class Paysan(Roturier):
     """
     def __init__(self, pnom: str, pres: int, cdp: int):
         Roturier.__init__(self, pnom, pres, 0, cdp)
-        self._pourcentage_impot = 50
+        self._taux_impot = 0.50

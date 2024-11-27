@@ -10,17 +10,19 @@ class Noble(Personne):
     """
     def __init__(self, pnom: str, pres: int, parg: int):
         Personne.__init__(self, pnom, pres, parg)
-        self._pourcentage_impot = 10
+        self._taux_impot = 0.10
 
         # Les roturiers que possède le noble
         self.liste_roturiers = ListRoturier()
 
     def prend_impot(self):
         """
-        Ajoute aux ressources un pourcentage fixe en fonction de l'impôt auquel sont soumis les roturiers sous ses ordres
+        Ajoute aux ressources du noble les impot perçu pour chaque roturiers sous ses ordres
         """
         for roturier in self.liste_roturiers:
-            self._ressources += roturier.payer_impot()
+            impot_percu = roturier.payer_impot() # recupération du tuple (roturier.argent, roturier.ressources)
+            self._argent += impot_percu[0]
+            self._ressources += impot_percu[1]
 
 
 
@@ -53,5 +55,3 @@ class ListRoturier(list):
 
         else:
             list.append(self, __object)
-
-
