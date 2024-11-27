@@ -182,13 +182,6 @@ class BaseCanvas(HighlightCanvas):
 
         if_temp = (TEMP_TAG,) if is_temp else tuple()
 
-        self.create_text_in_rectangle(
-            x0, y0, x1, y1,
-            text=text,
-            rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, group_tag=hud_tag) + if_temp,
-            text_tags=set_tags() + (TEXT_TAG,) + if_temp, fill=fill, state=state
-        )
-
         if func_triggered:
             for game_mode in for_which_game_mode:
                 if trigger_name in game_mode:
@@ -196,3 +189,10 @@ class BaseCanvas(HighlightCanvas):
 
                 else:
                     self.tag_foc[game_mode][trigger_name] = func_triggered
+
+        return self.create_text_in_rectangle(
+            x0, y0, x1, y1,
+            text=text,
+            rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, group_tag=hud_tag) + if_temp,
+            text_tags=set_tags() + (TEXT_TAG,) + if_temp, fill=fill, state=state
+        )

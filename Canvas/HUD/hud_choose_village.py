@@ -59,7 +59,7 @@ class HUDChooseVillage(HUDMobileABC):
                 x1_cadre + 5,
                 y1_cadre + 5, text, fill=FILL_OK,
                 rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=IMMIGRATE_TAG,
-                                        color_tag=FILL_OK, group_tag=self.tag) + (TEMP_TAG,),
+                                        color_tag=FILL_OK, hud_tag=self.tag) + (TEMP_TAG,),
                 text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
         )
 

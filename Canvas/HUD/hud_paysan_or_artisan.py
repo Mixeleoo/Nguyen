@@ -67,7 +67,7 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text_in_rectangle(
             center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 15, center_x + width_text // 2, y0_cadre + pad_from_borders + 25,
             text="▲",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PLUS_IMMIGRANTS_TAG) + (TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, PLUS_IMMIGRANTS_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             text_font=custom_font,
             state="hidden"
@@ -77,7 +77,7 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text_in_rectangle(
             center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 27, center_x + width_text // 2, y0_cadre + pad_from_borders + 37,
             text="▼",
-            rectangle_tags=set_tags(CLICKABLE_TAG, MINUS_IMMIGRANTS_TAG) + (TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, MINUS_IMMIGRANTS_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             text_font=custom_font,
             state="hidden"
@@ -90,7 +90,7 @@ class HUDPaysanOrArtisan(HUDABC):
                     (x0_cadre + x1_cadre) // 2,
             y1_cadre - 20,
             text="Paysan 1 PA",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG,),
+            rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             state="hidden"
         )
@@ -102,7 +102,7 @@ class HUDPaysanOrArtisan(HUDABC):
             x1_cadre - pad_from_borders,
             y1_cadre - 20,
                     text="Artisan 2 PA",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG,),
+            rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
@@ -115,7 +115,7 @@ class HUDPaysanOrArtisan(HUDABC):
                 x1_cadre + 5,
                 y1_cadre + 5, "OK", fill=FILL_OK,
                 rectangle_tags=set_tags(CLICKABLE_TAG, CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
-                                        color_tag=FILL_OK, group_tag=self.tag) + (TEMP_TAG,),
+                                        color_tag=FILL_OK, hud_tag=self.tag) + (TEMP_TAG,),
                 text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
                 state="hidden"
             )
@@ -127,7 +127,7 @@ class HUDPaysanOrArtisan(HUDABC):
             y1_cadre - 15,
             x0_cadre + 55,
             y1_cadre + 5, "Annuler", fill=FILL_CANCEL,
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_IMMIGRATION_TAG,  color_tag=FILL_CANCEL) + (TEMP_TAG,),
+            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_IMMIGRATION_TAG,  color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             state="hidden"
         )

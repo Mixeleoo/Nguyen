@@ -46,10 +46,16 @@ class HUDABC(ABC):
         pass
 
     def show(self, *args) -> None:
+        """
+        Affiche les éléments de l'HUD
+        """
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="normal")
 
     def hide(self, *args) -> None:
+        """
+        Cache les éléments de l'HUD
+        """
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="hidden")
 
