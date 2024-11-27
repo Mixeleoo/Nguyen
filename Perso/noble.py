@@ -15,6 +15,11 @@ class Noble(Personne):
         # Les roturiers que possède le noble
         self.liste_roturiers = ListRoturier()
 
+        # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
+        self._dico_villages: dict[int: Village] = {}
+        # Liste des soldats sous les ordres du noble
+        self._liste_soldats: list[Soldat] = []
+
     def prend_impot(self):
         """
         Ajoute aux ressources du noble les impot perçu pour chaque roturiers sous ses ordres
@@ -23,10 +28,6 @@ class Noble(Personne):
             impot_percu = roturier.payer_impot() # recupération du tuple (roturier.argent, roturier.ressources)
             self._argent += impot_percu[0]
             self._ressources += impot_percu[1]
-
-            # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
-            self._dico_villages: dict[int: Village] = {}
-            self._liste_soldats: list[Soldat] = []
 
     def creer_village(self, pid: int):
         """
