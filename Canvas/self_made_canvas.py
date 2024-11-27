@@ -4,10 +4,9 @@ import tkinter as tk
 from parameter import *
 from Canvas.function_on_drag_canvas import FunctionOnDragCanvas
 from Canvas.function_on_click_canvas import FunctionOnClickCanvas
-from Canvas.highlight_canvas import HighlightCanvas
 
 
-class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas, HighlightCanvas):
+class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
     def __init__(self, master=None, cnf=None, **kw):
         # C'est PyCharm qui me dit de mettre ça au lieu de cnf={} directement dans les arguments donc...
         if cnf is None:
@@ -17,7 +16,6 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas, HighlightCanva
         tk.font.nametofont("TkDefaultFont").config(size=11)
 
         self.master = master
-
         self.has_mouse_moved = False
 
         # Coordonnées de la souris lors d'un clic (pour initier le déplacement de la map)
@@ -34,7 +32,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas, HighlightCanva
         # Pendant le clic (grâce à la variable self.has_mouse_moved)
         self.bind("<ButtonRelease-1>", self.on_release)  # Relâchement
 
-    #                                               CLIC GAUCHE                                                #
+    #                                               CLIC GAUCHE #
     def on_click_left(self, event: tk.Event) -> None:
 
         self.has_mouse_moved = False
@@ -60,7 +58,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas, HighlightCanva
         # Lancement de l'highlight
         self.tag_highlight[tags[HIGHLIGHT_TAG_INDEX]]()
 
-    #                                          GLISSEMENT CLIC GAUCHE                                          #
+    #                                          GLISSEMENT CLIC GAUCHE                                            #
     def on_drag(self, event: tk.Event) -> None:
 
         self.has_mouse_moved = True
@@ -79,7 +77,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas, HighlightCanva
         # Met à jour la position de départ pour le prochain mouvement
         self.mouse_coor = (event.x, event.y)
 
-    #                                          RELACHEMENT CLIC GAUCHE                                         #
+    #                                          RELACHEMENT CLIC GAUCHE                                           #
     def on_release(self, event: tk.Event) -> None:
 
         tags = self.gettags("active")

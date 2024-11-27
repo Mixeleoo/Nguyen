@@ -33,7 +33,7 @@ class HighlightCanvas(Canvas):
 
         }
 
-        self.radiobuttons = RadiobuttonsSupervisor()
+        self.radiobuttons = RadiobuttonsSupervisor(self)
 
     def highlight_square(self, toward_coor: tuple = None):
         """
@@ -102,4 +102,4 @@ class HighlightCanvas(Canvas):
     def unhighlight_clickable(self): self.itemconfigure("highlight", fill=self.gettags("highlight")[COLOR_TAG_INDEX])
 
     def highlight_toggleable(self):
-        self.radiobuttons.toggle_switch_option(self.gettags("highlight")[4], self.find_withtag("highlight")[0])
+        self.radiobuttons.toggle_switch_option(self.gettags("highlight")[GROUP_TAG_INDEX], self.find_withtag("highlight")[0])

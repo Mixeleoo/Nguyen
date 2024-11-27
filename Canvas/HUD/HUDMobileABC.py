@@ -1,5 +1,4 @@
 
-import tkinter as tk
 from abc import ABC, abstractmethod
 
 from Canvas.base_canvas import BaseCanvas
@@ -17,7 +16,7 @@ class HUDMobileABC(ABC):
         pass
 
     @abstractmethod
-    def create(self):
+    def create(self, *args):
         """
         Méthode d'initialisation de la classe HUD
         """

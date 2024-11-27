@@ -1,6 +1,6 @@
 
-from Canvas.hud_canvas import HUDCanvas
 from parameter import *
+from Canvas.hud_canvas import HUDCanvas
 
 class AnimationCanvas(HUDCanvas):
     def __init__(self, master=None, cnf=None, **kw):

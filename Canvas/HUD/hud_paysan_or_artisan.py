@@ -37,7 +37,7 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_rectangle(
             x0_cadre, y0_cadre, x1_cadre, y1_cadre,
             fill=FILL_ACTION_BOX,
-            tags=set_tags() + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            tags=set_tags() + (TEMP_TAG, self.tag),
             state="hidden"
         )
 
@@ -45,7 +45,7 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text(
             x0_cadre + text_width // 2, y0_cadre + pad_from_borders,
             text=title_text,
-            tags=set_tags() + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            tags=set_tags() + (TEMP_TAG, self.tag),
             state="hidden"
         )
 
@@ -59,7 +59,7 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text(
             center_x - 20, y0_cadre + pad_from_borders + 25,
             text=text,
-            tags=set_tags() + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG, TEXT_NB_IMMIGRANTS),
+            tags=set_tags() + (TEMP_TAG, self.tag, TEXT_NB_IMMIGRANTS),
             state="hidden"
         )
 
@@ -67,8 +67,8 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text_in_rectangle(
             center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 15, center_x + width_text // 2, y0_cadre + pad_from_borders + 25,
             text="▲",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PLUS_IMMIGRANTS_TAG) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            rectangle_tags=set_tags(CLICKABLE_TAG, PLUS_IMMIGRANTS_TAG) + (TEMP_TAG, self.tag),
+            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
             text_font=custom_font,
             state="hidden"
         )
@@ -77,8 +77,8 @@ class HUDPaysanOrArtisan(HUDABC):
         self.canvas.create_text_in_rectangle(
             center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 27, center_x + width_text // 2, y0_cadre + pad_from_borders + 37,
             text="▼",
-            rectangle_tags=set_tags(CLICKABLE_TAG, MINUS_IMMIGRANTS_TAG) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            rectangle_tags=set_tags(CLICKABLE_TAG, MINUS_IMMIGRANTS_TAG) + (TEMP_TAG, self.tag),
+            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
             text_font=custom_font,
             state="hidden"
         )
@@ -90,8 +90,8 @@ class HUDPaysanOrArtisan(HUDABC):
                     (x0_cadre + x1_cadre) // 2,
             y1_cadre - 20,
             text="Paysan 1 PA",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG, self.tag),
+            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
             state="hidden"
         )
 
@@ -102,8 +102,8 @@ class HUDPaysanOrArtisan(HUDABC):
             x1_cadre - pad_from_borders,
             y1_cadre - 20,
                     text="Artisan 2 PA",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (TEMP_TAG, self.tag),
+            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
             state="hidden"
         )
 
@@ -115,9 +115,9 @@ class HUDPaysanOrArtisan(HUDABC):
                 y1_cadre - 15,
                 x1_cadre + 5,
                 y1_cadre + 5, "OK", fill=FILL_OK,
-                rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=IMMIGRATE_TAG,
-                                        color_tag=FILL_OK) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-                text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+                rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
+                                        color_tag=FILL_OK) + (TEMP_TAG, self.tag),
+                text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
                 state="hidden"
             )
         )
@@ -128,8 +128,8 @@ class HUDPaysanOrArtisan(HUDABC):
             y1_cadre - 15,
             x0_cadre + 55,
             y1_cadre + 5, "Annuler", fill=FILL_CANCEL,
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_IMMIGRATION_TAG,  color_tag=FILL_CANCEL) + (TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, PAYSAN_OR_ARTISAN_WINDOW_TAG),
+            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_IMMIGRATION_TAG,  color_tag=FILL_CANCEL) + (TEMP_TAG, self.tag),
+            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag),
             state="hidden"
         )
 
@@ -144,13 +144,19 @@ class HUDPaysanOrArtisan(HUDABC):
 
     def immigrate(self, e=None):
 
-        print(self.canvas.radiobuttons.get_selected_option(self.canvas.gettags(IMMIGRATE_TAG)[4]))
+        choice_made = self.canvas.radiobuttons.get_selected_option(self.canvas.gettags(CHOOSE_VILLAGE_TO_IMMIGRATE_TAG)[GROUP_TAG_INDEX])
 
-        # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici on la construit
-        self.cancel_immigration()
+        if choice_made:
+            self.canvas.hud_choose_village.show()
+
+            # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
+            self.cancel_immigration()
+
+        else:
+            print("T'as pas fait de choix là bro")
 
     def cancel_immigration(self, e=None):
-        self.canvas.radiobuttons.radiobuttons[self.canvas.gettags(IMMIGRATE_TAG)[4]].reset()
+        self.canvas.radiobuttons.radiobuttons[self.canvas.gettags(CHOOSE_VILLAGE_TO_IMMIGRATE_TAG)[GROUP_TAG_INDEX]].reset()
 
         for item_id in self.canvas.find_withtag(PAYSAN_OR_ARTISAN_WINDOW_TAG):
             self.canvas.itemconfigure(item_id, state="hidden")

@@ -15,7 +15,6 @@ class BaseCanvas(HighlightCanvas):
         super().__init__(master, cnf, **kw)
 
         self.custom_font = font.Font(family="Enchanted Land", size=20)
-
         self.references = []
 
     def give_active_tag(self, event: tk.Event) -> None:
@@ -46,7 +45,7 @@ class BaseCanvas(HighlightCanvas):
         self.addtag_withtag("highlight", id_rectangle)
 
     def create_text_in_rectangle(self, x0: int | float, y0: int | float, x1: int | float, y1: int | float, text: str,
-                                 rectangle_tags: tuple[str] = (), text_tags: tuple[str] = (),
+                                 rectangle_tags: tuple[str], text_tags: tuple[str],
                                  fill: str=FILL_ACTION_BOX, text_font: tk.font.Font=None,
                                  state: Literal["normal", "hidden", "disabled"] = "normal", radius: int = 20) -> int:
         """
@@ -131,13 +130,14 @@ class BaseCanvas(HighlightCanvas):
             y1 += SPS
 
         # Ajout des villages aléatoirement
-        for noble in range(4):
+        for noble in range(NB_NOBLE_AU_DEPART):
             square_id = random.choice(self.find_withtag(PLAINE_TAG))
             while self.villages_around(square_id):
                 square_id = random.choice(self.find_withtag(PLAINE_TAG))
 
             tags = list(self.gettags(square_id))
             tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
+            tags.insert(GROUP_TAG_INDEX, f"pvillage_{noble}")
             self.itemconfigure(square_id, fill="orange", tags=tags)
 
         self.addtag(MAP_SQUARE_TOP_LEFT_TAG, "withtag", all_squares_id[0])
