@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from parameter import *
 from Canvas.HUD.HUDMobileABC import HUDMobileABC

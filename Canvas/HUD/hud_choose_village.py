@@ -35,11 +35,11 @@ class HUDChooseVillage(HUDMobileABC):
         center_x = (x0_cadre + x1_cadre) // 2
 
         self.background_rectangle_id = self.canvas.create_rectangle(
-            x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,)
+            x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
         self.canvas.create_text(
-            center_x, y0_cadre + 10, text=title_text, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,)
+            center_x, y0_cadre + 10, text=title_text, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
         # Le seigneur n'a qu'un seul village au début, donc on ne crée qu'une ligne
@@ -47,37 +47,23 @@ class HUDChooseVillage(HUDMobileABC):
             x0_cadre, y0_cadre + 20, x1_cadre, y0_cadre + 60,
             text="village 1",
             rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG), state="hidden"
         )
 
-        text = "OK"
-        text_width = get_width_text(text)
-
-        self.ok_button_id = self.canvas.create_text_in_rectangle(
-                x1_cadre - text_width + 5,
-                y1_cadre - 15,
-                x1_cadre + 5,
-                y1_cadre + 5, text, fill=FILL_OK,
-                rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=IMMIGRATE_TAG,
-                                        color_tag=FILL_OK, hud_tag=self.tag) + (TEMP_TAG,),
-                text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
+        # Bouton OK
+        self.ok_button_id = self.canvas.create_ok_button(
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
+            trigger_name=IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
         self.canvas.radiobuttons.add((village_id,),
             ok_button_id=self.ok_button_id
         )
 
-        text = "Annuler"
-        text_width = get_width_text(text)
-
-        # Annuler bouton
-        self.cancel_button_id = self.canvas.create_text_in_rectangle(
-            x0_cadre - 5,
-            y1_cadre - 15,
-            x0_cadre + text_width - 5,
-            y1_cadre + 5, text, fill=FILL_CANCEL,
-            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
+        # Bouton Annuler
+        self.cancel_button_id = self.canvas.create_cancel_button(
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide,
+            trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
     def replace(self) -> None:

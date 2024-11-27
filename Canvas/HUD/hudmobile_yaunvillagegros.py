@@ -27,7 +27,7 @@ class HUDMobileYaUnVillageGros(HUDMobileABC):
 
         self.canvas.create_polygon(x0_cadre, y0_cadre, x1_cadre, y0_cadre,
                             (village_coords[0] + village_coords[2]) // 2, (village_coords[1] + village_coords[3]) // 2,
-                            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), width=1)
+                            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), width=1, state="hidden")
 
         self.canvas.create_text_in_rectangle(
             x0=x0_cadre,
@@ -36,7 +36,8 @@ class HUDMobileYaUnVillageGros(HUDMobileABC):
             y1=y1_cadre,
             rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text=text
+            text=text,
+            state="hidden"
         )
 
     def replace(self, village_id: int) -> None:

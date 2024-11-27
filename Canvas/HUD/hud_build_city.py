@@ -82,17 +82,9 @@ class HUDBuildCity(HUDABC):
             x0_cadre, y1_cadre - image_height, x1_cadre, y1_cadre - image_height, tags=set_tags(hud_tag=self.tag)
         )
 
-        cancel_width = get_width_text("annuler")
-
-        self.canvas.create_text_in_rectangle(
-            x1_cadre - cancel_width + 10,
-            y1_cadre - 10,
-            x1_cadre + 10,
-            y1_cadre + 10,
-            fill=FILL_CANCEL,
-            text="annuler",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CITY_TAG, color_tag=FILL_CANCEL, hud_tag=self.tag),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,)
+        self.canvas.create_cancel_button(
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
+            trigger_name=CANCEL_BUILD_CITY_TAG
         )
 
     def replace(self, event: tk.Event) -> None:
@@ -110,3 +102,48 @@ class HUDBuildCity(HUDABC):
 
         if self.canvas.coords(HUD_BIG_RECTANGLE_BUILD_CITY)[3] != -PADY_BUILD_CITY_HUD_HIDING:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
+
+    def choose_plain_to_build(self, event: tk.Event):
+        """
+        Uniquement s'il y a la possibilité, on cache les HUD, et on affiche le texte disant : Où voulez-vous construire
+        votre village ? Passage en mode citybuilding mgl
+        """
+        # On eclairci la zone
+        self.canvas.hide_all_permanant_huds()
+
+        # On affiche le rectangle de construction
+        self.show_animation()
+
+        self.canvas.game_mode = "build_city"
+
+    def cancel(self, e=None):
+        self.canvas.show_hidden_permanant_huds()
+
+        self.hide_animation()
+        self.canvas.game_mode = "basic"
+
+    def build_city_on_plain(self, event: tk.Event):
+        """
+        Cette fonction crée un village si le joueur clique sur une plaine qui n'a pas de villages aux alentours.
+        Elle affiche également les HUD qui étaient précédemment affichés avant de construire le village.
+        """
+        # Modifier la case en village
+        square_id = self.canvas.find_withtag("active")[0]
+        village_around_id = self.canvas.villages_around(square_id)
+
+        if village_around_id:
+            self.canvas.hudmobile_yavillagegros.show(village_around_id)
+
+        else:
+            # Même comportement que si on annulait la construction, sauf que là, on construit
+            self.cancel()
+
+            tags = list(self.canvas.gettags(square_id))
+
+            # Comme il y a un nouveau village, il faut update l'HUD qui permet de choisir le village
+            new_option_id = self.canvas.hud_choose_village.add_village_update_HUD("village 2")
+            self.canvas.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)
+
+            # On change son tag de trigger de fonction
+            tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
+            self.canvas.itemconfigure(square_id, fill="orange", tags=tags)

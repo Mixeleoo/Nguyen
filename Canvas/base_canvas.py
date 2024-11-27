@@ -168,31 +168,83 @@ class BaseCanvas(HighlightCanvas):
 
         return village_id
 
-    def create_button(self, x0: int | float, y0: int | float, x1: int | float, y1: int | float, text: str,
-                      hud_tag: str, func_triggered: callable = None, fill: str=FILL_ACTION_BOX,
-                      state: Literal["normal", "hidden", "disabled"] = "normal",
-                      trigger_name: str = NOTHING_TAG, is_temp: bool = False,
-                      for_which_game_mode: tuple[Literal["basic", "build_city", "build_church"]] = ("basic", "build_city", "build_church")):
+    def create_button(
+            self, x0: int | float, y0: int | float, x1: int | float, y1: int | float, text: str,
+            hud_tag: str, text_font=None, func_triggered: callable = None, fill: str = FILL_ACTION_BOX,
+            state: Literal["normal", "hidden", "disabled"] = "normal",
+            trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+    ) -> int:
         """
         Méthode qui créerera un texte sur un rectangle, qui agira comme un bouton :
         - Il est clickable (highlight)
         - Trigger une fonction lorsque clické dessus (trigger_name)
         - Peut être temporaire (is_temp)
         """
+        if text_font is None:
+            text_font = tk.font.nametofont("TkDefaultFont")
 
         if_temp = (TEMP_TAG,) if is_temp else tuple()
 
+        # S'il y a une fonction à attacher au tag
         if func_triggered:
-            for game_mode in for_which_game_mode:
-                if trigger_name in game_mode:
-                    raise TypeError(f"{trigger_name} a déjà une fonction attribuée dans le mode de jeu {game_mode}.")
+            # Pour chaque mode de jeu existant
+            for game_mode in ("basic", "build_city", "build_church"):
 
+                # Si la fonction est censée être trigger durant ce mode de jeu
+                if game_mode in for_which_game_mode:
+
+                    # Si le nom du trigger apparaît dores et déjà dans le dictionnaire, c'est pas bon
+                    if trigger_name in game_mode:
+                        raise TypeError(f"{trigger_name} a déjà une fonction attribuée dans le mode de jeu {game_mode}.")
+
+                    else:
+                        self.tag_foc[game_mode][trigger_name] = func_triggered
+
+                # Sinon ça veut dire qu'il faut attacher lambda e=None: None à ce tag pour le mode de jeu
                 else:
-                    self.tag_foc[game_mode][trigger_name] = func_triggered
+                    self.tag_foc[game_mode][trigger_name] = dummy
 
         return self.create_text_in_rectangle(
             x0, y0, x1, y1,
             text=text,
-            rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, group_tag=hud_tag) + if_temp,
-            text_tags=set_tags() + (TEXT_TAG,) + if_temp, fill=fill, state=state
+            text_font=text_font,
+            rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, hud_tag=hud_tag) + if_temp,
+            text_tags=set_tags(hud_tag=hud_tag) + (TEXT_TAG,) + if_temp, fill=fill, state=state
+        )
+
+    def create_ok_button(
+            self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
+            state: Literal["normal", "hidden", "disabled"] = "normal",
+            trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+    ) -> int:
+        """
+        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
+        Emplacement
+        """
+        text_width = get_width_text("OK")
+
+        return self.create_button(
+            x1_cadre - text_width + 5, y1_cadre - 15, x1_cadre + 5, y1_cadre + 5,
+            text="OK", fill=FILL_OK, hud_tag=hud_tag, func_triggered=func_triggered, state=state,
+            trigger_name=trigger_name, is_temp=is_temp, for_which_game_mode=for_which_game_mode
+        )
+
+    def create_cancel_button(
+            self, x0_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
+            state: Literal["normal", "hidden", "disabled"] = "normal",
+            trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+    ) -> int:
+        """
+        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
+        Emplacement
+        """
+        text_width = get_width_text("Annuler")
+
+        return self.create_button(
+            x0_cadre - 5, y1_cadre - 15, x0_cadre + text_width - 5, y1_cadre + 5,
+            text="Annuler", fill=FILL_CANCEL, hud_tag=hud_tag, func_triggered=func_triggered, state=state,
+            trigger_name=trigger_name, is_temp=is_temp, for_which_game_mode=for_which_game_mode
         )

@@ -1,5 +1,6 @@
 
 import tkinter as tk
+from typing import Literal
 
 from parameter import *
 from Canvas.HUD.HUDABC import HUDABC
@@ -8,6 +9,8 @@ class HUDActions(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
         self.num_page = 1
+
+        self.state: Literal["normal", "hidden"] = "normal"
 
     @property
     def tag(self):
@@ -80,30 +83,36 @@ class HUDActions(HUDABC):
         )
 
         # Bouton pour changer de page (précédente)
-        self.canvas.create_rectangle(
+        self.canvas.create_button(
             x0_cadre + 5,
             y0_cadre - 20,
             x0_cadre + 20,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_MINUS, hud_tag=self.tag)
+            text="◄",  # ►◄↓↑→←▲▼
+            hud_tag=self.tag, func_triggered=self.on_change_page, trigger_name=CHANGE_PAGE_MINUS,
+            for_which_game_mode=("basic",)
         )
 
         # Bouton pour changer de page (suivante)
-        self.canvas.create_rectangle(
+        self.canvas.create_button(
             x0_cadre + 25,
             y0_cadre - 20,
             x0_cadre + 40,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_PLUS, hud_tag=self.tag)
+            text="►",  # ►◄↓↑→←▲▼
+            hud_tag=self.tag, func_triggered=self.on_change_page, trigger_name=CHANGE_PAGE_PLUS,
+            for_which_game_mode=("basic",)
         )
 
         # Bouton pour cacher l'hud du bas
-        self.canvas.create_rectangle(
+        self.canvas.create_button(
             x1_cadre - 20,
             y0_cadre - 20,
             x1_cadre - 5,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, HIDE_PAGE, hud_tag=self.tag)
+            text="▼",
+            hud_tag=self.tag, func_triggered=self.show_or_hide, trigger_name=SHOW_OR_HIDE_PAGE_TAG,
+            for_which_game_mode=("basic",)
         )
 
     def replace(self, event: tk.Event):
@@ -121,19 +130,37 @@ class HUDActions(HUDABC):
 
     def show_animation(self):
         self.canvas.move(self.tag, 0,
-                         -(abs(self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD - self.canvas.coords(HIDE_PAGE)[3]) // 10 + 1))
+                         -(abs(self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD - self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3]) // 10 + 1))
 
-        if self.canvas.coords(HIDE_PAGE)[3] != self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD:
+        if self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3] != self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD:
             self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self):
-        self.canvas.move(self.tag, 0, abs(self.canvas.master.winfo_height() - 5 - self.canvas.coords(SHOW_PAGE)[3]) // 10 + 1)
+        self.canvas.move(self.tag, 0, abs(self.canvas.master.winfo_height() - 5 - self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3]) // 10 + 1)
 
-        if self.canvas.coords(SHOW_PAGE)[3] != self.canvas.master.winfo_height() - 5:
+        if self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3] != self.canvas.master.winfo_height() - 5:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
-    def hide_page(self, e=None): self.hide_show_hud(HIDE_PAGE, SHOW_PAGE, self.hide_animation)
-    def show_page(self, e=None): self.hide_show_hud(SHOW_PAGE, HIDE_PAGE, self.show_animation)
+    def bhide(self):
+        """
+        La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
+        """
+        self.state = "hidden"
+        self.hide_animation()
+
+    def bshow(self):
+        """
+        La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
+        """
+        self.state = "normal"
+        self.show_animation()
+
+    def show_or_hide(self, e=None):
+        if self.state == "normal":
+            self.bhide()
+
+        else:
+            self.bshow()
 
     def on_change_page(self, event: tk.Event):
         # Différienciation entre page précédente (M) et page suivante (P)

@@ -1,5 +1,6 @@
 
 import tkinter as tk
+from typing import Literal
 
 from parameter import *
 from Canvas.HUD.HUDABC import HUDABC
@@ -9,6 +10,7 @@ class HUDHistory(HUDABC):
         super().__init__(canvas)
 
         self.rect_hiding_top_text_id = 0
+        self.state: Literal["normal", "hidden"] = "normal"
 
     @property
     def tag(self):
@@ -33,12 +35,12 @@ class HUDHistory(HUDABC):
         )
 
         # Rectangle pour ranger l'historique
-        self.canvas.create_rectangle(
+        self.canvas.create_button(
             x0_cadre - 20,
             y1_cadre - 20,
             x0_cadre - 5,
             y1_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, HIDE_HISTORY, hud_tag=self.tag)
+            text="►", hud_tag=self.tag, func_triggered=self.show_or_hide, trigger_name=SHOW_OR_HIDE_HISTORY_TAG
         )
 
         # Scrollbar
@@ -57,7 +59,7 @@ class HUDHistory(HUDABC):
 
 
         # to_hide_text_rectangle
-        self.rect_hiding_top_text_id = to_hide_text_rectangle_haut = self.canvas.create_rectangle(
+        self.rect_hiding_top_text_id = self.canvas.create_rectangle(
             x0_cadre + 1,
             y0_cadre + 1,
             x1_cadre,
@@ -73,8 +75,8 @@ class HUDHistory(HUDABC):
             fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag), width=0
         )
 
-        self.canvas.tag_lower(HISTORY_TEXT, to_hide_text_rectangle_haut)
-        self.canvas.tag_lower(to_hide_text_rectangle_haut, to_hide_text_rectangle_bas)
+        self.canvas.tag_lower(HISTORY_TEXT, self.rect_hiding_top_text_id)
+        self.canvas.tag_lower(self.rect_hiding_top_text_id, to_hide_text_rectangle_bas)
 
     def replace(self, event: tk.Event):
         """
@@ -91,16 +93,34 @@ class HUDHistory(HUDABC):
 
     def show_animation(self):
         self.canvas.move(self.tag,
-                         -(abs(self.canvas.master.winfo_width() - 155 - self.canvas.coords(HIDE_HISTORY)[2]) // 10 + 1), 0)
+                         -(abs(self.canvas.master.winfo_width() - 155 - self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2]) // 10 + 1), 0)
 
-        if self.canvas.coords(HIDE_HISTORY)[2] != self.canvas.master.winfo_width() - 155:
+        if self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2] != self.canvas.master.winfo_width() - 155:
             self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self):
-        self.canvas.move(self.tag, abs(self.canvas.master.winfo_width() - 5 - self.canvas.coords(SHOW_HISTORY)[2]) // 10 + 1, 0)
+        self.canvas.move(self.tag, abs(self.canvas.master.winfo_width() - 5 - self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2]) // 10 + 1, 0)
 
-        if self.canvas.coords(SHOW_HISTORY)[2] != self.canvas.master.winfo_width() - 5:
+        if self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2] != self.canvas.master.winfo_width() - 5:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
-    def hide_history(self, e=None): self.hide_show_hud(HIDE_HISTORY, SHOW_HISTORY, self.hide_animation)
-    def show_history(self, e=None): self.hide_show_hud(SHOW_HISTORY, HIDE_HISTORY, self.show_animation)
+    def bhide(self):
+        """
+        La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
+        """
+        self.state = "hidden"
+        self.hide_animation()
+
+    def bshow(self):
+        """
+        La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
+        """
+        self.state = "normal"
+        self.show_animation()
+
+    def show_or_hide(self, e=None):
+        if self.state == "normal":
+            self.bhide()
+
+        else:
+            self.bshow()

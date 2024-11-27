@@ -84,7 +84,6 @@ HUD_BUILD_CITY = "HUD_BUILD_CITY"
 HUD_BUILD_CHURCH = "HUD_BUILD_CHURCH"
 HUD_EVENT = "HUD_EVENT"
 HUD_BIG_RECTANGLE_BUILD_CITY = "HUD_BIG_RECTANGLE_BUILD_CITY"
-HUD_BIG_RECTANGLE_BUILD_CHURCH = "HUD_BIG_RECTANGLE_BUILD_CHURCH"
 HISTORY_TEXT = "HISTORY_TEXT"
 TEXT_PAGE = "TEXT_PAGE"
 TEXT_NB_IMMIGRANTS = "TEXT_NB_IMMIGRANTS"
@@ -100,10 +99,8 @@ CHOOSE_VILLAGE_TAG = "CHOOSE_VILLAGE"
 MORE_INFO_TAG = "MORE_INFO"
 CHANGE_PAGE_MINUS = "CPM"
 CHANGE_PAGE_PLUS = "CPP"
-HIDE_PAGE = "HIDE_PAGE"
-SHOW_PAGE = "SHOW_PAGE"
-HIDE_HISTORY = "HIDE_HISTORY"
-SHOW_HISTORY = "SHOW_HISTORY"
+SHOW_OR_HIDE_PAGE_TAG = "SHOW_OR_HIDE_PAGE"
+SHOW_OR_HIDE_HISTORY_TAG = "SHOW_OR_HIDE_HISTORY"
 SCROLLBAR_TAG = "SCROLLBAR_TAG"
 RECTANGLE_ACTION = "RECTANGLE_ACTION"
 BUILD_CITY = "BUILD_CITY"
@@ -217,17 +214,6 @@ fill_darker = {
 def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG, color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
     return highlight_tag, trigger_tag, drag_tag, color_tag, hud_tag, group_tag
 
-ACTION_FOR_VILLAGE = ["{} Villageois", "{} Ressources", "{} Bonheur", "Plus d'info"]
-ACTION_ID_FOR_VILLAGE = [set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
-                         set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
-                         set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
-                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG, hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,)]
-ACTION_TEXT_TAG_FOR_VILLAGE = [
-    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-    set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
-
 pad_from_borders = 15
 
 def get_width_text(text: str):
@@ -294,3 +280,6 @@ noms = [
 
 def nom_aleatoire():
     return choice([noms])
+
+def dummy(*args):
+    pass
