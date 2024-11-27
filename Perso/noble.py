@@ -15,6 +15,11 @@ class Noble(Personne):
         # Les roturiers que possède le noble
         self.liste_roturiers = ListRoturier()
 
+        # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
+        self._dico_villages: dict[int: Village] = {}
+        # Liste des soldats sous les ordres du noble
+        self._liste_soldats: list[Soldat] = []
+
     def prend_impot(self):
         """
         Ajoute aux ressources du noble les impot perçu pour chaque roturiers sous ses ordres
@@ -23,6 +28,27 @@ class Noble(Personne):
             impot_percu = roturier.payer_impot() # recupération du tuple (roturier.argent, roturier.ressources)
             self._argent += impot_percu[0]
             self._ressources += impot_percu[1]
+
+    def creer_village(self, pid: int):
+        """
+        Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
+        """
+        nom = nom_aleatoire()
+        self._dico_villages[pid] = Village(pid, nom, self._nom)
+
+    def nourrir_soldats(self):
+        """
+        Retourne 0 si le seigneur a assez de ressources pour nourrir ses soldats
+        Retourne le nombre de ressources manquantes sinon (ce sera le nombre de soldats qui seront morts de faim)
+        """
+        deces = 0
+        nb_soldats = len(self._liste_soldats)  # effectif armée
+
+        if self._ressources < nb_soldats:
+            deces = nb_soldats - self._ressources
+            self._liste_soldats = self._liste_soldats[:self._ressources]
+
+        return deces
 
 
 
