@@ -8,6 +8,8 @@ class HUDMobileVillageInfo(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        self.more_info_button_id = 0
+
     @property
     def tag(self):
         return TEMP_VILLAGE_INFO_TAG
@@ -16,11 +18,13 @@ class HUDMobileVillageInfo(HUDMobileABC):
 
         largeur = 120
 
+        last_item_id = 0
+
         # Affichage du rectangle
         for categorie_i in range(len(ACTION_FOR_VILLAGE)):
             categorie_i_dim = categorie_i * 40
 
-            self.canvas.create_text_in_rectangle(
+            last_item_id = self.canvas.create_text_in_rectangle(
                 x0=0,
                 y0=categorie_i_dim,
                 x1=largeur,
@@ -32,6 +36,8 @@ class HUDMobileVillageInfo(HUDMobileABC):
                 state="hidden"
             )
 
+        self.more_info_button_id = last_item_id
+
     def replace(self, event: tk.Event) -> None:
 
         dx = event.x - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[0])[0]
@@ -39,7 +45,6 @@ class HUDMobileVillageInfo(HUDMobileABC):
 
         # Si le rectangle dépasse la longueur de la fenêtre par le bas, l'afficher par le haut
         if event.y + 160 > self.canvas.master.winfo_height():
-            print(self.canvas.gettags(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[-2]))
             dy = event.y - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[-2])[3]
 
         # Si le rectangle dépasse la longueur de la fenêtre par le bas, l'afficher par le haut
@@ -47,6 +52,13 @@ class HUDMobileVillageInfo(HUDMobileABC):
             dx = event.x - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[0])[2]
 
         self.canvas.move(TEMP_VILLAGE_INFO_TAG, dx, dy)
+
+        active_village_tags = self.canvas.gettags("active")
+
+        tags = list(self.canvas.gettags(self.more_info_button_id))
+        tags[GROUP_TAG_INDEX] = active_village_tags[GROUP_TAG_INDEX]
+
+        self.canvas.itemconfigure(self.more_info_button_id, tags=tags)
 
         for item_id in self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG):
             self.canvas.itemconfigure(item_id, state="normal")

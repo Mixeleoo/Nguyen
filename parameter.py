@@ -1,5 +1,5 @@
 
-from random import randint
+from random import randint, choice
 from tkinter import font
 
 MAX_WIDTH = 1024
@@ -21,10 +21,14 @@ HIGHLIGHT_TAG_INDEX = 0
 TRIGGER_TAG_INDEX = 1
 DRAG_TAG_INDEX = 2
 COLOR_TAG_INDEX = 3
+GROUP_TAG_INDEX = 4
 
 PA = 10
 
 DELTA_MS_ANIMATION = 1000 // 60  # 1000 ms = 1s / 60 (pour avoir 60 images par secondes)
+
+# UNIQUEMENT POUR LES TESTS
+NB_NOBLE_AU_DEPART = 4
 
 """
 Sans hiérarchie des tags, il est plus fastidieux de savoir quel élément se comporte comment, alors qu'avec une hiérarchie,
@@ -91,6 +95,7 @@ PAYSAN_OR_ARTISAN_WINDOW_TAG = "PAYSAN_OR_ARTISAN_WINDOW"
 RECTANGLE_HIDING_TOP_HISTORY_TEXT = "RECTANGLE_HIDING_TOP_HISTORY_TEXT"
 RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT = "RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT"
 MORE_INFO_WINDOW = "MORE_INFO_WINDOW"
+CHOOSE_VILLAGE_TAG = "CHOOSE_VILLAGE"
 
 # Tag qui trigger les fonctions appropriées
 MORE_INFO_TAG = "MORE_INFO"
@@ -106,6 +111,7 @@ BUILD_CITY = "BUILD_CITY"
 CANCEL_BUILD_CITY_TAG = "CANCEL_BUILD_CITY"
 BUILD_CHURCH = "BUILD_CHURCH"
 CANCEL_BUILD_CHURCH = "CANCEL_BUILD_CHURCH"
+CHOOSE_VILLAGE_TO_IMMIGRATE_TAG = "CHOOSE_VILLAGE_TO_IMMIGRATE"
 IMMIGRATE_TAG = "IMMIGRATE"
 CANCEL_IMMIGRATION_TAG = "CANCEL_IMMIGRATE"
 PLUS_IMMIGRANTS_TAG = "ADD_IMMIGRANTS"
@@ -117,6 +123,7 @@ MOVE_WINDOW = "MOVE_WINDOW"
 CLOSE_MORE_INFO_WINDOW = "CLOSE_MORE_INFO_WINDOW"
 PIN_MORE_INFO_WINDOW = "PIN_MORE_INFO_WINDOW"
 DRAG_CORNER_MORE_INFO_WINDOW_TAG = "DRAG_CORNER_MORE_INFO_WINDOW"
+CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG = "CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE"
 
 # si
 si = 'si'
@@ -212,10 +219,10 @@ def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHIN
     return highlight_tag, trigger_tag, drag_tag, color_tag
 
 ACTION_FOR_VILLAGE = ["{} Villageois", "{} Ressources", "{} Bonheur", "Plus d'info"]
-ACTION_ID_FOR_VILLAGE = [set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags() + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG) + (TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
+ACTION_ID_FOR_VILLAGE = [set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
+                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG) + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
 ACTION_TEXT_TAG_FOR_VILLAGE = [
     set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
     set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
@@ -232,3 +239,59 @@ def get_width_text(text: str):
     # Mesurer la largeur et la hauteur du texte
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
+
+noms = [
+    "Lande-Cendrée",
+    "Bois-Ruiné",
+    "Gorgemort",
+    "Ombrecombe",
+    "Rochebrèche",
+    "Val-Silencieux",
+    "Tertre-Vaillant",
+    "Creux-du-Déchu",
+    "Abîmeclair",
+    "Couronne-Froide",
+    "Haute-Désolation",
+    "Fosse-du-Purgé",
+    "Larmes-Grises",
+    "Tourbe-Sombre",
+    "Havre-Funèbre",
+    "Sépultroc",
+    "Pointe-Flétrie",
+    "Nécroval",
+    "Cime-Morne",
+    "Pierrefeu",
+    "Flammecreuse",
+    "Aube-Délétère",
+    "Brise-Ombre",
+    "Chant-du-Vide",
+    "Fanal-Terreux",
+    "Ravin-Spectral",
+    "Monts-Saignants",
+    "Graviombre",
+    "Givreclair",
+    "Linceul-de-Vers",
+    "Halte-Pâle",
+    "Grondeval",
+    "Terre-Fumante",
+    "Veine-Sanguine",
+    "Pic-du-Vernis",
+    "Grotte-des-Lamentations",
+    "Vent-Glacial",
+    "Clairière-Creuse",
+    "Failles-Grondantes",
+    "Rive-Austère",
+    "Fort-Plaie",
+    "Brasier-Cinéraire",
+    "Cœur-Brisé",
+    "Plaine-Hurlante",
+    "Bastion-Froid",
+    "Détroit-du-Malheur",
+    "Aiguilles-Mortelles",
+    "Hauts-Rendus",
+    "Lac-Sépia",
+    "Fond-du-Désespoir"
+]
+
+def nom_aleatoire():
+    return choice([noms])

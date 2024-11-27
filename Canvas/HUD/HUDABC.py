@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 import tkinter as tk
 
 from parameter import *
-from Canvas.base_canvas import BaseCanvas
+from Canvas.hud_canvas import HUDCanvas
 
 class HUDABC(ABC):
-    def __init__(self, canvas: BaseCanvas):
+    def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas
 
     @property

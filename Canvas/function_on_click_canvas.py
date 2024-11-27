@@ -1,8 +1,8 @@
 
 import tkinter as tk
 
-from Canvas.animation_canvas import AnimationCanvas
 from parameter import *
+from Canvas.animation_canvas import AnimationCanvas
 
 
 class FunctionOnClickCanvas(AnimationCanvas):
@@ -22,23 +22,25 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc = {
             PLAINE_TAG: lambda e: None,
             VILLAGE_TAG: self.hudmobile_village_info.show,
-            MORE_INFO_TAG: self.hudmobile_more_info.show,
+            MORE_INFO_TAG: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().show(),
             CHANGE_PAGE_MINUS: self.hud_actions.on_change_page,
             CHANGE_PAGE_PLUS: self.hud_actions.on_change_page,
-            HIDE_PAGE: self.hud_actions.hide_animation,
-            SHOW_PAGE: self.hud_actions.show_animation,
-            HIDE_HISTORY: self.hud_history.hide_animation,
-            SHOW_HISTORY: self.hud_history.show_animation,
+            HIDE_PAGE: self.hud_actions.hide_page,
+            SHOW_PAGE: self.hud_actions.show_page,
+            HIDE_HISTORY: self.hud_history.hide_history,
+            SHOW_HISTORY: self.hud_history.show_history,
             BUILD_CITY: self.build_city,
             BUILD_CHURCH: self.build_church,
-            IMMIGRATE_TAG: self.hud_paysan_or_artisan.immigrate,
+            CHOOSE_VILLAGE_TO_IMMIGRATE_TAG: self.hud_paysan_or_artisan.immigrate,
             CANCEL_IMMIGRATION_TAG: self.hud_paysan_or_artisan.cancel_immigration,
+            IMMIGRATE_TAG: self.hud_choose_village.immigrate,
+            CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG: self.hud_choose_village.hide,
             PLUS_IMMIGRANTS_TAG: self.hud_paysan_or_artisan.plus_immigrants,
             MINUS_IMMIGRANTS_TAG: self.hud_paysan_or_artisan.minus_immigrants,
-            CLOSE_MORE_INFO_WINDOW: self.hudmobile_more_info.hide,
-            PIN_MORE_INFO_WINDOW: self.pin_more_info_window,
+            CLOSE_MORE_INFO_WINDOW: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().hide(),
+            PIN_MORE_INFO_WINDOW: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().pin(),
             OK_EVENT_TAG: self.hud_event.hide,
-            INFO_EVENT_TAG: self.hudmobile_more_info.show,
+            INFO_EVENT_TAG: lambda e: None,
             PAYSAN_OR_ARTISAN_TAG: self.hud_paysan_or_artisan.show,
             NOTHING_TAG: lambda e: None
         }
@@ -106,10 +108,13 @@ class FunctionOnClickCanvas(AnimationCanvas):
             self.hudmobile_yavillagegros.show(village_around_id)
 
         else:
-            # Même comportement que si on annulait la construction, sauf que là on construit
+            # Même comportement que si on annulait la construction, sauf que là, on construit
             self.cancel_build_city()
 
             tags = list(self.gettags(square_id))
+
+            # Comme il y a un nouveau village, il faut update l'HUD qui permet de choisir le village
+            self.hud_choose_village.add_village_update_HUD("village 2")
 
             # On change son tag de trigger de fonction
             tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
@@ -151,14 +156,3 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.cancel_build_church()
 
         print("TU AS CONSTRUIT UNE EGLISE GG")
-
-    def pin_more_info_window(self, event: tk.Event):
-        if TEMP_TAG in self.gettags(CLOSE_MORE_INFO_WINDOW):
-            # On empêche de unhighlight l'objet
-            self.dtag("highlight", "highlight")
-
-            # La fenêtre ne devient plus temporaire
-            self.dtag(MORE_INFO_WINDOW, TEMP_TAG)
-
-        else:
-            self.addtag_withtag(TEMP_TAG, MORE_INFO_WINDOW)
