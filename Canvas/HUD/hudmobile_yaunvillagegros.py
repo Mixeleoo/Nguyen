@@ -27,15 +27,15 @@ class HUDMobileYaUnVillageGros(HUDMobileABC):
 
         self.canvas.create_polygon(x0_cadre, y0_cadre, x1_cadre, y0_cadre,
                             (village_coords[0] + village_coords[2]) // 2, (village_coords[1] + village_coords[3]) // 2,
-                            fill=FILL_ACTION_BOX, tags=set_tags() + (TEMP_TAG, TEMP_YAUNVILLAGEICIGROS_TAG), width=1)
+                            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), width=1)
 
         self.canvas.create_text_in_rectangle(
             x0=x0_cadre,
             y0=y0_cadre,
             x1=x1_cadre,
             y1=y1_cadre,
-            rectangle_tags=set_tags() + (TEMP_TAG, TEMP_YAUNVILLAGEICIGROS_TAG),
-            text_tags=set_tags() + (TEMP_TAG, TEMP_YAUNVILLAGEICIGROS_TAG),
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             text=text
         )
 

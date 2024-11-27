@@ -66,11 +66,11 @@ class RadiobuttonsSupervisor:
 
         for item_id in radiobutton_items_id:
             tags = list(self.canvas.gettags(item_id))
-            tags.insert(4, group_tag)
+            tags[GROUP_TAG_INDEX] = group_tag
             self.canvas.itemconfigure(item_id, tags=tags)
 
         tags = list(self.canvas.gettags(ok_button_id))
-        tags.insert(GROUP_TAG_INDEX, group_tag)
+        tags[GROUP_TAG_INDEX] = group_tag
         self.canvas.itemconfigure(ok_button_id, tags=tags)
 
     def toggle_switch_option(self, group_tag: str, option_id: int):
@@ -85,6 +85,6 @@ class RadiobuttonsSupervisor:
         Pour cela, il suffit juste d'ajouter un tag qui regroupera l'option avec le reste.
         """
         tags = list(self.canvas.gettags("active"))
-        tags[GROUP_TAG_INDEX]
+        tags[GROUP_TAG_INDEX] = group_tag
 
-        self.radiobuttons[group_tag].add(option_id)
+        self.canvas.itemconfigure(option_id, tags=tags)

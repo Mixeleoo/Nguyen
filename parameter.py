@@ -21,7 +21,8 @@ HIGHLIGHT_TAG_INDEX = 0
 TRIGGER_TAG_INDEX = 1
 DRAG_TAG_INDEX = 2
 COLOR_TAG_INDEX = 3
-GROUP_TAG_INDEX = 4
+HUD_TAG_INDEX = 4
+GROUP_TAG_INDEX = 5
 
 PA = 10
 
@@ -92,8 +93,6 @@ TEMP_TAG = "TEMP"
 TEMP_YAUNVILLAGEICIGROS_TAG = "TEMP_YAUNVILLAGEICIGROS"
 TEMP_VILLAGE_INFO_TAG = "TEMP_VILLAGE_INFO"
 PAYSAN_OR_ARTISAN_WINDOW_TAG = "PAYSAN_OR_ARTISAN_WINDOW"
-RECTANGLE_HIDING_TOP_HISTORY_TEXT = "RECTANGLE_HIDING_TOP_HISTORY_TEXT"
-RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT = "RECTANGLE_HIDING_BOTTOM_HISTORY_TEXT"
 MORE_INFO_WINDOW = "MORE_INFO_WINDOW"
 CHOOSE_VILLAGE_TAG = "CHOOSE_VILLAGE"
 
@@ -215,14 +214,14 @@ fill_darker = {
 }
 
 
-def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG, color_tag=FILL_ACTION_BOX):
-    return highlight_tag, trigger_tag, drag_tag, color_tag
+def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG, color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
+    return highlight_tag, trigger_tag, drag_tag, color_tag, hud_tag, group_tag
 
 ACTION_FOR_VILLAGE = ["{} Villageois", "{} Ressources", "{} Bonheur", "Plus d'info"]
-ACTION_ID_FOR_VILLAGE = [set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags() + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
-                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG) + ("", TEMP_TAG, TEMP_VILLAGE_INFO_TAG)]
+ACTION_ID_FOR_VILLAGE = [set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
+                         set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
+                         set_tags(hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,),
+                         set_tags(CLICKABLE_TAG, MORE_INFO_TAG, hud_tag=TEMP_VILLAGE_INFO_TAG) + (TEMP_TAG,)]
 ACTION_TEXT_TAG_FOR_VILLAGE = [
     set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),
     set_tags() + (TEXT_TAG, TEMP_TAG, TEMP_VILLAGE_INFO_TAG),

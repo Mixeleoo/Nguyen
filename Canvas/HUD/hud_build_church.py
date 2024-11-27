@@ -29,7 +29,7 @@ class HUDBuildChurch(HUDABC):
         y1_cadre = -PADY_BUILD_CITY_HUD_HIDING
 
         self.canvas.create_rectangle(x0_cadre, y0_cadre, x1_cadre, y1_cadre,
-                              fill="#cccc00", tags=set_tags() + (HUD_BIG_RECTANGLE_BUILD_CHURCH, HUD_BUILD_CHURCH,))
+                              fill="#cccc00", tags=set_tags(hud_tag=self.tag) + (HUD_BIG_RECTANGLE_BUILD_CHURCH,))
 
         original_image = Image.open("eglise vitrail.png")
 
@@ -46,13 +46,13 @@ class HUDBuildChurch(HUDABC):
         # Image d'en haut
         self.canvas.create_image(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2,
-            image=ref, tags=set_tags() + (HUD_BUILD_CHURCH,)
+            image=ref, tags=set_tags(hud_tag=self.tag)
         )
 
         self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2,
             text=text,
-            tags=set_tags() + (HUD_BUILD_CHURCH,),
+            tags=set_tags(hud_tag=self.tag),
             fill="white"
         )
 
@@ -65,8 +65,8 @@ class HUDBuildChurch(HUDABC):
             y1_cadre + 10,
             fill=FILL_CANCEL,
             text="annuler",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CHURCH, color_tag=FILL_CANCEL) + (HUD_BUILD_CHURCH,),
-            text_tags=set_tags() + (TEXT_TAG, HUD_BUILD_CHURCH,)
+            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CHURCH, color_tag=FILL_CANCEL, hud_tag=self.tag),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,)
         )
 
     def replace(self, event: tk.Event) -> None:

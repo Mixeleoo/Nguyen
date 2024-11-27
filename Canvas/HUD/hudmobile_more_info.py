@@ -29,8 +29,8 @@ class HUDMobileMoreInfo(HUDMobileABC):
             x0=x0_cadre, y0=y0_cadre + 20, x1=x1_cadre, y1=y1_cadre,
             fill=FILL_ACTION_BOX,
             text="Toutes les infos du villages (ou pas)",
-            rectangle_tags=set_tags() + (MORE_INFO_WINDOW, TEMP_TAG,),
-            text_tags=set_tags() + (MORE_INFO_WINDOW, TEMP_TAG,),
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden"
         )
 
@@ -42,8 +42,8 @@ class HUDMobileMoreInfo(HUDMobileABC):
             y1=y0_cadre + 20,
             fill=FILL_CANCEL,
             text="x",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL) + (MORE_INFO_WINDOW, TEMP_TAG,),
-            text_tags=set_tags() + (MORE_INFO_WINDOW, TEXT_TAG, TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
 
@@ -55,8 +55,8 @@ class HUDMobileMoreInfo(HUDMobileABC):
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
             text="pin",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW) + (MORE_INFO_WINDOW, TEMP_TAG,),
-            text_tags=set_tags() + (MORE_INFO_WINDOW, TEXT_TAG, TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
 
@@ -67,7 +67,7 @@ class HUDMobileMoreInfo(HUDMobileABC):
             x1_cadre - 40,
             y0_cadre + 20,
             fill=FILL_ACTION_BOX,
-            tags=set_tags(drag_tag=MOVE_WINDOW) + (MORE_INFO_WINDOW, TEMP_TAG,),
+            tags=set_tags(drag_tag=MOVE_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden"
         )
 
@@ -82,7 +82,7 @@ class HUDMobileMoreInfo(HUDMobileABC):
                     [x0_cadre, x1_cadre][i] + 5,
                     [y0_cadre, y1_cadre][j] + 5,
                     fill=FILL_ACTION_BOX,
-                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG) + (MORE_INFO_WINDOW, TEMP_TAG,),
+                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG, hud_tag=self.tag) + (TEMP_TAG,),
                     state="hidden"
                 )
 

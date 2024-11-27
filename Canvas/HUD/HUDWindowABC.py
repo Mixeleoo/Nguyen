@@ -40,8 +40,8 @@ class HUDWindowABC(HUDMobileABC, ABC):
             x0=x0_cadre, y0=y0_cadre + 20, x1=x1_cadre, y1=y1_cadre,
             fill=FILL_ACTION_BOX,
             text=self.text,
-            rectangle_tags=set_tags() + (self.tag, TEMP_TAG,),
-            text_tags=set_tags() + (self.tag, TEMP_TAG,),
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden"
         )
 
@@ -53,8 +53,8 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             fill=FILL_CANCEL,
             text="x",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL) + (self.tag, TEMP_TAG,),
-            text_tags=set_tags() + (self.tag, TEXT_TAG, TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
 
@@ -66,8 +66,8 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
             text="⌂",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW) + (self.tag, TEMP_TAG,),
-            text_tags=set_tags() + (self.tag, TEXT_TAG, TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
 
@@ -78,8 +78,8 @@ class HUDWindowABC(HUDMobileABC, ABC):
             x1=x1_cadre - 40,
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
-            rectangle_tags=set_tags(drag_tag=MOVE_WINDOW) + (self.tag, TEMP_TAG,),
-            text_tags=set_tags() + (self.tag, TEXT_TAG, TEMP_TAG,),
+            rectangle_tags=set_tags(drag_tag=MOVE_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             text=self.tag,
             state="hidden"
         )
@@ -95,7 +95,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
                     [x0_cadre, x1_cadre][i] + 5,
                     [y0_cadre, y1_cadre][j] + 5,
                     fill=FILL_ACTION_BOX,
-                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG) + (self.tag, TEMP_TAG,),
+                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG, hud_tag=self.tag) + (TEMP_TAG,),
                     state="hidden"
                 )
 

@@ -17,6 +17,16 @@ class BaseCanvas(HighlightCanvas):
         self.custom_font = font.Font(family="Enchanted Land", size=20)
         self.references = []
 
+        self.basic_mode_tag_foc = {}
+        self.build_city_mode_tag_foc = {}
+        self.build_church_mode_tag_foc = {}
+
+        self.tag_foc = {
+            "basic": self.basic_mode_tag_foc,
+            "build_city": self.build_city_mode_tag_foc,
+            "build_church": self.build_church_mode_tag_foc
+        }
+
     def give_active_tag(self, event: tk.Event) -> None:
         """
         Si le current est un texte, alors on donne le tag "active" au rectangle en dessous
@@ -157,3 +167,32 @@ class BaseCanvas(HighlightCanvas):
                 village_id = square_id + square_around_id
 
         return village_id
+
+    def create_button(self, x0: int | float, y0: int | float, x1: int | float, y1: int | float, text: str,
+                      hud_tag: str, func_triggered: callable = None, fill: str=FILL_ACTION_BOX,
+                      state: Literal["normal", "hidden", "disabled"] = "normal",
+                      trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+                      for_which_game_mode: tuple[Literal["basic", "build_city", "build_church"]] = ("basic", "build_city", "build_church")):
+        """
+        Méthode qui créerera un texte sur un rectangle, qui agira comme un bouton :
+        - Il est clickable (highlight)
+        - Trigger une fonction lorsque clické dessus (trigger_name)
+        - Peut être temporaire (is_temp)
+        """
+
+        if_temp = (TEMP_TAG,) if is_temp else tuple()
+
+        self.create_text_in_rectangle(
+            x0, y0, x1, y1,
+            text=text,
+            rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, group_tag=hud_tag) + if_temp,
+            text_tags=set_tags() + (TEXT_TAG,) + if_temp, fill=fill, state=state
+        )
+
+        if func_triggered:
+            for game_mode in for_which_game_mode:
+                if trigger_name in game_mode:
+                    raise TypeError(f"{trigger_name} a déjà une fonction attribuée dans le mode de jeu {game_mode}.")
+
+                else:
+                    self.tag_foc[game_mode][trigger_name] = func_triggered

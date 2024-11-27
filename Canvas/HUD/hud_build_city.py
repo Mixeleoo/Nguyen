@@ -31,13 +31,13 @@ class HUDBuildCity(HUDABC):
         self.canvas.create_rectangle(
             x0_cadre, y0_cadre, x1_cadre, y1_cadre,
             fill="#cccc00",
-            tags=set_tags() + (HUD_BIG_RECTANGLE_BUILD_CITY, HUD_BUILD_CITY,)
+            tags=set_tags(hud_tag=self.tag) + (HUD_BIG_RECTANGLE_BUILD_CITY,)
         )
 
         self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2,
             text=text,
-            tags=set_tags() + (HUD_BUILD_CITY,)
+            tags=set_tags(hud_tag=self.tag)
         )
 
         original_image = Image.open("banderoletravaux.png")
@@ -61,25 +61,25 @@ class HUDBuildCity(HUDABC):
         # Image d'en haut
         self.canvas.create_image(
             image_width // 2 + x0_cadre + 1, image_height // 2 + y0_cadre + 1,
-            image=ref, tags=set_tags() + (HUD_BUILD_CITY,)
+            image=ref, tags=set_tags(hud_tag=self.tag)
         )
 
         # Image d'en bas
         self.canvas.create_image(
             image_width // 2 + x0_cadre + 1, -image_height // 2 + y1_cadre,
-            image=ref, tags=set_tags() + (HUD_BUILD_CITY,)
+            image=ref, tags=set_tags(hud_tag=self.tag)
         )
 
         self.canvas.references += [ref]
 
         # Juste pour le côté graphique
         self.canvas.create_line(
-            x0_cadre, y0_cadre + image_height, x1_cadre, y0_cadre + image_height, tags=set_tags() + (HUD_BUILD_CITY,)
+            x0_cadre, y0_cadre + image_height, x1_cadre, y0_cadre + image_height, tags=set_tags(hud_tag=self.tag)
         )
 
         # Juste pour le côté graphique
         self.canvas.create_line(
-            x0_cadre, y1_cadre - image_height, x1_cadre, y1_cadre - image_height, tags=set_tags() + (HUD_BUILD_CITY,)
+            x0_cadre, y1_cadre - image_height, x1_cadre, y1_cadre - image_height, tags=set_tags(hud_tag=self.tag)
         )
 
         cancel_width = get_width_text("annuler")
@@ -91,8 +91,8 @@ class HUDBuildCity(HUDABC):
             y1_cadre + 10,
             fill=FILL_CANCEL,
             text="annuler",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CITY_TAG, color_tag=FILL_CANCEL) + (HUD_BUILD_CITY,),
-            text_tags=set_tags() + (TEXT_TAG, HUD_BUILD_CITY,)
+            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CITY_TAG, color_tag=FILL_CANCEL, hud_tag=self.tag),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,)
         )
 
     def replace(self, event: tk.Event) -> None:

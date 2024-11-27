@@ -38,10 +38,7 @@ class HUDActions(HUDABC):
             id_rectangle = self.canvas.create_rectangle(
                 x_values[x_value_i], y0_cadre, x_values[x_value_i + 1], y1_cadre,
                 fill=FILL_ACTION_BOX,
-                tags=set_tags(CLICKABLE_TAG, ACTION_FOR_YOUR_TURN[x_value_i]["do"]) + (
-                    RECTANGLE_ACTION,
-                    HUD_BOTTOM
-                )
+                tags=set_tags(CLICKABLE_TAG, ACTION_FOR_YOUR_TURN[x_value_i]["do"], hud_tag=self.tag) + (RECTANGLE_ACTION,)
             )
 
             # Titre de l'action
@@ -49,7 +46,7 @@ class HUDActions(HUDABC):
                 x_values[x_value_i] + pad, y0_cadre + pad,
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["text"],
                 anchor="nw",
-                tags=set_tags() + (TEXT_ACTION, TEXT_TAG, HUD_BOTTOM,)
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -59,7 +56,7 @@ class HUDActions(HUDABC):
                 x_values[x_value_i + 1] - pad, y0_cadre + pad,
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["PA"],
                 anchor="ne",
-                tags=set_tags() + (TEXT_ACTION, TEXT_TAG, HUD_BOTTOM,)
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -70,7 +67,7 @@ class HUDActions(HUDABC):
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"],
                 anchor="ne",
                 font=("ateztzerz", SIZE_ACTION_ADDITIONAL_COST_TEXT),
-                tags=set_tags() + (TEXT_ACTION, TEXT_TAG, HUD_BOTTOM,)
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -79,7 +76,7 @@ class HUDActions(HUDABC):
             x0_cadre + 80,
             y0_cadre - 15,
             text=f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}",
-            tags=set_tags() + (TEXT_PAGE, HUD_BOTTOM,)
+            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,)
         )
 
         # Bouton pour changer de page (précédente)
@@ -88,7 +85,7 @@ class HUDActions(HUDABC):
             y0_cadre - 20,
             x0_cadre + 20,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_MINUS) + (HUD_BOTTOM,)
+            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_MINUS, hud_tag=self.tag)
         )
 
         # Bouton pour changer de page (suivante)
@@ -97,7 +94,7 @@ class HUDActions(HUDABC):
             y0_cadre - 20,
             x0_cadre + 40,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_PLUS) + (HUD_BOTTOM,)
+            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, CHANGE_PAGE_PLUS, hud_tag=self.tag)
         )
 
         # Bouton pour cacher l'hud du bas
@@ -106,7 +103,7 @@ class HUDActions(HUDABC):
             y0_cadre - 20,
             x1_cadre - 5,
             y0_cadre - 5,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, HIDE_PAGE) + (HUD_BOTTOM,)
+            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, HIDE_PAGE, hud_tag=self.tag)
         )
 
     def replace(self, event: tk.Event):

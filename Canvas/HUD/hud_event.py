@@ -45,25 +45,25 @@ class HUDEvent(HUDABC):
         # Le +1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         # Image d'en haut
         self.canvas.create_image((x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2, image=ref,
-                          tags=set_tags() + (HUD_EVENT,), anchor=tk.CENTER)
+                          tags=set_tags(hud_tag=self.tag), anchor=tk.CENTER)
 
         self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2, text="EVENEMENT TITRE",
-            tags=set_tags() + (HUD_EVENT,), font=self.canvas.custom_font
+            tags=set_tags(hud_tag=self.tag), font=self.canvas.custom_font
         )
 
         # Ok bouton
         self.canvas.create_text_in_rectangle(
             x1_cadre - 15, y1_cadre - 10, x1_cadre + 15, y1_cadre + 10, "OK", fill=FILL_OK,
             text_tags=set_tags() + (TEXT_TAG, HUD_EVENT),
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=OK_EVENT_TAG, color_tag=FILL_OK) + (HUD_EVENT,)
+            rectangle_tags=set_tags(CLICKABLE_TAG, OK_EVENT_TAG, color_tag=FILL_OK, hud_tag=self.tag)
         )
 
         # More info bouton
         self.canvas.create_text_in_rectangle(
             x1_cadre - 15, y0_cadre - 10, x1_cadre + 15, y0_cadre + 10, "i", fill=FILL_INFO,
             text_tags=set_tags() + (TEXT_TAG, HUD_EVENT),
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=INFO_EVENT_TAG, color_tag=FILL_INFO) + (HUD_EVENT,)
+            rectangle_tags=set_tags(CLICKABLE_TAG, INFO_EVENT_TAG, color_tag=FILL_INFO, hud_tag=self.tag)
         )
 
     def replace(self, event: tk.Event) -> None:

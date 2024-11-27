@@ -35,19 +35,19 @@ class HUDChooseVillage(HUDMobileABC):
         center_x = (x0_cadre + x1_cadre) // 2
 
         self.background_rectangle_id = self.canvas.create_rectangle(
-            x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags() + (self.tag, TEMP_TAG)
+            x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,)
         )
 
         self.canvas.create_text(
-            center_x, y0_cadre + 10, text=title_text, tags=set_tags() + (self.tag, TEMP_TAG)
+            center_x, y0_cadre + 10, text=title_text, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,)
         )
 
         # Le seigneur n'a qu'un seul village au début, donc on ne crée qu'une ligne
         village_id = self.canvas.create_text_in_rectangle(
             x0_cadre, y0_cadre + 20, x1_cadre, y0_cadre + 60,
             text="village 1",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG) + (self.tag, TEMP_TAG),
-            text_tags=set_tags() + (TEXT_TAG, self.tag, TEMP_TAG)
+            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
         )
 
         text = "OK"
@@ -59,8 +59,8 @@ class HUDChooseVillage(HUDMobileABC):
                 x1_cadre + 5,
                 y1_cadre + 5, text, fill=FILL_OK,
                 rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=IMMIGRATE_TAG,
-                                        color_tag=FILL_OK) + (TEMP_TAG, self.tag),
-                text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag)
+                                        color_tag=FILL_OK, group_tag=self.tag) + (TEMP_TAG,),
+                text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
         )
 
         self.canvas.radiobuttons.add((village_id,),
@@ -76,14 +76,14 @@ class HUDChooseVillage(HUDMobileABC):
             y1_cadre - 15,
             x0_cadre + text_width - 5,
             y1_cadre + 5, text, fill=FILL_CANCEL,
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,  color_tag=FILL_CANCEL) + (TEMP_TAG, self.tag),
-            text_tags=set_tags() + (TEXT_TAG, TEMP_TAG, self.tag)
+            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG)
         )
 
     def replace(self) -> None:
         pass
 
-    def add_village_update_HUD(self, name: str):
+    def add_village_update_HUD(self, name: str) -> int:
         """
         Mettre à jour la taille du rectangle en background
         Ajouter la nouvelle option
@@ -99,8 +99,8 @@ class HUDChooseVillage(HUDMobileABC):
         new_category_id = self.canvas.create_text_in_rectangle(
             coords[0], coords[3] - 40, coords[2], coords[3],
             text=name,
-            rectangle_tags=set_tags() + (self.tag, TEMP_TAG),
-            text_tags=set_tags() + (TEXT_TAG, self.tag, TEMP_TAG),
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             fill=FILL_ACTION_BOX,
             state="hidden"
         )
@@ -115,7 +115,7 @@ class HUDChooseVillage(HUDMobileABC):
         self.canvas.move(self.canvas.text_id_in_rectangle_id[self.ok_button_id], 0, 40)
         self.canvas.move(self.canvas.text_id_in_rectangle_id[self.cancel_button_id], 0, 40)
 
-
+        return new_category_id
 
     def immigrate(self, event: tk.Event) -> None:
         print(self.canvas.radiobuttons.get_selected_option(self.canvas.gettags("active")[GROUP_TAG_INDEX]))

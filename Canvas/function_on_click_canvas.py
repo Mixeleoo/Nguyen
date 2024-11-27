@@ -19,49 +19,40 @@ class FunctionOnClickCanvas(AnimationCanvas):
 
         self.game_mode = "basic"
 
-        self.basic_mode_tag_foc = {
-            PLAINE_TAG: lambda e: None,
-            VILLAGE_TAG: self.hudmobile_village_info.show,
-            MORE_INFO_TAG: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().show(),
-            CHANGE_PAGE_MINUS: self.hud_actions.on_change_page,
-            CHANGE_PAGE_PLUS: self.hud_actions.on_change_page,
-            HIDE_PAGE: self.hud_actions.hide_page,
-            SHOW_PAGE: self.hud_actions.show_page,
-            HIDE_HISTORY: self.hud_history.hide_history,
-            SHOW_HISTORY: self.hud_history.show_history,
-            BUILD_CITY: self.build_city,
-            BUILD_CHURCH: self.build_church,
-            CHOOSE_VILLAGE_TO_IMMIGRATE_TAG: self.hud_paysan_or_artisan.immigrate,
-            CANCEL_IMMIGRATION_TAG: self.hud_paysan_or_artisan.cancel_immigration,
-            IMMIGRATE_TAG: self.hud_choose_village.immigrate,
-            CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG: self.hud_choose_village.hide,
-            PLUS_IMMIGRANTS_TAG: self.hud_paysan_or_artisan.plus_immigrants,
-            MINUS_IMMIGRANTS_TAG: self.hud_paysan_or_artisan.minus_immigrants,
-            CLOSE_MORE_INFO_WINDOW: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().hide(),
-            PIN_MORE_INFO_WINDOW: lambda *args: self.hudwindow_more_info_supervisor.get_active_window().pin(),
-            OK_EVENT_TAG: self.hud_event.hide,
-            INFO_EVENT_TAG: lambda e: None,
-            PAYSAN_OR_ARTISAN_TAG: self.hud_paysan_or_artisan.show,
-            NOTHING_TAG: lambda e: None
-        }
+        self.basic_mode_tag_foc[PLAINE_TAG] = lambda e: None
+        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
+        self.basic_mode_tag_foc[MORE_INFO_TAG] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().show()
+        self.basic_mode_tag_foc[CHANGE_PAGE_PLUS] = self.hud_actions.on_change_page
+        self.basic_mode_tag_foc[CHANGE_PAGE_MINUS] = self.hud_actions.on_change_page
+        self.basic_mode_tag_foc[HIDE_PAGE] = self.hud_actions.hide_page
+        self.basic_mode_tag_foc[SHOW_PAGE] = self.hud_actions.show_page
+        self.basic_mode_tag_foc[HIDE_HISTORY] = self.hud_history.hide_history
+        self.basic_mode_tag_foc[SHOW_HISTORY] = self.hud_history.show_history
+        self.basic_mode_tag_foc[BUILD_CITY] = self.build_city
+        self.basic_mode_tag_foc[BUILD_CHURCH] = self.build_church
+        self.basic_mode_tag_foc[CHOOSE_VILLAGE_TO_IMMIGRATE_TAG] = self.hud_paysan_or_artisan.immigrate
+        self.basic_mode_tag_foc[CANCEL_IMMIGRATION_TAG] = self.hud_paysan_or_artisan.cancel_immigration
+        self.basic_mode_tag_foc[IMMIGRATE_TAG] = self.hud_choose_village.immigrate
+        self.basic_mode_tag_foc[CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG] = self.hud_choose_village.hide
+        self.basic_mode_tag_foc[PLUS_IMMIGRANTS_TAG] = self.hud_paysan_or_artisan.plus_immigrants
+        self.basic_mode_tag_foc[MINUS_IMMIGRANTS_TAG] = self.hud_paysan_or_artisan.minus_immigrants
+        self.basic_mode_tag_foc[CLOSE_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().hide()
+        self.basic_mode_tag_foc[PIN_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().pin()
+        self.basic_mode_tag_foc[OK_EVENT_TAG] = self.hud_event.hide
+        self.basic_mode_tag_foc[INFO_EVENT_TAG] = lambda e: None
+        self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hud_paysan_or_artisan.show
+        self.basic_mode_tag_foc[NOTHING_TAG] = lambda e: None
 
-        self.build_city_mode_tag_foc = dict(self.basic_mode_tag_foc)
+
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.build_city_on_plain
         self.build_city_mode_tag_foc[SHOW_PAGE] = lambda e: None
         self.build_city_mode_tag_foc[CHANGE_PAGE_MINUS] = lambda e: None
         self.build_city_mode_tag_foc[CHANGE_PAGE_PLUS] = lambda e: None
         self.build_city_mode_tag_foc[CANCEL_BUILD_CITY_TAG] = self.cancel_build_city
 
-        self.build_church_mode_tag_foc = dict(self.build_city_mode_tag_foc)
         self.build_church_mode_tag_foc[PLAINE_TAG] = lambda e: None
         self.build_church_mode_tag_foc[VILLAGE_TAG] = self.build_church_on_village
         self.build_church_mode_tag_foc[CANCEL_BUILD_CHURCH] = self.cancel_build_church
-
-        self.tag_foc = {
-            "basic": self.basic_mode_tag_foc,
-            "build_city": self.build_city_mode_tag_foc,
-            "build_church": self.build_church_mode_tag_foc
-        }
 
         self.to_show_if_cancel = []
 
@@ -114,7 +105,8 @@ class FunctionOnClickCanvas(AnimationCanvas):
             tags = list(self.gettags(square_id))
 
             # Comme il y a un nouveau village, il faut update l'HUD qui permet de choisir le village
-            self.hud_choose_village.add_village_update_HUD("village 2")
+            new_option_id = self.hud_choose_village.add_village_update_HUD("village 2")
+            self.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)
 
             # On change son tag de trigger de fonction
             tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
