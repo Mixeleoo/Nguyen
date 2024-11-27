@@ -38,7 +38,7 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc[MINUS_IMMIGRANTS_TAG] = self.hud_paysan_or_artisan.minus_immigrants
         self.basic_mode_tag_foc[CLOSE_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().hide()
         self.basic_mode_tag_foc[PIN_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().pin()
-        self.basic_mode_tag_foc[OK_EVENT_TAG] = self.hud_event.hide
+        self.basic_mode_tag_foc[OK_EVENT_TAG] = self.hud_event.hide_animation
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = lambda e: None
         self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hud_paysan_or_artisan.show
         self.basic_mode_tag_foc[NOTHING_TAG] = lambda e: None
