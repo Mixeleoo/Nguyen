@@ -1,7 +1,7 @@
 
 from parameter import *
 from Canvas.HUD.HUDWindowABC import HUDWindowABC
-from Canvas.base_canvas import BaseCanvas
+from Canvas.hud_canvas import HUDCanvas
 
 class HUDWindowMoreInfo(HUDWindowABC):
     def __init__(self, canvas, village_tag: str):
@@ -15,7 +15,7 @@ class HUDWindowMoreInfo(HUDWindowABC):
 
 
 class HUDWindowMoreInfoSupervisor:
-    def __init__(self, canvas: BaseCanvas):
+    def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas
         self.current_group_id = 0
 
@@ -30,6 +30,4 @@ class HUDWindowMoreInfoSupervisor:
 
         self.current_group_id += 1
 
-    def get_active_window(self) -> HUDWindowMoreInfo:
-
-        return self.windows[self.canvas.gettags("active")[GROUP_TAG_INDEX]]
+    def get_active_window(self) -> HUDWindowMoreInfo: return self.windows[self.canvas.gettags("active")[GROUP_TAG_INDEX]]

@@ -9,6 +9,8 @@ class HUDBuildChurch(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        self.background_rect_id = 0
+
     @property
     def tag(self):
         return HUD_BUILD_CHURCH
@@ -28,8 +30,8 @@ class HUDBuildChurch(HUDABC):
         y0_cadre = -(height + PADY_BUILD_CITY_HUD_HIDING)
         y1_cadre = -PADY_BUILD_CITY_HUD_HIDING
 
-        self.canvas.create_rectangle(x0_cadre, y0_cadre, x1_cadre, y1_cadre,
-                              fill="#cccc00", tags=set_tags(hud_tag=self.tag) + (HUD_BIG_RECTANGLE_BUILD_CHURCH,))
+        self.background_rect_id = self.canvas.create_rectangle(x0_cadre, y0_cadre, x1_cadre, y1_cadre,
+                              fill="#cccc00", tags=set_tags(hud_tag=self.tag))
 
         original_image = Image.open("eglise vitrail.png")
 
@@ -58,15 +60,8 @@ class HUDBuildChurch(HUDABC):
 
         self.canvas.references += [ref]
 
-        self.canvas.create_text_in_rectangle(
-            x1_cadre - 40,
-            y1_cadre - 10,
-            x1_cadre + 10,
-            y1_cadre + 10,
-            fill=FILL_CANCEL,
-            text="annuler",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CANCEL_BUILD_CHURCH, color_tag=FILL_CANCEL, hud_tag=self.tag),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,)
+        self.canvas.create_cancel_button(
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel_build_church, trigger_name=CANCEL_BUILD_CHURCH
         )
 
     def replace(self, event: tk.Event) -> None:
@@ -74,13 +69,39 @@ class HUDBuildChurch(HUDABC):
 
     def show_animation(self):
         self.canvas.move(HUD_BUILD_CHURCH, 0,
-                        abs(PADY_BUILD_CITY_HUD - self.canvas.coords(HUD_BIG_RECTANGLE_BUILD_CHURCH)[1]) // 10 + 1)
+                        abs(PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[1]) // 10 + 1)
 
-        if self.canvas.coords(HUD_BIG_RECTANGLE_BUILD_CHURCH)[1] != PADY_BUILD_CITY_HUD:
+        if self.canvas.coords(self.background_rect_id)[1] != PADY_BUILD_CITY_HUD:
             self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self):
-        self.canvas.move(HUD_BUILD_CHURCH, 0, -(abs(-PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(HUD_BIG_RECTANGLE_BUILD_CHURCH)[3]) // 10 + 1))
+        self.canvas.move(HUD_BUILD_CHURCH, 0, -(abs(-PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(self.background_rect_id)[3]) // 10 + 1))
 
-        if self.canvas.coords(HUD_BIG_RECTANGLE_BUILD_CHURCH)[3] != -PADY_BUILD_CITY_HUD_HIDING:
+        if self.canvas.coords(self.background_rect_id)[3] != -PADY_BUILD_CITY_HUD_HIDING:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
+
+    def choose_village_to_build(self, event: tk.Event):
+        """
+        Uniquement s'il y a la possibilité, on cache les HUD, et on affiche le texte disant : Où voulez-vous construire
+        votre eglise ? Passage en mode churchbuilding mgl
+        """
+        self.canvas.hide_all_permanant_huds()
+
+        # On affiche le rectangle de construction
+        self.show_animation()
+
+        self.canvas.game_mode = "build_church"
+
+    def cancel_build_church(self, e=None):
+        self.canvas.show_hidden_permanant_huds()
+
+        self.hide_animation()
+        self.canvas.game_mode = "basic"
+
+    def build_church_on_village(self, e=None):
+
+        # Même comportement que si on annulait sa construction, mais on la construit vraiment
+        self.cancel_build_church()
+
+        print("TU AS CONSTRUIT UNE EGLISE GG")
+

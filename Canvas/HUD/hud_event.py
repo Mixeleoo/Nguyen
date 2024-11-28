@@ -53,10 +53,8 @@ class HUDEvent(HUDABC):
         )
 
         # Ok bouton
-        self.canvas.create_text_in_rectangle(
-            x1_cadre - 15, y1_cadre - 10, x1_cadre + 15, y1_cadre + 10, "OK", fill=FILL_OK,
-            text_tags=set_tags() + (TEXT_TAG, HUD_EVENT),
-            rectangle_tags=set_tags(CLICKABLE_TAG, OK_EVENT_TAG, color_tag=FILL_OK, hud_tag=self.tag)
+        self.canvas.create_ok_button(
+            x1_cadre + 10, y1_cadre, hud_tag=self.tag, func_triggered=self.hide_animation, trigger_name=OK_EVENT_TAG
         )
 
         # More info bouton

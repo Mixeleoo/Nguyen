@@ -64,23 +64,31 @@ class HUDPaysanOrArtisan(HUDABC):
         )
 
         # Bouton ajouter effectif
-        self.canvas.create_text_in_rectangle(
-            center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 15, center_x + width_text // 2, y0_cadre + pad_from_borders + 25,
+        self.canvas.create_button(
+            center_x - 20 + width_text // 2,
+            y0_cadre + pad_from_borders + 15,
+            center_x + width_text // 2,
+            y0_cadre + pad_from_borders + 25,
             text="▲",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PLUS_IMMIGRANTS_TAG, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
+            hud_tag=self.tag,
+            func_triggered=self.plus_immigrants,
+            trigger_name=PLUS_IMMIGRANTS_TAG,
             text_font=custom_font,
-            state="hidden"
+            state="hidden", is_temp=True
         )
 
         # Bouton retirer effectif
-        self.canvas.create_text_in_rectangle(
-            center_x - 20 + width_text // 2, y0_cadre + pad_from_borders + 27, center_x + width_text // 2, y0_cadre + pad_from_borders + 37,
+        self.canvas.create_button(
+            center_x - 20 + width_text // 2,
+            y0_cadre + pad_from_borders + 27,
+            center_x + width_text // 2,
+            y0_cadre + pad_from_borders + 37,
             text="▼",
-            rectangle_tags=set_tags(CLICKABLE_TAG, MINUS_IMMIGRANTS_TAG, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            hud_tag=self.tag,
+            func_triggered=self.minus_immigrants,
+            trigger_name=MINUS_IMMIGRANTS_TAG,
             text_font=custom_font,
-            state="hidden"
+            state="hidden", is_temp=True
         )
 
         # Paysan choix
@@ -109,27 +117,16 @@ class HUDPaysanOrArtisan(HUDABC):
 
         self.canvas.radiobuttons.add((self.paysan_choice_id, self.artisan_choice_id),
             # Ok bouton
-            ok_button_id=self.canvas.create_text_in_rectangle(
-                x1_cadre - 25,
-                y1_cadre - 15,
-                x1_cadre + 5,
-                y1_cadre + 5, "OK", fill=FILL_OK,
-                rectangle_tags=set_tags(CLICKABLE_TAG, CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
-                                        color_tag=FILL_OK, hud_tag=self.tag) + (TEMP_TAG,),
-                text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
-                state="hidden"
+            ok_button_id=self.canvas.create_ok_button(
+                x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, trigger_name=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
+                state="hidden", is_temp=True
             )
         )
 
         # Annuler bouton
-        self.canvas.create_text_in_rectangle(
-            x0_cadre - 5,
-            y1_cadre - 15,
-            x0_cadre + 55,
-            y1_cadre + 5, "Annuler", fill=FILL_CANCEL,
-            rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG, trigger_tag=CANCEL_IMMIGRATION_TAG,  color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
-            state="hidden"
+        self.canvas.create_cancel_button(
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel, trigger_name=CANCEL_IMMIGRATION_TAG,
+            state="hidden", is_temp=True
         )
 
     def replace(self, event: tk.Event) -> None:
@@ -149,12 +146,12 @@ class HUDPaysanOrArtisan(HUDABC):
             self.canvas.hud_choose_village.show()
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
-            self.cancel_immigration()
+            self.cancel()
 
         else:
             print("T'as pas fait de choix là bro")
 
-    def cancel_immigration(self, e=None):
+    def cancel(self, e=None):
         self.canvas.radiobuttons.radiobuttons[self.canvas.gettags(CHOOSE_VILLAGE_TO_IMMIGRATE_TAG)[GROUP_TAG_INDEX]].reset()
 
         for item_id in self.canvas.find_withtag(PAYSAN_OR_ARTISAN_WINDOW_TAG):

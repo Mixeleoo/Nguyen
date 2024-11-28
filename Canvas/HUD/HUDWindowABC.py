@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from parameter import *
 from Canvas.HUD.HUDMobileABC import HUDMobileABC
@@ -53,7 +53,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             fill=FILL_CANCEL,
             text="x",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL, hud_tag=self.tag) + (TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
@@ -66,7 +66,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
             text="⌂",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
+            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
@@ -78,7 +78,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             x1=x1_cadre - 40,
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
-            rectangle_tags=set_tags(drag_tag=MOVE_WINDOW, hud_tag=self.tag) + (TEMP_TAG,),
+            rectangle_tags=set_tags(drag_tag=MOVE_WINDOW, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             text=self.tag,
             state="hidden"
@@ -95,7 +95,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
                     [x0_cadre, x1_cadre][i] + 5,
                     [y0_cadre, y1_cadre][j] + 5,
                     fill=FILL_ACTION_BOX,
-                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG, hud_tag=self.tag) + (TEMP_TAG,),
+                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
                     state="hidden"
                 )
 
@@ -136,6 +136,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
         self.canvas.coords(window_items[10], x0_cadre, y0_cadre, x1_cadre - 40, y0_cadre + 20)
+        self.canvas.coords(window_items[11], (x0_cadre + x1_cadre - 40) // 2, (y0_cadre + y0_cadre + 20) // 2)
 
         # Rectangles pour changer la taille de la fenêtre.
         # Ils sont créés dans cet ordre :

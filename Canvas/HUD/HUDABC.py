@@ -58,13 +58,3 @@ class HUDABC(ABC):
         """
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="hidden")
-
-    def hide_show_hud(self, previous_tag: str, new_tag: str, anim: callable):
-        """
-        Fonction qui servira à switcher de "montrer" à "cacher" (et inversement) les HUD concernés.
-        """
-        tags = list(self.canvas.gettags(previous_tag))
-        tags[TRIGGER_TAG_INDEX] = new_tag
-
-        self.canvas.itemconfigure(previous_tag, tags=tags)
-        anim()

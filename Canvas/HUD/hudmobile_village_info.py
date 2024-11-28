@@ -18,40 +18,64 @@ class HUDMobileVillageInfo(HUDMobileABC):
 
         largeur = 120
 
-        last_item_id = 0
+        self.canvas.create_text_in_rectangle(
+            x0=0,
+            y0=0,
+            x1=largeur,
+            y1=40,
+            fill=FILL_ACTION_BOX,
+            text="50 Villageois",
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            state="hidden"
+        )
 
-        # Affichage du rectangle
-        for categorie_i in range(len(ACTION_FOR_VILLAGE)):
-            categorie_i_dim = categorie_i * 40
+        self.canvas.create_text_in_rectangle(
+            x0=0,
+            y0=40,
+            x1=largeur,
+            y1=80,
+            fill=FILL_ACTION_BOX,
+            text="50 Ressources",
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            state="hidden"
+        )
 
-            last_item_id = self.canvas.create_text_in_rectangle(
-                x0=0,
-                y0=categorie_i_dim,
-                x1=largeur,
-                y1=categorie_i_dim + 40,
-                fill=FILL_ACTION_BOX,
-                text=ACTION_FOR_VILLAGE[categorie_i],
-                rectangle_tags=ACTION_ID_FOR_VILLAGE[categorie_i],
-                text_tags=ACTION_TEXT_TAG_FOR_VILLAGE[categorie_i],
-                state="hidden"
-            )
+        self.canvas.create_text_in_rectangle(
+            x0=0,
+            y0=80,
+            x1=largeur,
+            y1=120,
+            fill=FILL_ACTION_BOX,
+            text="2 / 10 Bonheur",
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            state="hidden"
+        )
 
-        self.more_info_button_id = last_item_id
+        self.more_info_button_id = self.canvas.create_button(
+            0, 120, largeur, 160, "Plus d'info",
+            hud_tag=self.tag,
+            func_triggered=lambda *args: self.canvas.hudwindow_more_info_supervisor.get_active_window().show(),
+            trigger_name=MORE_INFO_TAG,
+            state="hidden", is_temp=True
+        )
 
     def replace(self, event: tk.Event) -> None:
 
-        dx = event.x - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[0])[0]
-        dy = event.y - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[0])[1]
+        dx = event.x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
+        dy = event.y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
 
         # Si le rectangle dépasse la longueur de la fenêtre par le bas, l'afficher par le haut
         if event.y + 160 > self.canvas.master.winfo_height():
-            dy = event.y - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[-2])[3]
+            dy = event.y - self.canvas.coords(self.canvas.find_withtag(self.tag)[-2])[3]
 
         # Si le rectangle dépasse la longueur de la fenêtre par le bas, l'afficher par le haut
         if event.x + 100 > self.canvas.master.winfo_width():
-            dx = event.x - self.canvas.coords(self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG)[0])[2]
+            dx = event.x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[2]
 
-        self.canvas.move(TEMP_VILLAGE_INFO_TAG, dx, dy)
+        self.canvas.move(self.tag, dx, dy)
 
         active_village_tags = self.canvas.gettags("active")
 
@@ -60,5 +84,4 @@ class HUDMobileVillageInfo(HUDMobileABC):
 
         self.canvas.itemconfigure(self.more_info_button_id, tags=tags)
 
-        for item_id in self.canvas.find_withtag(TEMP_VILLAGE_INFO_TAG):
-            self.canvas.itemconfigure(item_id, state="normal")
+        print(self.canvas.gettags(self.more_info_button_id))

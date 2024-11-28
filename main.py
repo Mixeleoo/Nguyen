@@ -48,7 +48,7 @@ class Interface(tk.Tk):
 
         # Créer les HUD
         self.canvas.create_HUDs(geometry_width, geometry_height)
-        self.canvas.hide_exceeding_text()
+        self.canvas.hud_history.hide_exceeding_text()
 
         """# Ajouter l'image au canvas
         # Je mets un self pour éviter que le garbage collector ne supprime la photo

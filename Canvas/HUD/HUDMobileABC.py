@@ -1,10 +1,10 @@
 
 from abc import ABC, abstractmethod
 
-from Canvas.base_canvas import BaseCanvas
+from Canvas.hud_canvas import HUDCanvas
 
 class HUDMobileABC(ABC):
-    def __init__(self, canvas: BaseCanvas):
+    def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas
 
     @property
