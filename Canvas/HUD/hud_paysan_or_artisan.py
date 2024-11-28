@@ -173,22 +173,27 @@ class HUDPaysanOrArtisan(HUDABC):
             self.griser(self.artisan_choice_id)
 
             if PA < self.desired_workforce:
+                # Si le joueur a selectionné ce choix
+                if self.radiobutton_choice.get_selected_option() == self.paysan_choice_id:
+                    self.radiobutton_choice.reset()
+
                 # Griser le bouton paysan et ne le rendre plus clickable
                 self.griser(self.paysan_choice_id)
 
         self.refresh_text()
 
     def minus_immigrants(self, e=None):
-        self.desired_workforce -= 1 if self.desired_workforce - 1 > 0 else 0
+        new_desired_workforce = self.desired_workforce - 1 if self.desired_workforce - 1 > 0 else 1
 
-        if PA >= self.desired_workforce:
-            # Griser le bouton paysan et ne le rendre plus clickable
-            self.degriser(self.paysan_choice_id)
+        # Si le nombre de PA du joueur dépasse le nouveau coût de l'effectif désiré d'artisan (donc affordable)
+        # ET qu'avant ce n'était pas le cas, alors il faut dégriser.
+        # if PA >= new_desired_workforce * 2 and PA < self.desired_workforce * 2:
+        if new_desired_workforce * 2 <= PA < self.desired_workforce * 2:
 
-            if PA >= self.desired_workforce * 2:
-                # Griser le bouton artisan et ne le rendre plus clickable
-                self.degriser(self.artisan_choice_id)
+            # Degriser le choix artisan et le rendre clickable
+            self.degriser(self.artisan_choice_id)
 
+        self.desired_workforce = new_desired_workforce
         self.refresh_text()
 
     def refresh_text(self):
