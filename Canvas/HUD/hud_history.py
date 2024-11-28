@@ -30,7 +30,7 @@ class HUDHistory(HUDABC):
 
         x1_cadre = geometry_width - pady_from_top
         x0_cadre = x1_cadre - width
-        y0_cadre = 5
+        y0_cadre = HEIGHT_HUD_TOP_SIDE + 5
         y1_cadre = y0_cadre + height
 
         # Rectangle de l'historique
@@ -92,7 +92,7 @@ class HUDHistory(HUDABC):
         self.canvas.move(
             HUD_RIGHT_SIDE,
             event.width - self.canvas.master.previous_geometry[0],
-            5 - self.canvas.coords(self.canvas.find_withtag(self.rect_hiding_top_text_id)[0])[1]
+            HEIGHT_HUD_TOP_SIDE + 10 - self.canvas.coords(self.canvas.find_withtag(self.rect_hiding_top_text_id)[0])[1]
         )
 
     def show_animation(self):

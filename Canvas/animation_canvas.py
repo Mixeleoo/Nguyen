@@ -14,7 +14,7 @@ class AnimationCanvas(HUDCanvas):
         # Pour avoir le point le plus en haut à gauche de la totalité de la grille de carrés
         coor_square_top_left = self.coords(MAP_SQUARE_TOP_LEFT_TAG)
         x0 = coor_square_top_left[0]
-        y0 = coor_square_top_left[1]
+        y0 = coor_square_top_left[1] - HEIGHT_HUD_TOP_SIDE
 
         # On prend les coordonnées en bas (y1) à droite (x1) du carré le plus en bas à droite
         # Pour avoir le point le plus en bas à droite de la totalité de la grille de carrés
@@ -24,7 +24,7 @@ class AnimationCanvas(HUDCanvas):
 
         dx, dy = 0, 0
 
-        # Si les carrés sont trop à droite, on les reme vers la gauche
+        # Si les carrés sont trop à droite, on les remet vers la gauche
         if x0 > 0:
             dx = -1 * (x0 // 5 + 1)
 

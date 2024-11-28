@@ -18,6 +18,7 @@ class HUDCanvas(BaseCanvas):
         from Canvas.HUD.hudmobile_village_info import HUDMobileVillageInfo
         from Canvas.HUD.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
         from Canvas.HUD.hud_choose_village import HUDChooseVillage
+        from Canvas.HUD.hud_top_side import HUDTopSide
 
         from Canvas.HUD.hudwindow_more_info import HUDWindowMoreInfoSupervisor
 
@@ -32,6 +33,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros = HUDMobileYaUnVillageGros(self)
         self.hud_choose_village = HUDChooseVillage(self)
         self.hud_paysan_or_artisan = HUDPaysanOrArtisan(self)
+        self.hud_top_side = HUDTopSide(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 
@@ -45,6 +47,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_event.create(geometry_width, geometry_height)
         self.hud_paysan_or_artisan.create(geometry_width, geometry_height)
         self.hud_choose_village.create(geometry_width, geometry_height)
+        self.hud_top_side.create(geometry_width, geometry_height)
 
         # HUD temporaire
         self.hudmobile_village_info.create()

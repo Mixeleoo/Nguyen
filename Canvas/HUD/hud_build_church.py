@@ -27,8 +27,8 @@ class HUDBuildChurch(HUDABC):
         x1_cadre = x0_cadre + width
 
         # - car on veut que ça soit affiché en dehors de l'écran
-        y0_cadre = -(height + PADY_BUILD_CITY_HUD_HIDING)
-        y1_cadre = -PADY_BUILD_CITY_HUD_HIDING
+        y0_cadre = - height + PADY_BUILD_CITY_HUD_HIDING
+        y1_cadre = PADY_BUILD_CITY_HUD_HIDING
 
         self.background_rect_id = self.canvas.create_rectangle(x0_cadre, y0_cadre, x1_cadre, y1_cadre,
                               fill="#cccc00", tags=set_tags(hud_tag=self.tag))
@@ -68,16 +68,16 @@ class HUDBuildChurch(HUDABC):
         pass
 
     def show_animation(self):
-        self.canvas.move(HUD_BUILD_CHURCH, 0,
+        self.canvas.move(self.tag, 0,
                         abs(PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[1]) // 10 + 1)
 
         if self.canvas.coords(self.background_rect_id)[1] != PADY_BUILD_CITY_HUD:
             self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self):
-        self.canvas.move(HUD_BUILD_CHURCH, 0, -(abs(-PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(self.background_rect_id)[3]) // 10 + 1))
+        self.canvas.move(self.tag, 0, -(abs(PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(self.background_rect_id)[3]) // 10 + 1))
 
-        if self.canvas.coords(self.background_rect_id)[3] != -PADY_BUILD_CITY_HUD_HIDING:
+        if self.canvas.coords(self.background_rect_id)[3] != PADY_BUILD_CITY_HUD_HIDING:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
     def choose_village_to_build(self, event: tk.Event):

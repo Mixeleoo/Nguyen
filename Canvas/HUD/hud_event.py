@@ -9,6 +9,8 @@ class HUDEvent(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        self.ok_button_id = 0
+
     @property
     def tag(self):
         return HUD_EVENT
@@ -23,8 +25,8 @@ class HUDEvent(HUDABC):
         x1_cadre = x0_cadre + width
 
         # - car on veut que ça soit affiché en dehors de l'écran
-        y0_cadre = PADY_BUILD_CITY_HUD_HIDING
-        y1_cadre = (height + PADY_BUILD_CITY_HUD_HIDING)
+        y0_cadre = - height + PADY_BUILD_CITY_HUD_HIDING
+        y1_cadre = PADY_BUILD_CITY_HUD_HIDING
 
         original_image = Image.open("parchemin.png").convert("RGBA")
 
@@ -53,7 +55,7 @@ class HUDEvent(HUDABC):
         )
 
         # Ok bouton
-        self.canvas.create_ok_button(
+        self.ok_button_id = self.canvas.create_ok_button(
             x1_cadre + 10, y1_cadre, hud_tag=self.tag, func_triggered=self.hide_animation, trigger_name=OK_EVENT_TAG
         )
 
@@ -68,10 +70,14 @@ class HUDEvent(HUDABC):
         pass
 
     def show_animation(self) -> None:
-        pass
+        self.canvas.move(self.tag, 0,
+                        abs(PADY_BUILD_CITY_HUD - self.canvas.bbox(self.tag)[1]) // 10 + 1)
+
+        if self.canvas.bbox(self.tag)[1] != PADY_BUILD_CITY_HUD:
+            self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self, e=None) -> None:
-        self.canvas.move(HUD_EVENT, 0, -(abs(-PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(OK_EVENT_TAG)[3]) // 10 + 1))
+        self.canvas.move(self.tag, 0, -(abs(PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(OK_EVENT_TAG)[3]) // 10 + 1))
 
-        if self.canvas.coords(OK_EVENT_TAG)[3] != -PADY_BUILD_CITY_HUD_HIDING:
+        if self.canvas.coords(OK_EVENT_TAG)[3] != PADY_BUILD_CITY_HUD_HIDING:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
