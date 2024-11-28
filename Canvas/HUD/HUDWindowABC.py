@@ -136,6 +136,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
         self.canvas.coords(window_items[10], x0_cadre, y0_cadre, x1_cadre - 40, y0_cadre + 20)
+        self.canvas.coords(window_items[11], (x0_cadre + x1_cadre - 40) // 2, (y0_cadre + y0_cadre + 20) // 2)
 
         # Rectangles pour changer la taille de la fenêtre.
         # Ils sont créés dans cet ordre :

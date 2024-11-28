@@ -59,7 +59,7 @@ class HUDMobileVillageInfo(HUDMobileABC):
             hud_tag=self.tag,
             func_triggered=lambda *args: self.canvas.hudwindow_more_info_supervisor.get_active_window().show(),
             trigger_name=MORE_INFO_TAG,
-            state="normal", is_temp=True
+            state="hidden", is_temp=True
         )
 
     def replace(self, event: tk.Event) -> None:

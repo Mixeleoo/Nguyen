@@ -11,6 +11,7 @@ class HUDActions(HUDABC):
         self.num_page = 1
 
         self.state: Literal["normal", "hidden"] = "normal"
+        self.hide_button_id = 0
 
     @property
     def tag(self):
@@ -105,7 +106,7 @@ class HUDActions(HUDABC):
         )
 
         # Bouton pour cacher l'hud du bas
-        self.canvas.create_button(
+        self.hide_button_id = self.canvas.create_button(
             x1_cadre - 20,
             y0_cadre - 20,
             x1_cadre - 5,
@@ -146,6 +147,7 @@ class HUDActions(HUDABC):
         La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
         """
         self.state = "hidden"
+        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▲")
         self.hide_animation()
 
     def bshow(self):
@@ -153,6 +155,7 @@ class HUDActions(HUDABC):
         La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
         """
         self.state = "normal"
+        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▼")
         self.show_animation()
 
     def show_or_hide(self, e=None):

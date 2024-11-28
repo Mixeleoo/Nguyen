@@ -11,6 +11,11 @@ class HUDHistory(HUDABC):
 
         self.rect_hiding_top_text_id = 0
         self.state: Literal["normal", "hidden"] = "normal"
+        self.hide_button_id = 0
+        self.background_rect_id = 0
+        self.thumb_id = 0
+
+        self.longueur_texte = 0
 
     @property
     def tag(self):
@@ -29,13 +34,13 @@ class HUDHistory(HUDABC):
         y1_cadre = y0_cadre + height
 
         # Rectangle de l'historique
-        self.canvas.create_rectangle(
+        self.background_rect_id = self.canvas.create_rectangle(
             x0_cadre, y0_cadre, x1_cadre, y1_cadre,
             fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag)
         )
 
         # Rectangle pour ranger l'historique
-        self.canvas.create_button(
+        self.hide_button_id = self.canvas.create_button(
             x0_cadre - 20,
             y1_cadre - 20,
             x0_cadre - 5,
@@ -44,18 +49,17 @@ class HUDHistory(HUDABC):
         )
 
         # Scrollbar
-        self.canvas.create_rectangle(
+        self.thumb_id = self.canvas.create_rectangle(
             geometry_width - 5 - 15,
-            5 + 25,
+            0,
             geometry_width - 5 - 5,
-            5 + 45,
+            0,
             fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, drag_tag=SCROLLBAR_TAG, hud_tag=self.tag)
         )
 
+        self.add_text("Début de la partie !")
         for i in range(60):
-            self.canvas.create_text((geometry_width - 150 + geometry_width - 5) // 2, - 50 + i * 20,
-                                    text=f"slt je suis le n°{('0' + str(i)) if i < 10 else i}",
-                                    tags=set_tags(hud_tag=self.tag) + (HISTORY_TEXT,))
+            self.add_text(f"slt je suis le n°{('0' + str(i)) if i < 10 else i}")
 
 
         # to_hide_text_rectangle
@@ -109,6 +113,7 @@ class HUDHistory(HUDABC):
         La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
         """
         self.state = "hidden"
+        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="◄")
         self.hide_animation()
 
     def bshow(self):
@@ -116,6 +121,7 @@ class HUDHistory(HUDABC):
         La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
         """
         self.state = "normal"
+        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="►")
         self.show_animation()
 
     def show_or_hide(self, e=None):
@@ -124,3 +130,88 @@ class HUDHistory(HUDABC):
 
         else:
             self.bshow()
+
+    def add_text(self, text: str) -> None:
+        """
+        Méthode qui ajoute du texte à l'historique.\n
+        Elle ajoutera sa taille en hauteur à la longueur totale des textes dans l'historique.\n
+        Elle met à jour la variable du dernier texte ajouté\n
+        Elle refera descendre l'historique tout en bas pour que le joueur voie quand il y a du nouveau\n
+        Elle refera calculer la nouvelle taille du thumb de la scrollbar.\n
+        """
+        coords = self.canvas.coords(self.background_rect_id)
+
+        texte_id = self.canvas.create_text(
+            (coords[0] + coords[2]) // 2, coords[3] - 10,
+            text=text, tags=set_tags(hud_tag=self.tag, group_tag=HISTORY_TEXT) + (TEXT_TAG,)
+        )
+
+        bbox = self.canvas.bbox(texte_id)
+        longueur_texte = bbox[3] - bbox[1]
+
+        self.drag_history_text(-longueur_texte)
+        self.longueur_texte += longueur_texte
+
+        # Après avoir mis à jour la longueur du texte, on met à jour la taille de lu thumb de la scrollbar
+        self.resize_thumb()
+
+        # On référence le texte vers le rectangle en dessous (pour le drag du texte)
+        self.canvas.text_id_in_rectangle_id[texte_id] = self.background_rect_id
+
+    def resize_thumb(self):
+        coords = self.canvas.coords(self.background_rect_id)
+        height = coords[3] - coords[1]
+
+        longueur_viewport = height - 50
+        taille_scrollbar = height - 50
+        # (longueur_viewport / longueur_contenu) * taille_scrollbar
+        longueur_thumb = (longueur_viewport / self.longueur_texte) * taille_scrollbar
+
+        coords_thumb = self.canvas.coords(self.thumb_id)
+        self.canvas.coords(self.thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 25, coords_thumb[2], coords[3] - 25)
+
+    def drag_history_text(self, dy: int):
+        self.canvas.move(HISTORY_TEXT, 0, dy)
+        self.hide_exceeding_text()
+
+    def hide_exceeding_text(self):
+        text_history_ids = self.canvas.find_withtag(HISTORY_TEXT)
+        i = 0
+
+        # Tous les textes en haut du rectangle deviennent hidden
+        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[1] + 10:
+            self.canvas.itemconfigure(text_history_ids[i], state="hidden")
+            i += 1
+
+        # Ceux au milieu, on les laisse
+        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[3] - 10:
+            self.canvas.itemconfigure(text_history_ids[i], state="normal")
+            i += 1
+
+        # Ceux en bas du rectangle deviennent hidden
+        while i < len(text_history_ids):
+            self.canvas.itemconfigure(text_history_ids[i], state="hidden")
+            i += 1
+
+    def on_drag_scrollbar(self, event: tk.Event):
+
+        dy = event.y - self.canvas.mouse_coor[1]
+
+        if self.canvas.coords(self.thumb_id)[1] + dy < self.canvas.coords(self.background_rect_id)[1] + 25 or \
+            self.canvas.coords(self.thumb_id)[3] + dy > self.canvas.coords(self.background_rect_id)[3] - 25:
+            dy = 0
+
+        # Déplace tous les carrés avec le tag "square"
+        self.canvas.move("active", 0, dy)
+
+        coords = self.canvas.coords(self.background_rect_id)
+        height = coords[3] - coords[1]
+
+        longueur_viewport = height - 50
+
+        # distance_defilée = fraction défilée * taille totale du contenu
+        # fraction defilée = distance effectuee / taille de la viewport
+        distance_defilee = (dy / longueur_viewport) * self.longueur_texte
+        self.drag_history_text(-distance_defilee)
+
+
