@@ -167,6 +167,9 @@ class HUDHistory(HUDABC):
         # (longueur_viewport / longueur_contenu) * taille_scrollbar
         longueur_thumb = (longueur_viewport / self.longueur_texte) * taille_scrollbar
 
+        # On limite la taille du thumb de la scrollbar quand même
+        longueur_thumb = longueur_thumb if longueur_thumb > 20 else 20
+
         coords_thumb = self.canvas.coords(self.thumb_id)
         self.canvas.coords(self.thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 25, coords_thumb[2], coords[3] - 25)
 
