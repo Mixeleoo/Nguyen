@@ -34,11 +34,11 @@ class Radiobutton:
 
             self.currently_selected = None
 
-    def get_selected_option(self) -> str | None:
+    def get_selected_option(self) -> int | None:
         """
-        :return: Le texte sur le rectangle dernièrement sélectionné
+        :return: L'id du rectangle dernièrement sélectionné
         """
-        return self.canvas.itemcget(self.canvas.text_id_in_rectangle_id[self.currently_selected], "text") if self.currently_selected is not None else None
+        return self.currently_selected
 
 
 class RadiobuttonsSupervisor:
@@ -53,7 +53,7 @@ class RadiobuttonsSupervisor:
 
         }
 
-    def add(self, radiobutton_items_id: tuple[int, ...], ok_button_id: int):
+    def add(self, radiobutton_items_id: tuple[int, ...], ok_button_id: int) -> Radiobutton:
         """
         Cette méthode sert à encadrer l'ajout de nouveaux radiobuttons.
         Elle ajoutera le nouveau radiobutton à sa liste.
@@ -72,6 +72,8 @@ class RadiobuttonsSupervisor:
         tags = list(self.canvas.gettags(ok_button_id))
         tags[GROUP_TAG_INDEX] = group_tag
         self.canvas.itemconfigure(ok_button_id, tags=tags)
+
+        return self.radiobuttons[group_tag]
 
     def toggle_switch_option(self, group_tag: str, option_id: int):
         self.radiobuttons[group_tag].toggle_switch_option(option_id)

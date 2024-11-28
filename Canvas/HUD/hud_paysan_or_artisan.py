@@ -2,6 +2,7 @@ import tkinter as tk
 
 from parameter import *
 from Canvas.HUD.HUDABC import HUDABC
+from Canvas.Radiobutton import Radiobutton
 
 class HUDPaysanOrArtisan(HUDABC):
     def __init__(self, canvas):
@@ -10,6 +11,8 @@ class HUDPaysanOrArtisan(HUDABC):
         self.desired_workforce = 1
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
+
+        self.radiobutton_choice: Radiobutton = None
 
     @property
     def tag(self):
@@ -115,7 +118,7 @@ class HUDPaysanOrArtisan(HUDABC):
             state="hidden"
         )
 
-        self.canvas.radiobuttons.add((self.paysan_choice_id, self.artisan_choice_id),
+        self.radiobutton_choice = self.canvas.radiobuttons.add((self.paysan_choice_id, self.artisan_choice_id),
             # Ok bouton
             ok_button_id=self.canvas.create_ok_button(
                 x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, trigger_name=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
@@ -140,9 +143,7 @@ class HUDPaysanOrArtisan(HUDABC):
 
     def immigrate(self, e=None):
 
-        choice_made = self.canvas.radiobuttons.get_selected_option(self.canvas.gettags(CHOOSE_VILLAGE_TO_IMMIGRATE_TAG)[GROUP_TAG_INDEX])
-
-        if choice_made:
+        if self.radiobutton_choice.get_selected_option():
             self.canvas.hud_choose_village.show()
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
@@ -164,6 +165,10 @@ class HUDPaysanOrArtisan(HUDABC):
         self.desired_workforce += 1 if self.desired_workforce + 1 <= 10 else 0
 
         if PA < self.desired_workforce * 2:
+            # Si le joueur a selectionné ce choix
+            if self.radiobutton_choice.get_selected_option() == self.artisan_choice_id:
+                self.radiobutton_choice.reset()
+
             # Griser le bouton artisan et ne le rendre plus clickable
             self.griser(self.artisan_choice_id)
 

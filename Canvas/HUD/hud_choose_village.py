@@ -1,6 +1,7 @@
 
 import tkinter as tk
 
+from Canvas.Radiobutton import Radiobutton
 from parameter import *
 from Canvas.HUD.HUDMobileABC import HUDMobileABC
 
@@ -11,6 +12,8 @@ class HUDChooseVillage(HUDMobileABC):
         self.background_rectangle_id = 0
         self.ok_button_id = 0
         self.cancel_button_id = 0
+
+        self.radiobutton_village_choix: Radiobutton
 
     @property
     def tag(self):
@@ -50,17 +53,18 @@ class HUDChooseVillage(HUDMobileABC):
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG), state="hidden"
         )
 
-        # Bouton OK
+        # Bouton OK qui lance l'immigration
         self.ok_button_id = self.canvas.create_ok_button(
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
             trigger_name=IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
-        self.canvas.radiobuttons.add((village_id,),
+        # Radiobutton du choix du village
+        self.radiobutton_village_choix = self.canvas.radiobuttons.add((village_id,),
             ok_button_id=self.ok_button_id
         )
 
-        # Bouton Annuler
+        # Bouton Annuler qui annule l'immigration
         self.cancel_button_id = self.canvas.create_cancel_button(
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide,
             trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
