@@ -1,4 +1,5 @@
 
+from typing import Optional
 import tkinter as tk
 
 from Canvas.Radiobutton import Radiobutton
@@ -13,7 +14,7 @@ class HUDChooseVillage(HUDMobileABC):
         self.ok_button_id = 0
         self.cancel_button_id = 0
 
-        self.radiobutton_village_choix: Radiobutton
+        self.radiobutton_village_choix: Optional[Radiobutton] = None
 
     @property
     def tag(self):
@@ -66,7 +67,7 @@ class HUDChooseVillage(HUDMobileABC):
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button_id = self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide,
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
             trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
@@ -108,4 +109,11 @@ class HUDChooseVillage(HUDMobileABC):
         return new_category_id
 
     def immigrate(self, event: tk.Event) -> None:
-        print(self.canvas.radiobuttons.get_selected_option(self.canvas.gettags("active")[GROUP_TAG_INDEX]))
+        print(self.radiobutton_village_choix.get_selected_option(), self.canvas.hud_paysan_or_artisan.last_choice_made)
+
+        # Même comportement que si on annulait, mais précédé par la validation
+        self.cancel()
+
+    def cancel(self):
+        self.radiobutton_village_choix.reset()
+        self.hide()

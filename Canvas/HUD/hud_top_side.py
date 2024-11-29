@@ -23,6 +23,8 @@ class HUDTopSide(HUDABC):
             x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag)
         )
 
+        #self.canvas.create_text()
+
     def replace(self, event: tk.Event) -> None:
         pass
 
