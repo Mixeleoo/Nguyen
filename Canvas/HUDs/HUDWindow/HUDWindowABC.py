@@ -3,7 +3,7 @@ import tkinter as tk
 from abc import ABC
 
 from parameter import *
-from Canvas.HUD.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
 
 class HUDWindowABC(HUDMobileABC, ABC):
@@ -46,29 +46,34 @@ class HUDWindowABC(HUDMobileABC, ABC):
         )
 
         # Bouton pour fermer
-        self.canvas.create_text_in_rectangle(
+        self.canvas.create_button(
             x0=x1_cadre - 20,
             y0=y0_cadre,
             x1=x1_cadre,
             y1=y0_cadre + 20,
-            fill=FILL_CANCEL,
             text="x",
-            rectangle_tags=set_tags(CLICKABLE_TAG, CLOSE_MORE_INFO_WINDOW, color_tag=FILL_CANCEL, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
-            state="hidden"
+            hud_tag=self.tag,
+            func_triggered=self.hide(),
+            fill=FILL_CANCEL,
+            state="hidden",
+            trigger_name="close_" + self.tag + "_window",
+            is_temp=True,
+            for_which_game_mode=("basic",)
         )
 
         # Bouton pour pin
-        self.canvas.create_text_in_rectangle(
+        self.canvas.create_button(
             x0=x1_cadre - 40,
             y0=y0_cadre,
             x1=x1_cadre - 20,
             y1=y0_cadre + 20,
-            fill=FILL_ACTION_BOX,
             text="⌂",
-            rectangle_tags=set_tags(CLICKABLE_TAG, PIN_MORE_INFO_WINDOW, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
-            state="hidden"
+            hud_tag=self.tag,
+            func_triggered=self.pin(),
+            state="hidden",
+            trigger_name="pin_" + self.tag + "_window",
+            is_temp=True,
+            for_which_game_mode=("basic",)
         )
 
         # Rectangle pour bouger la fenêtre (en haut dcp)

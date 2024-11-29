@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Literal
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 
 class HUDActions(HUDABC):
     def __init__(self, canvas):
@@ -118,9 +118,9 @@ class HUDActions(HUDABC):
 
     def replace(self, event: tk.Event):
         """
-        Replacer l'HUD du bas:
+        Replacer l'HUDs du bas:
         - mouvement sur x : Son centre reste au centre de l'image donc on prend la distance entre l'ancien centre et
-            le nouveau et on déplace tous les éléments du HUD de cette distance
+            le nouveau et on déplace tous les éléments du HUDs de cette distance
         - mouvement sur y : On déplace tous les éléments
         """
         self.canvas.move(
@@ -144,7 +144,7 @@ class HUDActions(HUDABC):
 
     def bhide(self):
         """
-        La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
+        La phase before hide, qui consiste à changer l'état du HUDs en "hidden" et lancer l'animation
         """
         self.state = "hidden"
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▲")
@@ -152,7 +152,7 @@ class HUDActions(HUDABC):
 
     def bshow(self):
         """
-        La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
+        La phase before show, qui consiste à changer l'état du HUDs en "normal" et lancer l'animation
         """
         self.state = "normal"
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▼")

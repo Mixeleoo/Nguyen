@@ -1,6 +1,6 @@
 
 from parameter import *
-from Canvas.HUD.HUDWindowABC import HUDWindowABC
+from Canvas.HUDs.HUDWindow.HUDWindowABC import HUDWindowABC
 from Canvas.hud_canvas import HUDCanvas
 
 class HUDWindowMoreInfo(HUDWindowABC):
