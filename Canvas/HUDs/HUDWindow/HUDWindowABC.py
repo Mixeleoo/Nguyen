@@ -83,11 +83,13 @@ class HUDWindowABC(HUDMobileABC, ABC):
             x1=x1_cadre - 40,
             y1=y0_cadre + 20,
             fill=FILL_ACTION_BOX,
-            rectangle_tags=set_tags(drag_tag=MOVE_WINDOW, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
+            rectangle_tags=set_tags(drag_tag="move_" + self.tag + "_window", hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             text=self.tag,
             state="hidden"
         )
+
+        self.canvas.tag_fod["move_" + self.tag + "_window"] = self.drag
 
         # Rectangles pour changer la taille de la fenêtre.
         # Ils sont créés dans cet ordre : En haut à gauche, en haut à droite
@@ -100,18 +102,18 @@ class HUDWindowABC(HUDMobileABC, ABC):
                     [x0_cadre, x1_cadre][i] + 5,
                     [y0_cadre, y1_cadre][j] + 5,
                     fill=FILL_ACTION_BOX,
-                    tags=set_tags(drag_tag=DRAG_CORNER_MORE_INFO_WINDOW_TAG, hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
+                    tags=set_tags(drag_tag="drag_corner_" + self.tag + "_window", hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
                     state="hidden"
                 )
-
+                
+                self.canvas.tag_fod["drag_corner_" + self.tag + "_window"] = self.drag_corner_window
                 self.canvas.tag_lower(item, MAP_TAG)
-
                 self.drag_corners.append(item)
 
     def replace(self, *args) -> None:
         pass
 
-    def on_drag(self, event: tk.Event):
+    def drag(self, event: tk.Event):
         dx = event.x - self.canvas.mouse_coor[0]
         dy = event.y - self.canvas.mouse_coor[1]
 
@@ -159,7 +161,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
                 )
                 k += 1
 
-    def on_drag_corner_window(self, event: tk.Event):
+    def drag_corner_window(self, event: tk.Event):
         """
         Je veux récupérer les coordonnées de la grande fenêtre, pour la coordonnée :
         - x0, il faut la coordonnée x0 de, soit le rectangle movible, soit le grand rectangle
@@ -195,9 +197,6 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
     def pin(self):
         if TEMP_TAG in self.canvas.gettags(self.tag):
-            # On empêche d'unhighlight l'objet
-            self.canvas.dtag("highlight", "highlight")
-
             # La fenêtre ne devient plus temporaire
             self.canvas.dtag(self.tag, TEMP_TAG)
 

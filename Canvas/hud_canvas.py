@@ -9,8 +9,6 @@ class HUDCanvas(BaseCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        self.jeu = kw['jeu']
-
         from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
         from Canvas.HUDs.HUDStandard.hud_paysan_or_artisan import HUDPaysanOrArtisan
         from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
