@@ -1,4 +1,6 @@
+
 import tkinter as tk
+from typing import Optional
 
 from parameter import *
 from Canvas.HUD.HUDABC import HUDABC
@@ -12,7 +14,10 @@ class HUDPaysanOrArtisan(HUDABC):
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
 
-        self.radiobutton_choice: Radiobutton = None
+        # tableau qui contiendra le dernier effectif choisi puis le dernier type de villageois choisi
+        self.last_choice_made = []
+
+        self.radiobutton_choice: Optional[Radiobutton] = None
 
     @property
     def tag(self):
@@ -144,6 +149,10 @@ class HUDPaysanOrArtisan(HUDABC):
     def immigrate(self, e=None):
 
         if self.radiobutton_choice.get_selected_option():
+
+            self.last_choice_made = [self.desired_workforce, self.radiobutton_choice.get_selected_option()]
+
+            # On affiche le choix du village
             self.canvas.hud_choose_village.show()
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
@@ -153,10 +162,9 @@ class HUDPaysanOrArtisan(HUDABC):
             print("T'as pas fait de choix là bro")
 
     def cancel(self, e=None):
-        self.canvas.radiobuttons.radiobuttons[self.canvas.gettags(CHOOSE_VILLAGE_TO_IMMIGRATE_TAG)[GROUP_TAG_INDEX]].reset()
 
-        for item_id in self.canvas.find_withtag(PAYSAN_OR_ARTISAN_WINDOW_TAG):
-            self.canvas.itemconfigure(item_id, state="hidden")
+        self.radiobutton_choice.reset()
+        self.hide()
 
         # On reset aussi l'effectif
         self.desired_workforce = 1
