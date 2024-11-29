@@ -21,8 +21,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
         self.basic_mode_tag_foc[BUILD_CITY] = self.hud_build_city.choose_plain_to_build
         self.basic_mode_tag_foc[BUILD_CHURCH] = self.hud_build_church.choose_village_to_build
-        self.basic_mode_tag_foc[CLOSE_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().hide()
-        self.basic_mode_tag_foc[PIN_MORE_INFO_WINDOW] = lambda *args: self.hudwindow_more_info_supervisor.get_active_window().pin()
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy
         self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hud_paysan_or_artisan.show
         self.basic_mode_tag_foc[NOTHING_TAG] = dummy

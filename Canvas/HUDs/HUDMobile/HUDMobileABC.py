@@ -11,21 +11,21 @@ class HUDMobileABC(ABC):
     @abstractmethod
     def tag(self):
         """
-        Méthode pour retourner le tag de l'HUD
+        Méthode pour retourner le tag de l'HUDs
         """
         pass
 
     @abstractmethod
     def create(self, *args):
         """
-        Méthode d'initialisation de la classe HUD
+        Méthode d'initialisation de la classe HUDs
         """
         pass
 
     @abstractmethod
     def replace(self, *args) -> None:
         """
-        Méthode de replacement de l'HUD
+        Méthode de replacement de l'HUDs
         """
         pass
 

@@ -3,7 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 
 class HUDBuildCity(HUDABC):
     def __init__(self, canvas):
@@ -107,7 +107,7 @@ class HUDBuildCity(HUDABC):
 
     def choose_plain_to_build(self, event: tk.Event):
         """
-        Uniquement s'il y a la possibilité, on cache les HUD, et on affiche le texte disant : Où voulez-vous construire
+        Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
         votre village ? Passage en mode citybuilding mgl
         """
         # On eclairci la zone
@@ -127,7 +127,7 @@ class HUDBuildCity(HUDABC):
     def build_city_on_plain(self, event: tk.Event):
         """
         Cette fonction crée un village si le joueur clique sur une plaine qui n'a pas de villages aux alentours.
-        Elle affiche également les HUD qui étaient précédemment affichés avant de construire le village.
+        Elle affiche également les HUDs qui étaient précédemment affichés avant de construire le village.
         """
         # Modifier la case en village
         square_id = self.canvas.find_withtag("active")[0]
@@ -142,7 +142,7 @@ class HUDBuildCity(HUDABC):
 
             tags = list(self.canvas.gettags(square_id))
 
-            # Comme il y a un nouveau village, il faut update l'HUD qui permet de choisir le village
+            # Comme il y a un nouveau village, il faut update l'HUDs qui permet de choisir le village
             new_option_id = self.canvas.hud_choose_village.add_village_update_HUD("village 2")
             self.canvas.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)
 

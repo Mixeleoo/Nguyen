@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Optional
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 from Canvas.Radiobutton import Radiobutton
 
 class HUDPaysanOrArtisan(HUDABC):

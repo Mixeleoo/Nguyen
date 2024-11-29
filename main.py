@@ -2,12 +2,16 @@ import tkinter as tk
 from parameter import *
 
 from Canvas.self_made_canvas import SelfMadeCanvas
+from jeu import Jeu
 
 
 class Interface(tk.Tk):
     def __init__(self, game_grid_geometry: tuple[int] = (CARRE_PAR_COLONNE, CARRE_PAR_LIGNE)):
         # Partie tkinter
         super().__init__()
+
+        # On instancie le jeu
+        self.jeu = Jeu()
 
         # sps = la longueur des carrés en pixel (square pixel size)
         self.sps = SPS
@@ -29,7 +33,7 @@ class Interface(tk.Tk):
         self.maxsize(canvas_width, canvas_height)
 
         # La grille du jeu
-        self.canvas = SelfMadeCanvas(self, width=canvas_width, height=canvas_height)
+        self.canvas = SelfMadeCanvas(self, width=canvas_width, height=canvas_height, jeu=self.jeu)
         self.canvas.pack()
 
         # Quand on redimensionne la fenêtre, on veut que les carrés se replacent en fonction de la nouvelle taille
@@ -46,7 +50,7 @@ class Interface(tk.Tk):
         # Fonction qui va générer tous les carrés aléatoirement
         self.canvas.generate_game_grid(game_grid_geometry)
 
-        # Créer les HUD
+        # Créer les HUDs
         self.canvas.create_HUDs(geometry_width, geometry_height)
         self.canvas.hud_history.hide_exceeding_text()
 

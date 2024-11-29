@@ -3,7 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 
 class HUDBuildChurch(HUDABC):
     def __init__(self, canvas):
@@ -82,7 +82,7 @@ class HUDBuildChurch(HUDABC):
 
     def choose_village_to_build(self, event: tk.Event):
         """
-        Uniquement s'il y a la possibilité, on cache les HUD, et on affiche le texte disant : Où voulez-vous construire
+        Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
         votre eglise ? Passage en mode churchbuilding mgl
         """
         self.canvas.hide_all_permanant_huds()

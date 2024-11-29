@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 
 class HUDTopSide(HUDABC):
     def __init__(self, canvas):

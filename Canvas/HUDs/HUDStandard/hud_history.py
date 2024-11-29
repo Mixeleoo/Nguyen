@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Literal
 
 from parameter import *
-from Canvas.HUD.HUDABC import HUDABC
+from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 
 class HUDHistory(HUDABC):
     def __init__(self, canvas):
@@ -84,7 +84,7 @@ class HUDHistory(HUDABC):
 
     def replace(self, event: tk.Event):
         """
-        Replacer l'HUD du bas:
+        Replacer l'HUDs du bas:
         - mouvement sur x : L'ensemble reste à gauche de l'écran.
         - mouvement sur y : L'ensemble reste en haut de la fenêtre et
             il faut faire un homotéthie de l'historique en fonction de l'agrandissement de la fenêtre
@@ -110,7 +110,7 @@ class HUDHistory(HUDABC):
 
     def bhide(self):
         """
-        La phase before hide, qui consiste à changer l'état du HUD en "hidden" et lancer l'animation
+        La phase before hide, qui consiste à changer l'état du HUDs en "hidden" et lancer l'animation
         """
         self.state = "hidden"
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="◄")
@@ -118,7 +118,7 @@ class HUDHistory(HUDABC):
 
     def bshow(self):
         """
-        La phase before show, qui consiste à changer l'état du HUD en "normal" et lancer l'animation
+        La phase before show, qui consiste à changer l'état du HUDs en "normal" et lancer l'animation
         """
         self.state = "normal"
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="►")

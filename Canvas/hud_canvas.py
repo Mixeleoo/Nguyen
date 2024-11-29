@@ -9,18 +9,20 @@ class HUDCanvas(BaseCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        from Canvas.HUD.hud_build_city import HUDBuildCity
-        from Canvas.HUD.hud_paysan_or_artisan import HUDPaysanOrArtisan
-        from Canvas.HUD.hud_actions import HUDActions
-        from Canvas.HUD.hud_history import HUDHistory
-        from Canvas.HUD.hud_build_church import HUDBuildChurch
-        from Canvas.HUD.hud_event import HUDEvent
-        from Canvas.HUD.hudmobile_village_info import HUDMobileVillageInfo
-        from Canvas.HUD.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
-        from Canvas.HUD.hud_choose_village import HUDChooseVillage
-        from Canvas.HUD.hud_top_side import HUDTopSide
+        self.jeu = kw['jeu']
 
-        from Canvas.HUD.hudwindow_more_info import HUDWindowMoreInfoSupervisor
+        from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
+        from Canvas.HUDs.HUDStandard.hud_paysan_or_artisan import HUDPaysanOrArtisan
+        from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
+        from Canvas.HUDs.HUDStandard.hud_history import HUDHistory
+        from Canvas.HUDs.HUDStandard.hud_build_church import HUDBuildChurch
+        from Canvas.HUDs.HUDStandard.hud_event import HUDEvent
+        from Canvas.HUDs.HUDMobile.hudmobile_village_info import HUDMobileVillageInfo
+        from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
+        from Canvas.HUDs.HUDStandard.hud_choose_village import HUDChooseVillage
+        from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
+
+        from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
 
         self.to_show_if_cancel = []
 
@@ -39,7 +41,7 @@ class HUDCanvas(BaseCanvas):
 
     def create_HUDs(self, geometry_width: int, geometry_height: int):
 
-        # HUD permanants
+        # HUDs permanants
         self.hud_actions.create(geometry_width, geometry_height)
         self.hud_history.create(geometry_width, geometry_height)
         self.hud_build_city.create(geometry_width, geometry_height)
@@ -49,7 +51,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_choose_village.create(geometry_width, geometry_height)
         self.hud_top_side.create(geometry_width, geometry_height)
 
-        # HUD temporaire
+        # HUDs temporaire
         self.hudmobile_village_info.create()
         self.hudmobile_yavillagegros.create()
         for i in range(NB_NOBLE_AU_DEPART):
@@ -67,7 +69,7 @@ class HUDCanvas(BaseCanvas):
             self.to_show_if_cancel += [self.hud_history.bshow]
 
     def show_hidden_permanant_huds(self):
-        # Réafficher les HUD cachés lorsque le joueur a cliqué sur l'action pour construire un village
+        # Réafficher les HUDs cachés lorsque le joueur a cliqué sur l'action pour construire un village
         for f in self.to_show_if_cancel:
             f()
 

@@ -1,6 +1,6 @@
 
 from parameter import *
-from Canvas.HUD.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
 
 class HUDMobileYaUnVillageGros(HUDMobileABC):
@@ -14,7 +14,7 @@ class HUDMobileYaUnVillageGros(HUDMobileABC):
         return TEMP_YAUNVILLAGEICIGROS_TAG
 
     def create(self) -> None:
-        # On va créer l'HUD sur la première case
+        # On va créer l'HUDs sur la première case
         village_coords = self.canvas.coords(self.canvas.find_withtag(MAP_TAG)[0])
 
         text = "y'a un village ici gros"

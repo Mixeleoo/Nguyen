@@ -4,7 +4,7 @@ import tkinter as tk
 
 from Canvas.Radiobutton import Radiobutton
 from parameter import *
-from Canvas.HUD.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
 class HUDChooseVillage(HUDMobileABC):
     def __init__(self, canvas):
@@ -14,6 +14,8 @@ class HUDChooseVillage(HUDMobileABC):
         self.ok_button_id = 0
         self.cancel_button_id = 0
 
+        # id du dernier village choisi
+        self.last_choice_made = 0
         self.radiobutton_village_choix: Optional[Radiobutton] = None
 
     @property
@@ -109,7 +111,13 @@ class HUDChooseVillage(HUDMobileABC):
         return new_category_id
 
     def immigrate(self, event: tk.Event) -> None:
-        print(self.radiobutton_village_choix.get_selected_option(), self.canvas.hud_paysan_or_artisan.last_choice_made)
+        """
+        Méthode qui met à jour le dernier choix de l'utilisateur dans l'attribut self.last_choice_made
+        """
+        self.last_choice_made = self.radiobutton_village_choix.get_selected_option()
+
+        # lancer l'immigration du jeu
+        self.canvas.jeu.immigrer()
 
         # Même comportement que si on annulait, mais précédé par la validation
         self.cancel()
