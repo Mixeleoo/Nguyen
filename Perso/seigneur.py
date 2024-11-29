@@ -1,6 +1,4 @@
 from Perso.noble import Noble
-from Perso.village import Village
-from parameter import nom_aleatoire
 
 
 class Seigneur(Noble):
@@ -15,11 +13,10 @@ class Seigneur(Noble):
         self._liste_nobles: list[Noble] = []
 
 
-    def prend_impot(self):
+    def prend_impot_noble(self):
         """
         Ajoute aux ressources du seigneur les impot perçu pour chaque noble sous ses ordres
         """
-        Noble.prend_impot(self)  # recupération de l'impôt de ses roturiers
 
         for noble in self._liste_nobles:
             self._ressources += noble.payer_impot()

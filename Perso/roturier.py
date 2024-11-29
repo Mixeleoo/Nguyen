@@ -7,8 +7,8 @@ class Roturier(Personne):
     Un roturier est une personne qui a en plus une capacité de prodcution qui lui est propre (minimum de 2)
     il a également un taux d'impôt prédéfinit (25%)
     """
-    def __init__(self, pnom: str, pres: int, parg: int, cdp: int):
-        Personne.__init__(self, pnom, pres, parg)
+    def __init__(self, pnom: str, parg: int, cdp: int):
+        Personne.__init__(self, pnom, 0 , parg)
         self._cdp = cdp
         self._taux_impot = 0.25
 
