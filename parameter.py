@@ -227,7 +227,7 @@ def get_width_text(text: str):
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
 
-noms = [
+noms_village = [
     "Lande-Cendrée",
     "Bois-Ruiné",
     "Gorgemort",
@@ -280,8 +280,32 @@ noms = [
     "Fond-du-Désespoir"
 ]
 
-def nom_aleatoire():
-    return choice([noms])
+prenoms_perso = [ "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Léonard", "Ysabeau", "Godefroy", "Agnès", "Hugues",
+    "Géraldine", "Baudoin", "Armand", "Isabeau", "Aimé", "Perrin", "Tanguy", "Clothilde", "Florent", "Sygarde",
+    "Gildas", "Théodora", "Renaud", "Béatrice", "Geoffroy", "Hildegarde", "Roland", "Mathilde", "Thierry", "Gertrude",
+    "Bernard", "Edwige", "Louis", "Aubrée", "Gérald", "Renée", "Frédéric", "Alix", "Frédérique", "Foulques",
+    "Hélène", "Henri", "Aude", "Mathieu", "Judith", "Galeran", "Constance", "Géraud", "Solange", "Renaude",
+    "Esteban", "Eustache", "Brunehaut", "Déodat", "Lancelot", "Lison", "Eléonore", "Sénéchal", "Aldegarde", "Béatrice",
+    "Térence", "Iseult", "Roger", "Pépin", "Blanche", "Godefroy", "Tiberius", "Hildebrand", "Eadric", "Sigismond",
+    "Gaétane", "Éléonore", "Thibault", "Isolde", "Géron", "Luce", "Guy", "Sibylle", "Bertrand", "Mathurin",
+    "Lothaire", "Théodore", "Hermenegilde", "Aldric", "Adeline", "Justine", "Yvain", "Guibert", "Pétronille", "Floriane",
+    "Valérie", "Ulric", "Adhémar", "Bérengère", "Gauthier", "Adalbert", "Lambert", "Gervais", "Clovis", "Eugénie",
+    "Héribert", "Philomène", "Mathias", "Frédégonde", "Hildegarde", "Édouard", "Pétronille", "Arsène", "Carlotta", "Geoffroy",
+    "Aldebert", "Aymon", "Béna", "Géraldine", "Alvéran", "Théophane", "Maud", "Roland", "Odilon", "Arnaud",
+    "Adèle", "Maïeul", "Cécile", "Thierry", "Milburge", "Madeleine", "Hildegarde", "Olivier", "Rémacle", "Hélier",
+    "Hélène", "Eberhard", "Côme", "Eustache", "Éva", "Grégoire", "Aimée", "Fulbert", "Agnès", "Baudouin",
+    "Désiré", "Arnould", "Sybille", "Agathe", "Enguerrand", "Yvette", "Roderick", "Ivo", "Guillaume", "Otton",
+    "Léon", "Claire", "Dido", "Ernestine", "Clément", "Irène", "Gauthier", "Béatrix", "Anselme", "Godefroy",
+    "Quentin", "Madeleine", "Liévin", "Olric", "Odon", "Géraud", "Venance", "Alix", "Eloise", "Engelbert",
+    "Gauthier", "Raoul", "Théobald", "Perrine", "Ethelred", "Gisèle", "Mathilde", "Thierry", "François", "Orabel",
+    "Sigismond", "Léonidas", "Godfrey", "Alice", "Audebert", "Romain", "Berthe", "André", "Maurin", "Agnès",
+    "Godefroy", "Norbert", "Millicent", "Eulalie", "Bertrade", "Hermenegilde", "Louis", "Gilbert", "Beatrix", "Gildas"]
+
+def nom_aleatoire_village():
+    return choice([noms_village])
+
+def prenom_aleatoire() :
+    return choice([prenoms_perso])
 
 def dummy(*args):
     pass

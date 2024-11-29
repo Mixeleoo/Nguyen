@@ -1,7 +1,7 @@
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire.village import Village
-from parameter import nom_aleatoire
+from parameter import nom_aleatoire_village
 
 
 class Noble(Personne):
@@ -35,7 +35,7 @@ class Noble(Personne):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
-        nom = nom_aleatoire()
+        nom = nom_aleatoire_village()
         self._dico_villages[pid] = Village(pid, nom, self._nom)
 
     def nourrir_soldats(self):
