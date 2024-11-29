@@ -280,6 +280,9 @@ noms_village = [
     "Fond-du-Désespoir"
 ]
 
+def nom_aleatoire_village():
+    return choice([noms_village])
+
 prenoms_perso = [ "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Léonard", "Ysabeau", "Godefroy", "Agnès", "Hugues",
     "Géraldine", "Baudoin", "Armand", "Isabeau", "Aimé", "Perrin", "Tanguy", "Clothilde", "Florent", "Sygarde",
     "Gildas", "Théodora", "Renaud", "Béatrice", "Geoffroy", "Hildegarde", "Roland", "Mathilde", "Thierry", "Gertrude",
@@ -301,11 +304,67 @@ prenoms_perso = [ "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Lé
     "Sigismond", "Léonidas", "Godfrey", "Alice", "Audebert", "Romain", "Berthe", "André", "Maurin", "Agnès",
     "Godefroy", "Norbert", "Millicent", "Eulalie", "Bertrade", "Hermenegilde", "Louis", "Gilbert", "Beatrix", "Gildas"]
 
-def nom_aleatoire_village():
-    return choice([noms_village])
-
 def prenom_aleatoire() :
     return choice([prenoms_perso])
+
+noms_eglises = [
+    "Église Saint-Pierre",
+    "Église Notre-Dame",
+    "Église Sainte-Marie",
+    "Église Saint-Jean-Baptiste",
+    "Église Saint-Paul",
+    "Église Saint-Louis",
+    "Église Saint-Augustin",
+    "Église Saint-Antoine",
+    "Église Sainte-Catherine",
+    "Église Saint-Joseph",
+    "Église Saint-François",
+    "Église Saint-André",
+    "Église Sainte-Thérèse",
+    "Église Saint-Honoré",
+    "Église Saint-Sulpice",
+    "Église Sainte-Claire",
+    "Église Saint-Denis",
+    "Église Saint-Alexandre",
+    "Église Sainte-Anne",
+    "Église Saint-Michel",
+    "Église Saint-Roch",
+    "Église Sainte-Rita",
+    "Église Saint-Étienne",
+    "Église Sainte-Élisabeth",
+    "Église Saint-Jean-de-Latran",
+    "Église Saint-Martin",
+    "Église Sainte-Bernadette",
+    "Église Saint-Benoît",
+    "Église Saint-Marc",
+    "Église Sainte-Madeleine",
+    "Église Saint-Basile",
+    "Église Saint-Hubert",
+    "Église Saint-Pierre-et-Saint-Paul",
+    "Église Sainte-Véronique",
+    "Église Saint-Augustin-de-Canterbury",
+    "Église Saint-Jean-de-Dieu",
+    "Église Saint-Cyr",
+    "Église Sainte-Victoire",
+    "Église Saint-Hélier",
+    "Église Saint-Léon",
+    "Église Sainte-Famille",
+    "Église Saint-Georges",
+    "Église Saint-Jacques",
+    "Église Sainte-Rose",
+    "Église Saint-Nicolas",
+    "Église Sainte-Marthe",
+    "Église Saint-Jean-Eudes",
+    "Église Saint-Étienne-de-Montluc",
+    "Église Saint-Dominique",
+    "Église Saint-Louis-de-Gonzague",
+    "Église Saint-Alban"
+]
+
+def nom_aleatoire_eglise() :
+    return choice([noms_eglises])
+
+
 
 def dummy(*args):
     pass

@@ -7,6 +7,7 @@ from parameter import prenom_aleatoire
 from random import randint
 
 from typing import Literal
+from Territoire.eglise import Eglise
 
 class Village :
     """
@@ -20,6 +21,9 @@ class Village :
 
         # Les roturiers que possède le noble
         self._liste_roturier = ListRoturier()
+
+        # Liste des églises dans le village
+        self._liste_eglises : list[Eglise] = []
 
 
     
@@ -36,6 +40,12 @@ class Village :
                 self._liste_roturier += [Roturier(prenom,argent,capacite_prod)]
             elif pvillageois == "paysan" :
                 self._liste_roturier += [Paysan(prenom, capacite_prod)]
+
+    def construire_eglise(self):
+        """
+        ajoute à la liste d'églises du village une nouvelle église
+        """
+        pass
 
 
 
