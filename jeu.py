@@ -21,8 +21,8 @@ class Jeu:
         Si tu as besoin de savoir comment sont organisées les données dans ces attribus ctrl + clic gauche dessus PyCharm t'amènera
         vers le commentaire qui la décrit.
         """
-        print(self.canvas.hud_paysan_or_artisan.last_choice_made)
-        print(self.canvas.hud_choose_village.last_choice_made)
+        print("choix nombre + type villageois : ",self.canvas.hud_paysan_or_artisan.last_choice_made)
+        print("choix village :",self.canvas.hud_choose_village.last_choice_made)
 
     def construire_village(self):
         """

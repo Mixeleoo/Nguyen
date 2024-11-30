@@ -361,6 +361,61 @@ noms_eglises = [
 def nom_aleatoire_eglise() :
     return choice([noms_eglises])
 
+noms_pretres = [
+    "Père Augustin",
+    "Père Bernard",
+    "Père Thomas",
+    "Père François",
+    "Père Dominique",
+    "Père Anselme",
+    "Père Bonaventure",
+    "Père Grégoire",
+    "Père Pierre",
+    "Père Benoît",
+    "Père Grégoire",
+    "Père Jean",
+    "Père Athanase",
+    "Père Jérôme",
+    "Père Ignace",
+    "Père Cyprien",
+    "Père Hilaire",
+    "Père Ambroise",
+    "Père Léon",
+    "Père Isidore",
+    "Père Martine",
+    "Père Nicolas",
+    "Père Jean",
+    "Père François",
+    "Père Pierre",
+    "Père Vincent",
+    "Père Louis",
+    "Père Clément",
+    "Père Polycarpe",
+    "Père Ephrem",
+    "Père Fulgence",
+    "Père Augustin",
+    "Père Grégoire",
+    "Père Firmin",
+    "Père Remi",
+    "Père Évode",
+    "Père Richard",
+    "Père Wenceslas",
+    "Père Thomas",
+    "Père Boniface",
+    "Père Lambert",
+    "Père Gérard",
+    "Père Hyacinthe",
+    "Père Albin",
+    "Père Martin",
+    "Père Gaudentius",
+    "Père Jean",
+    "Père Théodore",
+    "Père Basil",
+    "Père Sévérin"
+]
+
+def nom_aleatoire_pretres() :
+    return choice([noms_pretres])
 
 
 def dummy(*args):

@@ -1,8 +1,9 @@
 from random import randint
 
+from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
-from parameter import prenom_aleatoire
+from parameter import prenom_aleatoire, nom_aleatoire_pretres, nom_aleatoire_eglise
 
 from random import randint
 
@@ -12,12 +13,11 @@ from Territoire.eglise import Eglise
 class Village :
     """
     Un village est représenté par son id (qui servira pour l'associer à son emplacement sur la map)
-    par sa population (une liste de roturiers, de nobles et de soldats) ainsi que par son dirigeant (un seigneur)
+    par sa population de roturiers (une liste de roturiers) et des églises qui la composent (liste d'églises)
     """
-    def __init__(self, pid : int, nom : str, nom_proprio: str) :
+    def __init__(self, pid : int, nom : str) :
         self._nom = nom
         self._identifiant = pid
-        self._nom_proprio = nom_proprio
 
         # Les roturiers que possède le noble
         self._liste_roturier = ListRoturier()
@@ -41,11 +41,12 @@ class Village :
             elif pvillageois == "paysan" :
                 self._liste_roturier += [Paysan(prenom, capacite_prod)]
 
-    def construire_eglise(self):
+    def creer_eglise(self):
         """
         ajoute à la liste d'églises du village une nouvelle église
         """
-        pass
+        pretre = Ecceclesiastique(nom_aleatoire_pretres())
+        self._liste_eglises += [Eglise(pretre,nom_aleatoire_eglise())]
 
 
 
