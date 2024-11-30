@@ -15,7 +15,6 @@ class FunctionOnDragCanvas(AnimationCanvas):
         self.tag_fod[SCROLLBAR_TAG] = self.hud_history.on_drag_scrollbar
         self.tag_fod[NOTHING_TAG] = dummy
 
-
     def on_drag_map(self, event: tk.Event):
         dx = event.x - self.mouse_coor[0]
         dy = event.y - self.mouse_coor[1]

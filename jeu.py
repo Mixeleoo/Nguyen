@@ -1,4 +1,6 @@
 
+from typing import Literal
+
 from Canvas.hud_canvas import HUDCanvas
 """
 TOUT TES IMPORT DES DIFFERENTES CLASSES DE PERSO
@@ -12,17 +14,17 @@ class Jeu:
         """
         pass
 
-    def immigrer(self):
+    def immigrer(self, effectif: int, type_v: Literal["paysan", "artisan"], village_id: int):
         """
         Méthode qui va immigrer en fonction de canvas
-        Les méthodes qui t'intéressent :
-        canvas.hud_paysan_or_artisan.last_choice_made
-        canvas.hud_choose_village.last_choice_made
-        Si tu as besoin de savoir comment sont organisées les données dans ces attribus ctrl + clic gauche dessus PyCharm t'amènera
-        vers le commentaire qui la décrit.
+
+        :param effectif : nombre de du type de villageois désiré
+        :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
+        :param village_id : l'id du village concerné
         """
-        print("choix nombre + type villageois : ",self.canvas.hud_paysan_or_artisan.last_choice_made)
-        print("choix village :",self.canvas.hud_choose_village.last_choice_made)
+        print("choix nombre :", effectif)
+        print("type_villageois :", type_v)
+        print("choix village :", village_id)
 
     def construire_village(self):
         """

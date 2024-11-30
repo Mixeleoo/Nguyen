@@ -150,7 +150,12 @@ class HUDPaysanOrArtisan(HUDABC):
 
         if self.radiobutton_choice.get_selected_option():
 
-            self.last_choice_made = [self.desired_workforce, self.radiobutton_choice.get_selected_option()]
+            self.last_choice_made = [
+                self.desired_workforce,
+                self.canvas.itemcget(
+                    self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
+                ).split(" ")[0].lower()
+            ]
 
             # On affiche le choix du village
             self.canvas.hud_choose_village.show()

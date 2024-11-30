@@ -117,7 +117,11 @@ class HUDChooseVillage(HUDMobileABC):
         self.last_choice_made = self.radiobutton_village_choix.get_selected_option()
 
         # lancer l'immigration du jeu
-        self.canvas.jeu.immigrer()
+        self.canvas.jeu.immigrer(
+            effectif=self.canvas.hud_paysan_or_artisan.last_choice_made[0],
+            type_v=self.canvas.hud_paysan_or_artisan.last_choice_made[1],
+            village_id=self.last_choice_made
+        )
 
         # Même comportement que si on annulait, mais précédé par la validation
         self.cancel()
