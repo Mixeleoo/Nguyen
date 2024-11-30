@@ -10,9 +10,6 @@ class Interface(tk.Tk):
         # Partie tkinter
         super().__init__()
 
-        # On instancie le jeu
-        self.jeu = Jeu()
-
         # sps = la longueur des carrés en pixel (square pixel size)
         self.sps = SPS
         self.title("jeu de bz")
@@ -33,7 +30,7 @@ class Interface(tk.Tk):
         self.maxsize(canvas_width, canvas_height)
 
         # La grille du jeu
-        self.canvas = SelfMadeCanvas(self, width=canvas_width, height=canvas_height, jeu=self.jeu)
+        self.canvas = SelfMadeCanvas(self, width=canvas_width, height=canvas_height)
         self.canvas.pack()
 
         # Quand on redimensionne la fenêtre, on veut que les carrés se replacent en fonction de la nouvelle taille

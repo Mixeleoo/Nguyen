@@ -142,6 +142,9 @@ class HUDBuildCity(HUDABC):
 
             tags = list(self.canvas.gettags(square_id))
 
+            # On lance la méthode qui influera sur le jeu
+            self.canvas.jeu.construire_village()
+
             # Comme il y a un nouveau village, il faut update l'HUDs qui permet de choisir le village
             new_option_id = self.canvas.hud_choose_village.add_village_update_HUD("village 2")
             self.canvas.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)

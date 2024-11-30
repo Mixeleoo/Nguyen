@@ -14,18 +14,27 @@ class BaseCanvas(HighlightCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
+        from jeu import Jeu
+
+        # On instancie le jeu
+        self.jeu = Jeu(self)
+
         self.custom_font = font.Font(family="Enchanted Land", size=20)
         self.references = []
 
-        self.basic_mode_tag_foc = {}
-        self.build_city_mode_tag_foc = {}
-        self.build_church_mode_tag_foc = {}
+        self.basic_mode_tag_foc: [str, callable] = {}
+        self.build_city_mode_tag_foc: [str, callable] = {}
+        self.build_church_mode_tag_foc: [str, callable] = {}
 
         self.tag_foc = {
             "basic": self.basic_mode_tag_foc,
             "build_city": self.build_city_mode_tag_foc,
             "build_church": self.build_church_mode_tag_foc
         }
+
+        self.tag_fod: [str, callable] = {}
+
+        self.mouse_coor = ()
 
     def give_active_tag(self, event: tk.Event) -> None:
         """
@@ -173,7 +182,7 @@ class BaseCanvas(HighlightCanvas):
             hud_tag: str, text_font=None, func_triggered: callable = None, fill: str = FILL_ACTION_BOX,
             state: Literal["normal", "hidden", "disabled"] = "normal",
             trigger_name: str = NOTHING_TAG, is_temp: bool = False,
-            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church"), is_selection=False
     ) -> int:
         """
         Méthode qui créerera un texte sur un rectangle, qui agira comme un bouton :
@@ -212,6 +221,8 @@ class BaseCanvas(HighlightCanvas):
             rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, hud_tag=hud_tag) + if_temp,
             text_tags=set_tags(hud_tag=hud_tag) + (TEXT_TAG,) + if_temp, fill=fill, state=state
         )
+
+
 
     def create_ok_button(
             self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
