@@ -11,8 +11,8 @@ class FunctionOnDragCanvas(AnimationCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        self.tag_fod[MAP_TAG] = self.on_drag_map,
-        self.tag_fod[SCROLLBAR_TAG] = self.hud_history.on_drag_scrollbar,
+        self.tag_fod[MAP_TAG] = self.on_drag_map
+        self.tag_fod[SCROLLBAR_TAG] = self.hud_history.on_drag_scrollbar
         self.tag_fod[NOTHING_TAG] = dummy
 
 
