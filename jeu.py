@@ -28,3 +28,10 @@ class Jeu:
         """
         Méthode qui va ajouter un village au joueur
         """
+        pass
+
+    def construire_eglise(self):
+        """
+        Méthode pour construire une Église dans un village
+        """
+        pass

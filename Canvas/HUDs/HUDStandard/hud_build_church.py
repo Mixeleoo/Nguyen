@@ -103,5 +103,4 @@ class HUDBuildChurch(HUDABC):
         # Même comportement que si on annulait sa construction, mais on la construit vraiment
         self.cancel_build_church()
 
-        print("TU AS CONSTRUIT UNE EGLISE GG")
-
+        self.canvas.jeu.construire_eglise()
