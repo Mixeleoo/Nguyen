@@ -19,14 +19,13 @@ class Jeu:
 
     def immigrer(self,  village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
         """
-        Méthode qui va immigrer en fonction de canvas
+        Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 
         :param effectif : nombre de villageois désirés par le joueur
         :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
         :param village_id : l'id du village dans lequel les futurs villageois habiteront
         """
         self._joueur._dico_villages[village_id].ajouter_villageois(type_v, effectif)
-
 
         print("choix nombre :", effectif)
         print("type_villageois :", type_v)
@@ -43,7 +42,7 @@ class Jeu:
 
     def construire_eglise(self, village_id: int):
         """
-        Méthode pour construire une Église dans un village choisit
+        Méthode pour construire une Église dans un village choisi
 
         :param village_id : id du village dans lequel le joueur veut construir une église
         """
