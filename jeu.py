@@ -14,7 +14,7 @@ class Jeu:
         """
         TOUTES TES INSTANCIATIONS : LE JOUEUR (Noble), LES BOTS (Noble), ...
         """
-        self.joueur = Noble("M.test",0,0)
+        self._joueur = Noble("M.test",0,0)
         pass
 
     def immigrer(self,  village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
@@ -25,7 +25,7 @@ class Jeu:
         :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
         :param village_id : l'id du village dans lequel les futurs villageois habiteront
         """
-        self.joueur._dico_villages[village_id].ajouter_villageois(type_v, effectif)
+        self._joueur._dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
 
         print("choix nombre :", effectif)
@@ -38,7 +38,7 @@ class Jeu:
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
         """
-        self.joueur.creer_village(village_id)
+        self._joueur.creer_village(village_id)
         print("ID emplacement :",village_id)
 
     def construire_eglise(self, village_id: int):
@@ -47,4 +47,4 @@ class Jeu:
 
         :param village_id : id du village dans lequel le joueur veut construir une église
         """
-        pass
+        self._joueur._dico_villages[village_id].creer_eglise()
