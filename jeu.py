@@ -29,9 +29,11 @@ class Jeu:
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
-    def construire_village(self):
+    def construire_village(self, village_id: int):
         """
         Méthode qui va ajouter un village au joueur
+
+        :param village_id : l'id du village
         """
         pass
 

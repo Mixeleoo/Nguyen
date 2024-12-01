@@ -2,7 +2,6 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
 
-from parameter import *
 from Canvas.hud_canvas import HUDCanvas
 
 class HUDABC(ABC):
