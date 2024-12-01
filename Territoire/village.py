@@ -54,12 +54,12 @@ class ListRoturier(list):
     """
     Liste qui ne peut contenir que des Roturiers
     """
-    def __new__(cls, *args, **kwargs):
-        for elt in args:
+    def __new__(cls, *more):
+        for elt in more:
             if not isinstance(elt, Roturier):
                 raise TypeError(f"ListRoturier n'accepte que des Roturiers")
 
-        list.__new__(*args, **kwargs)
+        return list.__new__(cls)
 
     def __iadd__(self, other):
         if not isinstance(other, Roturier):

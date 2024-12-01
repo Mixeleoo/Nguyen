@@ -36,7 +36,7 @@ class Noble(Personne):
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
         nom = nom_aleatoire_village()
-        self._dico_villages[pid] = Village(pid, nom, self._nom)
+        self._dico_villages[pid] = Village(pid, nom)
 
     def nourrir_soldats(self):
         """

@@ -182,7 +182,7 @@ class BaseCanvas(HighlightCanvas):
             hud_tag: str, text_font=None, func_triggered: callable = None, fill: str = FILL_ACTION_BOX,
             state: Literal["normal", "hidden", "disabled"] = "normal",
             trigger_name: str = NOTHING_TAG, is_temp: bool = False,
-            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church"), is_selection=False
+            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
     ) -> int:
         """
         Méthode qui créerera un texte sur un rectangle, qui agira comme un bouton :
@@ -214,6 +214,10 @@ class BaseCanvas(HighlightCanvas):
                 else:
                     self.tag_foc[game_mode][trigger_name] = dummy
 
+                print(trigger_name)
+                print(game_mode)
+                print(self.tag_foc[game_mode][trigger_name], "\n")
+
         return self.create_text_in_rectangle(
             x0, y0, x1, y1,
             text=text,
@@ -221,8 +225,6 @@ class BaseCanvas(HighlightCanvas):
             rectangle_tags=set_tags(CLICKABLE_TAG, trigger_name, color_tag=fill, hud_tag=hud_tag) + if_temp,
             text_tags=set_tags(hud_tag=hud_tag) + (TEXT_TAG,) + if_temp, fill=fill, state=state
         )
-
-
 
     def create_ok_button(
             self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,

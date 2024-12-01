@@ -126,6 +126,6 @@ class HUDChooseVillage(HUDMobileABC):
         # Même comportement que si on annulait, mais précédé par la validation
         self.cancel()
 
-    def cancel(self):
+    def cancel(self, *args):
         self.radiobutton_village_choix.reset()
         self.hide()

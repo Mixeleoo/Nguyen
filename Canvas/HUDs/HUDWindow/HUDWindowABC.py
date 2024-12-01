@@ -15,6 +15,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         self.item_text_id = 0
         self._text = ""
+        self.pin_id = 0
 
     @property
     def text(self):
@@ -53,7 +54,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             text="x",
             hud_tag=self.tag,
-            func_triggered=self.hide(),
+            func_triggered=self.hide,
             fill=FILL_CANCEL,
             state="hidden",
             trigger_name="close_" + self.tag + "_window",
@@ -61,20 +62,20 @@ class HUDWindowABC(HUDMobileABC, ABC):
             for_which_game_mode=("basic",)
         )
 
-        # Bouton pour pin
-        self.canvas.create_button(
+        # Bouton pin
+        self.pin_id = self.canvas.create_text_in_rectangle(
             x0=x1_cadre - 40,
             y0=y0_cadre,
             x1=x1_cadre - 20,
             y1=y0_cadre + 20,
             text="⌂",
-            hud_tag=self.tag,
-            func_triggered=self.pin(),
-            state="hidden",
-            trigger_name="pin_" + self.tag + "_window",
-            is_temp=True,
-            for_which_game_mode=("basic",)
+            rectangle_tags=set_tags(highlight_tag="pin_" + self.tag + "_window", hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            state="hidden"
         )
+
+        self.canvas.tag_highlight["pin_" + self.tag + "_window"] = self.pin
+        self.canvas.tag_unhighlight["pin_" + self.tag + "_window"] = dummy
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
         self.canvas.create_text_in_rectangle(
@@ -195,10 +196,20 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         self.resize(*new_coords)
 
-    def pin(self):
+    def pin(self, *args):
+
+        # Si la fenêtre est temporaire, ça veut dire que le bouton n'était pas cliqué.
         if TEMP_TAG in self.canvas.gettags(self.tag):
+
+            # On la rend highlight (donc checkée)
+            self.canvas.itemconfigure(self.pin_id, fill=fill_brighter[self.canvas.gettags(self.pin_id)[COLOR_TAG_INDEX]])
+
             # La fenêtre ne devient plus temporaire
             self.canvas.dtag(self.tag, TEMP_TAG)
 
         else:
+            # On remet sa couleur de base
+            self.canvas.itemconfigure(self.pin_id, fill=self.canvas.gettags(self.pin_id)[COLOR_TAG_INDEX])
+
+            # On le rerend temporaire
             self.canvas.addtag_withtag(TEMP_TAG, self.tag)

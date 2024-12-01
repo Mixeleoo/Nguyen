@@ -25,11 +25,12 @@ class Jeu:
         :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
         :param village_id : l'id du village dans lequel les futurs villageois habiteront
         """
-        self._joueur._dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
         print("choix nombre :", effectif)
         print("type_villageois :", type_v)
         print("choix village :", village_id)
+
+        self._joueur._dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
     def construire_village(self, village_id: int):
         """
