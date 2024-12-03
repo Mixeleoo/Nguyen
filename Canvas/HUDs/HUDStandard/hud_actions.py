@@ -87,8 +87,7 @@ class HUDActions(HUDABC):
             x0_cadre + 80,
             y0_cadre - 15,
             text=f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}",
-            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,),
-                fill=FILL_TEXT
+            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,)
         )
 
         # Bouton pour changer de page (précédente)
