@@ -10,12 +10,17 @@ class HUDHistory(HUDABC):
         super().__init__(canvas)
 
         self.rect_hiding_top_text_id = 0
+        self.rect_hiding_bottom_text_id = 0
+        self.last_text_id = 0
+
         self.state: Literal["normal", "hidden"] = "normal"
         self.hide_button_id = 0
         self.background_rect_id = 0
         self.thumb_id = 0
 
         self.longueur_texte = 0
+
+        self.width = 150
 
     @property
     def tag(self):
@@ -25,11 +30,10 @@ class HUDHistory(HUDABC):
 
         pady_from_top = 5
         # Gros rectangle contenant l'historique
-        width = 145  # valeurs qui ne bouge pas en fonction de la taille de la fenêtre
         height = geometry_height - HEIGHT_BOTTOM_HUD - pady_from_top  # valeur qui ne bouge pas en fonction de la taille de la fenêtre
 
         x1_cadre = geometry_width - pady_from_top
-        x0_cadre = x1_cadre - width
+        x0_cadre = x1_cadre - self.width
         y0_cadre = PADY_BUILD_CITY_HUD
         y1_cadre = y0_cadre + height
 
@@ -57,6 +61,8 @@ class HUDHistory(HUDABC):
             fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, drag_tag=SCROLLBAR_TAG, hud_tag=self.tag)
         )
 
+        self.canvas.tag_fod[SCROLLBAR_TAG] = self.on_drag_scrollbar
+
         self.add_text("Début de la partie !")
         for i in range(60):
             self.add_text(f"slt je suis le n°{('0' + str(i)) if i < 10 else i}")
@@ -71,16 +77,13 @@ class HUDHistory(HUDABC):
             fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag), width=0
         )
 
-        to_hide_text_rectangle_bas = self.canvas.create_rectangle(
+        self.rect_hiding_bottom_text_id = self.canvas.create_rectangle(
             x0_cadre + 1,
             y1_cadre - 20,
             x1_cadre,
             y1_cadre,
             fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag), width=0
         )
-
-        self.canvas.tag_lower(HISTORY_TEXT, self.rect_hiding_top_text_id)
-        self.canvas.tag_lower(self.rect_hiding_top_text_id, to_hide_text_rectangle_bas)
 
     def replace(self, event: tk.Event):
         """
@@ -139,26 +142,52 @@ class HUDHistory(HUDABC):
         Elle refera descendre l'historique tout en bas pour que le joueur voie quand il y a du nouveau\n
         Elle refera calculer la nouvelle taille du thumb de la scrollbar.\n
         """
+
         coords = self.canvas.coords(self.background_rect_id)
 
-        texte_id = self.canvas.create_text(
-            (coords[0] + coords[2]) // 2, coords[3] - 10,
+        # On doit savoir combien de fois il faut séparer le texte de \n pour qu'il rentre dans l'historique
+        fractions = 1
+        length = get_width_text(text)
+        while length / fractions > self.width:
+            fractions += 1
+
+        text = separer_chaine_sans_couper(text, fractions)
+        tags = list(set_tags(hud_tag=self.tag) + (TEXT_TAG,))
+
+        # On ancre le texte au sud donc on met ses coordonnées en bas du rectangle
+        # On ancre le texte à l'ouest donc on met ses coordonnées à gauche du rectangle
+        text_id = self.canvas.create_text(
+            coords[0] + 15, coords[3] - 20,
             text=text,
-            tags=set_tags(hud_tag=self.tag, group_tag=HISTORY_TEXT) + (TEXT_TAG,),
+            tags=tags,
+            anchor="sw",
             fill=FILL_TEXT
         )
 
-        bbox = self.canvas.bbox(texte_id)
-        longueur_texte = bbox[3] - bbox[1]
+        bbox = self.canvas.bbox(text_id)
+        text_height = bbox[3] - bbox[1]
+        self.longueur_texte += text_height
 
-        self.drag_history_text(-longueur_texte)
-        self.longueur_texte += longueur_texte
+        # On simule la descente de la scrollbar tout en bas
+        if self.last_text_id:
+            self.drag_history_text(coords[3] - 20 - text_height - self.canvas.coords(self.last_text_id)[1])
+            self.canvas.move(self.thumb_id, 0, coords[3] - self.canvas.coords(self.thumb_id)[3])
+
+        # Dès que l'historique a été bien remonté pour que les textes ne se cheuvauchent pas,
+        # On peut grouper le nouveau texte avec ses compatriotes.
+        tags[GROUP_TAG_INDEX] = HISTORY_TEXT
+        self.canvas.itemconfigure(text_id, tags=tags)
+        self.last_text_id = text_id
+
+        # On met bien les rectangles cachants le texte au-dessus d'eux
+        self.canvas.tag_raise(self.rect_hiding_top_text_id, HISTORY_TEXT)
+        self.canvas.tag_raise(self.rect_hiding_bottom_text_id, HISTORY_TEXT)
 
         # Après avoir mis à jour la longueur du texte, on met à jour la taille de lu thumb de la scrollbar
         self.resize_thumb()
 
         # On référence le texte vers le rectangle en dessous (pour le drag du texte)
-        self.canvas.text_id_in_rectangle_id[texte_id] = self.background_rect_id
+        self.canvas.text_id_in_rectangle_id[text_id] = self.background_rect_id
 
     def resize_thumb(self):
         coords = self.canvas.coords(self.background_rect_id)
@@ -175,7 +204,7 @@ class HUDHistory(HUDABC):
         coords_thumb = self.canvas.coords(self.thumb_id)
         self.canvas.coords(self.thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 25, coords_thumb[2], coords[3] - 25)
 
-    def drag_history_text(self, dy: int):
+    def drag_history_text(self, dy: int | float):
         self.canvas.move(HISTORY_TEXT, 0, dy)
         self.hide_exceeding_text()
 
@@ -220,3 +249,37 @@ class HUDHistory(HUDABC):
         self.drag_history_text(-distance_defilee)
 
 
+def separer_chaine_sans_couper(chaine, n):
+    # Vérifie que n est un entier positif
+    if n <= 0:
+        raise ValueError("n doit être un entier positif non nul")
+
+    # Cas où n == 1 : toute la chaîne dans un seul segment
+    if n == 1:
+        return chaine.strip()
+
+    # Calcul de la longueur d'un segment approximatif
+    segment_length = len(chaine) // n
+    if segment_length == 0:
+        raise ValueError("n est trop grand par rapport à la longueur de la chaîne.")
+
+    # Liste pour stocker les segments
+    segments = []
+    segment = ""
+
+    # Parcours des mots
+    for mot in chaine.split():
+        # Ajoute le mot si le segment ne dépasse pas la longueur cible
+        if len(segment) + len(mot) + 1 <= segment_length:
+            segment += (mot + " ")
+        else:
+            # Ajoute le segment terminé à la liste et démarre un nouveau
+            segments.append(segment.strip())
+            segment = mot + " "
+
+    # Ajoute le dernier segment
+    if segment:
+        segments.append(segment.strip())
+
+    # Assemble les segments avec "\n"
+    return '\n'.join(segments)
