@@ -3,10 +3,10 @@ import tkinter as tk
 from typing import Optional
 
 from parameter import *
-from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 from Canvas.Radiobutton import Radiobutton
+from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
-class HUDPaysanOrArtisan(HUDABC):
+class HUDChooseTypeVillager(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -23,7 +23,7 @@ class HUDPaysanOrArtisan(HUDABC):
     def tag(self):
         return PAYSAN_OR_ARTISAN_WINDOW_TAG
 
-    def create(self, geometry_width, geometry_height):
+    def create(self):
 
         height = 150
 
@@ -34,10 +34,10 @@ class HUDPaysanOrArtisan(HUDABC):
         text_width = get_width_text(title_text)
 
         # coordonnées du rectangle principal pour l'avoir au milieu de l'écran
-        x0_cadre = geometry_width // 2 - text_width // 2
-        y0_cadre = geometry_height // 2 - height // 2
-        x1_cadre = x0_cadre + text_width
-        y1_cadre = y0_cadre + height
+        x0_cadre = 0
+        y0_cadre = 0
+        x1_cadre = text_width
+        y1_cadre = height
 
         center_x = (x0_cadre + x1_cadre) // 2
 
@@ -140,13 +140,13 @@ class HUDPaysanOrArtisan(HUDABC):
         )
 
     def replace(self, event: tk.Event) -> None:
-        pass
 
-    def show_animation(self) -> None:
-        pass
+        bbox = self.canvas.bbox(self.tag)
 
-    def hide_animation(self) -> None:
-        pass
+        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
+
+        self.canvas.move(self.tag, dx, dy)
 
     def immigrate(self, e=None):
 
@@ -170,11 +170,17 @@ class HUDPaysanOrArtisan(HUDABC):
 
     def cancel(self, e=None):
 
-        self.radiobutton_choice.reset()
-        self.hide()
-
-        # On reset aussi l'effectif
+        # On reset l'effectif
         self.desired_workforce = 1
+
+        # On reset les choix
+        self.radiobutton_choice.reset()
+
+        # On met à jour le texte (sa valeur par défaut vu l'effectif a été reset)
+        self.refresh_text()
+
+        # On cache l'HUD
+        self.hide()
 
     def plus_immigrants(self, e=None):
         self.desired_workforce += 1 if self.desired_workforce + 1 <= 10 else 0
