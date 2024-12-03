@@ -10,14 +10,14 @@ class HUDCanvas(BaseCanvas):
         super().__init__(master, cnf, **kw)
 
         from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
-        from Canvas.HUDs.HUDStandard.hud_paysan_or_artisan import HUDPaysanOrArtisan
+        from Canvas.HUDs.HUDMobile.hud_choose_type_villager import HUDChooseTypeVillager
         from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
         from Canvas.HUDs.HUDStandard.hud_history import HUDHistory
         from Canvas.HUDs.HUDStandard.hud_build_church import HUDBuildChurch
         from Canvas.HUDs.HUDStandard.hud_event import HUDEvent
         from Canvas.HUDs.HUDMobile.hudmobile_village_info import HUDMobileVillageInfo
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
-        from Canvas.HUDs.HUDStandard.hud_choose_village import HUDChooseVillage
+        from Canvas.HUDs.HUDMobile.hud_choose_village import HUDChooseVillage
         from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
 
         from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
@@ -32,7 +32,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_village_info = HUDMobileVillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobileYaUnVillageGros(self)
         self.hud_choose_village = HUDChooseVillage(self)
-        self.hud_paysan_or_artisan = HUDPaysanOrArtisan(self)
+        self.hud_paysan_or_artisan = HUDChooseTypeVillager(self)
         self.hud_top_side = HUDTopSide(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
@@ -45,13 +45,14 @@ class HUDCanvas(BaseCanvas):
         self.hud_build_city.create(geometry_width, geometry_height)
         self.hud_build_church.create(geometry_width, geometry_height)
         self.hud_event.create(geometry_width, geometry_height)
-        self.hud_paysan_or_artisan.create(geometry_width, geometry_height)
-        self.hud_choose_village.create(geometry_width, geometry_height)
         self.hud_top_side.create(geometry_width, geometry_height)
 
-        # HUDs temporaire
+        # HUDs mobile
         self.hudmobile_village_info.create()
         self.hudmobile_yavillagegros.create()
+        self.hud_paysan_or_artisan.create()
+        self.hud_choose_village.create()
+
         for i in range(NB_NOBLE_AU_DEPART):
             self.hudwindow_more_info_supervisor.add()
 
