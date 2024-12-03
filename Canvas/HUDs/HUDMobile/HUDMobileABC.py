@@ -11,29 +11,30 @@ class HUDMobileABC(ABC):
     @abstractmethod
     def tag(self):
         """
-        Méthode pour retourner le tag de l'HUDs
+        Méthode pour retourner le tag de l'HUD
         """
         pass
 
     @abstractmethod
-    def create(self, *args):
+    def create(self):
         """
-        Méthode d'initialisation de la classe HUDs
+        Méthode d'initialisation de la classe HUD
         """
         pass
 
     @abstractmethod
     def replace(self, *args) -> None:
         """
-        Méthode de replacement de l'HUDs
+        Méthode de replacement de l'HUD
         """
         pass
 
     def show(self, *args) -> None:
-        self.replace(*args)
-
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="normal")
+
+        # IMPORTANT DE LES REPLACER APRES LES AVOIR AFFICHÉS SINON TKINTER NE SAIT PAS LEURS COORDONNEES
+        self.replace(*args)
 
     def hide(self, *args) -> None:
         for item_id in self.canvas.find_withtag(self.tag):
