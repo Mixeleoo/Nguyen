@@ -54,7 +54,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             y1=y0_cadre + 20,
             text="x",
             hud_tag=self.tag,
-            func_triggered=self.hide,
+            func_triggered=self.cancel,
             fill=FILL_CANCEL,
             state="hidden",
             trigger_name="close_" + self.tag + "_window",
@@ -74,7 +74,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             state="hidden"
         )
 
-        self.canvas.tag_highlight["pin_" + self.tag + "_window"] = self.pin
+        self.canvas.tag_highlight["pin_" + self.tag + "_window"] = self.trigger_pin
         self.canvas.tag_unhighlight["pin_" + self.tag + "_window"] = dummy
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
@@ -196,7 +196,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         self.resize(*new_coords)
 
-    def pin(self, *args):
+    def trigger_pin(self, *args):
 
         # Si la fenêtre est temporaire, ça veut dire que le bouton n'était pas cliqué.
         if TEMP_TAG in self.canvas.gettags(self.tag):
@@ -208,8 +208,15 @@ class HUDWindowABC(HUDMobileABC, ABC):
             self.canvas.dtag(self.tag, TEMP_TAG)
 
         else:
-            # On remet sa couleur de base
-            self.canvas.itemconfigure(self.pin_id, fill=self.canvas.gettags(self.pin_id)[COLOR_TAG_INDEX])
+            self.reset_pin()
 
-            # On le rerend temporaire
-            self.canvas.addtag_withtag(TEMP_TAG, self.tag)
+    def reset_pin(self):
+        # On remet sa couleur de base
+        self.canvas.itemconfigure(self.pin_id, fill=self.canvas.gettags(self.pin_id)[COLOR_TAG_INDEX])
+
+        # On le rerend temporaire
+        self.canvas.addtag_withtag(TEMP_TAG, self.tag)
+
+    def cancel(self, *args):
+        self.reset_pin()
+        self.hide()
