@@ -1,7 +1,7 @@
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire.village import Village
-from parameter import nom_aleatoire_village
+from parameter import nom_aleatoire_village, prenom_aleatoire
 
 
 class Noble(Personne):
@@ -22,21 +22,35 @@ class Noble(Personne):
         self._liste_soldats: list[Soldat] = []
 
 
+    @property
+    def dico_villages(self):
+        return self._dico_villages
+
+
     def prend_impot_village(self,pid_village : int):
         """
         Ajoute aux ressources du noble les impot perçu pour chaque roturiers sous ses ordres dans le village mis en paramètre
         """
-        for roturier in self._dico_villages[pid_village]._liste_roturier :
+        for roturier in self._dico_villages[pid_village].liste_roturier :
             impot_percu = roturier.payer_impot() # recupération du tuple (roturier.argent, roturier.ressources)
             self._argent += impot_percu[0]
             self._ressources += impot_percu[1]
 
-    def creer_village(self, pid: int):
+    def ajouter_village(self, pid: int):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
         nom = nom_aleatoire_village()
         self._dico_villages[pid] = Village(pid, nom)
+
+    def ajout_soldat(self, peffectif: int):
+        """
+        Méthode qui ajouter peffectif soldats dans sa liste de soldats
+
+        :param peffectif:
+        """
+        for _ in range(peffectif):
+            self._liste_soldats += [Soldat(prenom_aleatoire())]
 
     def nourrir_soldats(self):
         """

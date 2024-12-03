@@ -26,10 +26,14 @@ class Village :
         self._liste_eglises : list[Eglise] = []
 
 
+    @property
+    def liste_roturier(self):
+        return self._liste_roturier
+
     
     def ajouter_villageois(self,pvillageois : Literal["paysan", "artisan"], effectif : int) :
         """
-        Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre
+        Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.
         Elle servira lorsque le joueur choisira l'action 'Immigration'
         """
         for v in range(effectif) :
@@ -46,8 +50,7 @@ class Village :
         ajoute à la liste d'églises du village une nouvelle église
         """
         pretre = Ecceclesiastique(nom_aleatoire_pretres())
-        self._liste_eglises += [Eglise(pretre,nom_aleatoire_eglise())]
-
+        self._liste_eglises += [Eglise(pretre, nom_aleatoire_eglise())]
 
 
 class ListRoturier(list):

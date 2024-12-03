@@ -36,6 +36,10 @@ class BaseCanvas(HighlightCanvas):
 
         self.mouse_coor = ()
 
+
+        self.font = tk.font.nametofont("TkDefaultFont")
+        self.font.config(size=11)
+
         # Vairblae test
         self.id_village = 0
 
@@ -112,7 +116,8 @@ class BaseCanvas(HighlightCanvas):
             text=text,
             font=text_font,
             tags=text_tags,
-            state=state
+            state=state,
+            fill=FILL_TEXT
         )
 
         self.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -150,11 +155,6 @@ class BaseCanvas(HighlightCanvas):
 
             y0 = y1
             y1 += SPS
-
-        # Ajout des villages aléatoirement
-        for noble in range(NB_NOBLE_AU_DEPART):
-            square_id = self.engine_build_city()
-            self.jeu.creer_noble(square_id)
 
         self.addtag(MAP_SQUARE_TOP_LEFT_TAG, "withtag", all_squares_id[0])
         self.addtag(MAP_SQUARE_BOTTOM_RIGHT_TAG, "withtag", all_squares_id[-1])

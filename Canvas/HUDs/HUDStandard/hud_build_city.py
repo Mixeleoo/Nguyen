@@ -39,7 +39,8 @@ class HUDBuildCity(HUDABC):
         self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2,
             text=text,
-            tags=set_tags(hud_tag=self.tag)
+            tags=set_tags(hud_tag=self.tag),
+                fill=FILL_TEXT
         )
 
         original_image = Image.open("banderoletravaux.png")
@@ -146,7 +147,7 @@ class HUDBuildCity(HUDABC):
             self.canvas.jeu.construire_village(village_id=square_id)
 
             # Comme il y a un nouveau village, il faut update l'HUDs qui permet de choisir le village
-            new_option_id = self.canvas.hud_choose_village.add_village_update_HUD("village 2")
+            new_option_id = self.canvas.hud_choose_village.add_village_update_HUD("village 2", square_id)
             self.canvas.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)
 
             # On change son tag de trigger de fonction

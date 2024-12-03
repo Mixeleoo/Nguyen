@@ -54,7 +54,8 @@ class HUDPaysanOrArtisan(HUDABC):
             x0_cadre + text_width // 2, y0_cadre + pad_from_borders,
             text=title_text,
             tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            state="hidden"
+            state="hidden",
+            fill=FILL_TEXT
         )
 
         # Effectif souhaité
@@ -68,7 +69,8 @@ class HUDPaysanOrArtisan(HUDABC):
             center_x - 20, y0_cadre + pad_from_borders + 25,
             text=text,
             tags=set_tags(hud_tag=self.tag) + (TEMP_TAG, TEXT_NB_IMMIGRANTS),
-            state="hidden"
+            state="hidden",
+            fill=FILL_TEXT
         )
 
         # Bouton ajouter effectif

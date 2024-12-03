@@ -13,6 +13,9 @@ class HUDActions(HUDABC):
         self.state: Literal["normal", "hidden"] = "normal"
         self.hide_button_id = 0
 
+        self.title_font = self.canvas.font.copy()
+        self.title_font.config(weight="bold")
+
     @property
     def tag(self):
         return HUD_BOTTOM
@@ -50,7 +53,9 @@ class HUDActions(HUDABC):
                 x_values[x_value_i] + pad, y0_cadre + pad,
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["text"],
                 anchor="nw",
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
+                font=self.title_font,
+                fill=FILL_TEXT
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -60,18 +65,20 @@ class HUDActions(HUDABC):
                 x_values[x_value_i + 1] - pad, y0_cadre + pad,
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["PA"],
                 anchor="ne",
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
+                fill=FILL_TEXT
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
 
             # Coûts supplémentaires potentiels (argent, ressources)
             id_text = self.canvas.create_text(
-                x_values[x_value_i + 1] - pad, y0_cadre + pad + 20,
+                x_values[x_value_i + 1] - pad, y0_cadre + pad + 40,
                 text=ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"],
                 anchor="ne",
-                font=("ateztzerz", SIZE_ACTION_ADDITIONAL_COST_TEXT),
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,)
+                font=("", SIZE_ACTION_ADDITIONAL_COST_TEXT),
+                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
+                fill=FILL_TEXT
             )
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
@@ -80,7 +87,8 @@ class HUDActions(HUDABC):
             x0_cadre + 80,
             y0_cadre - 15,
             text=f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}",
-            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,)
+            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,),
+                fill=FILL_TEXT
         )
 
         # Bouton pour changer de page (précédente)

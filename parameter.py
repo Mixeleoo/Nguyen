@@ -1,4 +1,6 @@
 
+# -*- coding: utf-8 -*-
+
 from random import randint, choice
 from tkinter import font
 
@@ -14,7 +16,7 @@ HEIGHT_HUD_TOP_SIDE = 60
 HEIGHT_BOTTOM_HUD = 80
 PADY_BOTTOM_HUD = 5
 PADX_BOTTOM_HUD = 5
-SIZE_ACTION_ADDITIONAL_COST_TEXT = 8
+SIZE_ACTION_ADDITIONAL_COST_TEXT = 12
 
 PADY_BUILD_CITY_HUD = 5 + HEIGHT_HUD_TOP_SIDE
 PADY_BUILD_CITY_HUD_HIDING = -20 + HEIGHT_HUD_TOP_SIDE
@@ -130,9 +132,9 @@ text_categories = ["text", "PA", "additionalcost"]
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
 ACTION_FOR_YOUR_TURN = [
     {
-        "text": "Immigration",
-        "PA": "1 PA",
-        "additionalcost": "",
+        "text": "Agrandir population",
+        "PA": "1-10 PA",
+        "additionalcost": "0-40, 0-40 res",
         "do": PAYSAN_OR_ARTISAN_TAG
     },
     {
@@ -160,21 +162,9 @@ ACTION_FOR_YOUR_TURN = [
         "do": NOTHING_TAG
     },
     {
-        "text": "Recruter soldat",
-        "PA": "2 PA",
-        "additionalcost": "40 arg, 40 res",
-        "do": NOTHING_TAG
-    },
-    {
         "text": "Déclarer la guerre",
         "PA": "8 PA",
         "additionalcost": "100 res",
-        "do": NOTHING_TAG
-    },
-    {
-        "text": "H",
-        "PA": "X PA",
-        "additionalcost": "Y arg, Z res",
         "do": NOTHING_TAG
     }
 ]
@@ -195,20 +185,22 @@ couleurs = {
     LAKE_TAG: lambda: rgb_to_hex(randint(50 , 127), randint(144, 160), 255)
 }
 
-FILL_ACTION_BOX = "#646464"
-FILL_CANCEL = "#D43353"
-FILL_OK = "#31BC25"
+FILL_TEXT = "#CCCCCC"
+
+FILL_ACTION_BOX = "#333333"
+FILL_CANCEL = "#BA0A0A"
+FILL_OK = "#1C6203"
 FILL_INFO = "#266CB6"
 
 fill_brighter = {
-    FILL_ACTION_BOX: "#A5A5A5",
-    FILL_CANCEL: "#DC657C",
-    FILL_OK: "#68E35D",
+    FILL_ACTION_BOX: "#514E4E",
+    FILL_CANCEL: "#DB4E4E",
+    FILL_OK: "#278E02",
     FILL_INFO: "#5397E0"
 }
 
 fill_darker = {
-    FILL_ACTION_BOX: "#474646",
+    FILL_ACTION_BOX: "#272626",
 }
 
 

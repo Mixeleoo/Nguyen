@@ -18,13 +18,15 @@ class HUDChooseVillage(HUDMobileABC):
         self.last_choice_made = 0
         self.radiobutton_village_choix: Optional[Radiobutton] = None
 
+        self.from_radiobutton_item_id_to_city_id: dict[int, int] = {}
+
     @property
     def tag(self):
         return CHOOSE_VILLAGE_TAG
 
     def create(self, geometry_width: int, geometry_height: int) -> None:
 
-        height = 60
+        height = 20
 
         title_text = "Où immigrer ces villageois ?"
 
@@ -45,15 +47,11 @@ class HUDChooseVillage(HUDMobileABC):
         )
 
         self.canvas.create_text(
-            center_x, y0_cadre + 10, text=title_text, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
-        )
-
-        # Le seigneur n'a qu'un seul village au début, donc on ne crée qu'une ligne
-        village_id = self.canvas.create_text_in_rectangle(
-            x0_cadre, y0_cadre + 20, x1_cadre, y0_cadre + 60,
-            text="village 1",
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG), state="hidden"
+            center_x, y0_cadre + 10,
+            text=title_text,
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            state="hidden",
+                fill=FILL_TEXT
         )
 
         # Bouton OK qui lance l'immigration
@@ -63,7 +61,7 @@ class HUDChooseVillage(HUDMobileABC):
         )
 
         # Radiobutton du choix du village
-        self.radiobutton_village_choix = self.canvas.radiobuttons.add((village_id,),
+        self.radiobutton_village_choix = self.canvas.radiobuttons.add((),
             ok_button_id=self.ok_button_id
         )
 
@@ -76,10 +74,10 @@ class HUDChooseVillage(HUDMobileABC):
     def replace(self) -> None:
         pass
 
-    def add_village_update_HUD(self, name: str) -> int:
+    def add_village_update_HUD(self, name: str, city_id: int) -> int:
         """
         Mettre à jour la taille du rectangle en background
-        Ajouter la nouvelle option
+        Ajouter la nouvelle option graphiquement + dans le radiobutton
         Déplacer le bouton OK et le bouton Annuler en bas
         """
         coords = self.canvas.coords(self.background_rectangle_id)
@@ -92,7 +90,7 @@ class HUDChooseVillage(HUDMobileABC):
         new_category_id = self.canvas.create_text_in_rectangle(
             coords[0], coords[3] - 40, coords[2], coords[3],
             text=name,
-            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             fill=FILL_ACTION_BOX,
             state="hidden"
@@ -108,6 +106,10 @@ class HUDChooseVillage(HUDMobileABC):
         self.canvas.move(self.canvas.text_id_in_rectangle_id[self.ok_button_id], 0, 40)
         self.canvas.move(self.canvas.text_id_in_rectangle_id[self.cancel_button_id], 0, 40)
 
+        # J'associe l'id du village à l'id du choix (= le rectangle correspondant au choix)
+        self.from_radiobutton_item_id_to_city_id[new_category_id] = city_id
+        self.radiobutton_village_choix.add_option(new_category_id)
+
         return new_category_id
 
     def immigrate(self, event: tk.Event) -> None:
@@ -120,7 +122,7 @@ class HUDChooseVillage(HUDMobileABC):
         self.canvas.jeu.immigrer(
             effectif=self.canvas.hud_paysan_or_artisan.last_choice_made[0],
             type_v=self.canvas.hud_paysan_or_artisan.last_choice_made[1],
-            village_id=self.last_choice_made
+            village_id=self.from_radiobutton_item_id_to_city_id[self.last_choice_made]
         )
 
         # Même comportement que si on annulait, mais précédé par la validation

@@ -143,7 +143,9 @@ class HUDHistory(HUDABC):
 
         texte_id = self.canvas.create_text(
             (coords[0] + coords[2]) // 2, coords[3] - 10,
-            text=text, tags=set_tags(hud_tag=self.tag, group_tag=HISTORY_TEXT) + (TEXT_TAG,)
+            text=text,
+            tags=set_tags(hud_tag=self.tag, group_tag=HISTORY_TEXT) + (TEXT_TAG,),
+            fill=FILL_TEXT
         )
 
         bbox = self.canvas.bbox(texte_id)

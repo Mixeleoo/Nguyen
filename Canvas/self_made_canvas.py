@@ -13,7 +13,6 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        tk.font.nametofont("TkDefaultFont").config(size=11)
         self.has_mouse_moved = False
 
         # Coordonnées de la souris lors d'un clic (pour initier le déplacement de la map)

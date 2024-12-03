@@ -55,6 +55,8 @@ class HUDCanvas(BaseCanvas):
         for i in range(NB_NOBLE_AU_DEPART):
             self.hudwindow_more_info_supervisor.add()
 
+        self.init_nobles()
+
     def hide_all_permanant_huds(self):
         # On simule un clic sur le bouton qui cache les pages d'actions
         if self.hud_actions.state == "normal":
@@ -73,4 +75,13 @@ class HUDCanvas(BaseCanvas):
 
         self.to_show_if_cancel = []
 
+    def init_nobles(self):
+        # Ajouter un village au joueur
+        square_id = self.engine_build_city()
+        self.jeu.creer_noble(square_id)
+        self.hud_choose_village.add_village_update_HUD("York", square_id)
 
+        # Ajout des villages aléatoirement
+        for noble in range(NB_NOBLE_AU_DEPART):
+            square_id = self.engine_build_city()
+            self.jeu.creer_noble(square_id)

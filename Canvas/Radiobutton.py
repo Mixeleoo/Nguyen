@@ -3,12 +3,14 @@ from parameter import *
 from Squelette_Canvas.highlight_canvas_sq import HighlightCanvas
 
 class Radiobutton:
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: HighlightCanvas, group_tag: str):
 
         self.canvas = canvas
 
         # L'option actuellement selectionnée
         self.currently_selected = None
+
+        self.group_tag = group_tag
 
     def toggle_switch_option(self, option_id: int):
 
@@ -40,6 +42,16 @@ class Radiobutton:
         """
         return self.currently_selected
 
+    def add_option(self, item_id: int) -> None:
+        """
+        Méthode qui ajoute une option au radiobutton (comme ça c'est dynamique).
+
+        :param item_id: id de l'option (c'est un rectangle) à rajouter au radiobutton
+        """
+        tags = list(self.canvas.gettags(item_id))
+        tags[GROUP_TAG_INDEX] = self.group_tag
+        self.canvas.itemconfigure(item_id, tags=tags)
+
 
 class RadiobuttonsSupervisor:
 
@@ -62,7 +74,7 @@ class RadiobuttonsSupervisor:
         group_tag = f"radiobutton_group{self.current_group_id}"
 
         self.current_group_id += 1
-        self.radiobuttons[group_tag] = Radiobutton(self.canvas)
+        self.radiobuttons[group_tag] = Radiobutton(self.canvas, group_tag)
 
         for item_id in radiobutton_items_id:
             tags = list(self.canvas.gettags(item_id))
