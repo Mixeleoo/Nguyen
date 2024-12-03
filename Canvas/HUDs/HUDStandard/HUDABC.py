@@ -12,21 +12,21 @@ class HUDABC(ABC):
     @abstractmethod
     def tag(self):
         """
-        Méthode pour retourner le tag de l'HUDs
+        Méthode pour retourner le tag de l'HUD
         """
         pass
 
     @abstractmethod
     def create(self, geometry_width: int, geometry_height: int) -> None:
         """
-        Méthode d'initialisation de la classe HUDs
+        Méthode d'initialisation graphique de la classe HUD
         """
         pass
 
     @abstractmethod
     def replace(self, event: tk.Event) -> None:
         """
-        Méthode de replacement de l'HUDs
+        Méthode de replacement de l'HUD
         """
         pass
 
