@@ -24,7 +24,7 @@ class HUDChooseVillage(HUDMobileABC):
     def tag(self):
         return CHOOSE_VILLAGE_TAG
 
-    def create(self, geometry_width: int, geometry_height: int) -> None:
+    def create(self) -> None:
 
         height = 20
 
@@ -35,10 +35,10 @@ class HUDChooseVillage(HUDMobileABC):
         text_width = get_width_text(title_text)
 
         # coordonnées du rectangle principal pour l'avoir au milieu de l'écran
-        x0_cadre = geometry_width // 2 - text_width // 2
-        y0_cadre = geometry_height // 2 - height // 2
-        x1_cadre = x0_cadre + text_width
-        y1_cadre = y0_cadre + height
+        x0_cadre = 0
+        y0_cadre = 0
+        x1_cadre = text_width
+        y1_cadre = height
 
         center_x = (x0_cadre + x1_cadre) // 2
 
@@ -67,12 +67,18 @@ class HUDChooseVillage(HUDMobileABC):
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button_id = self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide,
             trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
     def replace(self) -> None:
-        pass
+
+        bbox = self.canvas.bbox(self.tag)
+
+        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
+
+        self.canvas.move(self.tag, dx, dy)
 
     def add_village_update_HUD(self, name: str, city_id: int) -> int:
         """
@@ -118,16 +124,27 @@ class HUDChooseVillage(HUDMobileABC):
         """
         self.last_choice_made = self.radiobutton_village_choix.get_selected_option()
 
-        # lancer l'immigration du jeu
-        self.canvas.jeu.immigrer(
-            effectif=self.canvas.hud_paysan_or_artisan.last_choice_made[0],
-            type_v=self.canvas.hud_paysan_or_artisan.last_choice_made[1],
-            village_id=self.from_radiobutton_item_id_to_city_id[self.last_choice_made]
-        )
+        if self.last_choice_made:
 
-        # Même comportement que si on annulait, mais précédé par la validation
-        self.cancel()
+            effectif = self.canvas.hud_paysan_or_artisan.last_choice_made[0]
+            type_v = self.canvas.hud_paysan_or_artisan.last_choice_made[1]
+            village_id = self.from_radiobutton_item_id_to_city_id[self.last_choice_made]
 
-    def cancel(self, *args):
+            # lancer l'immigration du jeu
+            self.canvas.jeu.immigrer(
+                effectif=effectif,
+                type_v=type_v,
+                village_id=village_id
+            )
+
+            self.canvas.hud_history.add_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
+
+            # Même comportement que si on annulait, mais précédé par la validation
+            self.bhide()
+
+        else:
+            print("T'as pas choisi de village là bro")
+
+    def bhide(self, *args):
         self.radiobutton_village_choix.reset()
         self.hide()
