@@ -37,7 +37,7 @@ class Jeu:
         nouveau_noble.ajouter_village(village_id)
         self._joueurs.append(nouveau_noble)
 
-    def immigrer(self,  village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
+    def immigrer(self,  village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
         """
         Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 
@@ -50,8 +50,6 @@ class Jeu:
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
-        print(self.joueur_actuel.dico_villages)
-
         self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
     def construire_village(self, village_id: int):
@@ -60,7 +58,7 @@ class Jeu:
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
         """
-        self.joueur_actuel.creer_village(village_id)
+        self.joueur_actuel.ajouter_village(village_id)
         print("ID emplacement :",village_id)
 
     def construire_eglise(self, village_id: int):
