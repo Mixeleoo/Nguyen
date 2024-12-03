@@ -27,8 +27,8 @@ class FunctionOnClickCanvas(AnimationCanvas):
 
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.hud_build_city.build_city_on_plain
         self.build_city_mode_tag_foc[VILLAGE_TAG] = lambda e: print("Y'a déjà un village ici ?")
-        self.basic_mode_tag_foc[NOTHING_TAG] = dummy
+        self.build_city_mode_tag_foc[NOTHING_TAG] = dummy
 
         self.build_church_mode_tag_foc[PLAINE_TAG] = dummy
         self.build_church_mode_tag_foc[VILLAGE_TAG] = self.hud_build_church.build_church_on_village
-        self.basic_mode_tag_foc[NOTHING_TAG] = dummy
+        self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
