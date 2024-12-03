@@ -272,7 +272,7 @@ noms_village = [
 ]
 
 def nom_aleatoire_village():
-    return choice([noms_village])
+    return choice(noms_village)
 
 prenoms_perso = [ "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Léonard", "Ysabeau", "Godefroy", "Agnès", "Hugues",
     "Géraldine", "Baudoin", "Armand", "Isabeau", "Aimé", "Perrin", "Tanguy", "Clothilde", "Florent", "Sygarde",
@@ -296,7 +296,7 @@ prenoms_perso = [ "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Lé
     "Godefroy", "Norbert", "Millicent", "Eulalie", "Bertrade", "Hermenegilde", "Louis", "Gilbert", "Beatrix", "Gildas"]
 
 def prenom_aleatoire() :
-    return choice([prenoms_perso])
+    return choice(prenoms_perso)
 
 noms_eglises = [
     "Église Saint-Pierre",
@@ -353,7 +353,7 @@ noms_eglises = [
 ]
 
 def nom_aleatoire_eglise() :
-    return choice([noms_eglises])
+    return choice(noms_eglises)
 
 noms_pretres = [
     "Père Augustin",
