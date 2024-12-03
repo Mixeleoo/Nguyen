@@ -39,8 +39,7 @@ class HUDBuildCity(HUDABC):
         self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2, (y0_cadre + y1_cadre) // 2,
             text=text,
-            tags=set_tags(hud_tag=self.tag),
-                fill=FILL_TEXT
+            tags=set_tags(hud_tag=self.tag)
         )
 
         original_image = Image.open("banderoletravaux.png")
@@ -152,3 +151,6 @@ class HUDBuildCity(HUDABC):
 
             # On change son tag de trigger de fonction
             self.canvas.engine_build_city(square_id, tags)
+
+            # On affiche dans l'historique son action
+            self.canvas.hud_history.add_text("Le joueur a crée un village !")
