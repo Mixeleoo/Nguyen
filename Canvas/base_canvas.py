@@ -36,6 +36,9 @@ class BaseCanvas(HighlightCanvas):
 
         self.mouse_coor = ()
 
+        # Vairblae test
+        self.id_village = 0
+
     def give_active_tag(self, event: tk.Event) -> None:
         """
         Si le current est un texte, alors on donne le tag "active" au rectangle en dessous
@@ -150,17 +153,31 @@ class BaseCanvas(HighlightCanvas):
 
         # Ajout des villages aléatoirement
         for noble in range(NB_NOBLE_AU_DEPART):
-            square_id = random.choice(self.find_withtag(PLAINE_TAG))
-            while self.villages_around(square_id):
-                square_id = random.choice(self.find_withtag(PLAINE_TAG))
-
-            tags = list(self.gettags(square_id))
-            tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
-            tags.insert(GROUP_TAG_INDEX, f"pvillage_{noble}")
-            self.itemconfigure(square_id, fill="orange", tags=tags)
+            square_id = self.engine_build_city()
+            self.jeu.creer_noble(square_id)
 
         self.addtag(MAP_SQUARE_TOP_LEFT_TAG, "withtag", all_squares_id[0])
         self.addtag(MAP_SQUARE_BOTTOM_RIGHT_TAG, "withtag", all_squares_id[-1])
+
+    def engine_build_city(self, square_id: int=None, tags: tuple | list=None) -> int:
+        """
+        Méthode qui créera un village en fonction des paramètres
+        """
+
+        if square_id is None:
+            square_id = random.choice(self.find_withtag(PLAINE_TAG))
+            while self.villages_around(square_id):
+                square_id = random.choice(self.find_withtag(PLAINE_TAG))
+            tags = list(self.gettags(square_id))
+
+        # Configurer les villages concernés
+        tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
+        tags.insert(GROUP_TAG_INDEX, f"pvillage_{self.id_village}")
+        self.id_village += 1
+
+        self.itemconfigure(square_id, fill="orange", tags=tags)
+
+        return square_id
 
     def villages_around(self, square_id: int):
         village_id = 0

@@ -150,5 +150,4 @@ class HUDBuildCity(HUDABC):
             self.canvas.radiobuttons.add_option(tags[GROUP_TAG_INDEX], new_option_id)
 
             # On change son tag de trigger de fonction
-            tags[TRIGGER_TAG_INDEX] = VILLAGE_TAG
-            self.canvas.itemconfigure(square_id, fill="orange", tags=tags)
+            self.canvas.engine_build_city(square_id, tags)
