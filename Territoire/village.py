@@ -31,7 +31,7 @@ class Village :
         return self._liste_roturier
 
     
-    def ajouter_villageois(self,pvillageois : Literal["paysan", "artisan"], effectif : int) :
+    def ajouter_villageois(self, type_v: Literal["paysan", "artisan", "soldat"], effectif : int) :
         """
         Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.
         Elle servira lorsque le joueur choisira l'action 'Immigration'
@@ -40,10 +40,12 @@ class Village :
             prenom = prenom_aleatoire()
             argent = randint(1,5)
             capacite_prod = randint(18,22)
-            if pvillageois == "artisan" :
-                self._liste_roturier += [Roturier(prenom,argent,capacite_prod)]
-            elif pvillageois == "paysan" :
-                self._liste_roturier += [Paysan(prenom, capacite_prod)]
+            if type_v == "artisan" :
+                self._liste_roturier += Roturier(prenom,argent,capacite_prod)
+            elif type_v == "paysan" :
+                self._liste_roturier += Paysan(prenom, capacite_prod)
+
+        print(f"Roturiers du village : {self._nom} | {self._identifiant} : \n{self._liste_roturier}")
 
     def creer_eglise(self):
         """
@@ -60,25 +62,29 @@ class ListRoturier(list):
     def __new__(cls, *more):
         for elt in more:
             if not isinstance(elt, Roturier):
-                raise TypeError(f"ListRoturier n'accepte que des Roturiers")
+                raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(elt)}, que des Roturiers")
 
         return list.__new__(cls)
 
     def __iadd__(self, other):
         if not isinstance(other, Roturier):
-            raise TypeError(f"ListRoturier n'accepte que des Roturiers")
+            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(other)}, que des Roturiers")
 
         self.append(other)
+
+        return self
 
     def __radd__(self, other):
         if not isinstance(other, Roturier):
-            raise TypeError(f"ListRoturier n'accepte que des Roturiers")
+            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(other)}, que des Roturiers")
 
         self.append(other)
 
+        return self
+
     def append(self, __object):
         if not isinstance(__object, Roturier):
-            raise TypeError(f"ListRoturier n'accepte que des Roturiers")
+            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(__object)}, que des Roturiers")
 
         else:
             list.append(self, __object)
