@@ -21,45 +21,12 @@ SIZE_ACTION_ADDITIONAL_COST_TEXT = 12
 PADY_BUILD_CITY_HUD = 5 + HEIGHT_HUD_TOP_SIDE
 PADY_BUILD_CITY_HUD_HIDING = -20 + HEIGHT_HUD_TOP_SIDE
 
-HIGHLIGHT_TAG_INDEX = 0
-TRIGGER_TAG_INDEX = 1
-DRAG_TAG_INDEX = 2
-COLOR_TAG_INDEX = 3
-HUD_TAG_INDEX = 4
-GROUP_TAG_INDEX = 5
-
 PA = 10
 
 DELTA_MS_ANIMATION = 1000 // 60  # 1000 ms = 1s / 60 (pour avoir 60 images par secondes)
 
 # UNIQUEMENT POUR LES TESTS
 NB_NOBLE_AU_DEPART = 4
-
-"""
-Sans hiérarchie des tags, il est plus fastidieux de savoir quel élément se comporte comment, alors qu'avec une hiérarchie,
-    on peut regrouper certains comportements, comme le comportement des clickable par exemple, qui auront leur fonction pour
-    les mettre en surbrillance
-
-Hiérarchie des tags:
-                                                      HUD_TAG
-                                      NOTHING_TAG     TEXT_TAG     CLICKABLE_TAG
-                                                  _{id_rectangle}  {tag_function_triggered}
-                                            
-                                            
-                                            
-                                                       MAP_TAG
-                                PLAINE_TAG FOREST_TAG MOUNTAIN_TAG LAKE_TAG VILLAGE_TAG
-                                
-Tags sans hiérarchie (placés à la fin) :
-MAP_SQUARE_TOP_LEFT_TAG
-MAP_SQUARE_BOTTOM_RIGHT_TAG
-HUD_BOTTOM
-HUD_RIGHT_SIDE
-HISTORY_TEXT
-TEXT_PAGE
-TEXT_ACTION
-TEMP_TAG
-"""
 
 # RIEN
 NOTHING_TAG = "NOTHING"
@@ -193,6 +160,13 @@ fill_darker = {
     FILL_ACTION_BOX: "#272626",
 }
 
+
+HIGHLIGHT_TAG_INDEX = 0
+TRIGGER_TAG_INDEX = 1
+DRAG_TAG_INDEX = 2
+COLOR_TAG_INDEX = 3
+HUD_TAG_INDEX = 4
+GROUP_TAG_INDEX = 5
 
 def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG,
              color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
