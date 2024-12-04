@@ -147,8 +147,7 @@ class ButtonSupervisor:
 
     def create_ok_button(
             self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
-            state: Literal["normal", "hidden", "disabled"] = "normal",
-            trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
             for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
@@ -159,7 +158,7 @@ class ButtonSupervisor:
 
         b = self.add(
             hud_tag=hud_tag,
-            trigger_name=trigger_name,
+            trigger_name="ok_" + hud_tag,
             func_triggered=func_triggered,
             for_which_game_mode=for_which_game_mode
         )
@@ -171,8 +170,7 @@ class ButtonSupervisor:
 
     def create_cancel_button(
             self, x0_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
-            state: Literal["normal", "hidden", "disabled"] = "normal",
-            trigger_name: str = NOTHING_TAG, is_temp: bool = False,
+            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
             for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
@@ -183,7 +181,7 @@ class ButtonSupervisor:
 
         b = self.add(
             hud_tag=hud_tag,
-            trigger_name=trigger_name,
+            trigger_name="cancel_" + hud_tag,
             func_triggered=func_triggered,
             for_which_game_mode=for_which_game_mode
         )
