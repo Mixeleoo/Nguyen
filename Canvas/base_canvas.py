@@ -17,7 +17,7 @@ class BaseCanvas(HighlightCanvas):
         from jeu import Jeu
 
         # On instancie le jeu
-        self.jeu = Jeu(self)
+        self.jeu = Jeu()
 
         self.custom_font = font.Font(family="Enchanted Land", size=20)
         self.references = []
