@@ -69,7 +69,7 @@ class BaseCanvas(HighlightCanvas):
         for item in self.find_overlapping(event.x, event.y, event.x, event.y):
 
             # S'il y a le rectangle de drag sous la souris, alors on rend le rectangle qui gère tout ça sous la souris.
-            if DRAG_CORNER_MORE_INFO_WINDOW_TAG in self.gettags(item):
+            if "drag_corner" == self.gettags(item)[DRAG_TAG_INDEX][:11]:
                 id_rectangle = item
 
         self.addtag_withtag("active", id_rectangle)
