@@ -12,6 +12,7 @@ class HUDActions(HUDABC):
 
         self.state: Literal["normal", "hidden"] = "normal"
         self.hide_button_id = 0
+        self.text_page_id = 0
 
         self.title_font = self.canvas.font.copy()
         self.title_font.config(weight="bold")
@@ -83,11 +84,11 @@ class HUDActions(HUDABC):
 
             self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
 
-        self.canvas.create_text(
+        self.text_page_id = self.canvas.create_text(
             x0_cadre + 80,
             y0_cadre - 15,
             text=f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}",
-            tags=set_tags(hud_tag=self.tag) + (TEXT_PAGE,)
+            tags=set_tags(hud_tag=self.tag)
         )
 
         # Bouton pour changer de page (précédente)
@@ -211,4 +212,7 @@ class HUDActions(HUDABC):
                 ) + (RECTANGLE_ACTION, HUD_BOTTOM,)
             )
 
-        self.canvas.itemconfigure(self.canvas.find_withtag(TEXT_PAGE)[0], text=f"page : {self.num_page} / {len(ACTION_FOR_YOUR_TURN) // 2}")
+        self.canvas.itemconfigure(
+            self.canvas.find_withtag(self.text_page_id)[0],
+            text=f"page : {self.num_page} / {len(ACTION_FOR_YOUR_TURN) // 2}"
+        )

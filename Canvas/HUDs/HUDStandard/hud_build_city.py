@@ -85,8 +85,7 @@ class HUDBuildCity(HUDABC):
         )
 
         self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
-            trigger_name=CANCEL_BUILD_CITY_TAG
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel
         )
 
     def replace(self, event: tk.Event) -> None:

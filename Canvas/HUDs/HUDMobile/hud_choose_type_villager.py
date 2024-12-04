@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Optional
 
 from parameter import *
-from Canvas.Radiobutton import Radiobutton
+from Canvas.HUDs.Radiobutton import Radiobutton
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
 class HUDChooseTypeVillager(HUDMobileABC):
@@ -13,6 +13,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
         self.desired_workforce = 1
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
+        self.text_nb_immigrants_id = 0
 
         # tableau qui contiendra le dernier effectif choisi puis le dernier type de villageois choisi
         self.last_choice_made = []
@@ -65,10 +66,10 @@ class HUDChooseTypeVillager(HUDMobileABC):
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.config(size=6)
 
-        self.canvas.create_text(
+        self.text_nb_immigrants_id = self.canvas.create_text(
             center_x - 20, y0_cadre + pad_from_borders + 25,
             text=text,
-            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG, TEXT_NB_IMMIGRANTS),
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden",
             fill=FILL_TEXT
         )
@@ -130,7 +131,6 @@ class HUDChooseTypeVillager(HUDMobileABC):
         # Ok bouton
         self.canvas.create_ok_button(
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
-            trigger_name=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
             state="hidden", is_temp=True
         )
 
@@ -138,7 +138,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         # Annuler bouton
         self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel, trigger_name=CANCEL_IMMIGRATION_TAG,
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
             state="hidden", is_temp=True
         )
 
@@ -227,7 +227,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
                       text=f"Paysan {self.desired_workforce} PA")
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.artisan_choice_id],
                        text=f"Artisan {self.desired_workforce * 2} PA")
-        self.canvas. itemconfigure(TEXT_NB_IMMIGRANTS, text=f"Effectif souhaité : {self.desired_workforce}")
+        self.canvas.itemconfigure(self.text_nb_immigrants_id, text=f"Effectif souhaité : {self.desired_workforce}")
 
     def griser(self, button_id: int):
         tags = list(self.canvas.gettags(button_id))

@@ -61,7 +61,7 @@ class HUDBuildChurch(HUDABC):
         self.canvas.references += [ref]
 
         self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel_build_church, trigger_name=CANCEL_BUILD_CHURCH
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel_build_church
         )
 
     def replace(self, event: tk.Event) -> None:

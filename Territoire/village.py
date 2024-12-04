@@ -55,7 +55,7 @@ class Village :
     def appliquer_don(self):
         """
         Methode qui permet de faire profiter un villageois au hasard du don dont le prêtre de l'eglise du village est doté
-        Si il y a plusieurs églises dans le villages alors autant de villageois seront tirés au hasard pour profiter chacun
+        S'il y a plusieurs églises dans le village alors autant de villageois seront tirés au hasard pour profiter chacun
         d'un don (on prendra soin de ne pas tirer plusieurs fois le même villageois)
         """
 
@@ -70,11 +70,11 @@ class Village :
                 new_liste_eglise.remove(eglise)
                 don = eglise.pretre.don
                 if don == 1 :
-                    villageois.bonheur += 1 #valeur a determiner
+                    villageois.bonheur += 1  # valeur à determiner
                 elif don == 2 :
-                    villageois.esperance_vie += 1 #valeur a determiner
+                    villageois.esperance_vie += 1  # valeur à determiner
                 elif don == 3 :
-                    villageois.cdp += 1 #valeur a determiner
+                    villageois.cdp += 1  # valeur à determiner
 
         else :
             for eglise in new_liste_eglise :
@@ -82,8 +82,8 @@ class Village :
                 new_liste_roturier.remove(villageois)
                 don = eglise.pretre.don
                 if don == 1 :
-                    villageois.bonheur += 1 #valeur a determiner
+                    villageois.bonheur += 1  # valeur à determiner
                 elif don == 2 :
-                    villageois.esperance_vie += 1 #valeur a determiner
+                    villageois.esperance_vie += 1  # valeur à determiner
                 elif don == 3 :
-                    villageois.cdp += 1 #valeur a determiner
+                    villageois.cdp += 1  # valeur à determiner

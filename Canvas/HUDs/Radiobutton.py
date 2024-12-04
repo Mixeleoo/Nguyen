@@ -1,6 +1,6 @@
 
 from parameter import *
-from Squelette_Canvas.highlight_canvas_sq import HighlightCanvas
+from Canvas.highlight_canvas import HighlightCanvas
 
 class Radiobutton:
     def __init__(self, canvas: HighlightCanvas, group_tag: str):

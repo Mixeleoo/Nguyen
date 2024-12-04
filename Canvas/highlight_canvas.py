@@ -2,8 +2,6 @@
 from tkinter import Canvas
 
 from parameter import *
-from Canvas.Radiobutton import RadiobuttonsSupervisor
-
 
 class HighlightCanvas(Canvas):
     def __init__(self, master=None, cnf=None, **kw):
@@ -40,6 +38,8 @@ class HighlightCanvas(Canvas):
         self.get_rect_border_id_from_inner_id = {
 
         }
+
+        from Canvas.HUDs.Radiobutton import RadiobuttonsSupervisor
 
         self.radiobuttons = RadiobuttonsSupervisor(self)
         self.add_radiobutton = self.radiobuttons.add

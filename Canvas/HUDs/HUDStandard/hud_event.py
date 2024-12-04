@@ -9,6 +9,8 @@ class HUDEvent(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        self.ok_button_id = 0
+
     @property
     def tag(self):
         return HUD_EVENT
@@ -53,9 +55,9 @@ class HUDEvent(HUDABC):
         )
 
         # Ok bouton
-        self.canvas.create_ok_button(
-            x1_cadre + 10, y1_cadre, hud_tag=self.tag, func_triggered=self.hide_animation, trigger_name=OK_EVENT_TAG
-        )
+        self.ok_button_id = self.canvas.create_ok_button(
+            x1_cadre + 10, y1_cadre, hud_tag=self.tag, func_triggered=self.hide_animation
+        ).id
 
 
         # More info bouton
@@ -76,7 +78,7 @@ class HUDEvent(HUDABC):
             self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
 
     def hide_animation(self, e=None) -> None:
-        self.canvas.move(self.tag, 0, -(abs(PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(OK_EVENT_TAG)[3]) // 10 + 1))
+        self.canvas.move(self.tag, 0, -(abs(PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(self.ok_button_id)[3]) // 10 + 1))
 
-        if self.canvas.coords(OK_EVENT_TAG)[3] != PADY_BUILD_CITY_HUD_HIDING:
+        if self.canvas.coords(self.ok_button_id)[3] != PADY_BUILD_CITY_HUD_HIDING:
             self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)

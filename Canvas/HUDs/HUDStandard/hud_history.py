@@ -97,7 +97,7 @@ class HUDHistory(HUDABC):
             il faut faire un homotéthie de l'historique en fonction de l'agrandissement de la fenêtre
         """
         self.canvas.move(
-            HUD_RIGHT_SIDE,
+            self.tag,
             event.width - self.canvas.master.previous_geometry[0],
             PADY_BUILD_CITY_HUD - self.canvas.coords(self.canvas.find_withtag(self.rect_hiding_top_text_id)[0])[1]
         )
@@ -217,12 +217,12 @@ class HUDHistory(HUDABC):
         i = 0
 
         # Tous les textes en haut du rectangle deviennent hidden
-        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[1] + 10:
+        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[1] + 20:
             self.canvas.itemconfigure(text_history_ids[i], state="hidden")
             i += 1
 
         # Ceux au milieu, on les laisse
-        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[3] - 10:
+        while i < len(text_history_ids) and self.canvas.coords(text_history_ids[i])[1] < self.canvas.coords(self.background_rect_id)[3]:
             self.canvas.itemconfigure(text_history_ids[i], state="normal")
             i += 1
 

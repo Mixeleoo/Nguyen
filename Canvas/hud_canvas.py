@@ -32,7 +32,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_village_info = HUDMobileVillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobileYaUnVillageGros(self)
         self.hud_choose_village = HUDChooseVillage(self)
-        self.hud_paysan_or_artisan = HUDChooseTypeVillager(self)
+        self.hud_choose_type_villager = HUDChooseTypeVillager(self)
         self.hud_top_side = HUDTopSide(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
@@ -50,7 +50,7 @@ class HUDCanvas(BaseCanvas):
         # HUDs mobile
         self.hudmobile_village_info.create()
         self.hudmobile_yavillagegros.create()
-        self.hud_paysan_or_artisan.create()
+        self.hud_choose_type_villager.create()
         self.hud_choose_village.create()
 
         for i in range(NB_NOBLE_AU_DEPART):

@@ -81,24 +81,23 @@ CLICKABLE_TAG = "CLICKABLE"
 TOGGLEABLE_TAG = "TOGGLEABLE"
 HIGHLIGHT_BUTTON_TAG = "HIGHLIGHT_BUTTON"
 
-# Tas de tags HUDs
-TEXT_TAG = "TEXT"
-HUD_BOTTOM = "HUD_BOTTOM"
-HUD_RIGHT_SIDE = "HUD_RIGHT_SIDE"
-HUD_BUILD_CITY = "HUD_BUILD_CITY"
-HUD_BUILD_CHURCH = "HUD_BUILD_CHURCH"
-HUD_EVENT = "HUD_EVENT"
-HUD_TOP_SIDE = "HUD_TOP_SIDE"
-HISTORY_TEXT = "HISTORY_TEXT"
-TEXT_PAGE = "TEXT_PAGE"
-TEXT_NB_IMMIGRANTS = "TEXT_NB_IMMIGRANTS"
-TEXT_ACTION = "TEXT_ACTION"
-TEMP_TAG = "TEMP"
+# TAG HUD
 TEMP_YAUNVILLAGEICIGROS_TAG = "TEMP_YAUNVILLAGEICIGROS"
 TEMP_VILLAGE_INFO_TAG = "TEMP_VILLAGE_INFO"
 PAYSAN_OR_ARTISAN_WINDOW_TAG = "PAYSAN_OR_ARTISAN_WINDOW"
-MORE_INFO_WINDOW = "MORE_INFO_WINDOW"
 CHOOSE_VILLAGE_TAG = "CHOOSE_VILLAGE"
+HUD_BUILD_CITY = "HUD_BUILD_CITY"
+HUD_BUILD_CHURCH = "HUD_BUILD_CHURCH"
+HUD_EVENT = "HUD_EVENT"
+HUD_BOTTOM = "HUD_BOTTOM"
+HUD_RIGHT_SIDE = "HUD_RIGHT_SIDE"
+HUD_TOP_SIDE = "HUD_TOP_SIDE"
+
+# Tas de tags HUDs
+TEXT_TAG = "TEXT"
+HISTORY_TEXT = "HISTORY_TEXT"
+TEXT_ACTION = "TEXT_ACTION"
+TEMP_TAG = "TEMP"
 
 # Tag qui trigger les fonctions appropriées
 MORE_INFO_TAG = "MORE_INFO"
@@ -109,21 +108,11 @@ SHOW_OR_HIDE_HISTORY_TAG = "SHOW_OR_HIDE_HISTORY"
 SCROLLBAR_TAG = "SCROLLBAR_TAG"
 RECTANGLE_ACTION = "RECTANGLE_ACTION"
 BUILD_CITY = "BUILD_CITY"
-CANCEL_BUILD_CITY_TAG = "CANCEL_BUILD_CITY"
 BUILD_CHURCH = "BUILD_CHURCH"
-CANCEL_BUILD_CHURCH = "CANCEL_BUILD_CHURCH"
-CHOOSE_VILLAGE_TO_IMMIGRATE_TAG = "CHOOSE_VILLAGE_TO_IMMIGRATE"
-IMMIGRATE_TAG = "IMMIGRATE"
-CANCEL_IMMIGRATION_TAG = "CANCEL_IMMIGRATE"
 PLUS_IMMIGRANTS_TAG = "ADD_IMMIGRANTS"
 MINUS_IMMIGRANTS_TAG = "MINUS_IMMIGRANTS"
-OK_EVENT_TAG = "OK_EVENT"
 INFO_EVENT_TAG = "INFO_EVENT"
 PAYSAN_OR_ARTISAN_TAG = "PAYSAN_OR_ARTISAN"
-DRAG_CORNER_MORE_INFO_WINDOW_TAG = "DRAG_CORNER_MORE_INFO_WINDOW"
-CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG = "CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE"
-PIN_WINDOW_TAG = "PIN_WINDOW"
-CLOSE_WINDOW_TAG = "CLOSE_WINDOW"
 
 # si
 si = 'si'
@@ -205,7 +194,19 @@ fill_darker = {
 }
 
 
-def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG, color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
+def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG,
+             color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
+    """
+    Méthode qui sert à uniformiser tous les éléments du canvas, ils ont tous comme tags ceux en paramètres.
+
+    :param highlight_tag: Le tag déterminant ce qui est trigger lors du clic gauche (généralement le feedback).
+    :param trigger_tag: Le tag déterminant ce qui est trigger lors du clic gauche confirmé (= après relâchement sans mouvement de la souris entre le clic et le relâchement).
+    :param drag_tag: Le tag déterminant ce qui est trigger lors du drag clic gauche.
+    :param color_tag: Le tag déterminant la couleur d'origine (sert pour remettre la couleur d'origine après un highlight)
+    :param hud_tag: Le tag déterminant l'HUD auquel appartient l'élément.
+    :param group_tag: Le tag déterminant l'éventuel groupe auquel appartient l'élément (sert dans le cas de comportements spécifiques).
+    :return: Tous les tags avec une valeur par défaut
+    """
     return highlight_tag, trigger_tag, drag_tag, color_tag, hud_tag, group_tag
 
 pad_from_borders = 15

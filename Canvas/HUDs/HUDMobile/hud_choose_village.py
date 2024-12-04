@@ -3,7 +3,7 @@ from typing import Optional
 import tkinter as tk
 
 from Canvas.HUDs.Button import Button
-from Canvas.Radiobutton import Radiobutton
+from Canvas.HUDs.Radiobutton import Radiobutton
 from parameter import *
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 
@@ -57,8 +57,7 @@ class HUDChooseVillage(HUDMobileABC):
 
         # Bouton OK qui lance l'immigration
         self.ok_button = self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
-            trigger_name=IMMIGRATE_TAG, is_temp=True, state="hidden"
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, is_temp=True, state="hidden"
         )
 
         # Radiobutton du choix du village
@@ -66,8 +65,7 @@ class HUDChooseVillage(HUDMobileABC):
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button = self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide,
-            trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
     def replace(self) -> None:
@@ -122,8 +120,8 @@ class HUDChooseVillage(HUDMobileABC):
 
         if self.last_choice_made:
 
-            effectif = self.canvas.hud_paysan_or_artisan.last_choice_made[0]
-            type_v = self.canvas.hud_paysan_or_artisan.last_choice_made[1]
+            effectif = self.canvas.hud_choose_type_villager.last_choice_made[0]
+            type_v = self.canvas.hud_choose_type_villager.last_choice_made[1]
             village_id = self.from_radiobutton_item_id_to_city_id[self.last_choice_made]
 
             # lancer l'immigration du jeu

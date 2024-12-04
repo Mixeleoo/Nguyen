@@ -1,20 +1,15 @@
 
 from typing import Literal
 
-from Canvas.hud_canvas import HUDCanvas
 from Perso.noble import Noble
-from parameter import prenoms_perso, prenom_aleatoire
+from parameter import *
 
 """
 TOUT TES IMPORT DES DIFFERENTES CLASSES DE PERSO
 """
 
 class Jeu:
-    def __init__(self, canvas: HUDCanvas):
-        self.canvas = canvas
-        """
-        TOUTES TES INSTANCIATIONS : LE JOUEUR (Noble), LES BOTS (Noble), ...
-        """
+    def __init__(self):
         self._joueurs: list[Noble] = []
 
         """

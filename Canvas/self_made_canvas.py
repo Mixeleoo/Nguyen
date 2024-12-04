@@ -121,7 +121,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
         # On vérifie pour chaque item qui se chevauchent à l'endroit clické
         for item in self.find_overlapping(event.x, event.y, event.x, event.y):
             # Si il y a le rectangle de drag sous la souris, alors on rend le rectangle qui gère tout ça sous la souris
-            if DRAG_CORNER_MORE_INFO_WINDOW_TAG in self.gettags(item):
+            if "drag_corner" == self.gettags(item)[DRAG_TAG_INDEX][:11]:
                 self.config(cursor="heart")
                 on_corner = True
 
