@@ -10,4 +10,4 @@ class Ecceclesiastique(Personne):
     """
     def __init__(self, pnom: str):
         Personne.__init__(self, pnom, 0, 0)
-        self._don = randint(1, 3)
+        self.don = randint(1, 3)

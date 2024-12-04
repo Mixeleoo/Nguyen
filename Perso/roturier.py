@@ -9,7 +9,7 @@ class Roturier(Personne):
     """
     def __init__(self, pnom: str, parg: int, cdp: int):
         Personne.__init__(self, pnom, 0 , parg)
-        self._cdp = cdp
+        self.cdp = cdp
         self._taux_impot = 0.25
 
     def produit(self) -> int:

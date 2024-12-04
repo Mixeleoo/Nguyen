@@ -13,8 +13,8 @@ class Personne:
         self._ressources = pres
         self._argent = parg
         self._age = 20
-        self._esperance_vie = randint(30,100)
-        self._bonheur = 5
+        self.esperance_vie = randint(30,100)
+        self.bonheur = 5
         self._pourcentage_impot = 0
 
     def __str__(self):

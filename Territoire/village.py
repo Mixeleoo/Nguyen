@@ -1,11 +1,9 @@
-from random import randint
+from random import randint, choice
 
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
 from parameter import prenom_aleatoire, nom_aleatoire_pretres, nom_aleatoire_eglise
-
-from random import randint
 
 from typing import Literal
 from Territoire.eglise import Eglise
@@ -20,7 +18,7 @@ class Village :
         self._identifiant = pid
 
         # Les roturiers que possède le noble
-        self._liste_roturier = ListRoturier()
+        self._liste_roturier : list[Roturier] = []
 
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
@@ -54,37 +52,38 @@ class Village :
         pretre = Ecceclesiastique(nom_aleatoire_pretres())
         self._liste_eglises += [Eglise(pretre, nom_aleatoire_eglise())]
 
+    def appliquer_don(self):
+        """
+        Methode qui permet de faire profiter un villageois au hasard du don dont le prêtre de l'eglise du village est doté
+        Si il y a plusieurs églises dans le villages alors autant de villageois seront tirés au hasard pour profiter chacun
+        d'un don (on prendra soin de ne pas tirer plusieurs fois le même villageois)
+        """
 
-class ListRoturier(list):
-    """
-    Liste qui ne peut contenir que des Roturiers
-    """
-    def __new__(cls, *more):
-        for elt in more:
-            if not isinstance(elt, Roturier):
-                raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(elt)}, que des Roturiers")
+        nb_eglises = len(self._liste_eglises)
+        nb_villageois = len(self._liste_roturier)
+        new_liste_eglise = self._liste_eglises.copy()
+        new_liste_roturier = self._liste_roturier.copy()
 
-        return list.__new__(cls)
+        if nb_eglises > nb_villageois :
+            for villageois in new_liste_roturier :
+                eglise = choice(new_liste_eglise)
+                new_liste_eglise.remove(eglise)
+                don = eglise.pretre.don
+                if don == 1 :
+                    villageois.bonheur += 1 #valeur a determiner
+                elif don == 2 :
+                    villageois.esperance_vie += 1 #valeur a determiner
+                elif don == 3 :
+                    villageois.cdp += 1 #valeur a determiner
 
-    def __iadd__(self, other):
-        if not isinstance(other, Roturier):
-            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(other)}, que des Roturiers")
-
-        self.append(other)
-
-        return self
-
-    def __radd__(self, other):
-        if not isinstance(other, Roturier):
-            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(other)}, que des Roturiers")
-
-        self.append(other)
-
-        return self
-
-    def append(self, __object):
-        if not isinstance(__object, Roturier):
-            raise TypeError(f"ListRoturier n'accepte pas les objets de type {type(__object)}, que des Roturiers")
-
-        else:
-            list.append(self, __object)
+        else :
+            for eglise in new_liste_eglise :
+                villageois = choice(new_liste_roturier)
+                new_liste_roturier.remove(villageois)
+                don = eglise.pretre.don
+                if don == 1 :
+                    villageois.bonheur += 1 #valeur a determiner
+                elif don == 2 :
+                    villageois.esperance_vie += 1 #valeur a determiner
+                elif don == 3 :
+                    villageois.cdp += 1 #valeur a determiner
