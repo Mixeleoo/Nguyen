@@ -39,9 +39,9 @@ class Village :
             argent = randint(1,5)
             capacite_prod = randint(18,22)
             if type_v == "artisan" :
-                self._liste_roturier += Roturier(prenom,argent,capacite_prod)
+                self._liste_roturier += [Roturier(prenom,argent,capacite_prod)]
             elif type_v == "paysan" :
-                self._liste_roturier += Paysan(prenom, capacite_prod)
+                self._liste_roturier += [Paysan(prenom, capacite_prod)]
 
         print(f"Roturiers du village : {self._nom} | {self._identifiant} : \n{self._liste_roturier}")
 
