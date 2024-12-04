@@ -13,6 +13,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
         self.desired_workforce = 1
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
+        self.soldat_choice_id = 0
         self.text_nb_immigrants_id = 0
 
         # tableau qui contiendra le dernier effectif choisi puis le dernier type de villageois choisi
@@ -27,6 +28,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
     def create(self):
 
         height = 150
+        width = 400
 
         title_text = "Quelle sera la profession du villageois ?"
 
@@ -37,7 +39,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
         # coordonnées du rectangle principal pour l'avoir au milieu de l'écran
         x0_cadre = 0
         y0_cadre = 0
-        x1_cadre = text_width
+        x1_cadre = width
         y1_cadre = height
 
         center_x = (x0_cadre + x1_cadre) // 2
@@ -52,7 +54,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         # Titre choix
         self.canvas.create_text(
-            x0_cadre + text_width // 2, y0_cadre + pad_from_borders,
+            center_x, y0_cadre + pad_from_borders,
             text=title_text,
             tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden",
@@ -108,7 +110,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
         self.paysan_choice_id = self.canvas.create_text_in_rectangle(
             x0_cadre + pad_from_borders,
             y0_cadre + pad_from_borders + 40,
-                    (x0_cadre + x1_cadre) // 2,
+            (x0_cadre + x1_cadre + pad_from_borders) // 3,
             y1_cadre - 20,
             text="Paysan 1 PA",
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
@@ -118,28 +120,40 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         # Artisan choix
         self.artisan_choice_id = self.canvas.create_text_in_rectangle(
-            (x0_cadre + x1_cadre) // 2,
+            (x0_cadre + x1_cadre + pad_from_borders) // 3,
             y0_cadre + pad_from_borders + 40,
-            x1_cadre - pad_from_borders,
+            (x0_cadre + x1_cadre) // 3 * 2,
             y1_cadre - 20,
-                    text="Artisan 2 PA",
+            text="Artisan 2 PA",
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             state="hidden"
         )
 
-        # Ok bouton
-        self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
-            state="hidden", is_temp=True
+        # Soldat choix
+        self.soldat_choice_id = self.canvas.create_text_in_rectangle(
+            (x0_cadre + x1_cadre) // 3 * 2,
+            y0_cadre + pad_from_borders + 40,
+            x1_cadre - pad_from_borders,
+            y1_cadre - 20,
+            text="Soldat 2 PA",
+            rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
+            state="hidden"
         )
 
-        self.radiobutton_choice = self.canvas.add_radiobutton((self.paysan_choice_id, self.artisan_choice_id))
+        self.radiobutton_choice = self.canvas.add_radiobutton(
+            self.paysan_choice_id, self.artisan_choice_id, self.soldat_choice_id
+        )
+
+        # Ok bouton
+        self.canvas.create_ok_button(
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, state="hidden", is_temp=True
+        )
 
         # Annuler bouton
         self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel,
-            state="hidden", is_temp=True
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel, state="hidden", is_temp=True
         )
 
     def replace(self, event: tk.Event) -> None:
@@ -179,7 +193,9 @@ class HUDChooseTypeVillager(HUDMobileABC):
         # On reset les choix
         self.radiobutton_choice.reset()
 
+        # On dégrise les options grisables
         self.degriser(self.artisan_choice_id)
+        self.degriser(self.soldat_choice_id)
 
         # On met à jour le texte (sa valeur par défaut vu l'effectif a été reset)
         self.refresh_text()
@@ -192,11 +208,12 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         if PA < self.desired_workforce * 2:
             # Si le joueur a selectionné ce choix
-            if self.radiobutton_choice.get_selected_option() == self.artisan_choice_id:
+            if self.radiobutton_choice.get_selected_option() in [self.artisan_choice_id, self.soldat_choice_id]:
                 self.radiobutton_choice.reset()
 
             # Griser le bouton artisan et ne le rendre plus clickable
             self.griser(self.artisan_choice_id)
+            self.griser(self.soldat_choice_id)
 
             if PA < self.desired_workforce:
                 # Si le joueur a selectionné ce choix
@@ -218,6 +235,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
             # Degriser le choix artisan et le rendre clickable
             self.degriser(self.artisan_choice_id)
+            self.degriser(self.soldat_choice_id)
 
         self.desired_workforce = new_desired_workforce
         self.refresh_text()
@@ -227,6 +245,8 @@ class HUDChooseTypeVillager(HUDMobileABC):
                       text=f"Paysan {self.desired_workforce} PA")
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.artisan_choice_id],
                        text=f"Artisan {self.desired_workforce * 2} PA")
+        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.soldat_choice_id],
+                       text=f"Soldat {self.desired_workforce * 2} PA")
         self.canvas.itemconfigure(self.text_nb_immigrants_id, text=f"Effectif souhaité : {self.desired_workforce}")
 
     def griser(self, button_id: int):

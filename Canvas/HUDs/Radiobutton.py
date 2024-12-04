@@ -65,7 +65,7 @@ class RadiobuttonsSupervisor:
 
         }
 
-    def add(self, radiobutton_items_id: tuple[int, ...]) -> Radiobutton:
+    def add(self, *radiobutton_items_id: int) -> Radiobutton:
         """
         Cette méthode sert à encadrer l'ajout de nouveaux radiobuttons.
         Elle ajoutera le nouveau radiobutton à sa liste.
@@ -85,9 +85,6 @@ class RadiobuttonsSupervisor:
 
     def toggle_switch_option(self, group_tag: str, option_id: int):
         self.radiobuttons[group_tag].toggle_switch_option(option_id)
-
-    def get_selected_option(self, group_tag: str) -> str | None:
-        return self.radiobuttons[group_tag].get_selected_option()
 
     def add_option(self, group_tag: str, option_id: int):
         """

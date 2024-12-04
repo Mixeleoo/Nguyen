@@ -61,7 +61,7 @@ class HUDChooseVillage(HUDMobileABC):
         )
 
         # Radiobutton du choix du village
-        self.radiobutton_village_choix = self.canvas.add_radiobutton(())
+        self.radiobutton_village_choix = self.canvas.add_radiobutton()
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button = self.canvas.create_cancel_button(
