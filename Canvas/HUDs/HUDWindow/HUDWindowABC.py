@@ -47,19 +47,20 @@ class HUDWindowABC(HUDMobileABC, ABC):
         )
 
         # Bouton pour fermer
-        self.canvas.create_button(
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name="close_" + self.tag + "_window",
+            func_triggered=self.cancel,
+            for_which_game_mode=("basic",)
+        ).draw(
             x0=x1_cadre - 20,
             y0=y0_cadre,
             x1=x1_cadre,
             y1=y0_cadre + 20,
             text="x",
-            hud_tag=self.tag,
-            func_triggered=self.cancel,
-            fill=FILL_CANCEL,
             state="hidden",
-            trigger_name="close_" + self.tag + "_window",
             is_temp=True,
-            for_which_game_mode=("basic",)
+            fill=FILL_CANCEL
         )
 
         # Bouton pin

@@ -91,36 +91,45 @@ class HUDActions(HUDABC):
         )
 
         # Bouton pour changer de page (précédente)
-        self.canvas.create_button(
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name=CHANGE_PAGE_MINUS,
+            func_triggered=self.on_change_page,
+            for_which_game_mode=("basic",)
+        ).draw(
             x0_cadre + 5,
             y0_cadre - 20,
             x0_cadre + 20,
             y0_cadre - 5,
             text="◄",  # ►◄↓↑→←▲▼
-            hud_tag=self.tag, func_triggered=self.on_change_page, trigger_name=CHANGE_PAGE_MINUS,
-            for_which_game_mode=("basic",)
         )
 
         # Bouton pour changer de page (suivante)
-        self.canvas.create_button(
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name=CHANGE_PAGE_PLUS,
+            func_triggered=self.on_change_page,
+            for_which_game_mode=("basic",)
+        ).draw(
             x0_cadre + 25,
             y0_cadre - 20,
             x0_cadre + 40,
             y0_cadre - 5,
             text="►",  # ►◄↓↑→←▲▼
-            hud_tag=self.tag, func_triggered=self.on_change_page, trigger_name=CHANGE_PAGE_PLUS,
-            for_which_game_mode=("basic",)
         )
 
         # Bouton pour cacher l'hud du bas
-        self.hide_button_id = self.canvas.create_button(
+        self.hide_button_id = self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name=SHOW_OR_HIDE_PAGE_TAG,
+            func_triggered=self.show_or_hide,
+            for_which_game_mode=("basic",)
+        ).draw(
             x1_cadre - 20,
             y0_cadre - 20,
             x1_cadre - 5,
             y0_cadre - 5,
-            text="▼",
-            hud_tag=self.tag, func_triggered=self.show_or_hide, trigger_name=SHOW_OR_HIDE_PAGE_TAG,
-            for_which_game_mode=("basic",)
+            text="▼"
         )
 
     def replace(self, event: tk.Event):

@@ -44,12 +44,16 @@ class HUDHistory(HUDABC):
         )
 
         # Rectangle pour ranger l'historique
-        self.hide_button_id = self.canvas.create_button(
-            x0_cadre - 20,
-            y1_cadre - 20,
-            x0_cadre - 5,
-            y1_cadre - 5,
-            text="►", hud_tag=self.tag, func_triggered=self.show_or_hide, trigger_name=SHOW_OR_HIDE_HISTORY_TAG
+        self.hide_button_id = self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name=SHOW_OR_HIDE_HISTORY_TAG,
+            func_triggered=self.show_or_hide
+        ).draw(
+            x0=x0_cadre - 20,
+            y0=y1_cadre - 20,
+            x1=x0_cadre - 5,
+            y1=y1_cadre - 5,
+            text="►"
         )
 
         # Scrollbar

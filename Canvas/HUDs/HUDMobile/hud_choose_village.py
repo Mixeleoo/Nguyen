@@ -2,6 +2,7 @@
 from typing import Optional
 import tkinter as tk
 
+from Canvas.HUDs.Button import Button
 from Canvas.Radiobutton import Radiobutton
 from parameter import *
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
@@ -11,8 +12,8 @@ class HUDChooseVillage(HUDMobileABC):
         super().__init__(canvas)
 
         self.background_rectangle_id = 0
-        self.ok_button_id = 0
-        self.cancel_button_id = 0
+        self.ok_button: Optional[Button] = None
+        self.cancel_button: Optional[Button] = None
 
         # id du dernier village choisi
         self.last_choice_made = 0
@@ -55,18 +56,16 @@ class HUDChooseVillage(HUDMobileABC):
         )
 
         # Bouton OK qui lance l'immigration
-        self.ok_button_id = self.canvas.create_ok_button(
+        self.ok_button = self.canvas.create_ok_button(
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
             trigger_name=IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
 
         # Radiobutton du choix du village
-        self.radiobutton_village_choix = self.canvas.radiobuttons.add((),
-            ok_button_id=self.ok_button_id
-        )
+        self.radiobutton_village_choix = self.canvas.add_radiobutton(())
 
         # Bouton Annuler qui annule l'immigration
-        self.cancel_button_id = self.canvas.create_cancel_button(
+        self.cancel_button = self.canvas.create_cancel_button(
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide,
             trigger_name=CANCEL_CHOOSE_VILLAGE_TO_IMMIGRATE_TAG, is_temp=True, state="hidden"
         )
@@ -102,15 +101,12 @@ class HUDChooseVillage(HUDMobileABC):
             state="hidden"
         )
 
-        self.canvas.tag_lower(new_category_id, self.ok_button_id)
-        self.canvas.tag_lower(self.canvas.text_id_in_rectangle_id[new_category_id], self.ok_button_id)
+        self.canvas.tag_lower(new_category_id, self.ok_button.id)
+        self.canvas.tag_lower(self.canvas.text_id_in_rectangle_id[new_category_id], self.ok_button.id)
 
         # Déplacer vers le bas de la hauteur de la nouvelle catégorie les deux boutons
-        self.canvas.move(self.ok_button_id, 0, 40)
-        self.canvas.move(self.cancel_button_id, 0, 40)
-
-        self.canvas.move(self.canvas.text_id_in_rectangle_id[self.ok_button_id], 0, 40)
-        self.canvas.move(self.canvas.text_id_in_rectangle_id[self.cancel_button_id], 0, 40)
+        self.ok_button.move(0, 40)
+        self.cancel_button.move( 0, 40)
 
         # J'associe l'id du village à l'id du choix (= le rectangle correspondant au choix)
         self.from_radiobutton_item_id_to_city_id[new_category_id] = city_id

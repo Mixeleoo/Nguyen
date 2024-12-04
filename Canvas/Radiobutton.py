@@ -65,7 +65,7 @@ class RadiobuttonsSupervisor:
 
         }
 
-    def add(self, radiobutton_items_id: tuple[int, ...], ok_button_id: int) -> Radiobutton:
+    def add(self, radiobutton_items_id: tuple[int, ...]) -> Radiobutton:
         """
         Cette méthode sert à encadrer l'ajout de nouveaux radiobuttons.
         Elle ajoutera le nouveau radiobutton à sa liste.
@@ -80,10 +80,6 @@ class RadiobuttonsSupervisor:
             tags = list(self.canvas.gettags(item_id))
             tags[GROUP_TAG_INDEX] = group_tag
             self.canvas.itemconfigure(item_id, tags=tags)
-
-        tags = list(self.canvas.gettags(ok_button_id))
-        tags[GROUP_TAG_INDEX] = group_tag
-        self.canvas.itemconfigure(ok_button_id, tags=tags)
 
         return self.radiobuttons[group_tag]
 
