@@ -3,10 +3,10 @@ from random import randint, choice
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
+from Territoire.eglise import Eglise
 from parameter import prenom_aleatoire, nom_aleatoire_pretres, nom_aleatoire_eglise
 
 from typing import Literal
-from Territoire.eglise import Eglise
 
 class Village :
     """
@@ -23,12 +23,10 @@ class Village :
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
 
-
     @property
     def liste_roturier(self):
         return self._liste_roturier
 
-    
     def ajouter_villageois(self, type_v: Literal["paysan", "artisan", "soldat"], effectif : int) :
         """
         Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.

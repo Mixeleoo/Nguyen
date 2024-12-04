@@ -32,7 +32,7 @@ class Jeu:
         nouveau_noble.ajouter_village(village_id)
         self._joueurs.append(nouveau_noble)
 
-    def immigrer(self,  village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
+    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
         """
         Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 

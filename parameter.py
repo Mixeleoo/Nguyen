@@ -80,6 +80,7 @@ PLUS_IMMIGRANTS_TAG = "ADD_IMMIGRANTS"
 MINUS_IMMIGRANTS_TAG = "MINUS_IMMIGRANTS"
 INFO_EVENT_TAG = "INFO_EVENT"
 PAYSAN_OR_ARTISAN_TAG = "PAYSAN_OR_ARTISAN"
+TAXES_TAG = "TAXES"
 
 # si
 si = 'si'
@@ -116,7 +117,7 @@ ACTION_FOR_YOUR_TURN = [
         "text": "Impôt",
         "PA": "5 PA",
         "additionalcost": "",
-        "do": NOTHING_TAG
+        "do": TAXES
     },
     {
         "text": "Déclarer la guerre",
