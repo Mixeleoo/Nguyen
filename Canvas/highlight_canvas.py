@@ -16,14 +16,16 @@ class HighlightCanvas(Canvas):
             MAP_TAG: self.highlight_square,
             CLICKABLE_TAG: self.highlight_clickable,
             TOGGLEABLE_TAG: self.highlight_toggleable,
-            NOTHING_TAG: lambda: None
+            HIGHLIGHT_BUTTON_TAG: self.highlight_button,
+            NOTHING_TAG: dummy
         }
 
         self.tag_unhighlight = {
             MAP_TAG: self.unhighlight_square,
             CLICKABLE_TAG: self.unhighlight_clickable,
-            TOGGLEABLE_TAG: lambda: None,
-            NOTHING_TAG: lambda: None
+            TOGGLEABLE_TAG: dummy,
+            HIGHLIGHT_BUTTON_TAG: self.unhighlight_button,
+            NOTHING_TAG: dummy
         }
 
         # Cette variable repertoriera tous les id de texts et leur rectangle associé.
@@ -33,7 +35,14 @@ class HighlightCanvas(Canvas):
 
         }
 
+        # Comme le dictionnaire qui sert à récupérer le rectangle depuis le texte et inversement. Celui-ci servira
+        # à récupérer l'id du rectangle du fond à partir du rectangle par dessus (pour l'highlight du bouton)
+        self.get_rect_border_id_from_inner_id = {
+
+        }
+
         self.radiobuttons = RadiobuttonsSupervisor(self)
+        self.add_radiobutton = self.radiobuttons.add
 
     def highlight_square(self, toward_coor: tuple = None):
         """
@@ -100,6 +109,20 @@ class HighlightCanvas(Canvas):
 
     def highlight_clickable(self): self.itemconfigure("highlight", fill=fill_brighter[self.gettags("highlight")[COLOR_TAG_INDEX]])
     def unhighlight_clickable(self): self.itemconfigure("highlight", fill=self.gettags("highlight")[COLOR_TAG_INDEX])
+    def highlight_toggleable(self): self.radiobuttons.toggle_switch_option(self.gettags("highlight")[GROUP_TAG_INDEX], self.find_withtag("highlight")[0])
 
-    def highlight_toggleable(self):
-        self.radiobuttons.toggle_switch_option(self.gettags("highlight")[GROUP_TAG_INDEX], self.find_withtag("highlight")[0])
+    def highlight_button(self):
+        """
+        Méthode qui va être trigger lors de l'highlight du bouton
+        """
+        self.itemconfig(self.get_rect_border_id_from_inner_id[self.find_withtag("highlight")[0]], outline="#CCCCCC")     # Bord éclairé
+        self.itemconfig("highlight", outline="grey")       # Bord interne clair
+        self.itemconfigure("highlight", fill=self.gettags("highlight")[COLOR_TAG_INDEX])
+
+    def unhighlight_button(self):
+        """
+        Méthode qui va être trigger lors de l'unhighlight du bouton
+        """
+        self.itemconfig(self.get_rect_border_id_from_inner_id[self.find_withtag("highlight")[0]], outline="darkgrey")  # Bord plus sombre
+        self.itemconfig("highlight", outline="black")      # Bord interne foncé
+        self.itemconfig("highlight", fill=fill_brighter[self.gettags("highlight")[COLOR_TAG_INDEX]])      # Bord interne foncé
