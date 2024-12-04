@@ -74,29 +74,31 @@ class HUDChooseTypeVillager(HUDMobileABC):
         )
 
         # Bouton ajouter effectif
-        self.canvas.create_button(
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            func_triggered=self.plus_immigrants,
+            trigger_name=PLUS_IMMIGRANTS_TAG
+        ).draw(
             center_x - 20 + width_text // 2,
             y0_cadre + pad_from_borders + 15,
             center_x + width_text // 2,
             y0_cadre + pad_from_borders + 25,
             text="▲",
-            hud_tag=self.tag,
-            func_triggered=self.plus_immigrants,
-            trigger_name=PLUS_IMMIGRANTS_TAG,
             text_font=custom_font,
             state="hidden", is_temp=True
         )
 
         # Bouton retirer effectif
-        self.canvas.create_button(
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            func_triggered=self.minus_immigrants,
+            trigger_name=MINUS_IMMIGRANTS_TAG,
+        ).draw(
             center_x - 20 + width_text // 2,
             y0_cadre + pad_from_borders + 27,
             center_x + width_text // 2,
             y0_cadre + pad_from_borders + 37,
             text="▼",
-            hud_tag=self.tag,
-            func_triggered=self.minus_immigrants,
-            trigger_name=MINUS_IMMIGRANTS_TAG,
             text_font=custom_font,
             state="hidden", is_temp=True
         )
@@ -125,13 +127,14 @@ class HUDChooseTypeVillager(HUDMobileABC):
             state="hidden"
         )
 
-        self.radiobutton_choice = self.canvas.radiobuttons.add((self.paysan_choice_id, self.artisan_choice_id),
-            # Ok bouton
-            ok_button_id=self.canvas.create_ok_button(
-                x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, trigger_name=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
-                state="hidden", is_temp=True
-            )
+        # Ok bouton
+        self.canvas.create_ok_button(
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate,
+            trigger_name=CHOOSE_VILLAGE_TO_IMMIGRATE_TAG,
+            state="hidden", is_temp=True
         )
+
+        self.radiobutton_choice = self.canvas.add_radiobutton((self.paysan_choice_id, self.artisan_choice_id))
 
         # Annuler bouton
         self.canvas.create_cancel_button(
@@ -175,6 +178,8 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         # On reset les choix
         self.radiobutton_choice.reset()
+
+        self.degriser(self.artisan_choice_id)
 
         # On met à jour le texte (sa valeur par défaut vu l'effectif a été reset)
         self.refresh_text()

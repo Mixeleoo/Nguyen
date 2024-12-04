@@ -54,12 +54,18 @@ class HUDMobileVillageInfo(HUDMobileABC):
             state="hidden"
         )
 
-        self.more_info_button_id = self.canvas.create_button(
-            0, 120, largeur, 160, "Plus d'info",
+        self.more_info_button_id = self.canvas.add_button(
             hud_tag=self.tag,
-            func_triggered=lambda *args: self.canvas.hudwindow_more_info_supervisor.get_active_window().show(),
             trigger_name=MORE_INFO_TAG,
-            state="hidden", is_temp=True
+            func_triggered=lambda *args: self.canvas.hudwindow_more_info_supervisor.get_active_window().show(),
+        ).draw(
+            x0=0,
+            y0=120,
+            x1=largeur,
+            y1=160,
+            text="Plus d'info",
+            state="hidden",
+            is_temp=True
         )
 
     def replace(self, event: tk.Event) -> None:
@@ -83,5 +89,3 @@ class HUDMobileVillageInfo(HUDMobileABC):
         tags[GROUP_TAG_INDEX] = active_village_tags[GROUP_TAG_INDEX]
 
         self.canvas.itemconfigure(self.more_info_button_id, tags=tags)
-
-        print(self.canvas.gettags(self.more_info_button_id))

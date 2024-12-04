@@ -9,8 +9,6 @@ class HUDEvent(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.ok_button_id = 0
-
     @property
     def tag(self):
         return HUD_EVENT
@@ -55,9 +53,10 @@ class HUDEvent(HUDABC):
         )
 
         # Ok bouton
-        self.ok_button_id = self.canvas.create_ok_button(
+        self.canvas.create_ok_button(
             x1_cadre + 10, y1_cadre, hud_tag=self.tag, func_triggered=self.hide_animation, trigger_name=OK_EVENT_TAG
         )
+
 
         # More info bouton
         self.canvas.create_text_in_rectangle(
