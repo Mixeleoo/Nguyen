@@ -61,7 +61,7 @@ class Noble(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def se_soumettre(self, pnoble: 'Noble'):
+    def soumettre(self, pnoble: 'Noble'):
         """
         Méthode qui permet de déterminer si un noble accepte de se soumettre ou non
         Ce choix se fera en fonction de la taille de son armée
