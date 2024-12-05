@@ -1,6 +1,5 @@
 
 from abc import ABC, abstractmethod
-from typing import Literal
 
 from parameter import *
 from Canvas.highlight_canvas import HighlightCanvas
@@ -16,7 +15,7 @@ class SelectorsABC(ABC):
 
     def add_option(self, option_id: int) -> None:
         """
-        Méthode qui ajoute une option au radiobutton (comme ça, c'est dynamique).
+        Méthode qui ajoute une option au radiobutton.
 
         :param option_id: id de l'élément à ajouter au sélecteur.
         """
@@ -39,7 +38,6 @@ class SelectorsABC(ABC):
         Méthode qui sera trigger lors du clic sur un choix du sélecteur concerné.
 
         :param option_id: id de l'élément à toggle
-        :return:
         """
         pass
 
@@ -80,11 +78,7 @@ class Radiobutton(SelectorsABC):
         # On met à jour la dernière option cliquée
         self.currently_selected = option_id
 
-    def get_selected_option(self) -> int | None:
-        """
-        :return: L'id du rectangle dernièrement sélectionné
-        """
-        return self.currently_selected
+    def get_selected_option(self) -> int | None: return self.currently_selected
 
 
 class Checkbutton(SelectorsABC):
@@ -124,39 +118,59 @@ class Checkbutton(SelectorsABC):
             # On met à jour la dernière option cliquée
             self.currently_selected.append(option_id)
 
-    def get_selected_option(self, *args) -> list[int, ...] | list:
-        return self.currently_selected
+    def get_selected_option(self, *args) -> list[int, ...] | list: return self.currently_selected
 
 
-class RadiobuttonsSupervisor:
+class SelectorSupervisor:
 
     """
     Cette classe servira à gérer les différents radiobutton sur le canvas
     """
     def __init__(self, canvas: HighlightCanvas):
-        self.current_group_id = 0
+
+        self.current_radio_group_id = 0
+        self.current_check_group_id = 0
+
         self.canvas = canvas
-        self.radiobuttons: dict[str: Radiobutton | Checkbutton] = {
+        self.selectors: dict[str: Radiobutton | Checkbutton] = {
 
         }
 
-    def add(self, *radiobutton_items_id: int, type_b: Literal["check", "radio"]) -> Radiobutton:
+    def add_radiobutton(self, *items_id: int) -> Radiobutton:
         """
         Cette méthode sert à encadrer l'ajout de nouveaux radiobuttons.
         Elle ajoutera le nouveau radiobutton à sa liste.
         Pour chacun des éléments de ce radiobutton, elle ajoutera le tag pour les regrouper.
         """
-        group_tag = f"radiobutton_group{self.current_group_id}"
+        group_tag = f"radiobutton_group{self.current_radio_group_id}"
 
-        self.current_group_id += 1
-        self.radiobuttons[group_tag] = Radiobutton(self.canvas, group_tag)
+        self.current_radio_group_id += 1
+        self.selectors[group_tag] = Radiobutton(self.canvas, group_tag)
 
-        for item_id in radiobutton_items_id:
+        for item_id in items_id:
             tags = list(self.canvas.gettags(item_id))
             tags[GROUP_TAG_INDEX] = group_tag
             self.canvas.itemconfigure(item_id, tags=tags)
 
-        return self.radiobuttons[group_tag]
+        return self.selectors[group_tag]
+
+    def add_checkbutton(self, *items_id: int) -> Radiobutton:
+        """
+        Cette méthode sert à encadrer l'ajout de nouveaux selectors.
+        Elle ajoutera le nouveau selector à sa liste.
+        Pour chacun des éléments de ce selector, elle ajoutera le tag pour les regrouper.
+        """
+        group_tag = f"checkbutton_group{self.current_check_group_id}"
+
+        self.current_check_group_id += 1
+        self.selectors[group_tag] = Checkbutton(self.canvas, group_tag)
+
+        for item_id in items_id:
+            tags = list(self.canvas.gettags(item_id))
+            tags[GROUP_TAG_INDEX] = group_tag
+            self.canvas.itemconfigure(item_id, tags=tags)
+
+        return self.selectors[group_tag]
 
     def toggle_switch_option(self, group_tag: str, option_id: int):
-        self.radiobuttons[group_tag].toggle_switch_option(option_id)
+        self.selectors[group_tag].toggle_switch_option(option_id)

@@ -1,6 +1,7 @@
 
 from tkinter import Canvas
 
+from Canvas.HUDs.Radiobutton import SelectorSupervisor
 from parameter import *
 
 class HighlightCanvas(Canvas):
@@ -39,10 +40,11 @@ class HighlightCanvas(Canvas):
 
         }
 
-        from Canvas.HUDs.Radiobutton import RadiobuttonsSupervisor
+        from Canvas.HUDs.Radiobutton import SelectorSupervisor
 
-        self.radiobuttons = RadiobuttonsSupervisor(self)
-        self.add_radiobutton = self.radiobuttons.add
+        self.radiobuttons = SelectorSupervisor(self)
+        self.add_radiobutton = self.radiobuttons.add_radiobutton
+        self.add_checkbutton = self.radiobuttons.add_checkbutton
 
     def highlight_square(self, toward_coor: tuple = None):
         """
