@@ -26,6 +26,24 @@ class Noble(Personne):
     def dico_villages(self):
         return self._dico_villages
 
+    @property
+    def liste_soldats(self):
+        return self._liste_soldats
+
+    def payer_impot(self):
+        """
+        Méthode d'impôt en fonction du pourcentage d'impot attribué noble
+        Retourne un tuple de la quantité d'argent et de ressources prises au noble
+        et enlève cette quantité de l'argent ET des ressources de ce noble
+        """
+        imp_arg = self._argent * self._taux_impot
+        imp_ress = self._ressources * self._taux_impot
+
+        self._argent -= imp_arg
+        self._ressources -= imp_ress
+
+        return imp_arg, imp_ress
+
     def prend_impot_village(self, pid_village: int) -> tuple[int, int]:
         """
         Ajoute aux ressources du noble les impot perçu pour chaque roturier sous ses ordres dans le village mis en paramètre
@@ -42,6 +60,16 @@ class Noble(Personne):
         self._ressources += impot_total_res
 
         return impot_total_arg, impot_total_res
+
+    def se_soumettre(self, pnoble: 'Noble'):
+        """
+        Méthode qui permet de déterminer si un noble accepte de se soumettre ou non
+        Ce choix se fera en fonction de la taille de son armée
+
+        :param pnoble: Noble souhaitant soumettre un autre noble
+        :return : True si le noble accepte de devenir vassal, False sinon
+        """
+
 
     def ajouter_village(self, pid: int):
         """

@@ -4,7 +4,7 @@ from random import randint
 class Personne:
     """
     Une personne est définie par son nom, son age (ici les personnages commencent leur vie à 20 ans), les ressources et l'argent qu'elle possède,
-    son espérence de vie (entre 30 et 100 ans) et son indice de bonheur (entre 0 et 10, initialisé à 5)
+    son espérence de vie (entre 30 et 100 ans), son indice de bonheur (entre 0 et 10, initialisé à 5)
     """
 
     def __init__(self, pnom: str, pres: int, parg: int):
@@ -15,10 +15,21 @@ class Personne:
         self._age = 20
         self.esperance_vie = randint(30,100)
         self.bonheur = 5
-        self._pourcentage_impot = 0
 
     def __str__(self):
         return self._nom
+
+    @property
+    def nom(self):
+        return self._nom
+
+    @property
+    def ressources(self):
+        return self._ressources
+
+    @property
+    def argent(self):
+        return self._argent
 
     def gestion_ressources(self, value: int) -> bool:
         """
@@ -41,11 +52,3 @@ class Personne:
             return False
         else:
             return True
-
-    def payer_impot(self) -> int:
-        """
-        payer_impot retire un pourcentage des ressources et les renvoie
-        """
-        impot = int(self._ressources * (self._pourcentage_impot / 100))
-        self._ressources -= impot
-        return impot

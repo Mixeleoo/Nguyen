@@ -12,14 +12,20 @@ class Seigneur(Noble):
         # Liste des vassaux du seigneur (nobles sous les ordres du seigneur)
         self._liste_nobles: list[Noble] = []
 
+    @property
+    def liste_nobles(self):
+        return self._liste_nobles
 
-    def prend_impot_noble(self):
-        """
-        Ajoute aux ressources du seigneur les impot perçu pour chaque noble sous ses ordres
-        """
 
-        for noble in self._liste_nobles:
-            self._ressources += noble.payer_impot()
+    def prend_impot_noble(self, indice_noble : int):
+        """
+        Ajoute aux ressources du seigneur les impot perçu pour le noble se trouvant à l'indice indice_noble de sa liste de nobles sous ses ordres
+        """
+        self._argent += self._liste_nobles[indice_noble].payer_impot()[0]
+        self._ressources += self._liste_nobles[indice_noble].payer_impot()[1]
+
+        """for noble in self._liste_nobles:
+            self._ressources += noble.payer_impot()"""
 
 
 class ListNoble(list):
