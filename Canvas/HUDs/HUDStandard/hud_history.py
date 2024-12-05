@@ -140,11 +140,12 @@ class HUDHistory(HUDABC):
 
     def add_text(self, text: str) -> None:
         """
-        Méthode qui ajoute du texte à l'historique.\n
-        Elle ajoutera sa taille en hauteur à la longueur totale des textes dans l'historique.\n
-        Elle met à jour la variable du dernier texte ajouté\n
-        Elle refera descendre l'historique tout en bas pour que le joueur voie quand il y a du nouveau\n
-        Elle refera calculer la nouvelle taille du thumb de la scrollbar.\n
+        Méthode qui ajoute du texte à l'historique.
+        Elle coupera le texte pour qu'il rentre en largeur dans l'historique.
+        Elle ajoutera sa taille en hauteur à la longueur totale des textes dans l'historique.
+        Elle refera descendre l'historique à sa hauteur pour que le joueur voie quand il y a du nouveau.
+        Elle ajoutera le nouveau texte au groupe en lui ajoutant le tag HISTORY_TEXT.
+        Elle refera calculer la nouvelle taille du thumb de la scrollbar.
         """
 
         coords = self.canvas.coords(self.background_rect_id)

@@ -19,6 +19,7 @@ class HUDCanvas(BaseCanvas):
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
         from Canvas.HUDs.HUDMobile.hudmobile_choose_village import HUDChooseVillage
         from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_taxes import HUDMobileChooseTaxes
 
         from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
 
@@ -34,6 +35,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_choose_village = HUDChooseVillage(self)
         self.hud_choose_type_villager = HUDChooseTypeVillager(self)
         self.hud_top_side = HUDTopSide(self)
+        self.hudmobile_choose_taxes = HUDMobileChooseTaxes(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 
@@ -52,6 +54,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros.create()
         self.hud_choose_type_villager.create()
         self.hud_choose_village.create()
+        self.hudmobile_choose_taxes.create()
 
         for i in range(NB_NOBLE_AU_DEPART):
             self.hudwindow_more_info_supervisor.add()
