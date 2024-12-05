@@ -4,6 +4,7 @@ from typing import Literal
 
 from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from Canvas.HUDs.StringVar import StringVar
 
 class HUDActions(HUDABC):
     def __init__(self, canvas):

@@ -15,7 +15,7 @@ class Noble(Personne):
         self._taux_impot = 0.10
 
         # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
-        # Servira a accéder à la liste de Roturiers que le noble possède
+        # Servira à accéder à la liste de Roturiers que le noble possède
         self._dico_villages: dict[int, Village] = {}
 
         # Liste des soldats sous les ordres du noble
@@ -89,7 +89,7 @@ class Noble(Personne):
 
     def nourrir_soldats(self) -> int:
         """
-        Retourne 0 si le seigneur a assez de ressources pour nourrir ses soldats
+        Retourne zéro si le seigneur a assez de ressources pour nourrir ses soldats.
         Retourne le nombre de ressources manquantes sinon (ce sera le nombre de soldats qui seront morts de faim)
         """
         deces = 0
