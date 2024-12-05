@@ -10,14 +10,14 @@ class HUDCanvas(BaseCanvas):
         super().__init__(master, cnf, **kw)
 
         from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
-        from Canvas.HUDs.HUDMobile.hud_choose_type_villager import HUDChooseTypeVillager
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_type_villager import HUDChooseTypeVillager
         from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
         from Canvas.HUDs.HUDStandard.hud_history import HUDHistory
         from Canvas.HUDs.HUDStandard.hud_build_church import HUDBuildChurch
         from Canvas.HUDs.HUDStandard.hud_event import HUDEvent
         from Canvas.HUDs.HUDMobile.hudmobile_village_info import HUDMobileVillageInfo
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
-        from Canvas.HUDs.HUDMobile.hud_choose_village import HUDChooseVillage
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_village import HUDChooseVillage
         from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
 
         from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
