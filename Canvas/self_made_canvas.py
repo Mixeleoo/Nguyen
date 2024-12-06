@@ -113,9 +113,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
         for item_id in self.find_withtag(TEMP_TAG):
             self.itemconfigure(item_id, state="hidden")
 
-        # self.hud_event.show_animation()
-
-        self.hudmobile_choose_taxes.show()
+        self.hud_event.show_animation()
 
     def on_motion(self, event: tk.Event) -> None:
 
