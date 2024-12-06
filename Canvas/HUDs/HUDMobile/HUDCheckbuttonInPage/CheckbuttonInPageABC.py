@@ -170,6 +170,7 @@ class CheckbuttonInPageABC(HUDMobileABC, ABC):
         # On remet le group_tag de l'option au checkbutton actuel
         tags = list(self.canvas.gettags(new_category_id))
         tags[GROUP_TAG_INDEX] = self.cur_checkbutton.group_tag
+        tags[HIGHLIGHT_TAG_INDEX] = TOGGLEABLE_TAG
         self.canvas.itemconfigure(new_category_id, tags=tags)
 
         self.from_checkbutton_index_to_item_id_to_item_id[len(self.checkbuttons) - 1][new_category_id] = item_id
