@@ -11,6 +11,9 @@ CARRE_PAR_LIGNE = 60
 CARRE_PAR_COLONNE = 40
 SPS = 25
 
+# nombre maximum de choix de villages pour changer de page
+RBTN_MAX_VIL = 2
+
 HEIGHT_HUD_TOP_SIDE = 60
 
 HEIGHT_BOTTOM_HUD = 80
@@ -64,7 +67,6 @@ HUD_CHOOSE_TAXES = "HUD_CHOOSE_TAXES"
 # Tas de tags HUDs
 TEXT_TAG = "TEXT"
 HISTORY_TEXT = "HISTORY_TEXT"
-TEXT_ACTION = "TEXT_ACTION"
 TEMP_TAG = "TEMP"
 
 # Tag qui trigger les fonctions appropriées
@@ -87,7 +89,6 @@ TAXES_TAG = "TAXES"
 si = 'si'
 
 
-text_categories = ["text", "PA", "additionalcost"]
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
 ACTION_FOR_YOUR_TURN = [
     {

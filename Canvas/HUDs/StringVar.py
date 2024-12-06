@@ -1,19 +1,19 @@
 
 from Canvas.highlight_canvas import HighlightCanvas
 
-
 class StringVar:
-    def __init__(self, canvas: HighlightCanvas, text: str, text_id: str):
+    def __init__(self, canvas: HighlightCanvas, text_id: int):
         self._canvas = canvas
-        self._text = text
+        self._text = ""
         self._id = text_id
 
     @property
-    def text(self):
-        return self._text
+    def id(self) -> int:
+        return self._id
 
-    def draw(self) -> int:
-        pass
+    @property
+    def text(self) -> str:
+        return self._text
 
     def set(self, text: str):
         """
@@ -24,3 +24,4 @@ class StringVar:
         self._text = text
         self._canvas.itemconfigure(self._id, text=text)
 
+        return self

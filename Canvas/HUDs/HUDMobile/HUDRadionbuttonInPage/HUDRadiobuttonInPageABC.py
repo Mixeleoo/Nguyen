@@ -1,13 +1,15 @@
 
 from typing import Optional
 import tkinter as tk
+from abc import ABC, abstractmethod
 
 from Canvas.HUDs.Button import Button
 from Canvas.HUDs.Radiobutton import Radiobutton
-from parameter import *
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.StringVar import StringVar
+from parameter import *
 
-class HUDChooseVillage(HUDMobileABC):
+class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -21,15 +23,25 @@ class HUDChooseVillage(HUDMobileABC):
 
         self.from_radiobutton_item_id_to_city_id: dict[int, int] = {}
 
-    @property
-    def tag(self):
-        return CHOOSE_VILLAGE_TAG
+        # Gestion des pages
+        self.num_page = 1
+        self.t_page: Optional[StringVar] = None
 
-    def create(self) -> None:
+        self.radiobuttons: list[Radiobutton] = [self.canvas.add_radiobutton()]
+
+        self.choices_id: list[int] = []
+        self.choices_texts: list[StringVar] = []
+
+        # Dictionnaire des index des checkbutton qui mènent vers leurs différentes catégories qui mènent vers
+        # L'id des villages
+        self.from_checkbutton_index_to_item_id_to_item_id: dict[int, dict[int, int]] = {0: {}}
+        self.from_checkbutton_index_to_item_id_to_text: dict[int, dict[int, str]] = {0: {}}
+
+    def create(self, title: str) -> None:
 
         height = 20
 
-        title_text = "Où immigrer ces villageois ?"
+        title_text = title
 
         # Mesurer la largeur et la hauteur du texte
         # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
@@ -68,26 +80,12 @@ class HUDChooseVillage(HUDMobileABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
-    def replace(self) -> None:
-
-        bbox = self.canvas.bbox(self.tag)
-
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
-
-    def add_village_update_HUD(self, name: str, city_id: int) -> int:
+    def add_option_update_HUD(self, name: str, city_id: int) -> int:
         """
         Mettre à jour la taille du rectangle en background
         Ajouter la nouvelle option graphiquement + dans le radiobutton
         Déplacer le bouton OK et le bouton Annuler en bas
         """
-        coords = self.canvas.coords(self.background_rectangle_id)
-
-        coords[3] += 40
-
-        self.canvas.coords(self.background_rectangle_id, coords[0], coords[1], coords[2], coords[3])
 
         # Ajouter la nouvelle option
         new_category_id = self.canvas.create_text_in_rectangle(
@@ -101,10 +99,6 @@ class HUDChooseVillage(HUDMobileABC):
 
         self.canvas.tag_lower(new_category_id, self.ok_button.id)
         self.canvas.tag_lower(self.canvas.text_id_in_rectangle_id[new_category_id], self.ok_button.id)
-
-        # Déplacer vers le bas de la hauteur de la nouvelle catégorie les deux boutons
-        self.ok_button.move(0, 40)
-        self.cancel_button.move( 0, 40)
 
         # J'associe l'id du village à l'id du choix (= le rectangle correspondant au choix)
         self.from_radiobutton_item_id_to_city_id[new_category_id] = city_id

@@ -17,7 +17,7 @@ class HUDCanvas(BaseCanvas):
         from Canvas.HUDs.HUDStandard.hud_event import HUDEvent
         from Canvas.HUDs.HUDMobile.hudmobile_village_info import HUDMobileVillageInfo
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_village import HUDChooseVillage
+        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_village import HUDChooseVillage
         from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
         from Canvas.HUDs.HUDMobile.hudmobile_choose_taxes import HUDMobileChooseTaxes
 
@@ -83,7 +83,10 @@ class HUDCanvas(BaseCanvas):
         # Ajouter un village au joueur
         square_id = self.engine_build_city()
         self.jeu.creer_noble(square_id)
-        self.hud_choose_village.add_village_update_HUD("York", square_id)
+
+        nom = nom_aleatoire_village()
+        self.hud_choose_village.add_village_update_HUD(nom, square_id)
+        self.hudmobile_choose_taxes.add_village(nom, square_id)
 
         # Ajout des villages aléatoirement
         for noble in range(NB_NOBLE_AU_DEPART):

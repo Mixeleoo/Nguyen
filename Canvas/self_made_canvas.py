@@ -40,6 +40,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
         # Pour du débug, on print sur ce qu'on clique
         print("Tags de l'élément clické :", self.gettags("current"))
         print("Tags de l'élément gardé :", self.gettags("active"))
+        print("Id de l'élément gardé :", self.find_withtag("active")[0])
 
         # On initialise les coordonnées de départ de la souris
         self.mouse_coor = (event.x, event.y)

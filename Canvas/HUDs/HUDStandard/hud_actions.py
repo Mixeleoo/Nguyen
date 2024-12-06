@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from typing import Literal
+from typing import Literal, Optional
 
 from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
@@ -13,7 +13,12 @@ class HUDActions(HUDABC):
 
         self.state: Literal["normal", "hidden"] = "normal"
         self.hide_button_id = 0
-        self.text_page_id = 0
+        self.actions_rectangle_ids = []
+
+        self.t_page: Optional[StringVar] = None
+        self.ts_title_action: list[StringVar] = []
+        self.ts_additionnal_cost: list[StringVar] = []
+        self.ts_PA: list[StringVar] = []
 
         self.title_font = self.canvas.font.copy()
         self.title_font.config(weight="bold")
@@ -51,46 +56,58 @@ class HUDActions(HUDABC):
             )
 
             # Titre de l'action
-            id_text = self.canvas.create_text(
-                x_values[x_value_i] + pad, y0_cadre + pad,
-                text=ACTION_FOR_YOUR_TURN[x_value_i]["text"],
-                anchor="nw",
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
-                font=self.title_font,
-                fill=FILL_TEXT
-            )
+            text = StringVar(
+                self.canvas,
+                self.canvas.create_text(
+                    x_values[x_value_i] + pad, y0_cadre + pad,
+                    anchor="nw",
+                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                    font=self.title_font,
+                    fill=FILL_TEXT
+                )
+            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["text"])
 
-            self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
+            self.ts_title_action.append(text)
+            self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
 
             # Nombre de points d'actions utilisés
-            id_text = self.canvas.create_text(
-                x_values[x_value_i + 1] - pad, y0_cadre + pad,
-                text=ACTION_FOR_YOUR_TURN[x_value_i]["PA"],
-                anchor="ne",
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
-                fill=FILL_TEXT
-            )
+            text = StringVar(
+                self.canvas,
+                self.canvas.create_text(
+                    x_values[x_value_i + 1] - pad, y0_cadre + pad,
+                    anchor="ne",
+                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                    fill=FILL_TEXT
+                )
+            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["PA"])
 
-            self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
+            self.ts_PA.append(text)
+            self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
 
             # Coûts supplémentaires potentiels (argent, ressources)
-            id_text = self.canvas.create_text(
-                x_values[x_value_i + 1] - pad, y0_cadre + pad + 40,
-                text=ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"],
-                anchor="ne",
-                font=("", SIZE_ACTION_ADDITIONAL_COST_TEXT),
-                tags=set_tags(hud_tag=self.tag) + (TEXT_ACTION, TEXT_TAG,),
-                fill=FILL_TEXT
+            text = StringVar(
+                self.canvas,
+                self.canvas.create_text(
+                    x_values[x_value_i + 1] - pad, y0_cadre + pad + 40,
+                    anchor="ne",
+                    font=("", SIZE_ACTION_ADDITIONAL_COST_TEXT),
+                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                    fill=FILL_TEXT
+                )
+            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"])
+
+            self.ts_additionnal_cost.append(text)
+            self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
+            self.actions_rectangle_ids.append(id_rectangle)
+
+        self.t_page = StringVar(
+            self.canvas,
+            self.canvas.create_text(
+                x0_cadre + 80,
+                y0_cadre - 15,
+                tags=set_tags(hud_tag=self.tag)
             )
-
-            self.canvas.text_id_in_rectangle_id[id_text] = id_rectangle
-
-        self.text_page_id = self.canvas.create_text(
-            x0_cadre + 80,
-            y0_cadre - 15,
-            text=f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}",
-            tags=set_tags(hud_tag=self.tag)
-        )
+        ).set(f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}")
 
         # Bouton pour changer de page (précédente)
         self.canvas.add_button(
@@ -191,29 +208,23 @@ class HUDActions(HUDABC):
         else:
             self.num_page = (self.num_page + 1) if self.num_page + 1 <= NB_ACTIONS // NB_ACTION_PER_PAGE else NB_ACTIONS // NB_ACTION_PER_PAGE
 
-        actions_rectangle_ids = self.canvas.find_withtag(RECTANGLE_ACTION)
-        actions_text_ids = self.canvas.find_withtag(TEXT_ACTION)
+        for action_rect_id_i in range(len(self.actions_rectangle_ids)):
 
-        for action_id_i in range(len(actions_rectangle_ids)):
-            text_i = 0
-            for text_category_i in range(len(text_categories)):
-                # Modification du texte
-                self.canvas.itemconfigure(
-                    actions_text_ids[action_id_i * len(text_categories) + text_category_i],
-                    text=ACTION_FOR_YOUR_TURN[(self.num_page - 1) * NB_ACTION_PER_PAGE + action_id_i][text_categories[text_category_i]]
-                )
-                text_i += 1
+            action_i = (self.num_page - 1) * NB_ACTION_PER_PAGE + action_rect_id_i
+
+            # Modification du texte
+            self.ts_title_action[action_rect_id_i].set(ACTION_FOR_YOUR_TURN[action_i]["text"])
+            self.ts_additionnal_cost[action_rect_id_i].set(ACTION_FOR_YOUR_TURN[action_i]["additionalcost"])
+            self.ts_PA[action_rect_id_i].set(ACTION_FOR_YOUR_TURN[action_i]["PA"])
 
             # Modification des tags (pour savoir quelles fonctions vont être trigger)
             self.canvas.itemconfigure(
-                actions_rectangle_ids[action_id_i],
+                self.actions_rectangle_ids[action_rect_id_i],
                 tags=set_tags(
                     highlight_tag=CLICKABLE_TAG,
-                    trigger_tag=ACTION_FOR_YOUR_TURN[(self.num_page - 1) * NB_ACTION_PER_PAGE + action_id_i]["do"]
-                ) + (RECTANGLE_ACTION, HUD_BOTTOM,)
+                    trigger_tag=ACTION_FOR_YOUR_TURN[action_i]["do"],
+                    hud_tag=self.tag
+                )
             )
 
-        self.canvas.itemconfigure(
-            self.canvas.find_withtag(self.text_page_id)[0],
-            text=f"page : {self.num_page} / {len(ACTION_FOR_YOUR_TURN) // 2}"
-        )
+        self.t_page.set(f"page : {self.num_page} / {len(ACTION_FOR_YOUR_TURN) // 2}")

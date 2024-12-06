@@ -16,7 +16,7 @@ class HUDMobileABC(ABC):
         pass
 
     @abstractmethod
-    def create(self):
+    def create(self, *args):
         """
         Méthode d'initialisation de la classe HUD
         """
@@ -29,9 +29,12 @@ class HUDMobileABC(ABC):
         """
         pass
 
-    def show(self, *args) -> None:
+    def no_replace_show(self, *args) -> None:
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="normal")
+
+    def show(self, *args) -> None:
+        self.no_replace_show(*args)
 
         # IMPORTANT DE LES REPLACER APRES LES AVOIR AFFICHÉS SINON TKINTER NE SAIT PAS LEURS COORDONNEES
         self.replace(*args)
