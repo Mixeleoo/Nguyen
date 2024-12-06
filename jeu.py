@@ -19,13 +19,17 @@ class Jeu:
     def joueur_actuel(self) -> Noble|Seigneur:
         return self._joueurs[self._id_joueur_actuel]
 
-    def creer_noble(self, village_id: int):
+    def get_joueur(self, index: int) -> Noble:
+        return self._joueurs[index]
+
+    def creer_noble(self, village_id: int, prenom: str):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
 
         :param village_id: id du village crée
+        :param prenom: prenom du noble
         """
-        nouveau_noble = Noble(prenom_aleatoire(), 0, 0)
+        nouveau_noble = Noble(prenom, 0, 0)
         nouveau_noble.ajouter_village(village_id)
         self._joueurs.append(nouveau_noble)
 

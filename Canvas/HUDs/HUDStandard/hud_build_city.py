@@ -146,7 +146,7 @@ class HUDBuildCity(HUDABC):
 
             # Comme il y a un nouveau village, il faut update les HUDs qui permet de choisir le village
             nom = nom_aleatoire_village()
-            self.canvas.hud_choose_village.add_village_update_HUD(nom, square_id)
+            self.canvas.hudmobile_choose_village.add_option(nom, square_id)
             self.canvas.hudmobile_choose_taxes.add_village(nom, square_id)
 
             # On change son tag de trigger de fonction

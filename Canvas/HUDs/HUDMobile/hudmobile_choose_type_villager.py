@@ -177,7 +177,7 @@ class HUDChooseTypeVillager(HUDMobileABC):
             ]
 
             # On affiche le choix du village
-            self.canvas.hud_choose_village.show()
+            self.canvas.hudmobile_choose_village.show()
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
             self.cancel()

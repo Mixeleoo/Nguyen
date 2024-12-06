@@ -69,6 +69,7 @@ class Noble(Personne):
         :param pnoble: Noble souhaitant soumettre un autre noble
         :return : True si le noble accepte de devenir vassal, False sinon
         """
+        return True
 
 
     def ajouter_village(self, pid: int):

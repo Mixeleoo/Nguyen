@@ -84,6 +84,7 @@ MINUS_IMMIGRANTS_TAG = "MINUS_IMMIGRANTS"
 INFO_EVENT_TAG = "INFO_EVENT"
 PAYSAN_OR_ARTISAN_TAG = "PAYSAN_OR_ARTISAN"
 TAXES_TAG = "TAXES"
+VASSALIZE_TAG = "VASSALIZE"
 
 # si
 si = 'si'
@@ -107,7 +108,7 @@ ACTION_FOR_YOUR_TURN = [
         "text": "Vassaliser",
         "PA": "4 PA",
         "additionalcost": "Y arg, Z res",
-        "do": NOTHING_TAG
+        "do": VASSALIZE_TAG
     },
     {
         "text": "Construire un village",
