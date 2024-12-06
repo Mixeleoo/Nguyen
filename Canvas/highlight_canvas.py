@@ -1,7 +1,6 @@
 
 from tkinter import Canvas
 
-from Canvas.HUDs.Radiobutton import SelectorSupervisor
 from parameter import *
 
 class HighlightCanvas(Canvas):

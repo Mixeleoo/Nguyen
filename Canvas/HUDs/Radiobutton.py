@@ -7,11 +7,15 @@ from Canvas.highlight_canvas import HighlightCanvas
 
 class SelectorsABC(ABC):
     def __init__(self, canvas: HighlightCanvas, group_tag: str):
+
         self.canvas = canvas
         self.group_tag = group_tag
 
         # L'option actuellement selectionnée
         self.currently_selected = None
+
+        # Nombre d'options
+        self.nb_options = 0
 
     def add_option(self, option_id: int) -> None:
         """
@@ -22,6 +26,7 @@ class SelectorsABC(ABC):
         tags = list(self.canvas.gettags(option_id))
         tags[GROUP_TAG_INDEX] = self.group_tag
         self.canvas.itemconfigure(option_id, tags=tags)
+        self.nb_options += 1
 
     @abstractmethod
     def reset(self) -> None:
@@ -54,23 +59,27 @@ class Radiobutton(SelectorsABC):
         super().__init__(canvas, group_tag)
 
     def reset(self):
-
         if self.currently_selected:
-            self.canvas.itemconfigure(
-                self.currently_selected,
-                fill=self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]
-            )
-
+            self.griser()
             self.currently_selected = None
+
+    def griser(self):
+        self.canvas.itemconfigure(
+            self.currently_selected,
+            fill=self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]
+        )
+
+    def degriser(self):
+        self.canvas.itemconfigure(
+            self.currently_selected,
+            fill=fill_brighter[self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]]
+        )
 
     def toggle_switch_option(self, option_id: int):
 
         # S'il y a quelque chose à unhighlight
         if self.currently_selected:
-            self.canvas.itemconfigure(
-                self.currently_selected,
-                fill=self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]
-            )
+            self.griser()
 
         # On highlight l'option qui est cliquée
         self.canvas.highlight_clickable()
@@ -90,14 +99,24 @@ class Checkbutton(SelectorsABC):
     def reset(self) -> None:
 
         # On remet leur couleur par défaut
+        self.griser()
+
+        # On remet à vide la liste des éléments sélectionnés
+        self.currently_selected = []
+
+    def griser(self):
         for option_id in self.currently_selected:
             self.canvas.itemconfigure(
                 option_id,
                 fill=self.canvas.gettags(option_id)[COLOR_TAG_INDEX]
             )
 
-            # On remet à vide la liste des éléments sélectionnés
-            self.currently_selected = []
+    def degriser(self):
+        for option_id in self.currently_selected:
+            self.canvas.itemconfigure(
+                option_id,
+                fill=fill_brighter[self.canvas.gettags(option_id)[COLOR_TAG_INDEX]]
+            )
 
     def toggle_switch_option(self, option_id: int):
 
@@ -132,7 +151,7 @@ class SelectorSupervisor:
         self.current_check_group_id = 0
 
         self.canvas = canvas
-        self.selectors: dict[str: Radiobutton | Checkbutton] = {
+        self.selectors: dict[str, Radiobutton | Checkbutton] = {
 
         }
 
@@ -166,9 +185,7 @@ class SelectorSupervisor:
         self.selectors[group_tag] = Checkbutton(self.canvas, group_tag)
 
         for item_id in items_id:
-            tags = list(self.canvas.gettags(item_id))
-            tags[GROUP_TAG_INDEX] = group_tag
-            self.canvas.itemconfigure(item_id, tags=tags)
+            self.selectors[group_tag].add_option(item_id)
 
         return self.selectors[group_tag]
 

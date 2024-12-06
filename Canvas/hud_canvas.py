@@ -84,6 +84,7 @@ class HUDCanvas(BaseCanvas):
         square_id = self.engine_build_city()
         self.jeu.creer_noble(square_id)
         self.hud_choose_village.add_village_update_HUD("York", square_id)
+        self.hudmobile_choose_taxes.add_village_update_HUD("York", square_id)
 
         # Ajout des villages aléatoirement
         for noble in range(NB_NOBLE_AU_DEPART):
