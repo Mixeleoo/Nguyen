@@ -37,9 +37,14 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
         self.from_checkbutton_index_to_item_id_to_item_id: dict[int, dict[int, int]] = {0: {}}
         self.from_checkbutton_index_to_item_id_to_text: dict[int, dict[int, str]] = {0: {}}
 
+    @property
+    def cur_checkbutton(self):
+        return self.radiobuttons[self.num_page - 1]
+
     def create(self, title: str) -> None:
 
         height = 20
+        height_choice = 40
 
         title_text = title
 
@@ -56,7 +61,10 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
         center_x = (x0_cadre + x1_cadre) // 2
 
         self.background_rectangle_id = self.canvas.create_rectangle(
-            x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
+            x0_cadre, y0_cadre, x1_cadre, y1_cadre,
+            fill=FILL_ACTION_BOX,
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            state="hidden"
         )
 
         self.canvas.create_text(
@@ -66,6 +74,36 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
             state="hidden",
                 fill=FILL_TEXT
         )
+
+        cur_height = height
+
+        for i in range(RBTN_MAX_VIL):
+            new_category_id = self.canvas.create_rectangle(
+                x0_cadre, cur_height, x1_cadre, cur_height + height_choice,
+                fill=FILL_ACTION_BOX,
+                tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+                state="hidden",
+            )
+
+            text = StringVar(
+                self.canvas,
+                self.canvas.create_text(
+                    center_x, (cur_height + cur_height + height_choice) // 2,
+                    text="",
+                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
+                    state="hidden",
+                    fill=FILL_TEXT
+                )
+            )
+
+            cur_height += height_choice
+
+            self.canvas.text_id_in_rectangle_id[text.id] = new_category_id
+            self.canvas.text_id_in_rectangle_id[new_category_id] = text.id
+
+            self.choices_texts.append(text)
+            self.choices_id.append(new_category_id)
+
 
         # Bouton OK qui lance l'immigration
         self.ok_button = self.canvas.create_ok_button(
@@ -80,29 +118,84 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
-    def add_option_update_HUD(self, name: str, city_id: int) -> int:
-        """
-        Mettre à jour la taille du rectangle en background
-        Ajouter la nouvelle option graphiquement + dans le radiobutton
-        Déplacer le bouton OK et le bouton Annuler en bas
-        """
-
-        # Ajouter la nouvelle option
-        new_category_id = self.canvas.create_text_in_rectangle(
-            coords[0], coords[3] - 40, coords[2], coords[3],
-            text=name,
-            rectangle_tags=set_tags(highlight_tag=TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
-            fill=FILL_ACTION_BOX,
+        # Bouton pour changer de page (précédente)
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name="CHANGE_PAGE_" + self.tag + "_M",
+            func_triggered=self.change_page,
+            for_which_game_mode=("basic",)
+        ).draw(
+            x0_cadre + 5,
+            y0_cadre - 20,
+            x0_cadre + 20,
+            y0_cadre - 5,
+            text="◄",  # ►◄↓↑→←▲▼
+            is_temp=True,
             state="hidden"
         )
 
-        self.canvas.tag_lower(new_category_id, self.ok_button.id)
-        self.canvas.tag_lower(self.canvas.text_id_in_rectangle_id[new_category_id], self.ok_button.id)
+        # Bouton pour changer de page (suivante)
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name="CHANGE_PAGE_" + self.tag + "_P",
+            func_triggered=self.change_page,
+            for_which_game_mode=("basic",)
+        ).draw(
+            x0_cadre + 25,
+            y0_cadre - 20,
+            x0_cadre + 40,
+            y0_cadre - 5,
+            text="►",  # ►◄↓↑→←▲▼
+            is_temp=True,
+            state="hidden"
+        )
+
+        self.t_page = StringVar(
+            self.canvas,
+            self.canvas.create_text(
+                x0_cadre + 80,
+                y0_cadre - 15,
+                tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+                state="hidden"
+            )
+        ).set(f"page : 1 / {len(self.radiobuttons)}")
+
+    def add_option_update_HUD(self, name: str, item_id: int) -> int:
+        """
+
+        """
+        # S'il y a RBTN_MAX_VIL choix sur le dernier checkbutton alors
+        if self.radiobuttons[-1].nb_options == RBTN_MAX_VIL:
+
+            # Créer une nouvelle page où il y aura un nouveau checkbutton
+            self.radiobuttons.append(self.canvas.add_checkbutton())
+            self.from_checkbutton_index_to_item_id_to_item_id[len(self.radiobuttons) - 1] = {}
+            self.from_checkbutton_index_to_item_id_to_text[len(self.radiobuttons) - 1] = {}
+
+        # Si le nouveau choix est sur la première page alors
+        if len(self.radiobuttons) == 1:
+
+            # Ajouter le texte dans les choix.
+            self.choices_texts[self.radiobuttons[0].nb_options].set(name)
+
+        """
+        Ajouter un nouveau choix au dernier checkbutton
+        """
+        # Ajouter l'option infra au dernier checkbutton
 
         # J'associe l'id du village à l'id du choix (= le rectangle correspondant au choix)
-        self.from_radiobutton_item_id_to_city_id[new_category_id] = city_id
-        self.radiobutton_village_choix.add_option(new_category_id)
+        new_category_id = self.choices_id[self.radiobuttons[-1].nb_options]
+        self.radiobuttons[-1].add_option(new_category_id)
+
+        # On remet le group_tag de l'option au checkbutton actuel
+        tags = list(self.canvas.gettags(new_category_id))
+        tags[GROUP_TAG_INDEX] = self.cur_checkbutton.group_tag
+        self.canvas.itemconfigure(new_category_id, tags=tags)
+
+        self.from_checkbutton_index_to_item_id_to_item_id[len(self.radiobuttons) - 1][new_category_id] = item_id
+        self.from_checkbutton_index_to_item_id_to_text[len(self.radiobuttons) - 1][new_category_id] = name
+
+        self.t_page.set(f"page : {self.num_page} / {len(self.radiobuttons)}")
 
         return new_category_id
 

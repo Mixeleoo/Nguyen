@@ -1,5 +1,6 @@
 
-from CheckbuttonInPageABC import CheckbuttonInPageABC
+from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.CheckbuttonInPageABC import CheckbuttonInPageABC
+
 
 class HUDMobileChooseVillagesForTaxes(CheckbuttonInPageABC):
     def __init__(self, canvas):
