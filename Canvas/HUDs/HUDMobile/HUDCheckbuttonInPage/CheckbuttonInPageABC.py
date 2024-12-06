@@ -140,7 +140,7 @@ class CheckbuttonInPageABC(HUDMobileABC, ABC):
 
         return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
-    def add_option_update_HUD(self, name: str, item_id: int) -> int:
+    def add_option(self, name: str, item_id: int) -> int:
         """
 
         """
