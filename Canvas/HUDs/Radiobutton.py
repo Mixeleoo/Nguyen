@@ -59,21 +59,22 @@ class Radiobutton(SelectorsABC):
         super().__init__(canvas, group_tag)
 
     def reset(self):
-        if self.currently_selected:
-            self.griser()
-            self.currently_selected = None
+        self.griser()
+        self.currently_selected = None
 
     def griser(self):
-        self.canvas.itemconfigure(
-            self.currently_selected,
-            fill=self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]
-        )
+        if self.currently_selected:
+            self.canvas.itemconfigure(
+                self.currently_selected,
+                fill=self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]
+            )
 
     def degriser(self):
-        self.canvas.itemconfigure(
-            self.currently_selected,
-            fill=fill_brighter[self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]]
-        )
+        if self.currently_selected:
+            self.canvas.itemconfigure(
+                self.currently_selected,
+                fill=fill_brighter[self.canvas.gettags(self.currently_selected)[COLOR_TAG_INDEX]]
+            )
 
     def toggle_switch_option(self, option_id: int):
 
