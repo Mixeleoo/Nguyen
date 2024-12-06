@@ -33,4 +33,3 @@ class Roturier(Personne):
 
         self._argent -= imp_arg
         self._ressources -= imp_ress
- #truc
