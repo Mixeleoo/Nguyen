@@ -68,7 +68,7 @@ class HUDChooseVillage(HUDMobileABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
-    def replace(self) -> None:
+    def replace(self, *args) -> None:
 
         bbox = self.canvas.bbox(self.tag)
 
