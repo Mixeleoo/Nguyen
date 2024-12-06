@@ -1,7 +1,7 @@
 
 from typing import Optional
-import tkinter as tk
 from abc import ABC, abstractmethod
+import tkinter as tk
 
 from Canvas.HUDs.Button import Button
 from Canvas.HUDs.Radiobutton import Radiobutton
@@ -9,7 +9,7 @@ from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 from Canvas.HUDs.StringVar import StringVar
 from parameter import *
 
-class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
+class HUDRadiobuttonInPageABC(HUDMobileABC, ABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -17,16 +17,13 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
 
-        # id du dernier village choisi
-        self.last_choice_made = 0
-        self.radiobutton_village_choix: Optional[Radiobutton] = None
-
         self.from_radiobutton_item_id_to_city_id: dict[int, int] = {}
 
         # Gestion des pages
         self.num_page = 1
         self.t_page: Optional[StringVar] = None
 
+        self.last_radiobutton_index_choice = None
         self.radiobuttons: list[Radiobutton] = [self.canvas.add_radiobutton()]
 
         self.choices_id: list[int] = []
@@ -34,19 +31,45 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
 
         # Dictionnaire des index des checkbutton qui mènent vers leurs différentes catégories qui mènent vers
         # L'id des villages
-        self.from_checkbutton_index_to_item_id_to_item_id: dict[int, dict[int, int]] = {0: {}}
-        self.from_checkbutton_index_to_item_id_to_text: dict[int, dict[int, str]] = {0: {}}
+        self.from_radiobutton_index_to_item_id_to_item: dict[int, dict[int, int]] = {0: {}}
+        self.from_radiobutton_index_to_item_id_to_text: dict[int, dict[int, str]] = {0: {}}
 
     @property
-    def cur_checkbutton(self):
-        return self.radiobuttons[self.num_page - 1]
+    def cur_radiobutton(self):
+        return self.radiobuttons[self.cur_radiobutton_index]
 
-    def create(self, title: str) -> None:
+    @property
+    def cur_radiobutton_index(self):
+        return self.num_page - 1
+
+    @property
+    def selected_option(self):
+        if self.last_radiobutton_index_choice is not None:
+            return self.from_radiobutton_index_to_item_id_to_item[
+                self.last_radiobutton_index_choice
+            ][self.radiobuttons[self.last_radiobutton_index_choice].currently_selected]
+        elif self.radiobuttons[0].currently_selected:
+            return self.from_radiobutton_index_to_item_id_to_item[
+                0
+            ][self.radiobuttons[0].currently_selected]
+        else:
+            return None
+
+    @property
+    @abstractmethod
+    def title(self):
+        pass
+
+    @abstractmethod
+    def ok_trigger(self, event: tk.Event):
+        pass
+
+    def create(self) -> None:
 
         height = 20
         height_choice = 40
 
-        title_text = title
+        title_text = self.title
 
         # Mesurer la largeur et la hauteur du texte
         # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
@@ -56,7 +79,7 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
         x0_cadre = 0
         y0_cadre = 0
         x1_cadre = text_width
-        y1_cadre = height
+        y1_cadre = height + RBTN_MAX_VIL * height_choice
 
         center_x = (x0_cadre + x1_cadre) // 2
 
@@ -107,7 +130,7 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
 
         # Bouton OK qui lance l'immigration
         self.ok_button = self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, is_temp=True, state="hidden"
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, is_temp=True, state="hidden"
         )
 
         # Radiobutton du choix du village
@@ -160,7 +183,16 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
             )
         ).set(f"page : 1 / {len(self.radiobuttons)}")
 
-    def add_option_update_HUD(self, name: str, item_id: int) -> int:
+    def replace(self, *args) -> None:
+
+        bbox = self.canvas.bbox(self.tag)
+
+        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
+
+        self.canvas.move(self.tag, dx, dy)
+
+    def add_option(self, name: str, item: int) -> int:
         """
 
         """
@@ -168,9 +200,11 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
         if self.radiobuttons[-1].nb_options == RBTN_MAX_VIL:
 
             # Créer une nouvelle page où il y aura un nouveau checkbutton
-            self.radiobuttons.append(self.canvas.add_checkbutton())
-            self.from_checkbutton_index_to_item_id_to_item_id[len(self.radiobuttons) - 1] = {}
-            self.from_checkbutton_index_to_item_id_to_text[len(self.radiobuttons) - 1] = {}
+            self.radiobuttons.append(self.canvas.add_radiobutton())
+            self.from_radiobutton_index_to_item_id_to_item[len(self.radiobuttons) - 1] = {}
+            self.from_radiobutton_index_to_item_id_to_text[len(self.radiobuttons) - 1] = {}
+
+            self.t_page.set(f"page : {self.num_page} / {len(self.radiobuttons)}")
 
         # Si le nouveau choix est sur la première page alors
         if len(self.radiobuttons) == 1:
@@ -189,42 +223,75 @@ class HUDRadionbuttonInPageABC(HUDMobileABC, ABC):
 
         # On remet le group_tag de l'option au checkbutton actuel
         tags = list(self.canvas.gettags(new_category_id))
-        tags[GROUP_TAG_INDEX] = self.cur_checkbutton.group_tag
+        tags[GROUP_TAG_INDEX] = self.cur_radiobutton.group_tag
+        tags[HIGHLIGHT_TAG_INDEX] = TOGGLEABLE_TAG
         self.canvas.itemconfigure(new_category_id, tags=tags)
 
-        self.from_checkbutton_index_to_item_id_to_item_id[len(self.radiobuttons) - 1][new_category_id] = item_id
-        self.from_checkbutton_index_to_item_id_to_text[len(self.radiobuttons) - 1][new_category_id] = name
-
-        self.t_page.set(f"page : {self.num_page} / {len(self.radiobuttons)}")
+        self.from_radiobutton_index_to_item_id_to_item[len(self.radiobuttons) - 1][new_category_id] = item
+        self.from_radiobutton_index_to_item_id_to_text[len(self.radiobuttons) - 1][new_category_id] = name
 
         return new_category_id
 
-    def immigrate(self, event: tk.Event) -> None:
+    def change_page(self, *args):
         """
-        Méthode qui met à jour le dernier choix de l'utilisateur dans l'attribut self.last_choice_made
+
         """
-        self.last_choice_made = self.radiobutton_village_choix.get_selected_option()
 
-        if self.last_choice_made:
+        """
+        Si il y a un élément sélectionné sur la page actuelle ET que le dernier choix effectué était sur une autre page
+            ça veut dire qu'il faut griser le dernier radiobutton dans lequel un choix a été cliqué
+        Sinon il faut allumer le choix sélectionné du prochain radiobutton.
+        """
+        if self.last_radiobutton_index_choice is not None:
+            if self.cur_radiobutton.currently_selected and self.last_radiobutton_index_choice != self.cur_radiobutton_index:
+                self.radiobuttons[self.last_radiobutton_index_choice].reset()
 
-            effectif = self.canvas.hud_choose_type_villager.last_choice_made[0]
-            type_v = self.canvas.hud_choose_type_villager.last_choice_made[1]
-            village_id = self.from_radiobutton_item_id_to_city_id[self.last_choice_made]
+        if self.cur_radiobutton.currently_selected:
+            self.last_radiobutton_index_choice = self.cur_radiobutton_index
+            self.cur_radiobutton.griser()
 
-            # lancer l'immigration du jeu
-            self.canvas.jeu.immigrer(
-                effectif=effectif,
-                type_v=type_v,
-                village_id=village_id
-            )
-
-            self.canvas.hud_history.add_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
-
-            # Même comportement que si on annulait, mais précédé par la validation
-            self.bhide()
+        # Différienciation entre page précédente (M) et page suivante (P)
+        if self.canvas.gettags("active")[TRIGGER_TAG_INDEX][-1] == "M":
+            self.num_page = self.num_page - 1 if self.num_page - 1 >= 1 else 1
 
         else:
-            print("T'as pas choisi de village là bro")
+            self.num_page = self.num_page + 1 if self.num_page + 1 <= len(self.radiobuttons) else len(self.radiobuttons)
+
+        self.cur_radiobutton.degriser()
+
+        for action_rect_id_i in range(self.cur_radiobutton.nb_options):
+
+            # Modification du texte
+            self.choices_texts[action_rect_id_i].set(
+                self.from_radiobutton_index_to_item_id_to_text[self.num_page - 1][self.choices_id[action_rect_id_i]]
+            )
+
+            tags = list(self.canvas.gettags(self.choices_id[action_rect_id_i]))
+            tags[HIGHLIGHT_TAG_INDEX] = TOGGLEABLE_TAG
+            tags[GROUP_TAG_INDEX] = self.cur_radiobutton.group_tag
+
+            # Modification des tags (pour savoir quelles fonctions vont être trigger)
+            self.canvas.itemconfigure(
+                self.choices_id[action_rect_id_i],
+                tags=tags
+            )
+
+        for action_rect_id_i in range(RBTN_MAX_VIL - self.cur_radiobutton.nb_options):
+            self.choices_texts[RBTN_MAX_VIL - action_rect_id_i - 1].set(
+                ""
+            )
+
+            tags = list(self.canvas.gettags(self.choices_id[RBTN_MAX_VIL - action_rect_id_i - 1]))
+            tags[HIGHLIGHT_TAG_INDEX] = NOTHING_TAG
+            tags[GROUP_TAG_INDEX] = ""
+
+            # Modification des tags (pour savoir quelles fonctions vont être trigger)
+            self.canvas.itemconfigure(
+                self.choices_id[RBTN_MAX_VIL - action_rect_id_i - 1],
+                tags=tags
+            )
+
+        self.t_page.set(f"page : {self.num_page} / {len(self.radiobuttons)}")
 
     def bhide(self, *args):
         self.radiobutton_village_choix.reset()
