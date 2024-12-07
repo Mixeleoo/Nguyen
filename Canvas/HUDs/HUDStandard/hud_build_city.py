@@ -141,13 +141,13 @@ class HUDBuildCity(HUDABC):
 
             tags = list(self.canvas.gettags(square_id))
 
-            # On lance la méthode qui influera sur le jeu
-            self.canvas.jeu.construire_village(village_id=square_id)
-
             # Comme il y a un nouveau village, il faut update les HUDs qui permet de choisir le village
             nom = nom_aleatoire_village()
             self.canvas.hudmobile_choose_village.add_option(nom, square_id)
             self.canvas.hudmobile_choose_taxes.add_village(nom, square_id)
+
+            # On lance la méthode qui influera sur le jeu
+            self.canvas.jeu.construire_village(village_id=square_id, nom=nom)
 
             # On change son tag de trigger de fonction
             self.canvas.engine_build_city(square_id, tags)

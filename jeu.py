@@ -22,15 +22,16 @@ class Jeu:
     def get_joueur(self, index: int) -> Noble:
         return self._joueurs[index]
 
-    def creer_noble(self, village_id: int, prenom: str):
+    def creer_noble(self, village_id: int, prenom: str, nom_village: str):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
 
         :param village_id: id du village crée
         :param prenom: prenom du noble
+        :param nom_village: nom du village
         """
         nouveau_noble = Noble(prenom, 0, 0)
-        nouveau_noble.ajouter_village(village_id)
+        nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
@@ -48,13 +49,13 @@ class Jeu:
 
         self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
-    def construire_village(self, village_id: int):
+    def construire_village(self, village_id: int, nom: str):
         """
         Méthode qui va ajouter un village dans la liste de villages du joueur
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
         """
-        self.joueur_actuel.ajouter_village(village_id)
+        self.joueur_actuel.ajouter_village(village_id, nom)
         print("ID emplacement :",village_id)
 
     def construire_eglise(self, village_id: int):

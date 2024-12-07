@@ -87,11 +87,12 @@ class HUDCanvas(BaseCanvas):
     def init_nobles(self):
         # Ajouter un village au joueur
         square_id = self.engine_build_city()
-        self.jeu.creer_noble(square_id, prenom_aleatoire())
 
         nom = nom_aleatoire_village()
         self.hudmobile_choose_village.add_option(nom, square_id)
         self.hudmobile_choose_taxes.add_village(nom, square_id)
+
+        self.jeu.creer_noble(square_id, prenom_aleatoire(), nom)
 
         # Ajout des villages aléatoirement
         for noble in range(NB_NOBLE_AU_DEPART):
@@ -100,4 +101,4 @@ class HUDCanvas(BaseCanvas):
 
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
             self.hudmobile_choose_noble.add_option(prenom, noble + 1)
-            self.jeu.creer_noble(square_id, prenom)
+            self.jeu.creer_noble(square_id, prenom, nom_aleatoire_village())
