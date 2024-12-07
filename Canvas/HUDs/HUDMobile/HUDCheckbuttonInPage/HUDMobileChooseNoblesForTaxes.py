@@ -10,6 +10,10 @@ class HUDMobileChooseNoblesForTaxes(CheckbuttonInPageABC):
     def tag(self):
         return "HUD_CHOOSE_NOBLES"
 
+    @property
+    def title(self):
+        return "Quel(s) noble(s) imposer ?"
+
     def replace(self, *args) -> tuple[int, int]:
         bbox = self.canvas.bbox(self.tag)
 

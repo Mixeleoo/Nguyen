@@ -53,6 +53,20 @@ class SelectorsABC(ABC):
         """
         pass
 
+    @abstractmethod
+    def griser(self, *args) -> None:
+        """
+        Méthode qui "grisera" les choix sélectionnés (= cachera les choix sélectionnés).
+        """
+        pass
+
+    @abstractmethod
+    def degriser(self, *args) -> None:
+        """
+        Méthode qui "degrisera" les choix sélectionnés (= highlightera les choix sélectionnés).
+        """
+        pass
+
 
 class Radiobutton(SelectorsABC):
     def __init__(self, canvas: HighlightCanvas, group_tag: str):

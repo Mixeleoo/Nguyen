@@ -10,6 +10,10 @@ class HUDMobileChooseVillagesForTaxes(CheckbuttonInPageABC):
     def tag(self):
         return "HUD_CHOOSE_VILLAGES"
 
+    @property
+    def title(self):
+        return "Quel(s) village(s) imposer ?"
+
     def replace(self, *args) -> tuple[int, int]:
         bbox = self.canvas.bbox(self.tag)
 

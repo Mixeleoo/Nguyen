@@ -36,14 +36,14 @@ class HUDMobileChooseTaxes(HUDMobileABC):
 
     def create(self):
 
-        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_villages.create("Quel(s) village(s) imposer ?")
+        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_villages.create()
 
         # Bouton OK qui lance l'immigration
         self.ok_button = self.canvas.create_ok_button(
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
         )
 
-        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_nobles.create("Quel(s) noble(s) imposer ?")
+        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_nobles.create()
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button = self.canvas.create_cancel_button(
@@ -51,8 +51,8 @@ class HUDMobileChooseTaxes(HUDMobileABC):
         )
 
     def imposer(self, *args):
-        print(self.hudmobile_choose_villages.get_items_choosed())
-        print(self.hudmobile_choose_nobles.get_items_choosed())
+        print(self.hudmobile_choose_villages.selected_option)
+        print(self.hudmobile_choose_nobles.selected_option)
 
     def bhide(self, *args):
         self.hudmobile_choose_villages.bhide()
