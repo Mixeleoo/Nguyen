@@ -2,9 +2,9 @@
 import tkinter as tk
 from typing import Literal, Optional
 
-from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
 from Canvas.HUDs.StringVar import StringVar
+from parameter import *
 
 class HUDActions(HUDABC):
     def __init__(self, canvas):
@@ -23,9 +23,18 @@ class HUDActions(HUDABC):
         self.title_font = self.canvas.font.copy()
         self.title_font.config(weight="bold")
 
+        self.temp_tag_storage: list[str] = ["", ""]
+
     @property
-    def tag(self):
-        return HUD_BOTTOM
+    def tag(self): return HUD_BOTTOM
+    @property
+    def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3])
+    @property
+    def curr_hide_pos(self) -> Position: return Position(0, self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3])
+    @property
+    def arrival_pos_show(self) -> Position: return Position(0, self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD)
+    @property
+    def arrival_pos_hide(self) -> Position: return Position(0, self.canvas.master.winfo_height() - 5)
 
     def create(self, geometry_width, geometry_height):
 
@@ -163,19 +172,6 @@ class HUDActions(HUDABC):
             PADX_BOTTOM_HUD + 5 - self.canvas.coords(self.canvas.find_withtag(CHANGE_PAGE_MINUS)[0])[0],
             event.height - self.canvas.master.previous_geometry[1]
         )
-
-    def show_animation(self):
-        self.canvas.move(self.tag, 0,
-                         -(abs(self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD - self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3]) // 10 + 1))
-
-        if self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3] != self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD:
-            self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
-
-    def hide_animation(self):
-        self.canvas.move(self.tag, 0, abs(self.canvas.master.winfo_height() - 5 - self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3]) // 10 + 1)
-
-        if self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3] != self.canvas.master.winfo_height() - 5:
-            self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
     def bhide(self):
         """

@@ -1,4 +1,4 @@
-
+from collections import namedtuple
 # -*- coding: utf-8 -*-
 
 from random import randint, choice
@@ -197,6 +197,8 @@ def get_width_text(text: str):
     # Mesurer la largeur et la hauteur du texte
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
+
+Position = namedtuple('Position', ['x', 'y'])
 
 noms_village = [
     "Lande-Cendrée",

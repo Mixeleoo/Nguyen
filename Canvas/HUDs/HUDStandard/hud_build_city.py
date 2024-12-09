@@ -15,6 +15,15 @@ class HUDBuildCity(HUDABC):
     def tag(self):
         return HUD_BUILD_CITY
 
+    @property
+    def arrival_pos_show(self) -> Position: return Position(0, PADY_BUILD_CITY_HUD)
+    @property
+    def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(self.background_rect_id)[1])
+    @property
+    def arrival_pos_hide(self) -> Position: return Position(0, PADY_BUILD_CITY_HUD_HIDING)
+    @property
+    def curr_hide_pos(self) -> Position: return Position(0, self.canvas.coords(self.background_rect_id)[3])
+
     def create(self, geometry_width: int, geometry_height: int):
 
         text = "Choisissez une plaine où construire votre village"
@@ -90,19 +99,6 @@ class HUDBuildCity(HUDABC):
 
     def replace(self, event: tk.Event) -> None:
         pass
-
-    def show_animation(self):
-        self.canvas.move(self.tag, 0,
-                        abs(PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[1]) // 10 + 1)
-
-        if self.canvas.coords(self.background_rect_id)[1] != PADY_BUILD_CITY_HUD:
-            self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
-
-    def hide_animation(self):
-        self.canvas.move(self.tag, 0, -(abs(PADY_BUILD_CITY_HUD_HIDING - self.canvas.coords(self.background_rect_id)[3]) // 10 + 1))
-
-        if self.canvas.coords(self.background_rect_id)[3] != PADY_BUILD_CITY_HUD_HIDING:
-            self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
     def choose_plain_to_build(self, event: tk.Event):
         """

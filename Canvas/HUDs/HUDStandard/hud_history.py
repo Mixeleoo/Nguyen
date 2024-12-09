@@ -26,6 +26,15 @@ class HUDHistory(HUDABC):
     def tag(self):
         return HUD_RIGHT_SIDE
 
+    @property
+    def arrival_pos_show(self) -> Position: return Position(self.canvas.master.winfo_width() - 155, 0)
+    @property
+    def curr_show_pos(self) -> Position: return Position(self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2], 0)
+    @property
+    def arrival_pos_hide(self) -> Position: return Position(self.canvas.master.winfo_width() - 5, 0)
+    @property
+    def curr_hide_pos(self) -> Position: return Position(self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2], 0)
+
     def create(self, geometry_width: int, geometry_height: int):
 
         pady_from_top = 5
@@ -101,19 +110,6 @@ class HUDHistory(HUDABC):
             event.width - self.canvas.master.previous_geometry[0],
             PADY_BUILD_CITY_HUD - self.canvas.coords(self.canvas.find_withtag(self.rect_hiding_top_text_id)[0])[1]
         )
-
-    def show_animation(self):
-        self.canvas.move(self.tag,
-                         -(abs(self.canvas.master.winfo_width() - 155 - self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2]) // 10 + 1), 0)
-
-        if self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2] != self.canvas.master.winfo_width() - 155:
-            self.canvas.after(DELTA_MS_ANIMATION, self.show_animation)
-
-    def hide_animation(self):
-        self.canvas.move(self.tag, abs(self.canvas.master.winfo_width() - 5 - self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2]) // 10 + 1, 0)
-
-        if self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2] != self.canvas.master.winfo_width() - 5:
-            self.canvas.after(DELTA_MS_ANIMATION, self.hide_animation)
 
     def bhide(self):
         """

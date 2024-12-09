@@ -3,18 +3,14 @@ from abc import ABC, abstractmethod
 import tkinter as tk
 
 from Canvas.hud_canvas import HUDCanvas
+from Canvas.HUDs.HUDStandard.HUDAnimationManager import HUDAnimationManager
 
-class HUDABC(ABC):
+class HUDABC(HUDAnimationManager, ABC):
     def __init__(self, canvas: HUDCanvas):
-        self.canvas = canvas
+        super().__init__(canvas)
 
-    @property
-    @abstractmethod
-    def tag(self):
-        """
-        Méthode pour retourner le tag de l'HUD
-        """
-        pass
+        self.canvas = canvas
+        self.animating = False
 
     @abstractmethod
     def create(self, geometry_width: int, geometry_height: int) -> None:
@@ -27,20 +23,6 @@ class HUDABC(ABC):
     def replace(self, event: tk.Event) -> None:
         """
         Méthode de replacement de l'HUD
-        """
-        pass
-
-    @abstractmethod
-    def show_animation(self) -> None:
-        """
-        Méthode d'animation de révélation des éléments de l'HUDs
-        """
-        pass
-
-    @abstractmethod
-    def hide_animation(self) -> None:
-        """
-        Méthode d'animation de masquage des éléments de l'HUDs
         """
         pass
 
