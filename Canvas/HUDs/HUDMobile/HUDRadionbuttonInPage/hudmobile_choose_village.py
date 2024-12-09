@@ -34,7 +34,7 @@ class HUDChooseVillage(HUDRadiobuttonInPageABC):
                 village_id=village_id
             )
 
-            self.canvas.hud_history.add_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
+            self.canvas.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
 
             # Même comportement que si on annulait, mais précédé par la validation
             self.bhide()

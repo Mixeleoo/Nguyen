@@ -169,15 +169,23 @@ class HUDChooseTypeVillager(HUDMobileABC):
 
         if self.radiobutton_choice.get_selected_option():
 
-            self.last_choice_made = [
-                self.desired_workforce,
-                self.canvas.itemcget(
+            if self.canvas.itemcget(
                     self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
-                ).split(" ")[0].lower()
-            ]
+                ).split(" ")[0].lower() == "soldat":
 
-            # On affiche le choix du village
-            self.canvas.hudmobile_choose_village.show()
+                self.canvas.jeu.recruter_soldat(self.desired_workforce)
+                self.canvas.add_history_text(f"Vous avez recruté {self.desired_workforce} soldat(s) !")
+
+            else:
+                self.last_choice_made = [
+                    self.desired_workforce,
+                    self.canvas.itemcget(
+                        self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
+                    ).split(" ")[0].lower()
+                ]
+
+                # On affiche le choix du village
+                self.canvas.hudmobile_choose_village.show()
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
             self.cancel()

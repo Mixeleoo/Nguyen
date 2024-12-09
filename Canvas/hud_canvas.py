@@ -29,6 +29,8 @@ class HUDCanvas(BaseCanvas):
 
         self.hud_actions = HUDActions(self)
         self.hud_history = HUDHistory(self)
+        self.add_history_text = self.hud_history.add_text
+
         self.hud_build_city = HUDBuildCity(self)
         self.hud_build_church = HUDBuildChurch(self)
         self.hud_event = HUDEvent(self)
