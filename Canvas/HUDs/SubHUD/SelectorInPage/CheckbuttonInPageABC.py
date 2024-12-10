@@ -1,7 +1,7 @@
 
 from abc import ABC
 
-from Canvas.HUDs.SubHUD.selectorinpageabc import SelectorInPageABC
+from ..selectorinpageabc import SelectorInPageABC
 from Canvas.Widget.Radiobutton import Checkbutton
 
 

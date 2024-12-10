@@ -2,7 +2,7 @@
 from abc import ABC
 
 from Canvas.Widget.Radiobutton import Radiobutton
-from Canvas.HUDs.SubHUD.selectorinpageabc import SelectorInPageABC
+from ..selectorinpageabc import SelectorInPageABC
 
 class RadiobuttonInPageABC(SelectorInPageABC, ABC):
     def __init__(self, canvas, hud_tag: str):
