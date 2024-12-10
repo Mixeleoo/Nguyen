@@ -1,8 +1,10 @@
 
 from typing import Literal
+from random import randint
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
+from Territoire.village import Village
 from parameter import *
 
 
@@ -17,7 +19,7 @@ class Jeu:
         self._id_joueur_actuel = 0
 
     @property
-    def joueur_actuel(self) -> Noble | Seigneur:
+    def joueur_actuel(self) -> Noble|Seigneur:
         return self._joueurs[self._id_joueur_actuel]
 
     def get_joueur(self, index: int) -> Noble:
@@ -57,9 +59,23 @@ class Jeu:
             return "pillage", self.joueur_actuel.dico_villages[id_village_pie].nom
 
         elif 21 <= choix_ev <= 40 :
-            # famine : les ressources des plaines sont divisées par 2
+            # famine : les ressources des terres sont divisées par 2
             pass
 
+        elif 65 <= choix_ev <= 84 :
+            # récolte abondante : ressources des terres doublées
+
+        elif 85 <= choix_ev <= 94 :
+            # immigration : des roturiers augmentent la population d'un village
+            id_village_peuple = choice(list(self.joueur_actuel.dico_villages.keys()))
+            nb_immigres = randint(3,10) # TODO : choisir la fourchette de valeur
+            type_imigres = choice(["artisan","paysan"])
+            self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
+            return "immigration", nb_immigres
+
+        elif 95 <= choix_ev <= 100 :
+            # vassalisation : un noble se propose comme vassal
+            
 
 
 
@@ -74,7 +90,7 @@ class Jeu:
         :param prenom: prenom du noble
         :param nom_village: nom du village
         """
-        nouveau_noble = Noble(prenom, 10, 10)
+        nouveau_noble = Noble(prenom, 0, 0)
         nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
 
@@ -197,4 +213,3 @@ class Jeu:
             self._joueurs.remove(pnoble)
 
         return victoire
-
