@@ -1,14 +1,19 @@
-
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.StringVar import StringVar
+from Canvas.Widget.StringVar import StringVar
 from parameter import *
-
 
 class HUDMobileChooseArgRes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        self.amount_arg = 0
         self.arg_text = StringVar(self.canvas)
+
+        self.amount_res = 0
+        self.res_text = StringVar(self.canvas)
+
+        self.starting_ms = 500
+        self.ms = 500
 
     @property
     def tag(self):
@@ -30,84 +35,87 @@ class HUDMobileChooseArgRes(HUDMobileABC):
             x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
-        # Effectif souhaité
-        text = "Arg : 1"
-
-        width_text = get_width_text(text)
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.config(size=6)
 
+        # TODO Créer un nouveau Widget QuantiySelector
+
         self.arg_text.id = self.canvas.create_text(
-            center_x - 20, y0_cadre + pad_from_borders, text="💰 : 0", tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
+            center_x - 20, y0_cadre + pad_from_borders,
+            text=f"💰 : {self.amount_arg}",
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            state="hidden",
+            fill=FILL_TEXT
         )
 
         # Bouton ajouter effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.plus_arg,
-            trigger_name="PLUS_ARG"
-        ).draw(
-            center_x - 40,
+        self.canvas.create_text_in_rectangle(
+            center_x - 35,
             y0_cadre + pad_from_borders + 15,
-            center_x - 20,
+            center_x - 15,
             y0_cadre + pad_from_borders + 25,
+            rectangle_tags=set_tags(highlight_tag="PLUS_ARG", hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG, TEMP_TAG),
             text="▲",
             text_font=custom_font,
-            state="hidden",
-            is_temp=True
+            state="hidden"
         )
+
+        self.canvas.tag_highlight["PLUS_ARG"] = self._plus_arg_step
+        self.canvas.tag_highlight["PLUS_ARG"] = self._plus_arg_step
 
         # Bouton retirer effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.minus_arg,
-            trigger_name="MINUS_ARG",
-        ).draw(
-            center_x - 40,
+        self.canvas.create_text_in_rectangle(
+            center_x - 35,
             y0_cadre + pad_from_borders + 27,
-            center_x - 20,
+            center_x - 15,
             y0_cadre + pad_from_borders + 37,
+            rectangle_tags=set_tags(highlight_tag="MINUS_ARG", hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             text="▼",
             text_font=custom_font,
-            state="hidden",
-            is_temp=True
+            state="hidden"
         )
 
-        self.arg_text.id = self.canvas.create_text(
-            center_x + 20, y0_cadre + 10, text="🍴 : 0", tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
+        self.canvas.tag_highlight["MINUS_ARG"] = self._minus_arg_step
+
+        self.res_text.id = self.canvas.create_text(
+            center_x + 20, y0_cadre + pad_from_borders,
+            text=f"🍴 : {self.amount_res}",
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            state="hidden",
+            fill=FILL_TEXT
         )
 
         # Bouton ajouter effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.plus_arg,
-            trigger_name="PLUS_ARG"
-        ).draw(
-            center_x - 20 + width_text // 2,
+        self.canvas.create_text_in_rectangle(
+            center_x + 15,
             y0_cadre + pad_from_borders + 15,
-            center_x + width_text // 2,
+            center_x + 35,
             y0_cadre + pad_from_borders + 25,
+            rectangle_tags=set_tags(highlight_tag="PLUS_RES", hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             text="▲",
             text_font=custom_font,
             state="hidden",
-            is_temp=True
         )
 
+        self.canvas.tag_highlight["PLUS_RES"] = self._plus_res_step
+
         # Bouton retirer effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.minus_arg,
-            trigger_name="MINUS_ARG",
-        ).draw(
-            center_x - 20 + width_text // 2,
+        self.canvas.create_text_in_rectangle(
+            center_x + 15,
             y0_cadre + pad_from_borders + 27,
-            center_x + width_text // 2,
+            center_x + 35,
             y0_cadre + pad_from_borders + 37,
+            rectangle_tags=set_tags(highlight_tag="MINUS_RES", hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
             text="▼",
             text_font=custom_font,
-            state="hidden",
-            is_temp=True
+            state="hidden"
         )
+
+        self.canvas.tag_highlight["MINUS_RES"] = self._minus_res_step
 
         # Bouton OK qui lance l'immigration
         self.canvas.create_ok_button(
@@ -128,11 +136,49 @@ class HUDMobileChooseArgRes(HUDMobileABC):
 
         self.canvas.move(self.tag, dx, dy)
 
-    def plus_arg(self, *args):
-        pass
+    def _minus_arg_step(self):
+        if self.canvas.is_clicking:
+            self.amount_arg -= 1 if self.amount_arg - 1 > 0 else 0
+            self.arg_text.set(f"💰 : {self.amount_arg}")
+            self.ms -= 10 if self.ms - 10 > 10 else 0
 
-    def minus_arg(self, *args):
-        pass
+            self.canvas.after(self.ms, self._minus_arg_step)
+
+        else:
+            self.ms = self.starting_ms
+
+    def _plus_arg_step(self):
+        if self.canvas.is_clicking:
+            self.amount_arg += 1 if self.amount_arg + 1 <= self.canvas.jeu.joueur_actuel.argent else 0
+            self.arg_text.set(f"💰 : {self.amount_arg}")
+            self.ms -= 10 if self.ms - 10 > 10 else 0
+
+            self.canvas.after(self.ms, self._minus_arg_step)
+
+        else:
+            self.ms = self.starting_ms
+
+    def _minus_res_step(self):
+        if self.canvas.is_clicking:
+            self.amount_res -= 1 if self.amount_res - 1 > 0 else 0
+            self.res_text.set(f"🍴 : {self.amount_res}")
+            self.ms -= 10 if self.ms - 10 > 10 else 0
+
+            self.canvas.after(self.ms, self._minus_res_step)
+
+        else:
+            self.ms = self.starting_ms
+
+    def _plus_res_step(self):
+        if self.canvas.is_clicking:
+            self.amount_res += 1 if self.amount_res + 1 <= self.canvas.jeu.joueur_actuel.ressources else 0
+            self.res_text.set(f"🍴 : {self.amount_res}")
+            self.ms -= 10 if self.ms - 10 > 10 else 0
+
+            self.canvas.after(self.ms, self._plus_res_step)
+
+        else:
+            self.ms = self.starting_ms
 
     def imposer(self, *args):
         # self.canvas.jeu.imposer(self.hudmobile_choose_villages.selected_option)

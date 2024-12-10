@@ -32,6 +32,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
     def on_click_left(self, event: tk.Event) -> None:
 
         self.has_mouse_moved = False
+        self.is_clicking = True
 
         # On donne le tag active à la forme qu'on veut, comme ça, les fonctions responsables de lancer les actions
         # Sauront sur quoi le joueur a voulu cliquer, donc devront se fier à "active" et pas "current"
@@ -78,6 +79,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
     def on_release(self, event: tk.Event) -> None:
 
         tags = self.gettags("active")
+        self.is_clicking = False
 
         # Si la souris n'a pas bougé entre le clic et le relâchement,
         # on considère que c'est un clic gauche simple.

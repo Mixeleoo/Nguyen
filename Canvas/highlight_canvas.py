@@ -39,7 +39,7 @@ class HighlightCanvas(Canvas):
 
         }
 
-        from Canvas.HUDs.Radiobutton import SelectorSupervisor
+        from Canvas.Widget.Radiobutton import SelectorSupervisor
 
         self.radiobuttons = SelectorSupervisor(self)
         self.add_radiobutton = self.radiobuttons.add_radiobutton

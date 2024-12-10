@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Literal, Optional
 
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
-from Canvas.HUDs.StringVar import StringVar
+from Canvas.Widget.StringVar import StringVar
 from parameter import *
 
 class HUDActions(HUDABC):

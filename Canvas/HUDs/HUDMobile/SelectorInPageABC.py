@@ -2,9 +2,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from Canvas.HUDs.StringVar import StringVar
+from Canvas.Widget.StringVar import StringVar
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.Radiobutton import SelectorsABC
+from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
 
 class SelectorInPageABC(HUDMobileABC, ABC):

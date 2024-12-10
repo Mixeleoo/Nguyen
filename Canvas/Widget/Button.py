@@ -116,7 +116,6 @@ class ButtonSupervisor:
     def __init__(self, canvas: BaseCanvas):
 
         self.canvas = canvas
-
         self.current_group_id = 0
 
     def add(

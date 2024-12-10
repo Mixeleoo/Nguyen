@@ -2,7 +2,7 @@
 from abc import ABC
 
 from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
-from Canvas.HUDs.Radiobutton import Checkbutton
+from Canvas.Widget.Radiobutton import Checkbutton
 
 
 class CheckbuttonInPageABC(SelectorInPageABC, ABC):

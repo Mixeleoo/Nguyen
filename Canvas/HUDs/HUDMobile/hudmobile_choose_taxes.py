@@ -1,7 +1,7 @@
 
 from typing import Optional
 
-from Canvas.HUDs.Button import Button
+from Canvas.Widget.Button import Button
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
 from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseNobles import HUDMobileChooseNobles
 from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseVillages import HUDMobileChooseVillages

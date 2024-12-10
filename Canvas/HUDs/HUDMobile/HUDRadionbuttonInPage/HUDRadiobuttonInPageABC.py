@@ -3,8 +3,8 @@ from typing import Optional
 from abc import ABC, abstractmethod
 import tkinter as tk
 
-from Canvas.HUDs.Button import Button
-from Canvas.HUDs.Radiobutton import Radiobutton, SelectorsABC
+from Canvas.Widget.Button import Button
+from Canvas.Widget.Radiobutton import Radiobutton, SelectorsABC
 from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
 
 class HUDRadiobuttonInPageABC(SelectorInPageABC, ABC):
