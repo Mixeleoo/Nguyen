@@ -15,6 +15,8 @@ class HUDActions(HUDABC):
         self.hide_button_id = 0
         self.actions_rectangle_ids = []
 
+        # TODO Instancier le StringVar ici au lieu d'utiliser Optional
+
         self.t_page: Optional[StringVar] = None
         self.ts_title_action: list[StringVar] = []
         self.ts_additionnal_cost: list[StringVar] = []

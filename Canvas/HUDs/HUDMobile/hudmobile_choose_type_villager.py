@@ -2,9 +2,9 @@
 import tkinter as tk
 from typing import Optional
 
-from parameter import *
 from Canvas.HUDs.Radiobutton import Radiobutton
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from parameter import *
 
 class HUDChooseTypeVillager(HUDMobileABC):
     def __init__(self, canvas):
@@ -67,6 +67,8 @@ class HUDChooseTypeVillager(HUDMobileABC):
         width_text = get_width_text(text)
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.config(size=6)
+
+        # TODO Utiliser StringVar ici
 
         self.text_nb_immigrants_id = self.canvas.create_text(
             center_x - 20, y0_cadre + pad_from_borders + 25,

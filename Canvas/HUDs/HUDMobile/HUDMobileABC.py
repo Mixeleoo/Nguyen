@@ -34,11 +34,17 @@ class HUDMobileABC(ABC):
             self.canvas.itemconfigure(item_id, state="normal")
 
     def show(self, *args) -> None:
+        """
+        Affiche les éléments de l'HUDs
+        """
         self.no_replace_show(*args)
 
         # IMPORTANT DE LES REPLACER APRES LES AVOIR AFFICHÉS SINON TKINTER NE SAIT PAS LEURS COORDONNEES
         self.replace(*args)
 
     def hide(self, *args) -> None:
+        """
+        Cache les éléments de l'HUDs
+        """
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="hidden")

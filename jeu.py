@@ -74,7 +74,7 @@ class Jeu:
         """
         self.joueur_actuel.ajout_soldat(effectif)
 
-    def vassalisation_confirmee(self, pnoble : Noble, parg : int, pres : int):
+    def vassalisation_confirmee(self, pnoble : Noble, parg : int, pres : int) -> int:
         """
         Méthode qui permet de vassaliser le noble mis en paramètre s'il a accepté de se soumettre
         Si le joueur/bot n'est pas encore un Seigneur( n'a encore vassalisé aucun noble), alors il en devient un
@@ -94,4 +94,6 @@ class Jeu:
             new_seigneur._liste_soldats = self.joueur_actuel.liste_soldats
             self._joueurs[self._id_joueur_actuel] = new_seigneur
 
-        self.joueur_actuel.liste_nobles += [pnoble]
+        self.joueur_actuel.liste_nobles.append(pnoble)
+
+        return len(self.joueur_actuel.liste_nobles) - 1

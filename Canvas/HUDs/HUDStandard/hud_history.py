@@ -2,8 +2,8 @@
 import tkinter as tk
 from typing import Literal
 
-from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from parameter import *
 
 class HUDHistory(HUDABC):
     def __init__(self, canvas):

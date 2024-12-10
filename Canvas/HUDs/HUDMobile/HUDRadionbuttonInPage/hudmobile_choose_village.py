@@ -4,7 +4,7 @@ import tkinter as tk
 from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.HUDRadiobuttonInPageABC import HUDRadiobuttonInPageABC
 from parameter import *
 
-class HUDChooseVillage(HUDRadiobuttonInPageABC):
+class HUDMobileChooseVillage(HUDRadiobuttonInPageABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

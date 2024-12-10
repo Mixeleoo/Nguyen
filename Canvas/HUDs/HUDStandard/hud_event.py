@@ -2,8 +2,8 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 
-from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from parameter import *
 
 class HUDEvent(HUDABC):
     def __init__(self, canvas):

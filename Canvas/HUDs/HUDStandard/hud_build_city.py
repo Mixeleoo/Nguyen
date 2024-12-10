@@ -1,9 +1,9 @@
-import tkinter as tk
 
+import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
-from parameter import *
 from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from parameter import *
 
 class HUDBuildCity(HUDABC):
     def __init__(self, canvas):

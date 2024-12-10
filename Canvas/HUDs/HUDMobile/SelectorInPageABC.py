@@ -11,6 +11,8 @@ class SelectorInPageABC(HUDMobileABC, ABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        # TODO Instancier les StringVar au lieu d'utiliser Optional
+
         # Gestion des pages
         self.num_page = 1
         self.t_page: Optional[StringVar] = None
@@ -264,10 +266,12 @@ class SelectorInPageABC(HUDMobileABC, ABC):
 
         self.t_page.set(f"page : {self.num_page} / {len(self.selectors)}")
 
-    def bhide(self, *args):
+    def reset_selectors(self):
         for s in self.selectors:
             s.reset()
 
+    def bhide(self, *args):
+        self.reset_selectors()
         self.hide()
 
     @abstractmethod

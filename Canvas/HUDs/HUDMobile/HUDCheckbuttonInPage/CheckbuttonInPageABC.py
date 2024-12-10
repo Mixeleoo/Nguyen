@@ -2,7 +2,7 @@
 from abc import ABC
 
 from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
-from Canvas.HUDs.Radiobutton import Checkbutton, SelectorsABC
+from Canvas.HUDs.Radiobutton import Checkbutton
 
 
 class CheckbuttonInPageABC(SelectorInPageABC, ABC):
@@ -12,7 +12,7 @@ class CheckbuttonInPageABC(SelectorInPageABC, ABC):
         self.checkbuttons: list[Checkbutton] = [self.canvas.add_checkbutton()]
 
     @property
-    def selectors(self) -> list[SelectorsABC]:
+    def selectors(self) -> list[Checkbutton]:
         return self.checkbuttons
 
     @property

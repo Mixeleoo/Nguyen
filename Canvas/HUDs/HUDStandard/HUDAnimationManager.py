@@ -62,7 +62,6 @@ class HUDAnimationManager(ABC):
         # Si "hide" est en cours, on l'interrompt
         if self.is_hiding:
             self.cancel_animation()
-            self.is_hiding = False
 
         self.is_showing = True
         self._show_step()        # Commencer l'animation
@@ -94,7 +93,6 @@ class HUDAnimationManager(ABC):
         # Si "show" est en cours, on l'interrompt
         if self.is_showing:
             self.cancel_animation()
-            self.is_showing = False
 
         self.is_hiding = True
         self._hide_step()        # Commencer l'animation
