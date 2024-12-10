@@ -2,10 +2,10 @@
 from Canvas.highlight_canvas import HighlightCanvas
 
 class StringVar:
-    def __init__(self, canvas: HighlightCanvas, text_id: int = 0):
+    def __init__(self, canvas: HighlightCanvas):
         self._canvas = canvas
         self._text = ""
-        self._id = text_id
+        self._id = None
 
     @property
     def id(self) -> int:

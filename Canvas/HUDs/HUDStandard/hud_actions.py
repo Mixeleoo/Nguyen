@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from typing import Literal, Optional
+from typing import Literal
 
 from Canvas.HUDs.HUDABC import HUDABC
 from Canvas.Widget.StringVar import StringVar
@@ -17,7 +17,7 @@ class HUDActions(HUDABC):
 
         # TODO Instancier le StringVar ici au lieu d'utiliser Optional
 
-        self.t_page: Optional[StringVar] = None
+        self.t_page = StringVar(canvas)
         self.ts_title_action: list[StringVar] = []
         self.ts_additionnal_cost: list[StringVar] = []
         self.ts_PA: list[StringVar] = []
@@ -67,58 +67,54 @@ class HUDActions(HUDABC):
             )
 
             # Titre de l'action
-            text = StringVar(
-                self.canvas,
-                self.canvas.create_text(
-                    x_values[x_value_i] + pad, y0_cadre + pad,
-                    anchor="nw",
-                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
-                    font=self.title_font,
-                    fill=FILL_TEXT
-                )
-            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["text"])
+            text = StringVar(self.canvas)
+            text.id = self.canvas.create_text(
+                x_values[x_value_i] + pad, y0_cadre + pad,
+                anchor="nw",
+                tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                font=self.title_font,
+                fill=FILL_TEXT
+            )
+            text.set(ACTION_FOR_YOUR_TURN[x_value_i]["text"])
 
             self.ts_title_action.append(text)
             self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
 
             # Nombre de points d'actions utilisés
-            text = StringVar(
-                self.canvas,
-                self.canvas.create_text(
-                    x_values[x_value_i + 1] - pad, y0_cadre + pad,
-                    anchor="ne",
-                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
-                    fill=FILL_TEXT
-                )
-            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["PA"])
+            text = StringVar(self.canvas)
+            text.id = self.canvas.create_text(
+                x_values[x_value_i + 1] - pad, y0_cadre + pad,
+                anchor="ne",
+                tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                fill=FILL_TEXT
+            )
+            text.set(ACTION_FOR_YOUR_TURN[x_value_i]["PA"])
 
             self.ts_PA.append(text)
             self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
 
             # Coûts supplémentaires potentiels (argent, ressources)
-            text = StringVar(
-                self.canvas,
-                self.canvas.create_text(
-                    x_values[x_value_i + 1] - pad, y0_cadre + pad + 40,
-                    anchor="ne",
-                    font=("", SIZE_ACTION_ADDITIONAL_COST_TEXT),
-                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
-                    fill=FILL_TEXT
-                )
-            ).set(ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"])
+            text = StringVar(self.canvas)
+            text.id = self.canvas.create_text(
+                x_values[x_value_i + 1] - pad, y0_cadre + pad + 40,
+                anchor="ne",
+                font=("", SIZE_ACTION_ADDITIONAL_COST_TEXT),
+                tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+                fill=FILL_TEXT
+            )
+            text.set(ACTION_FOR_YOUR_TURN[x_value_i]["additionalcost"])
 
             self.ts_additionnal_cost.append(text)
             self.canvas.text_id_in_rectangle_id[text.id] = id_rectangle
             self.actions_rectangle_ids.append(id_rectangle)
 
-        self.t_page = StringVar(
-            self.canvas,
-            self.canvas.create_text(
-                x0_cadre + 80,
-                y0_cadre - 15,
-                tags=set_tags(hud_tag=self.tag)
-            )
-        ).set(f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}")
+        self.t_page = StringVar(self.canvas)
+        self.t_page.id = self.canvas.create_text(
+            x0_cadre + 80,
+            y0_cadre - 15,
+            tags=set_tags(hud_tag=self.tag)
+        )
+        self.t_page.set(f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}")
 
         # Bouton pour changer de page (précédente)
         self.canvas.add_button(
