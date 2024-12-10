@@ -27,9 +27,16 @@ class Roturier(Personne):
         Méthode d'impôt en fonction du pourcentage d'impot attribué roturier
         Retourne un tuple de la quantité d'argent et de ressources prises au roturier
         et enlève cette quantité de l'argent ET des ressources de ce roturier
+        Le roturier imposé perdra une partie de son bonheur au cours de cette action (1 point de bonheur)
         """
+
         imp_arg = self._argent * self._taux_impot
         imp_ress = self._ressources * self._taux_impot
 
         self._argent -= imp_arg
         self._ressources -= imp_ress
+
+        if self.bonheur - 1 < 0 :
+            self.bonheur = 0
+        else :
+            self.bonheur -= 1

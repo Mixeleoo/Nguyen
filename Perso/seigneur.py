@@ -21,40 +21,6 @@ class Seigneur(Noble):
         """
         Ajoute aux ressources du seigneur les impot perçu pour le noble se trouvant à l'indice indice_noble de sa liste de nobles sous ses ordres
         """
-        self._argent += self._liste_nobles[indice_noble].payer_impot()[0]
-        self._ressources += self._liste_nobles[indice_noble].payer_impot()[1]
-
-        """for noble in self._liste_nobles:
-            self._ressources += noble.payer_impot()"""
-
-
-class ListNoble(list):
-    """
-     Liste qui ne peut contenir que des Nobles
-     """
-
-    def __new__(cls, *args, **kwargs):
-        for elt in args:
-            if not isinstance(elt, Noble):
-                raise TypeError(f"ListNoble n'accepte que des Nobles")
-
-        list.__new__(*args, **kwargs)
-
-    def __iadd__(self, other):
-        if not isinstance(other, Noble):
-            raise TypeError(f"ListNoble n'accepte que des Nobles")
-
-        self.append(other)
-
-    def __radd__(self, other):
-        if not isinstance(other, Noble):
-            raise TypeError(f"ListNoble n'accepte que des Nobles")
-
-        self.append(other)
-
-    def append(self, __object):
-        if not isinstance(__object, Noble):
-            raise TypeError(f"ListNoble n'accepte que des Nobles")
-
-        else:
-            list.append(self, __object)
+        impot =  self._liste_nobles[indice_noble].payer_impot()
+        self._argent += impot[0]
+        self._ressources += impot[1]
