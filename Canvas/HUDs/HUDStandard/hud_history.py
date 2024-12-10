@@ -2,7 +2,7 @@
 import tkinter as tk
 from typing import Literal
 
-from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from Canvas.HUDs.HUDABC import HUDABC
 from parameter import *
 
 class HUDHistory(HUDABC):
@@ -71,7 +71,7 @@ class HUDHistory(HUDABC):
             0,
             geometry_width - 5 - 5,
             0,
-            fill=FILL_ACTION_BOX, tags=set_tags(CLICKABLE_TAG, drag_tag=SCROLLBAR_TAG, hud_tag=self.tag)
+            fill=FILL_ACTION_BOX, tags=set_tags(DRAGGABLE_TAG, drag_tag=SCROLLBAR_TAG, hud_tag=self.tag)
         )
 
         self.canvas.tag_fod[SCROLLBAR_TAG] = self.on_drag_scrollbar
