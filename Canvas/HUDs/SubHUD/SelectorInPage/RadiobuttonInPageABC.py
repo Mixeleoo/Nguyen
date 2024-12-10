@@ -1,7 +1,7 @@
 
 from abc import ABC
 
-from Canvas.Widget.Radiobutton import Radiobutton, SelectorsABC
+from Canvas.Widget.Radiobutton import Radiobutton
 from Canvas.HUDs.SubHUD.SelectorInPageABC import SelectorInPageABC
 
 class RadiobuttonInPageABC(SelectorInPageABC, ABC):
@@ -12,7 +12,7 @@ class RadiobuttonInPageABC(SelectorInPageABC, ABC):
         self.radiobuttons: list[Radiobutton] = [self.canvas.add_radiobutton()]
 
     @property
-    def selectors(self) -> list[SelectorsABC]:
+    def selectors(self) -> list[Radiobutton]:
         return self.radiobuttons
 
     @property
