@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from parameter import *
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 
 class HUDMobileVillageInfo(HUDMobileABC):
     def __init__(self, canvas):

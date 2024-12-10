@@ -3,7 +3,7 @@ import tkinter as tk
 from typing import Optional
 
 from Canvas.Widget.Radiobutton import Radiobutton
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 from parameter import *
 
 class HUDChooseTypeVillager(HUDMobileABC):

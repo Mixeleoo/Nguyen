@@ -1,6 +1,6 @@
 
 from parameter import *
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 
 
 class HUDMobileYaUnVillageGros(HUDMobileABC):

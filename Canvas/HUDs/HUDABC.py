@@ -1,7 +1,7 @@
 
 from abc import ABC
 
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 from Canvas.hud_canvas import HUDCanvas
 from Canvas.HUDs.HUDStandard.HUDAnimationManager import HUDAnimationManager
 
