@@ -9,10 +9,14 @@ class Noble(Personne):
     """
     Un noble est une personne qui contôle des roturiers (sous forme d'une liste de roturiers)
     il est également soumis à un impôt s'il est vassal d'un seigneur (10%).
+    Chaque noble aura un nombre de PA intitialisé à 10 et qui sera modifié au fur et à mesure des action du jeu
+    en cours de partie
+    Il sera réinitialisé à chaque fin de tour
     """
     def __init__(self, pnom: str, pres: int, parg: int):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
+        self.pa = 10
 
         # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
         # Servira à accéder à la liste de Roturiers que le noble possède
@@ -30,11 +34,25 @@ class Noble(Personne):
     def liste_soldats(self):
         return self._liste_soldats
 
+    @property
+    def bonheur_general(self):
+        """
+        Retourne la moyenne du bonheur dans tous les villages dirigés par le noble
+        """
+        bonheur = 0
+        nb_village = 0
+        for village in self._dico_villages.values() :
+            bonheur += village.bonheur_general
+            nb_village += 1
+        return round(bonheur/nb_village,2)
+
+
     def payer_impot(self):
         """
         Méthode d'impôt en fonction du pourcentage d'impot attribué noble
         Retourne un tuple de la quantité d'argent et de ressources prises au noble
         et enlève cette quantité de l'argent ET des ressources de ce noble
+        Une partie de son bonheur lui sera enlevé à l'issu de cette action
         """
         imp_arg = self._argent * self._taux_impot
         imp_ress = self._ressources * self._taux_impot
@@ -61,15 +79,23 @@ class Noble(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def soumettre(self, pnoble: 'Noble'):
+    def soumettre(self, pnoble: 'Noble', pargent : int, press : int):
         """
         Méthode qui permet de déterminer si un noble accepte de se soumettre ou non
-        Ce choix se fera en fonction de la taille de son armée
+        Ce choix se fera en fonction de la taille de l'armée et de la quantité de ressources et d'argent que l'on offre au nobles à soumettre
+        Si la quantité de ressources et d'argent proposés sont strictement supérieur à 25% de ce que le noble à déjà OU
+        que la taille de son armée est inférieur à celle du noble qui soumet : la fonction return True
+        Sinon : False
 
         :param pnoble: Noble souhaitant soumettre un autre noble
+        :param pargent: Quantité d'argent offerte au noble
+        :param press: Quantité de ressources offertes au noble
         :return : True si le noble accepte de devenir vassal, False sinon
         """
-        return True
+        if(pnoble.argent * 0.25 < pargent and pnoble.ressources * 0.25 < press) or (len(pnoble.liste_soldats) < len(self.liste_soldats)) :
+            return True
+        else :
+            return False
 
 
     def ajouter_village(self, pid: int, nom: str):

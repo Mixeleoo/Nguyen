@@ -24,8 +24,24 @@ class Village :
         self._liste_eglises : list[Eglise] = []
 
     @property
+    def nom(self):
+        return self._nom
+
+    @property
     def liste_roturier(self):
         return self._liste_roturier
+
+    @property
+    def bonheur_general(self):
+        """
+        Retourne la moyenne du bonheur dans le village
+        """
+        bonheur = 0
+        effectif = 0
+        for villageois in self.liste_roturier:
+            bonheur += villageois.bonheur
+            effectif += 1
+        return round(bonheur / effectif, 2)
 
     def ajouter_villageois(self, type_v: Literal["paysan", "artisan", "soldat"], effectif : int) :
         """
