@@ -53,7 +53,7 @@ class Interface(tk.Tk):
 
         """# Ajouter l'image au canvas
         # Je mets un self pour éviter que le garbage collector ne supprime la photo
-        original_image = Image.open("shrek.jpg")
+        original_image = Image.open("./assets/shrek.jpg")
         resized_image = original_image.resize((149 - 5, 20))
 
         # Convertir l'image redimensionnée en format Tkinter

@@ -51,7 +51,7 @@ class BuildCity(HUDABC):
             tags=set_tags(hud_tag=self.tag)
         )
 
-        original_image = Image.open("banderoletravaux.png")
+        original_image = Image.open("./assets/banderoletravaux.png")
 
         # La largeur fait la taille du rectangle du fond
         image_width = x1_cadre - x0_cadre

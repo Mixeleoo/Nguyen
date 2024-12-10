@@ -41,7 +41,7 @@ class BuildChurch(HUDABC):
         self.background_rect_id = self.canvas.create_rectangle(x0_cadre, y0_cadre, x1_cadre, y1_cadre,
                               fill="#cccc00", tags=set_tags(hud_tag=self.tag))
 
-        original_image = Image.open("eglise vitrail.png")
+        original_image = Image.open("./assets/eglise vitrail.png")
 
         # Le -1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         resized_image = original_image.resize((width, height))

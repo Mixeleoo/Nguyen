@@ -37,7 +37,7 @@ class Event(HUDABC):
         y0_cadre = - height + PADY_BUILD_CITY_HUD_HIDING
         y1_cadre = PADY_BUILD_CITY_HUD_HIDING
 
-        original_image = Image.open("parchemin.png").convert("RGBA")
+        original_image = Image.open("./assets/parchemin.png").convert("RGBA")
 
         # La largeur fait la taille du rectangle du fond
         image_width = x1_cadre - x0_cadre + 150
