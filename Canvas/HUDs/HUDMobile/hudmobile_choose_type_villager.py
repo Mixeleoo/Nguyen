@@ -10,6 +10,8 @@ class HUDChooseTypeVillager(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
+        # TODO: remplacer le choix de l'effectif par un QuantitySelector (et donc rajouter un callback dans QuantitySelector qui permettra de griser ou dégriser les choix)
+
         self.desired_workforce = 1
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
