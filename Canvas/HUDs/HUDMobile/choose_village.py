@@ -4,14 +4,14 @@ from typing import Optional
 
 from .base import HUDMobileABC
 from Canvas.Widget.Button import Button
-from ..SubHUD import SubHUDChooseVillage
+import Canvas.HUDs.SubHUD as SubHUD
 from parameter import *
 
 class ChooseVillage(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.choose_village = SubHUDChooseVillage(canvas, self.tag)
+        self.choose_village = SubHUD.ChooseVillage(canvas, self.tag)
 
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None

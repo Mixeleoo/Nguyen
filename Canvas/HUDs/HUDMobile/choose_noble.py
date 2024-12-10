@@ -4,14 +4,14 @@ from typing import Optional
 
 from .base import HUDMobileABC
 from Canvas.Widget.Button import Button
-from ..SubHUD import SubHUDChooseNoble
+import Canvas.HUDs.SubHUD as SubHUD
 
 
 class ChooseNoble(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.choose_noble = SubHUDChooseNoble(canvas, self.tag)
+        self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag)
         self.noble_index_selected = 0
 
         self.ok_button: Optional[Button] = None

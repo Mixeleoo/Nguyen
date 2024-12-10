@@ -1,10 +1,10 @@
 
 from ..RadiobuttonInPageABC import RadiobuttonInPageABC
 
-class SubHUDChooseNoble(RadiobuttonInPageABC):
+class ChooseVillage(RadiobuttonInPageABC):
     def __init__(self, canvas, hud_tag: str):
         super().__init__(canvas, hud_tag)
 
     @property
     def title(self):
-        return "Quel noble voulez-vous vassaliser ?"
+        return "Quel villages voulez-vous immigrer ?"

@@ -1,16 +1,16 @@
 from .selectorinpageabc import SelectorInPageABC
 from .quantityselector import QuantitySelector, QuantitySelectorSupervisor
-from .SelectorInPage.HUDRadionbuttonInPage.subhud_choose_noble import SubHUDChooseNoble
-from .SelectorInPage.HUDRadionbuttonInPage.subhud_choose_village import SubHUDChooseVillage
-from .SelectorInPage.HUDCheckbuttonInPage.subhud_choose_nobles import SubHUDChooseNobles
-from .SelectorInPage.HUDCheckbuttonInPage.subhud_choose_villages import SubHUDChooseVillages
+from .SelectorInPage.HUDRadionbuttonInPage.choose_noble import ChooseNoble
+from .SelectorInPage.HUDRadionbuttonInPage.choose_village import ChooseVillage
+from .SelectorInPage.HUDCheckbuttonInPage.choose_nobles import ChooseNobles
+from .SelectorInPage.HUDCheckbuttonInPage.choose_villages import ChooseVillages
 
 __all__ = [
     "SelectorInPageABC",
     "QuantitySelector",
     "QuantitySelectorSupervisor",
-    "SubHUDChooseNoble",
-    "SubHUDChooseVillage",
-    "SubHUDChooseNobles",
-    "SubHUDChooseVillages",
+    "ChooseNoble",
+    "ChooseVillage",
+    "ChooseNobles",
+    "ChooseVillages",
 ]

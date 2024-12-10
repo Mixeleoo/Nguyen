@@ -3,15 +3,15 @@ from typing import Optional
 
 from .base import HUDMobileABC
 from Canvas.Widget.Button import Button
-from ..SubHUD import SubHUDChooseVillages, SubHUDChooseNobles
+from ..SubHUD import ChooseVillages, ChooseNobles
 
 
 class ChooseTaxes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.hudmobile_choose_villages = SubHUDChooseVillages(canvas, self.tag)
-        self.hudmobile_choose_nobles = SubHUDChooseNobles(canvas, self.tag)
+        self.hudmobile_choose_villages = ChooseVillages(canvas, self.tag)
+        self.hudmobile_choose_nobles = ChooseNobles(canvas, self.tag)
 
         self.add_village = self.hudmobile_choose_villages.add_option
         self.add_noble = self.hudmobile_choose_nobles.add_option
