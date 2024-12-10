@@ -3,7 +3,7 @@ import tkinter as tk
 from abc import ABC
 
 from parameter import *
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 
 
 class HUDWindowABC(HUDMobileABC, ABC):
@@ -75,8 +75,10 @@ class HUDWindowABC(HUDMobileABC, ABC):
             state="hidden"
         )
 
-        self.canvas.tag_highlight["pin_" + self.tag + "_window"] = self.trigger_pin
-        self.canvas.tag_unhighlight["pin_" + self.tag + "_window"] = dummy
+        self.canvas.new_highlight(
+            "pin_" + self.tag + "_window",
+            on_click=self.trigger_pin
+        )
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
         self.canvas.create_text_in_rectangle(
