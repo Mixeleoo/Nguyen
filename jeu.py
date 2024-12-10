@@ -17,7 +17,7 @@ class Jeu:
         self._id_joueur_actuel = 0
 
     @property
-    def joueur_actuel(self) -> Noble|Seigneur:
+    def joueur_actuel(self) -> Noble | Seigneur:
         return self._joueurs[self._id_joueur_actuel]
 
     def get_joueur(self, index: int) -> Noble:
@@ -74,7 +74,7 @@ class Jeu:
         :param prenom: prenom du noble
         :param nom_village: nom du village
         """
-        nouveau_noble = Noble(prenom, 0, 0)
+        nouveau_noble = Noble(prenom, 10, 10)
         nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
 
