@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from Canvas.Widget.StringVar import StringVar
-from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
 

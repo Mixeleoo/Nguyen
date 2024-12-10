@@ -10,7 +10,7 @@ from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
 class HUDRadiobuttonInPageABC(SelectorInPageABC, ABC):
     def __init__(self, canvas):
         super().__init__(canvas)
-
+        # TODO: ici il faut faire en sorte que cette classe abstraite ne gère pas les boutons
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
 
