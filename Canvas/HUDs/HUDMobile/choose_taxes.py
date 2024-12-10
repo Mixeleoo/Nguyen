@@ -1,13 +1,12 @@
 
 from typing import Optional
 
+from .base import HUDMobileABC
 from Canvas.Widget.Button import Button
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.SubHUD.SelectorInPage.HUDCheckbuttonInPage.subhud_choose_villages import SubHUDChooseVillages
-from Canvas.HUDs.SubHUD.SelectorInPage.HUDCheckbuttonInPage.subhud_choose_nobles import SubHUDChooseNobles
+from ..SubHUD import SubHUDChooseVillages, SubHUDChooseNobles
 
 
-class HUDMobileChooseTaxes(HUDMobileABC):
+class ChooseTaxes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

@@ -1,10 +1,10 @@
 
 import tkinter as tk
 
+from .base import HUDMobileABC
 from parameter import *
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 
-class HUDMobileVillageInfo(HUDMobileABC):
+class VillageInfo(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

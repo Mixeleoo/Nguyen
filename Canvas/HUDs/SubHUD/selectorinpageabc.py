@@ -1,7 +1,7 @@
 
 from abc import ABC, abstractmethod
 
-from Canvas.HUDs.SubHUDABC import SubHUDABC
+from Canvas.HUDs.SubHUD.base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
 from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *

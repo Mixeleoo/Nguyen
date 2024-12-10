@@ -2,10 +2,10 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 
-from Canvas.HUDs.HUDABC import HUDABC
+from .base import HUDABC
 from parameter import *
 
-class HUDEvent(HUDABC):
+class Event(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

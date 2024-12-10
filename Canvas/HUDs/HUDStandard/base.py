@@ -1,9 +1,9 @@
 
 from abc import ABC
 
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobile.base import HUDMobileABC
 from Canvas.hud_canvas import HUDCanvas
-from Canvas.HUDs.HUDStandard.HUDAnimationManager import HUDAnimationManager
+from .HUDAnimationManager import HUDAnimationManager
 
 class HUDABC(HUDAnimationManager, HUDMobileABC, ABC):
     def __init__(self, canvas: HUDCanvas):

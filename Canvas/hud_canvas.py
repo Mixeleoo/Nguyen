@@ -9,7 +9,7 @@ class HUDCanvas(BaseCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        from Canvas.HUDs.SubHUD.QuantitySelector import QuantitySelectorSupervisor
+        from Canvas.HUDs.SubHUD import QuantitySelectorSupervisor
 
         self.quantity_selectors = QuantitySelectorSupervisor(self)
         self.add_quantity_selector = self.quantity_selectors.add
@@ -17,41 +17,28 @@ class HUDCanvas(BaseCanvas):
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
 
-        from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
-        from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
-        from Canvas.HUDs.HUDStandard.hud_history import HUDHistory
-        from Canvas.HUDs.HUDStandard.hud_build_church import HUDBuildChurch
-        from Canvas.HUDs.HUDStandard.hud_event import HUDEvent
-        from Canvas.HUDs.HUDStandard.hud_top_side import HUDTopSide
+        import Canvas.HUDs.HUDStandard as HUDStandard
+        import Canvas.HUDs.HUDMobile as HUDMobile
 
-        from Canvas.HUDs.HUDMobile.hudmobile_village_info import HUDMobileVillageInfo
-        from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_type_villager import HUDChooseTypeVillager
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_taxes import HUDMobileChooseTaxes
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_village import HUDMobileChooseVillage
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_noble import HUDMobileChooseNoble
-        from Canvas.HUDs.HUDMobile.hudmobile_choose_arg_res import HUDMobileChooseArgRes
-
-        from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
+        from Canvas.HUDs.HUDWindow import HUDWindowMoreInfoSupervisor
 
         self.to_show_if_cancel = []
 
-        self.hud_actions = HUDActions(self)
-        self.hud_history = HUDHistory(self)
+        self.hud_actions = HUDStandard.Actions(self)
+        self.hud_history = HUDStandard.History(self)
         self.add_history_text = self.hud_history.add_text
+        self.hud_build_city = HUDStandard.BuildCity(self)
+        self.hud_build_church = HUDStandard.BuildChurch(self)
+        self.hud_event = HUDStandard.Event(self)
+        self.hud_top_side = HUDStandard.TopSide(self)
 
-        self.hud_build_city = HUDBuildCity(self)
-        self.hud_build_church = HUDBuildChurch(self)
-        self.hud_event = HUDEvent(self)
-        self.hud_top_side = HUDTopSide(self)
-
-        self.hudmobile_village_info = HUDMobileVillageInfo(self)
-        self.hudmobile_yavillagegros = HUDMobileYaUnVillageGros(self)
-        self.hudmobile_choose_type_villager = HUDChooseTypeVillager(self)
-        self.hudmobile_choose_taxes = HUDMobileChooseTaxes(self)
-        self.hudmobile_choose_village = HUDMobileChooseVillage(self)
-        self.hudmobile_choose_noble = HUDMobileChooseNoble(self)
-        self.hudmobile_choose_arg_res = HUDMobileChooseArgRes(self)
+        self.hudmobile_village_info = HUDMobile.VillageInfo(self)
+        self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
+        self.hudmobile_choose_type_villager = HUDMobile.ChooseTypeVillager(self)
+        self.hudmobile_choose_taxes = HUDMobile.ChooseTaxes(self)
+        self.hudmobile_choose_village = HUDMobile.ChooseVillage(self)
+        self.hudmobile_choose_noble = HUDMobile.ChooseNoble(self)
+        self.hudmobile_choose_arg_res = HUDMobile.ChooseArgRes(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 

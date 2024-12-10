@@ -1,5 +1,5 @@
 
-from Canvas.HUDs.SubHUD.SelectorInPage.RadiobuttonInPageABC import RadiobuttonInPageABC
+from ..RadiobuttonInPageABC import RadiobuttonInPageABC
 
 class SubHUDChooseNoble(RadiobuttonInPageABC):
     def __init__(self, canvas, hud_tag: str):

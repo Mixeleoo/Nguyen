@@ -2,11 +2,11 @@
 import tkinter as tk
 from typing import Optional
 
+from .base import HUDMobileABC
 from Canvas.Widget.Radiobutton import Radiobutton
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 from parameter import *
 
-class HUDChooseTypeVillager(HUDMobileABC):
+class ChooseTypeVillager(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

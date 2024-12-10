@@ -3,7 +3,7 @@ import tkinter as tk
 from abc import ABC
 
 from parameter import *
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
+from Canvas.HUDs.HUDMobile.base import HUDMobileABC
 
 
 class HUDWindowABC(HUDMobileABC, ABC):

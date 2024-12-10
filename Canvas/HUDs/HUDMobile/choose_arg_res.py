@@ -1,8 +1,8 @@
 
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
+from .base import HUDMobileABC
 from parameter import *
 
-class HUDMobileChooseArgRes(HUDMobileABC):
+class ChooseArgRes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -19,7 +19,7 @@ class HUDMobileChooseArgRes(HUDMobileABC):
 
     @property
     def tag(self):
-        return "HUDMobileChooseArgRes"
+        return "ChooseArgRes"
 
     def create(self, *args):
 

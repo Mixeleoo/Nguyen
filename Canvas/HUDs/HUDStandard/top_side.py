@@ -1,10 +1,10 @@
 
 import tkinter as tk
 
+from .base import HUDABC
 from parameter import *
-from Canvas.HUDs.HUDABC import HUDABC
 
-class HUDTopSide(HUDABC):
+class TopSide(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

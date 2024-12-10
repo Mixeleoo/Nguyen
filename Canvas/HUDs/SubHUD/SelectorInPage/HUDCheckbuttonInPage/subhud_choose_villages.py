@@ -1,5 +1,5 @@
 
-from Canvas.HUDs.SubHUD.SelectorInPage.CheckbuttonInPageABC import CheckbuttonInPageABC
+from ..CheckbuttonInPageABC import CheckbuttonInPageABC
 
 
 class SubHUDChooseVillages(CheckbuttonInPageABC):

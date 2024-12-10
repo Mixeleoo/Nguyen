@@ -1,5 +1,5 @@
 
-from Canvas.HUDs.SubHUDABC import SubHUDABC
+from Canvas.HUDs.SubHUD.base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *

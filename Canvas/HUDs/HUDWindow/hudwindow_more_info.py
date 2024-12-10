@@ -1,7 +1,7 @@
 
-from parameter import *
-from Canvas.HUDs.HUDWindowABC import HUDWindowABC
+from .base import HUDWindowABC
 from Canvas.hud_canvas import HUDCanvas
+from parameter import *
 
 class HUDWindowMoreInfo(HUDWindowABC):
     def __init__(self, canvas, village_tag: str):

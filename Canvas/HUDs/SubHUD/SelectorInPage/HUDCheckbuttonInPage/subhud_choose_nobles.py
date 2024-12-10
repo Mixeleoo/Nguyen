@@ -1,6 +1,5 @@
 
-from Canvas.HUDs.SubHUD.SelectorInPage.CheckbuttonInPageABC import CheckbuttonInPageABC
-
+from ..CheckbuttonInPageABC import CheckbuttonInPageABC
 
 class SubHUDChooseNobles(CheckbuttonInPageABC):
     def __init__(self, canvas, hud_tag: str):

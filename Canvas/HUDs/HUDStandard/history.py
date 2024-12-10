@@ -2,10 +2,10 @@
 import tkinter as tk
 from typing import Literal
 
-from Canvas.HUDs.HUDABC import HUDABC
+from .base import HUDABC
 from parameter import *
 
-class HUDHistory(HUDABC):
+class History(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

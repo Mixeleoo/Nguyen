@@ -2,10 +2,10 @@
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDABC import HUDABC
+from .base import HUDABC
 from parameter import *
 
-class HUDBuildChurch(HUDABC):
+class BuildChurch(HUDABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

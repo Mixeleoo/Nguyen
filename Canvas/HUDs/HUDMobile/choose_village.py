@@ -2,12 +2,12 @@
 import tkinter as tk
 from typing import Optional
 
+from .base import HUDMobileABC
 from Canvas.Widget.Button import Button
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.SubHUD.SelectorInPage.HUDRadionbuttonInPage.subhud_choose_village import SubHUDChooseVillage
+from ..SubHUD import SubHUDChooseVillage
 from parameter import *
 
-class HUDMobileChooseVillage(HUDMobileABC):
+class ChooseVillage(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
