@@ -52,7 +52,7 @@ class HUDAnimationManager(ABC):
         """
         pass
 
-    def show_animation(self):
+    def show_animation(self, *args):
         """
         Lance l'animation pour afficher le HUD.
         """
@@ -85,7 +85,7 @@ class HUDAnimationManager(ABC):
         else:
             self.after_id = self.canvas.after(DELTA_MS_ANIMATION, self._show_step)  # Appeler la prochaine étape
 
-    def hide_animation(self):
+    def hide_animation(self, *args):
         """Lance l'animation pour cacher le HUD."""
         if self.is_hiding:
             return  # L'animation "hide" est déjà en cours, on ignore
