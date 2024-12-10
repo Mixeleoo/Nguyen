@@ -2,7 +2,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDStandard.HUDABC import HUDABC
+from Canvas.HUDs.HUDABC import HUDABC
 from parameter import *
 
 class HUDBuildChurch(HUDABC):
