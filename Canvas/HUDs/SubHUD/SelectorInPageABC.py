@@ -1,21 +1,18 @@
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
+from Canvas.HUDs.SubHUDABC import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
-from Canvas.HUDs.HUDMobileABC import HUDMobileABC
 from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
 
-class SelectorInPageABC(HUDMobileABC, ABC):
-    def __init__(self, canvas):
-        super().__init__(canvas)
-
-        # TODO Instancier les StringVar au lieu d'utiliser Optional
+class SelectorInPageABC(SubHUDABC, ABC):
+    def __init__(self, canvas, hud_tag: str):
+        super().__init__(canvas, hud_tag)
 
         # Gestion des pages
         self.num_page = 1
-        self.t_page: Optional[StringVar] = None
+        self.t_page = StringVar(self.canvas)
 
         # Liste des choix (rectangles et textes dessus)
         self.choices_id: list[int] = []
@@ -66,7 +63,7 @@ class SelectorInPageABC(HUDMobileABC, ABC):
         """
         pass
 
-    def create(self) -> tuple[int, int, int, int]:
+    def create(self, x0_cadre: float, y0_cadre: float) -> tuple[float, float, float, float]:
 
         height = 20
         height_choice = 40
@@ -78,10 +75,8 @@ class SelectorInPageABC(HUDMobileABC, ABC):
         text_width = get_width_text(title_text)
 
         # coordonnées du rectangle principal pour l'avoir au milieu de l'écran
-        x0_cadre = 0
-        y0_cadre = 0
-        x1_cadre = text_width
-        y1_cadre = height + RBTN_MAX_VIL * height_choice
+        x1_cadre = x0_cadre + text_width
+        y1_cadre = y0_cadre + height + RBTN_MAX_VIL * height_choice
 
         center_x = (x0_cadre + x1_cadre) // 2
 
@@ -113,15 +108,13 @@ class SelectorInPageABC(HUDMobileABC, ABC):
             state = "hidden",
             )
 
-            text = StringVar(
-                self.canvas,
-                self.canvas.create_text(
-                    center_x, (cur_height + cur_height + height_choice) // 2,
-                    text="",
-                    tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
-                    state="hidden",
-                    fill=FILL_TEXT
-                )
+            text = StringVar(self.canvas)
+            text.id = self.canvas.create_text(
+                center_x, (cur_height + cur_height + height_choice) // 2,
+                text="",
+                tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
+                state="hidden",
+                fill=FILL_TEXT
             )
 
             cur_height += height_choice
@@ -164,15 +157,13 @@ class SelectorInPageABC(HUDMobileABC, ABC):
             state="hidden"
         )
 
-        self.t_page = StringVar(
-            self.canvas,
-            self.canvas.create_text(
-                x0_cadre + 80,
-                y0_cadre - 15,
-                tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-                state="hidden"
-            )
-        ).set(f"page : 1 / {len(self.selectors)}")
+        self.t_page.id = self.canvas.create_text(
+            x0_cadre + 80,
+            y0_cadre - 15,
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            state="hidden"
+        )
+        self.t_page.set(f"page : 1 / {len(self.selectors)}")
 
         return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
@@ -270,9 +261,8 @@ class SelectorInPageABC(HUDMobileABC, ABC):
         for s in self.selectors:
             s.reset()
 
-    def bhide(self, *args):
+    def setup_before_display(self, *args):
         self.reset_selectors()
-        self.hide()
 
     @abstractmethod
     def griser(self, *args) -> None:

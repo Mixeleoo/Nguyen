@@ -1,18 +1,12 @@
 
-from typing import Optional
-from abc import ABC, abstractmethod
-import tkinter as tk
+from abc import ABC
 
-from Canvas.Widget.Button import Button
 from Canvas.Widget.Radiobutton import Radiobutton, SelectorsABC
-from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
+from Canvas.HUDs.SubHUD.SelectorInPageABC import SelectorInPageABC
 
-class HUDRadiobuttonInPageABC(SelectorInPageABC, ABC):
-    def __init__(self, canvas):
-        super().__init__(canvas)
-        # TODO: ici il faut faire en sorte que cette classe abstraite ne gère pas les boutons
-        self.ok_button: Optional[Button] = None
-        self.cancel_button: Optional[Button] = None
+class RadiobuttonInPageABC(SelectorInPageABC, ABC):
+    def __init__(self, canvas, hud_tag: str):
+        super().__init__(canvas, hud_tag)
 
         self.last_radiobutton_index_choice = None
         self.radiobuttons: list[Radiobutton] = [self.canvas.add_radiobutton()]
@@ -33,33 +27,6 @@ class HUDRadiobuttonInPageABC(SelectorInPageABC, ABC):
     @property
     def add_selector(self) -> callable:
         return self.canvas.add_radiobutton
-
-    @abstractmethod
-    def ok_trigger(self, event: tk.Event):
-        pass
-
-    def create(self) -> None:
-
-        x0_cadre, y0_cadre, x1_cadre, y1_cadre = SelectorInPageABC.create(self)
-
-        # Bouton OK qui lance l'immigration
-        self.ok_button = self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, is_temp=True, state="hidden"
-        )
-
-        # Bouton Annuler qui annule l'immigration
-        self.cancel_button = self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
-        )
-
-    def replace(self, *args) -> None:
-
-        bbox = self.canvas.bbox(self.tag)
-
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
 
     def griser(self, *args) -> None:
         """

@@ -1,13 +1,13 @@
 
 from abc import ABC
 
-from Canvas.HUDs.HUDMobile.SelectorInPageABC import SelectorInPageABC
+from Canvas.HUDs.SubHUD.SelectorInPageABC import SelectorInPageABC
 from Canvas.Widget.Radiobutton import Checkbutton
 
 
 class CheckbuttonInPageABC(SelectorInPageABC, ABC):
-    def __init__(self, canvas):
-        super().__init__(canvas)
+    def __init__(self, canvas, hud_tag: str):
+        super().__init__(canvas, hud_tag)
 
         self.checkbuttons: list[Checkbutton] = [self.canvas.add_checkbutton()]
 

@@ -3,16 +3,16 @@ from typing import Optional
 
 from Canvas.Widget.Button import Button
 from Canvas.HUDs.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseNobles import HUDMobileChooseNobles
-from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseVillages import HUDMobileChooseVillages
+from Canvas.HUDs.SubHUD.SelectorInPage.HUDCheckbuttonInPage.subhud_choose_villages import SubHUDChooseVillages
+from Canvas.HUDs.SubHUD.SelectorInPage.HUDCheckbuttonInPage.subhud_choose_nobles import SubHUDChooseNobles
 
 
 class HUDMobileChooseTaxes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.hudmobile_choose_villages = HUDMobileChooseVillages(canvas)
-        self.hudmobile_choose_nobles = HUDMobileChooseNobles(canvas)
+        self.hudmobile_choose_villages = SubHUDChooseVillages(canvas, self.tag)
+        self.hudmobile_choose_nobles = SubHUDChooseNobles(canvas, self.tag)
 
         self.add_village = self.hudmobile_choose_villages.add_option
         self.add_noble = self.hudmobile_choose_nobles.add_option
@@ -26,29 +26,28 @@ class HUDMobileChooseTaxes(HUDMobileABC):
 
     def create(self):
 
-        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_villages.create()
-
-        # Bouton OK qui lance l'immigration
-        self.ok_button = self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
-        )
-
-        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_nobles.create()
+        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_nobles.create(0, 0)
 
         # Bouton Annuler qui annule l'immigration
         self.cancel_button = self.canvas.create_cancel_button(
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
+        x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.hudmobile_choose_villages.create(x1_cadre, 0)
+
+        # Bouton OK qui lance l'immigration
+        self.ok_button = self.canvas.create_ok_button(
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
+        )
+
     def replace(self, *args) -> None:
-        self.hudmobile_choose_nobles.no_replace_show()
-        self.hudmobile_choose_villages.no_replace_show()
 
-        dx, dy = self.hudmobile_choose_nobles.replace(*args)
-        self.cancel_button.move(dx, dy)
+        bbox = self.canvas.bbox(self.tag)
 
-        dx, dy = self.hudmobile_choose_villages.replace(*args)
-        self.ok_button.move(dx, dy)
+        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
+
+        self.canvas.move(self.tag, dx, dy)
 
     def imposer(self, *args):
         # self.canvas.jeu.imposer(self.hudmobile_choose_villages.selected_option)
@@ -56,6 +55,6 @@ class HUDMobileChooseTaxes(HUDMobileABC):
         print(self.hudmobile_choose_villages.selected_option)
 
     def bhide(self, *args):
-        self.hudmobile_choose_villages.bhide()
-        self.hudmobile_choose_nobles.bhide()
+        self.hudmobile_choose_villages.setup_before_display()
+        self.hudmobile_choose_nobles.setup_before_display()
         self.hide()
