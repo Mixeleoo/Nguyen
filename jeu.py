@@ -1,10 +1,8 @@
 
 from typing import Literal
-from random import randint
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
-from Territoire.village import Village
 from parameter import *
 
 
@@ -76,7 +74,7 @@ class Jeu:
 
         elif 95 <= choix_ev <= 100 :
             # vassalisation : un noble se propose comme vassal
-            
+            pass
 
 
 
