@@ -3,16 +3,16 @@ from typing import Optional
 
 from Canvas.HUDs.Button import Button
 from Canvas.HUDs.HUDMobile.HUDMobileABC import HUDMobileABC
-from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseNoblesForTaxes import HUDMobileChooseNoblesForTaxes
-from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseVillagesForTaxes import HUDMobileChooseVillagesForTaxes
+from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseNobles import HUDMobileChooseNobles
+from Canvas.HUDs.HUDMobile.HUDCheckbuttonInPage.HUDMobileChooseVillages import HUDMobileChooseVillages
 
 
 class HUDMobileChooseTaxes(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.hudmobile_choose_villages = HUDMobileChooseVillagesForTaxes(canvas)
-        self.hudmobile_choose_nobles = HUDMobileChooseNoblesForTaxes(canvas)
+        self.hudmobile_choose_villages = HUDMobileChooseVillages(canvas)
+        self.hudmobile_choose_nobles = HUDMobileChooseNobles(canvas)
 
         self.add_village = self.hudmobile_choose_villages.add_option
         self.add_noble = self.hudmobile_choose_nobles.add_option
@@ -23,16 +23,6 @@ class HUDMobileChooseTaxes(HUDMobileABC):
     @property
     def tag(self):
         return "HUD_CHOOSE_TAXES"
-
-    def replace(self, *args) -> None:
-        self.hudmobile_choose_nobles.no_replace_show()
-        self.hudmobile_choose_villages.no_replace_show()
-
-        dx, dy = self.hudmobile_choose_nobles.replace(*args)
-        self.cancel_button.move(dx, dy)
-
-        dx, dy = self.hudmobile_choose_villages.replace(*args)
-        self.ok_button.move(dx, dy)
 
     def create(self):
 
@@ -50,9 +40,20 @@ class HUDMobileChooseTaxes(HUDMobileABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
+    def replace(self, *args) -> None:
+        self.hudmobile_choose_nobles.no_replace_show()
+        self.hudmobile_choose_villages.no_replace_show()
+
+        dx, dy = self.hudmobile_choose_nobles.replace(*args)
+        self.cancel_button.move(dx, dy)
+
+        dx, dy = self.hudmobile_choose_villages.replace(*args)
+        self.ok_button.move(dx, dy)
+
     def imposer(self, *args):
-        print(self.hudmobile_choose_villages.selected_option)
+        # self.canvas.jeu.imposer(self.hudmobile_choose_villages.selected_option)
         print(self.hudmobile_choose_nobles.selected_option)
+        print(self.hudmobile_choose_villages.selected_option)
 
     def bhide(self, *args):
         self.hudmobile_choose_villages.bhide()

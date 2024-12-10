@@ -20,8 +20,9 @@ class HUDCanvas(BaseCanvas):
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
         from Canvas.HUDs.HUDMobile.hudmobile_choose_type_villager import HUDChooseTypeVillager
         from Canvas.HUDs.HUDMobile.hudmobile_choose_taxes import HUDMobileChooseTaxes
-        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_village import HUDChooseVillage
-        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_noble import HUDChooseNoble
+        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_village import HUDMobileChooseVillage
+        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_noble import HUDMobileChooseNoble
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_arg_res import HUDMobileChooseArgRes
 
         from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
 
@@ -40,8 +41,9 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros = HUDMobileYaUnVillageGros(self)
         self.hudmobile_choose_type_villager = HUDChooseTypeVillager(self)
         self.hudmobile_choose_taxes = HUDMobileChooseTaxes(self)
-        self.hudmobile_choose_village = HUDChooseVillage(self)
-        self.hudmobile_choose_noble = HUDChooseNoble(self)
+        self.hudmobile_choose_village = HUDMobileChooseVillage(self)
+        self.hudmobile_choose_noble = HUDMobileChooseNoble(self)
+        self.hudmobile_choose_arg_res = HUDMobileChooseArgRes(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 
@@ -62,6 +64,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_village.create()
         self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_noble.create()
+        self.hudmobile_choose_arg_res.create()
 
         for i in range(NB_NOBLE_AU_DEPART):
             self.hudwindow_more_info_supervisor.add()

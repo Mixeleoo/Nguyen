@@ -3,9 +3,11 @@ import tkinter as tk
 
 from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.HUDRadiobuttonInPageABC import HUDRadiobuttonInPageABC
 
-class HUDChooseNoble(HUDRadiobuttonInPageABC):
+class HUDMobileChooseNoble(HUDRadiobuttonInPageABC):
     def __init__(self, canvas):
         super().__init__(canvas)
+
+        self.noble_index_selected = 0
 
     @property
     def tag(self):
@@ -21,16 +23,10 @@ class HUDChooseNoble(HUDRadiobuttonInPageABC):
         """
 
         if self.selected_option:
-            noble_selected = self.canvas.jeu.get_joueur(self.selected_option)
-            if self.canvas.jeu.joueur_actuel.soumettre(noble_selected):
-                self.canvas.hudmobile_choose_taxes.add_noble(noble_selected.nom, self.selected_option)
-                self.canvas.hud_history.add_text(f"Vous avez vassalisé {noble_selected.nom} !")
+            self.noble_index_selected = self.selected_option
 
-            else:
-                self.canvas.hud_history.add_text(f"Vous n'avez pas vassalisé {noble_selected.nom}...")
-
-            # Même comportement que si on annulait, mais précédé par la validation
             self.bhide()
+            self.canvas.hudmobile_choose_arg_res.show()
 
         else:
             print("T'as pas choisi de nobles là bro")
