@@ -9,6 +9,14 @@ class HUDCanvas(BaseCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
+        from Canvas.HUDs.SubHUD.QuantitySelector import QuantitySelectorSupervisor
+
+        self.quantity_selectors = QuantitySelectorSupervisor(self)
+        self.add_quantity_selector = self.quantity_selectors.add
+
+        # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
+        self.after_quantity_selector_id = None
+
         from Canvas.HUDs.HUDStandard.hud_build_city import HUDBuildCity
         from Canvas.HUDs.HUDStandard.hud_actions import HUDActions
         from Canvas.HUDs.HUDStandard.hud_history import HUDHistory
@@ -20,8 +28,8 @@ class HUDCanvas(BaseCanvas):
         from Canvas.HUDs.HUDMobile.hudmobile_yaunvillagegros import HUDMobileYaUnVillageGros
         from Canvas.HUDs.HUDMobile.hudmobile_choose_type_villager import HUDChooseTypeVillager
         from Canvas.HUDs.HUDMobile.hudmobile_choose_taxes import HUDMobileChooseTaxes
-        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_village import HUDMobileChooseVillage
-        from Canvas.HUDs.HUDMobile.HUDRadionbuttonInPage.hudmobile_choose_noble import HUDMobileChooseNoble
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_village import HUDMobileChooseVillage
+        from Canvas.HUDs.HUDMobile.hudmobile_choose_noble import HUDMobileChooseNoble
         from Canvas.HUDs.HUDMobile.hudmobile_choose_arg_res import HUDMobileChooseArgRes
 
         from Canvas.HUDs.HUDWindow.hudwindow_more_info import HUDWindowMoreInfoSupervisor
@@ -62,8 +70,8 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros.create()
         self.hudmobile_choose_type_villager.create()
         self.hudmobile_choose_village.create()
-        self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_noble.create()
+        self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_arg_res.create()
 
         for i in range(NB_NOBLE_AU_DEPART):
@@ -94,7 +102,7 @@ class HUDCanvas(BaseCanvas):
         square_id = self.engine_build_city()
 
         nom = nom_aleatoire_village()
-        self.hudmobile_choose_village.add_option(nom, square_id)
+        self.hudmobile_choose_village.choose_village.add_option(nom, square_id)
         self.hudmobile_choose_taxes.add_village(nom, square_id)
 
         self.jeu.creer_noble(square_id, prenom_aleatoire(), nom)
@@ -105,5 +113,5 @@ class HUDCanvas(BaseCanvas):
             prenom = prenom_aleatoire()
 
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
-            self.hudmobile_choose_noble.add_option(prenom, noble + 1)
+            self.hudmobile_choose_noble.choose_noble.add_option(prenom, noble + 1)
             self.jeu.creer_noble(square_id, prenom, nom_aleatoire_village())

@@ -41,8 +41,6 @@ class BaseCanvas(HighlightCanvas):
         # Vairblae test
         self.id_village = 0
 
-        self.is_clicking = True
-
         from Canvas.Widget.Button import ButtonSupervisor
 
         self.buttons = ButtonSupervisor(self)

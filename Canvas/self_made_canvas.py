@@ -32,7 +32,6 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
     def on_click_left(self, event: tk.Event) -> None:
 
         self.has_mouse_moved = False
-        self.is_clicking = True
 
         # On donne le tag active à la forme qu'on veut, comme ça, les fonctions responsables de lancer les actions
         # Sauront sur quoi le joueur a voulu cliquer, donc devront se fier à "active" et pas "current"
@@ -54,20 +53,20 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
                 self.itemconfigure(item_id, state="hidden")
 
         # Lancement de l'highlight
-        self.tag_highlight[tags[HIGHLIGHT_TAG_INDEX]]()
+        self.highlight_tag_on_click[tags[HIGHLIGHT_TAG_INDEX]]()
 
     #                                          GLISSEMENT CLIC GAUCHE                                            #
     def on_drag(self, event: tk.Event) -> None:
 
-        self.has_mouse_moved = True
+        # Premier instant où on bouge la souris
+        if not self.has_mouse_moved:
+            self.has_mouse_moved = True
 
-        tags = self.gettags("highlight")
-        if tags:
-            self.tag_unhighlight[tags[HIGHLIGHT_TAG_INDEX]]()
-            self.dtag("highlight", "highlight")
+            tags = self.gettags("highlight")
+            if tags:
+                self.highlight_tag_on_drag[tags[HIGHLIGHT_TAG_INDEX]]()
 
-        else:
-            tags = self.gettags("active")
+        tags = self.gettags("active")
 
         # Ici ça drague (LOL PCK ON_DRAG T'AS COMPRIS ????)
         self.tag_fod[tags[DRAG_TAG_INDEX]](event)
@@ -79,7 +78,11 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
     def on_release(self, event: tk.Event) -> None:
 
         tags = self.gettags("active")
-        self.is_clicking = False
+
+        # Arrêter l'after trigger des quantityselector
+        if self.after_quantity_selector_id is not None:
+            self.after_cancel(self.after_quantity_selector_id)
+            self.after_quantity_selector_id = None
 
         # Si la souris n'a pas bougé entre le clic et le relâchement,
         # on considère que c'est un clic gauche simple.
@@ -104,7 +107,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
         tags = self.gettags("highlight")
         if tags:
             # On unhighlight l'objet actif
-            self.tag_unhighlight[tags[HIGHLIGHT_TAG_INDEX]]()
+            self.highlight_tag_on_release[tags[HIGHLIGHT_TAG_INDEX]]()
             self.dtag("highlight", "highlight")
 
         # Sauter une ligne

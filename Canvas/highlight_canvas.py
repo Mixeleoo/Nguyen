@@ -10,17 +10,28 @@ class HighlightCanvas(Canvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        self.tag_highlight = {
+        self.highlight_tag_on_click = {
             MAP_TAG: self.highlight_square,
             CLICKABLE_TAG: self.highlight_clickable,
+            DRAGGABLE_TAG: self.highlight_clickable,
             TOGGLEABLE_TAG: self.highlight_toggleable,
             HIGHLIGHT_BUTTON_TAG: self.highlight_button,
             NOTHING_TAG: dummy
         }
 
-        self.tag_unhighlight = {
+        self.highlight_tag_on_drag = {
             MAP_TAG: self.unhighlight_square,
             CLICKABLE_TAG: self.unhighlight_clickable,
+            DRAGGABLE_TAG: dummy,
+            TOGGLEABLE_TAG: self.highlight_toggleable,
+            HIGHLIGHT_BUTTON_TAG: self.unhighlight_button,
+            NOTHING_TAG: dummy
+        }
+
+        self.highlight_tag_on_release = {
+            MAP_TAG: self.unhighlight_square,
+            CLICKABLE_TAG: self.unhighlight_clickable,
+            DRAGGABLE_TAG: self.unhighlight_clickable,
             TOGGLEABLE_TAG: dummy,
             HIGHLIGHT_BUTTON_TAG: self.unhighlight_button,
             NOTHING_TAG: dummy
@@ -127,3 +138,11 @@ class HighlightCanvas(Canvas):
         self.itemconfig(self.get_rect_border_id_from_inner_id[self.find_withtag("highlight")[0]], outline="darkgrey")  # Bord plus sombre
         self.itemconfig("highlight", outline="black")      # Bord interne foncé
         self.itemconfig("highlight", fill=fill_brighter[self.gettags("highlight")[COLOR_TAG_INDEX]])      # Bord interne foncé
+
+    def new_highlight(self, tag: str, on_click: callable=dummy, on_drag: callable=dummy, on_release: callable=dummy):
+        """
+        Méthode pour généraliser la création de nouveaux comportements d'highlight.
+        """
+        self.highlight_tag_on_click[tag] = on_click
+        self.highlight_tag_on_drag[tag] = on_drag
+        self.highlight_tag_on_release[tag] = on_release
