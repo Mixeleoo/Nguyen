@@ -64,6 +64,7 @@ class Jeu:
 
         elif 65 <= choix_ev <= 84 :
             # récolte abondante : ressources des terres doublées
+            pass
 
         elif 85 <= choix_ev <= 94 :
             # immigration : des roturiers augmentent la population d'un village
