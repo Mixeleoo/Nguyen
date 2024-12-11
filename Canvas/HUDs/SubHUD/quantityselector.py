@@ -100,7 +100,7 @@ class QuantitySelector(SubHUDABC):
             self._quantity += value_added
             self._text.set(self.title)
 
-            self.ms = self.ms - 10 if self.ms - 10 > 10 else self.ms
+            self.ms = self.ms - 50 if self.ms - 50 > 10 else 10
             self.canvas.after_quantity_selector_id = self.canvas.after(self.ms, self._inc_step, value_added)
 
     def reset(self):

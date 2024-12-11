@@ -55,8 +55,12 @@ class ChooseNoble(HUDMobileABC):
             self.bhide()
             self.canvas.hudmobile_choose_arg_res.show()
 
+            # TODO: Retirer le noble des choix de nobles à vassaliser
+
         else:
             print("T'as pas choisi de nobles là bro")
+
+        # TODO: ici il faut griser la séléction si aucun choix n'a été fait pour éviter de vérifier à chaque fois si un choix a été fait. (Dans le sous HUD SelectorInPage)
 
     def bhide(self, *args):
         self.choose_noble.setup_before_display()
