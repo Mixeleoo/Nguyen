@@ -23,7 +23,7 @@ class HighlightCanvas(Canvas):
             MAP_TAG: self.unhighlight_square,
             CLICKABLE_TAG: self.unhighlight_clickable,
             DRAGGABLE_TAG: dummy,
-            TOGGLEABLE_TAG: self.highlight_toggleable,
+            TOGGLEABLE_TAG: dummy,
             HIGHLIGHT_BUTTON_TAG: self.unhighlight_button,
             NOTHING_TAG: dummy
         }
