@@ -337,7 +337,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
         for s in self.selectors:
             s.reset()
 
-    def setup_before_display(self, *args):
+    def update(self, *args):
         self.reset_selectors()
 
         self.num_page = 1

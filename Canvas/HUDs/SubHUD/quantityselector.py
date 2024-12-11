@@ -85,7 +85,7 @@ class QuantitySelector(SubHUDABC):
             on_release=self.canvas.unhighlight_clickable
         )
 
-    def setup_before_display(self, max_quantity: int) -> None:
+    def update(self, *args: int) -> None:
         self._max_quantity = max_quantity
 
     def increase(self, value_added: int):
