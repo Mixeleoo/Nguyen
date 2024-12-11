@@ -2,11 +2,11 @@
 import tkinter as tk
 from typing import Optional
 
-from .base import HUDMobileABC
+from .base import HUDCenteredABC
 from Canvas.Widget.Radiobutton import Radiobutton
 from parameter import *
 
-class ChooseTypeVillager(HUDMobileABC):
+class ChooseTypeVillager(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -160,14 +160,8 @@ class ChooseTypeVillager(HUDMobileABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel, state="hidden", is_temp=True
         )
 
-    def replace(self, event: tk.Event) -> None:
-
-        bbox = self.canvas.bbox(self.tag)
-
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
+    def update(self):
+        pass
 
     def immigrate(self, e=None):
 

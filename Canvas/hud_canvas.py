@@ -17,12 +17,11 @@ class HUDCanvas(BaseCanvas):
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
 
-        import Canvas.HUDs.HUDStandard as HUDStandard
-        import Canvas.HUDs.HUDMobile as HUDMobile
-
         from Canvas.HUDs.HUDWindow import HUDWindowMoreInfoSupervisor
 
         self.to_show_if_cancel = []
+
+        import Canvas.HUDs.HUDStandard as HUDStandard
 
         self.hud_actions = HUDStandard.Actions(self)
         self.hud_history = HUDStandard.History(self)
@@ -32,13 +31,18 @@ class HUDCanvas(BaseCanvas):
         self.hud_event = HUDStandard.Event(self)
         self.hud_top_side = HUDStandard.TopSide(self)
 
+        import Canvas.HUDs.HUDMobile as HUDMobile
+
         self.hudmobile_village_info = HUDMobile.VillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
-        self.hudmobile_choose_type_villager = HUDMobile.ChooseTypeVillager(self)
-        self.hudmobile_choose_taxes = HUDMobile.ChooseTaxes(self)
-        self.hudmobile_choose_village = HUDMobile.ChooseVillage(self)
-        self.hudmobile_choose_noble = HUDMobile.ChooseNoble(self)
-        self.hudmobile_choose_arg_res = HUDMobile.ChooseArgRes(self)
+
+        import Canvas.HUDs.HUDCentered as HUDCentered
+
+        self.hudmobile_choose_type_villager = HUDCentered.ChooseTypeVillager(self)
+        self.hudmobile_choose_taxes = HUDCentered.ChooseTaxes(self)
+        self.hudmobile_choose_village = HUDCentered.ChooseVillage(self)
+        self.hudmobile_choose_noble = HUDCentered.ChooseNoble(self)
+        self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 

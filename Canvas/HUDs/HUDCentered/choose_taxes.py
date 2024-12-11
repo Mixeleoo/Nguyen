@@ -1,12 +1,12 @@
 
 from typing import Optional
 
-from .base import HUDMobileABC
+from .base import HUDCenteredABC
 from Canvas.Widget.Button import Button
-from ..SubHUD import ChooseVillages, ChooseNobles
+from Canvas.HUDs.SubHUD import ChooseVillages, ChooseNobles
 
 
-class ChooseTaxes(HUDMobileABC):
+class ChooseTaxes(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -42,14 +42,8 @@ class ChooseTaxes(HUDMobileABC):
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
         )
 
-    def replace(self, *args) -> None:
-
-        bbox = self.canvas.bbox(self.tag)
-
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
+    def update(self):
+        pass
 
     def imposer(self, *args):
         # self.canvas.jeu.imposer(self.hudmobile_choose_villages.selected_option)
@@ -57,6 +51,6 @@ class ChooseTaxes(HUDMobileABC):
         print(self.hudmobile_choose_villages.selected_option)
 
     def bhide(self, *args):
-        self.hudmobile_choose_villages.setup_before_display()
-        self.hudmobile_choose_nobles.setup_before_display()
+        self.hudmobile_choose_villages.update()
+        self.hudmobile_choose_nobles.update()
         self.hide()

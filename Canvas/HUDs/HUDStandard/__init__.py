@@ -6,10 +6,5 @@ from .history import History
 from .top_side import TopSide
 
 __all__ = [
-    "Actions",
-    "BuildChurch",
-    "BuildCity",
-    "Event",
-    "History",
-    "TopSide"
+    name for name, obj in globals().items() if not name.startswith('_')
 ]

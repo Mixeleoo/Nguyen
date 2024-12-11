@@ -6,11 +6,5 @@ from .SelectorInPage.HUDCheckbuttonInPage.choose_nobles import ChooseNobles
 from .SelectorInPage.HUDCheckbuttonInPage.choose_villages import ChooseVillages
 
 __all__ = [
-    "SelectorInPageABC",
-    "QuantitySelector",
-    "QuantitySelectorSupervisor",
-    "ChooseNoble",
-    "ChooseVillage",
-    "ChooseNobles",
-    "ChooseVillages",
+    name for name, obj in globals().items() if not name.startswith('_')
 ]

@@ -2,12 +2,12 @@
 import tkinter as tk
 from typing import Optional
 
-from .base import HUDMobileABC
+from .base import HUDCenteredABC
 from Canvas.Widget.Button import Button
 import Canvas.HUDs.SubHUD as SubHUD
 
 
-class ChooseNoble(HUDMobileABC):
+class ChooseNoble(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -38,16 +38,8 @@ class ChooseNoble(HUDMobileABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
-    def replace(self, *args) -> None:
-
-        self.choose_noble.setup_before_display()
-
-        bbox = self.canvas.bbox(self.tag)
-
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
+    def update(self):
+        self.choose_noble.update()
 
     def ok_trigger(self, event: tk.Event) -> None:
         """

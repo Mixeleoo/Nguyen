@@ -16,7 +16,7 @@ class SubHUDABC(ABC):
         pass
 
     @abstractmethod
-    def setup_before_display(self, *args) -> None:
+    def update(self, *args) -> None:
         """
         Méthode de mise à jour du sous HUD.
         """
