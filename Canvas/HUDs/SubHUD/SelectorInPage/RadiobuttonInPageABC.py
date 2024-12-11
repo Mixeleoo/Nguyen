@@ -20,8 +20,7 @@ class RadiobuttonInPageABC(SelectorInPageABC, ABC):
         res = None
         for i in range(len(self.radiobuttons)):
             if self.radiobuttons[i].currently_selected:
-                res = self.from_selector_index_to_item_id_to_item[i][self.radiobuttons[i].currently_selected]
-
+                res = self.list_selector_choices_to_item[i][self.radiobuttons[i].currently_selected]
         return res
 
     @property

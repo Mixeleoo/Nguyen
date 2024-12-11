@@ -18,7 +18,7 @@ class CheckbuttonInPageABC(SelectorInPageABC, ABC):
     @property
     def selected_option(self):
         return [
-            self.from_selector_index_to_item_id_to_item[i][item_id]
+            self.list_selector_choices_to_item[i][item_id]
             for i in range(len(self.checkbuttons))
             for item_id in self.checkbuttons[i].currently_selected
         ]

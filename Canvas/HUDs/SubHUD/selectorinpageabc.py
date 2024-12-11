@@ -25,8 +25,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         # Dictionnaire des index des checkbutton qui mènent vers leurs différentes catégories qui mènent vers
         # L'id des villages
-        self.from_selector_index_to_item_id_to_item: dict[int, dict[int, int]] = {0: {}}
-        self.from_selector_index_to_item_id_to_text: dict[int, dict[int, str]] = {0: {}}
+        self.list_selector_choices_to_item: list[dict[int, int]] = [{}]
+        self.list_selector_choices_to_text: list[dict[int, str]] = [{}]
 
     @property
     def cur_selector(self) -> SelectorsABC:
@@ -172,7 +172,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
-    def add_option(self, name: str, item_id: int) -> int:
+    def add_option(self, name: str, item: int) -> int:
         """
 
         """
@@ -181,8 +181,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
             # Créer une nouvelle page où il y aura un nouveau checkbutton
             self.selectors.append(self.add_selector())
-            self.from_selector_index_to_item_id_to_item[len(self.selectors) - 1] = {}
-            self.from_selector_index_to_item_id_to_text[len(self.selectors) - 1] = {}
+            self.list_selector_choices_to_item.append({})
+            self.list_selector_choices_to_text.append({})
 
             self.t_page.set(f"page : {self.num_page} / {len(self.selectors)}")
 
@@ -207,8 +207,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
         tags[HIGHLIGHT_TAG_INDEX] = TOGGLEABLE_TAG
         self.canvas.itemconfigure(new_category_id, tags=tags)
 
-        self.from_selector_index_to_item_id_to_item[len(self.selectors) - 1][new_category_id] = item_id
-        self.from_selector_index_to_item_id_to_text[len(self.selectors) - 1][new_category_id] = name
+        self.list_selector_choices_to_item[len(self.selectors) - 1][new_category_id] = item
+        self.list_selector_choices_to_text[len(self.selectors) - 1][new_category_id] = name
 
         return new_category_id
 
@@ -232,7 +232,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
             # Modification du texte
             self.choices_texts[action_rect_id_i].set(
-                self.from_selector_index_to_item_id_to_text[self.num_page - 1][self.choices_id[action_rect_id_i]]
+                self.list_selector_choices_to_text[self.num_page - 1][self.choices_id[action_rect_id_i]]
             )
 
             tags = list(self.canvas.gettags(self.choices_id[action_rect_id_i]))
