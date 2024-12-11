@@ -58,23 +58,26 @@ class Jeu:
 
         elif 21 <= choix_ev <= 40 :
             # famine : les ressources des terres sont divisées par 2
-            pass
+            return "Famine"
+
+        elif 41 <= choix_ev <= 64 :
+            return "Rien"
 
         elif 65 <= choix_ev <= 84 :
             # récolte abondante : ressources des terres doublées
-            pass
+            return "Récolte abondante"
 
         elif 85 <= choix_ev <= 94 :
             # immigration : des roturiers augmentent la population d'un village
             id_village_peuple = choice(list(self.joueur_actuel.dico_villages.keys()))
-            nb_immigres = randint(3,10) # TODO : choisir la fourchette de valeur
+            nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
             return "immigration", nb_immigres
 
         elif 95 <= choix_ev <= 100 :
             # vassalisation : un noble se propose comme vassal
-            pass
+            return "Vassalisation"
 
 
 
