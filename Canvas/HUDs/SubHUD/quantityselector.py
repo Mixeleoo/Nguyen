@@ -24,6 +24,10 @@ class QuantitySelector(SubHUDABC):
     def title(self):
         return self._quantity_labeled + str(self._quantity)
 
+    @property
+    def quantity(self) -> int:
+        return self._quantity
+
     def create(self, x0: float, y0: float):
 
         text_width = get_width_text(self.title)
