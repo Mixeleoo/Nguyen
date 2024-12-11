@@ -12,7 +12,10 @@ class ChooseNoble(HUDMobileABC):
         super().__init__(canvas)
 
         self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag)
-        self.noble_index_selected = 0
+        self.add_noble = self.choose_noble.add_option
+        self.remove_noble = self.choose_noble.remove_option
+
+        self.noble_index_selected = None
 
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
@@ -37,6 +40,8 @@ class ChooseNoble(HUDMobileABC):
 
     def replace(self, *args) -> None:
 
+        self.choose_noble.setup_before_display()
+
         bbox = self.canvas.bbox(self.tag)
 
         dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
@@ -51,11 +56,8 @@ class ChooseNoble(HUDMobileABC):
 
         if self.choose_noble.selected_option:
             self.noble_index_selected = self.choose_noble.selected_option
-
             self.bhide()
             self.canvas.hudmobile_choose_arg_res.show()
-
-            # TODO: Retirer le noble des choix de nobles à vassaliser
 
         else:
             print("T'as pas choisi de nobles là bro")
@@ -63,5 +65,4 @@ class ChooseNoble(HUDMobileABC):
         # TODO: ici il faut griser la séléction si aucun choix n'a été fait pour éviter de vérifier à chaque fois si un choix a été fait. (Dans le sous HUD SelectorInPage)
 
     def bhide(self, *args):
-        self.choose_noble.setup_before_display()
         self.hide()

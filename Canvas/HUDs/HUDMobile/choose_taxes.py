@@ -14,7 +14,10 @@ class ChooseTaxes(HUDMobileABC):
         self.hudmobile_choose_nobles = ChooseNobles(canvas, self.tag)
 
         self.add_village = self.hudmobile_choose_villages.add_option
+        self.remove_noble = self.hudmobile_choose_villages.remove_option
+
         self.add_noble = self.hudmobile_choose_nobles.add_option
+        self.remove_noble = self.hudmobile_choose_nobles.remove_option
 
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None

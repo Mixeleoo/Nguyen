@@ -50,7 +50,7 @@ class ChooseArgRes(HUDMobileABC):
 
         # Bouton OK qui lance l'immigration
         self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.vassaliser, is_temp=True, state="hidden"
         )
 
         # Bouton Annuler qui annule l'immigration
@@ -70,10 +70,24 @@ class ChooseArgRes(HUDMobileABC):
 
         self.canvas.move(self.tag, dx, dy)
 
-    def imposer(self, *args):
-        # self.canvas.jeu.imposer(self.hudmobile_choose_villages.selected_option)
-        print(self.canvas.hudmobile_choose_taxes.hudmobile_choose_nobles.selected_option)
-        print(self.canvas.hudmobile_choose_taxes.hudmobile_choose_nobles.selected_option)
+    def vassaliser(self, *args):
+
+        noble_selected_index = self.canvas.hudmobile_choose_noble.noble_index_selected
+        noble_selected = self.canvas.jeu.get_joueur(noble_selected_index)
+
+        # TODO: Retirer le noble des choix de nobles à vassaliser
+        if self.canvas.jeu.joueur_actuel.soumettre(
+                noble_selected, self.quantity_selector_arg.quantity, self.quantity_selector_res.quantity
+        ):
+            self.canvas.add_history_text("Vous avez vassalisé " + noble_selected.nom)
+
+            # Ajouter le nouveau choix de noble à imposer
+            self.canvas.hudmobile_choose_taxes.add_noble(noble_selected.nom, noble_selected_index)
+
+            # Retirer le choix de noble à vassaliser
+            self.canvas.hudmobile_choose_noble.remove_noble(noble_selected_index)
+
+        self.bhide()
 
     def bhide(self, *args):
         self.hide()

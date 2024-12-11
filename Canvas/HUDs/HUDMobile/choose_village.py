@@ -12,6 +12,8 @@ class ChooseVillage(HUDMobileABC):
         super().__init__(canvas)
 
         self.choose_village = SubHUD.ChooseVillage(canvas, self.tag)
+        self.add_village = self.choose_village.add_option
+        self.remove_village = self.choose_village.remove_option
 
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None

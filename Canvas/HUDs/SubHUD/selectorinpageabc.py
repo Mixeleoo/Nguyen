@@ -212,6 +212,71 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         return new_category_id
 
+    def remove_option(self, item: int):
+        """
+        Cette méthode retirera le choix menant vers item.
+        """
+        # Pour ça il faut parcourir tous les selecteurs et chercher celui qui mène vers ce choix et le retirer.
+        # Dès qu'il est retiré, il faut décaler tous les autres d'un cran.
+        selector_index = 0
+        choix_index = 0
+
+        print(selector_index, len(self.selectors) - 1, flush=True)
+        print(choix_index, self.selectors[selector_index].nb_options - 1, "\n", flush=True)
+
+        # Dès qu'on tombe sur le choix donnant sur item, la boucle s'arrêtera.
+        while (selector_index < len(self.selectors) - 1 or choix_index < self.selectors[selector_index].nb_options - 1) and \
+                self.list_selector_choices_to_item[selector_index][self.choices_id[choix_index]] != item:
+            choix_index += 1
+
+            if choix_index == RBTN_MAX_VIL:
+                selector_index += 1
+                choix_index = 0
+
+            print(selector_index, len(self.selectors) - 1, flush=True)
+            print(choix_index, self.selectors[selector_index].nb_options - 1, "\n", flush=True)
+
+        # Si le choix sur lequel on est tombé est le dernier, c'est que ce choix n'existe pas, il faut arrêter la méthode.
+        if selector_index == len(self.selectors) - 1 and choix_index == self.selectors[selector_index].nb_options:
+            print("Le choix qui a été supprimé n'existe pas")
+            return
+
+        next_choice_index = int(choix_index)
+        next_selector_index = int(selector_index)
+
+        # On déplace tous les éléments aux éléments d'avant
+        while selector_index < len(self.selectors) - 1 or choix_index < self.selectors[selector_index].nb_options - 1:
+            next_choice_index += 1
+
+            if next_choice_index == RBTN_MAX_VIL:
+                next_selector_index += 1
+                next_choice_index = 0
+
+            self.list_selector_choices_to_item[selector_index][self.choices_id[choix_index]] = \
+                self.list_selector_choices_to_item[next_selector_index][self.choices_id[next_choice_index]]
+
+            self.list_selector_choices_to_text[selector_index][self.choices_id[choix_index]] = \
+                self.list_selector_choices_to_text[next_selector_index][self.choices_id[next_choice_index]]
+
+            choix_index = int(next_choice_index)
+            selector_index = int(next_selector_index)
+
+        # On supprime le dernier élément
+        # Si dernier élément est le premier élément d'un selecteur, et s'il n'y a pas qu'un selecteur, il faut supprimer la dernière page entière.
+        if choix_index == 0 and len(self.selectors) > 1:
+
+            self.selectors.pop(selector_index)  # Je pourrai mettre -1 c'est pareil
+            self.list_selector_choices_to_item.pop(selector_index)
+            self.list_selector_choices_to_text.pop(selector_index)
+
+            self.t_page.set(f"page : {self.num_page} / {len(self.selectors)}")
+
+        else:
+            self.list_selector_choices_to_item[selector_index].pop(self.choices_id[choix_index])
+            self.list_selector_choices_to_text[selector_index].pop(self.choices_id[choix_index])
+
+            self.selectors[selector_index].nb_options -= 1
+
     def change_page(self, *args):
         """
         Méthode appelée lors d'un click sur page suivant ou page précédente.
