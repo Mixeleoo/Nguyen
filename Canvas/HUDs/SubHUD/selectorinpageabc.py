@@ -7,8 +7,13 @@ from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
 
 class SelectorInPageABC(SubHUDABC, ABC):
+    _instance_counter = 0
+
     def __init__(self, canvas, hud_tag: str):
         super().__init__(canvas, hud_tag)
+
+        self._index = SelectorInPageABC._instance_counter
+        SelectorInPageABC._instance_counter += 1
 
         # Gestion des pages
         self.num_page = 1

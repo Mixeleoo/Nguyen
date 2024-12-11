@@ -6,10 +6,15 @@ from Canvas.highlight_canvas import HighlightCanvas
 
 
 class SelectorsABC(ABC):
-    def __init__(self, canvas: HighlightCanvas, group_tag: str):
+    _instance_counter = 0
+
+    def __init__(self, canvas: HighlightCanvas):
 
         self.canvas = canvas
-        self.group_tag = group_tag
+
+        self._index = SelectorsABC._instance_counter
+        SelectorsABC._instance_counter += 1
+        self.group_tag = "selector" + str(self._index)
 
         # L'option actuellement selectionnée
         self.currently_selected = None
@@ -69,8 +74,8 @@ class SelectorsABC(ABC):
 
 
 class Radiobutton(SelectorsABC):
-    def __init__(self, canvas: HighlightCanvas, group_tag: str):
-        super().__init__(canvas, group_tag)
+    def __init__(self, canvas: HighlightCanvas):
+        super().__init__(canvas)
 
     def reset(self):
         self.griser()
@@ -106,8 +111,8 @@ class Radiobutton(SelectorsABC):
 
 
 class Checkbutton(SelectorsABC):
-    def __init__(self, canvas: HighlightCanvas, group_tag: str):
-        super().__init__(canvas, group_tag)
+    def __init__(self, canvas: HighlightCanvas):
+        super().__init__(canvas)
 
         self.currently_selected = []
 
@@ -161,14 +166,8 @@ class SelectorSupervisor:
     Cette classe servira à gérer les différents radiobutton sur le canvas
     """
     def __init__(self, canvas: HighlightCanvas):
-
-        self.current_radio_group_id = 0
-        self.current_check_group_id = 0
-
         self.canvas = canvas
-        self.selectors: dict[str, Radiobutton | Checkbutton] = {
-
-        }
+        self.selectors: dict[str, Radiobutton | Checkbutton] = {}
 
     def add_radiobutton(self, *items_id: int) -> Radiobutton:
         """
@@ -176,33 +175,27 @@ class SelectorSupervisor:
         Elle ajoutera le nouveau radiobutton à sa liste.
         Pour chacun des éléments de ce radiobutton, elle ajoutera le tag pour les regrouper.
         """
-        group_tag = f"radiobutton_group{self.current_radio_group_id}"
-
-        self.current_radio_group_id += 1
-        self.selectors[group_tag] = Radiobutton(self.canvas, group_tag)
+        r = Radiobutton(self.canvas)
+        self.selectors[r.group_tag] = r
 
         for item_id in items_id:
-            tags = list(self.canvas.gettags(item_id))
-            tags[GROUP_TAG_INDEX] = group_tag
-            self.canvas.itemconfigure(item_id, tags=tags)
+            r.add_option(item_id)
 
-        return self.selectors[group_tag]
+        return r
 
-    def add_checkbutton(self, *items_id: int) -> Radiobutton:
+    def add_checkbutton(self, *items_id: int) -> Checkbutton:
         """
         Cette méthode sert à encadrer l'ajout de nouveaux selectors.
         Elle ajoutera le nouveau selector à sa liste.
         Pour chacun des éléments de ce selector, elle ajoutera le tag pour les regrouper.
         """
-        group_tag = f"checkbutton_group{self.current_check_group_id}"
-
-        self.current_check_group_id += 1
-        self.selectors[group_tag] = Checkbutton(self.canvas, group_tag)
+        c = Checkbutton(self.canvas)
 
         for item_id in items_id:
-            self.selectors[group_tag].add_option(item_id)
+            c.add_option(item_id)
 
-        return self.selectors[group_tag]
+        self.selectors[c.group_tag] = c
+        return c
 
     def toggle_switch_option(self, group_tag: str, option_id: int):
         self.selectors[group_tag].toggle_switch_option(option_id)

@@ -7,18 +7,24 @@ from parameter import *
 from Canvas.base_canvas import BaseCanvas
 
 class ButtonABC(ABC):
-    def __init__(self, canvas: BaseCanvas, hud_tag: str, group_tag: str, trigger_name: str,
+    _instance_counter = 0
+
+    def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
                  func_triggered: callable = dummy,
                  for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")):
 
         # Attribus dépendant des arguments
         self.canvas = canvas
-        self.group_tag = group_tag
         self.hud_tag = hud_tag
         self.trigger_name = trigger_name
 
         # Attribus fixes dès la création du bouton
         self.id = 0
+
+        # Tag pour différencier entre chaque bouton
+        self._index = ButtonABC._instance_counter
+        ButtonABC._instance_counter += 1
+        self.group_tag = "button" + str(self._index)
 
         self.attach_trigger_to_button(func_triggered, for_which_game_mode)
 
@@ -59,11 +65,11 @@ class ButtonABC(ABC):
 
 
 class Button(ButtonABC):
-    def __init__(self, canvas: BaseCanvas, hud_tag: str, group_tag: str, trigger_name: str,
+    def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
                  func_triggered: callable = dummy,
                  for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")):
 
-        super().__init__(canvas, hud_tag, group_tag, trigger_name, func_triggered, for_which_game_mode)
+        super().__init__(canvas, hud_tag, trigger_name, func_triggered, for_which_game_mode)
 
     def draw(
             self: ButtonABC, x0: int | float, y0: int | float, x1: int | float, y1: int | float,
@@ -114,9 +120,7 @@ class Button(ButtonABC):
 
 class ButtonSupervisor:
     def __init__(self, canvas: BaseCanvas):
-
         self.canvas = canvas
-        self.current_group_id = 0
 
     def add(
             self, hud_tag: str, trigger_name: str,
@@ -124,24 +128,17 @@ class ButtonSupervisor:
             for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
-        Méthode qui servira à ajouter des boutons et à leur attribuer un tag différent pour éviter les ambigüités
-
-        :param hud_tag:
-        :param func_triggered:
-        :param trigger_name:
-        :param for_which_game_mode:
-        :return: Button
+        Méthode qui servira à ajouter des boutons
         """
+
         b = Button(
             self.canvas,
             hud_tag,
-            f"button_group{self.current_group_id}",
             trigger_name,
             func_triggered,
             for_which_game_mode
         )
 
-        self.current_group_id += 1
         return b
 
     def create_ok_button(
