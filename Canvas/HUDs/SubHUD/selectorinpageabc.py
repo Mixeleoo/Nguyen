@@ -133,7 +133,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
         # Bouton pour changer de page (précédente)
         self.canvas.add_button(
             hud_tag=self.tag,
-            trigger_name="CHANGE_PAGE_" + self.tag + "_M",
+            trigger_name="CHANGE_PAGE_" + str(self._index) + "_M",
             func_triggered=self.change_page,
             for_which_game_mode=("basic",)
         ).draw(
@@ -149,7 +149,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
         # Bouton pour changer de page (suivante)
         self.canvas.add_button(
             hud_tag=self.tag,
-            trigger_name="CHANGE_PAGE_" + self.tag + "_P",
+            trigger_name="CHANGE_PAGE_" + str(self._index) + "_P",
             func_triggered=self.change_page,
             for_which_game_mode=("basic",)
         ).draw(
