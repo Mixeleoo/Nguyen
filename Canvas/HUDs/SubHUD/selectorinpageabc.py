@@ -293,6 +293,12 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         self.degriser()
 
+        self.graphic_reset()
+
+    def graphic_reset(self):
+        """
+        Méthode qui mettra à jour le selecteur en fonction de la page actuelle
+        """
         for action_rect_id_i in range(self.cur_selector.nb_options):
 
             # Modification du texte
@@ -333,6 +339,9 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
     def setup_before_display(self, *args):
         self.reset_selectors()
+
+        self.num_page = 1
+        self.graphic_reset()
 
     @abstractmethod
     def griser(self, *args) -> None:
