@@ -68,6 +68,7 @@ class TopSide(HUDABC):
         joueur = self.canvas.jeu.get_joueur(0)
 
         return [
+            f"PA {joueur.pa}",
             f"💰 {joueur.argent}",
             f"😊 {joueur.bonheur_general}",
             f"🍴 {joueur.ressources}",
