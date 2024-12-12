@@ -63,7 +63,9 @@ class ChooseVillage(HUDCenteredABC):
             self.bhide()
 
         else:
-            print("T'as pas choisi de village là bro")
+            bbox = self.canvas.bbox(self.tag)
+            self.canvas.hudemobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.shake()
 
     def bhide(self, *args):
         self.choose_village.update()
