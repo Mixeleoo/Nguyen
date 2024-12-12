@@ -8,6 +8,8 @@ from parameter import *
 
 class Jeu:
     def __init__(self):
+
+        self._const_joueurs: list[Noble] = []
         self._joueurs: list[Noble] = []
 
         """
@@ -26,6 +28,9 @@ class Jeu:
 
     def get_joueur(self, index: int) -> Noble:
         return self._joueurs[index]
+
+    def get_const_joueur(self, index: int) -> Noble:
+        return self._const_joueurs[index]
 
     def get_nb_noble_de_joueur(self, index: int) -> int:
         joueur = self._joueurs[index]
@@ -108,6 +113,7 @@ class Jeu:
         nouveau_noble = Noble(prenom, 100, 10)
         nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
+        self._const_joueurs.append(nouveau_noble)
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
         """

@@ -66,7 +66,7 @@ class ChooseArgRes(HUDCenteredABC):
     def vassaliser(self, *args):
 
         noble_selected_index = self.canvas.hudmobile_choose_noble_vassaliser.noble_index_selected
-        noble_selected = self.canvas.jeu.get_joueur(noble_selected_index)
+        noble_selected = self.canvas.jeu.get_const_joueur(noble_selected_index)
 
         if self.canvas.jeu.joueur_actuel.soumettre(
                 noble_selected, self.quantity_selector_arg.quantity, self.quantity_selector_res.quantity

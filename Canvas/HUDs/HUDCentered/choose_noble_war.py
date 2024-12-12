@@ -44,7 +44,7 @@ class ChooseNobleWar(HUDCenteredABC):
         """
         noble_index = self.choose_noble.selected_option
         if noble_index:
-            noble = self.canvas.jeu.get_joueur(noble_index)
+            noble = self.canvas.jeu.get_const_joueur(noble_index)
             self.bhide()
             if self.canvas.jeu.guerre(noble):
                 self.canvas.add_history_text(f"Tu as battu {noble.nom}.")
