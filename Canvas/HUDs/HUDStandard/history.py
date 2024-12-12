@@ -20,8 +20,6 @@ class History(HUDABC):
 
         self.longueur_texte = 0
 
-        self.width = 150
-
     @property
     def tag(self):
         return HUD_RIGHT_SIDE
@@ -39,10 +37,10 @@ class History(HUDABC):
 
         pady_from_top = 5
         # Gros rectangle contenant l'historique
-        height = geometry_height - HEIGHT_BOTTOM_HUD - pady_from_top  # valeur qui ne bouge pas en fonction de la taille de la fenêtre
+        height = geometry_height - HEIGHT_BOTTOM_HUD - pady_from_top - 70  # valeur qui ne bouge pas en fonction de la taille de la fenêtre
 
         x1_cadre = geometry_width - pady_from_top
-        x0_cadre = x1_cadre - self.width
+        x0_cadre = x1_cadre - WIDTH_HISTORY_HUD
         y0_cadre = PADY_BUILD_CITY_HUD
         y1_cadre = y0_cadre + height
 
@@ -149,7 +147,7 @@ class History(HUDABC):
         # On doit savoir combien de fois il faut séparer le texte de \n pour qu'il rentre dans l'historique
         fractions = 1
         length = get_width_text(text)
-        while length / fractions > self.width:
+        while length / fractions > WIDTH_HISTORY_HUD:
             fractions += 1
 
         text = separer_chaine_sans_couper(text, fractions)
