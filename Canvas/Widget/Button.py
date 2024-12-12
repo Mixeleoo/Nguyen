@@ -63,6 +63,20 @@ class ButtonABC(ABC):
         """
         self.canvas.move(self.group_tag, dx, dy)
 
+    @abstractmethod
+    def desactivate(self):
+        """
+        Méthode qui rendra le bouton inutilisable avec un effet visuel le grisant pour indiquer son hors-service.
+        """
+        pass
+
+    @abstractmethod
+    def reactivate(self):
+        """
+        Méthode qui rendra le bouton réutilisable.
+        """
+        pass
+
 
 class Button(ButtonABC):
     def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
@@ -117,6 +131,19 @@ class Button(ButtonABC):
 
         return rect_inner
 
+    def desactivate(self):
+        tags = list(self.canvas.gettags(self.id))
+        tags[TRIGGER_TAG_INDEX] = NOTHING_TAG
+
+        self.canvas.itemconfigure(self.id, tags=tags)
+        self.canvas.itemconfigure(self.id, fill=tags[COLOR_TAG_INDEX])
+
+    def reactivate(self):
+        tags = list(self.canvas.gettags(self.id))
+        tags[TRIGGER_TAG_INDEX] = self.trigger_name
+
+        self.canvas.itemconfigure(self.id, tags=tags)
+        self.canvas.itemconfigure(self.id, fill=fill_brighter[tags[COLOR_TAG_INDEX]])
 
 class ButtonSupervisor:
     def __init__(self, canvas: BaseCanvas):
