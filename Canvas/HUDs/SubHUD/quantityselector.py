@@ -1,16 +1,22 @@
 
-from Canvas.HUDs.SubHUD.base import SubHUDABC
+from .base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
 class QuantitySelector(SubHUDABC):
-    def __init__(self, canvas: HUDCanvas, hud_tag: str, quantity_labeled: str, group_tag: str, min_quantity: int, max_quantity: int):
+    _instance_counter = 0
+    def __init__(self, canvas: HUDCanvas, hud_tag: str, quantity_labeled: str,
+                 min_quantity: int, max_quantity: int, callback: callable = None):
         super().__init__(canvas, hud_tag)
         self._quantity_labeled = quantity_labeled
-        self._group_tag = group_tag
         self._min_quantity = min_quantity
         self._max_quantity = max_quantity
+        self.callback = callback
+
+        self._index = QuantitySelector._instance_counter
+        QuantitySelector._instance_counter += 1
+        self._group_tag = "quantity_selector" + str(self._index)
 
         self._quantity = 0
         self.ms_start = 500
@@ -28,7 +34,7 @@ class QuantitySelector(SubHUDABC):
     def quantity(self) -> int:
         return self._quantity
 
-    def create(self, x0: float, y0: float):
+    def create(self, center_x: float, center_y: float):
 
         text_width = get_width_text(self.title)
         button_width = 20
@@ -39,20 +45,19 @@ class QuantitySelector(SubHUDABC):
         custom_font.config(size=6)
 
         self._text.id = self.canvas.create_text(
-            x0, y0,
+            center_x, center_y,
             text=self.title,
             tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden",
-            fill=FILL_TEXT,
-            anchor="nw"
+            fill=FILL_TEXT
         )
 
         # Bouton ajouter effectif
         self.canvas.create_text_in_rectangle(
-            x0 + text_width,
-            y0,
-            x0 + text_width + button_width,
-            y0 + button_height,
+            center_x + text_width // 2,
+            center_y - 11,
+            center_x + text_width // 2 + button_width,
+            center_y - 1,
             rectangle_tags=set_tags(highlight_tag="INC_" + self._group_tag, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             text="▲",
@@ -68,10 +73,10 @@ class QuantitySelector(SubHUDABC):
 
         # Bouton retirer effectif
         self.canvas.create_text_in_rectangle(
-            x0 + text_width,
-            y0 + button_height + pad_between_buttons,
-            x0 + text_width + button_width,
-            y0 + button_height + pad_between_buttons + button_height,
+            center_x + text_width // 2,
+            center_y + 1,
+            center_x + text_width // 2 + button_width,
+            center_y + 11,
             rectangle_tags=set_tags(highlight_tag="DEC_" + self._group_tag, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
             text="▼",
@@ -85,7 +90,7 @@ class QuantitySelector(SubHUDABC):
             on_release=self.canvas.unhighlight_clickable
         )
 
-    def update(self, *args: int) -> None:
+    def update(self, max_quantity: int) -> None:
         self._max_quantity = max_quantity
 
     def increase(self, value_added: int):
@@ -101,8 +106,12 @@ class QuantitySelector(SubHUDABC):
         Méthode de chaque étape d'incrémentation de la quantité voulue.
         """
         if self._min_quantity <= self._quantity + value_added <= self._max_quantity:
+            old_quantity = self._quantity
             self._quantity += value_added
             self._text.set(self.title)
+
+            if self.callback is not None:
+                self.callback(old_quantity)
 
             self.ms = self.ms - 50 if self.ms - 50 > 10 else 10
             self.canvas.after_quantity_selector_id = self.canvas.after(self.ms, self._inc_step, value_added)
@@ -124,19 +133,3 @@ class QuantitySelector(SubHUDABC):
         Méthode pour réactiver les boutons du Widget.
         """
         pass
-
-
-class QuantitySelectorSupervisor:
-    def __init__(self, canvas: HUDCanvas):
-
-        self.canvas = canvas
-        self.current_group_id = 0
-
-    def add(self, hud_tag: str, quantity_labeled: str, min_quantity: int, max_quantity: int) -> QuantitySelector:
-        q = QuantitySelector(
-            self.canvas, hud_tag, quantity_labeled,
-            f"quantity_selector{self.current_group_id}",
-            min_quantity, max_quantity)
-
-        self.current_group_id += 1
-        return q
