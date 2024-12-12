@@ -1,7 +1,7 @@
 from .selectorinpageabc import SelectorInPageABC
 from .quantityselector import QuantitySelector
-from .SelectorInPage.HUDRadionbuttonInPage.choose_noble import ChooseNoble
-from .SelectorInPage.HUDRadionbuttonInPage.choose_village import ChooseVillage
+from .SelectorInPage.HUDRadiobuttonInPage.choose_noble import ChooseNoble
+from .SelectorInPage.HUDRadiobuttonInPage.choose_village import ChooseVillage
 from .SelectorInPage.HUDCheckbuttonInPage.choose_nobles import ChooseNobles
 from .SelectorInPage.HUDCheckbuttonInPage.choose_villages import ChooseVillages
 
