@@ -53,6 +53,7 @@ class ChooseTaxes(HUDCenteredABC):
             self.shake()
 
         else:
+            self.canvas.jeu.imposer(self.choose_villages.selected_option, self.choose_nobles.selected_option)
             print(self.choose_nobles.selected_option)
             print(self.choose_villages.selected_option)
 
