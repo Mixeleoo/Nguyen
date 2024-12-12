@@ -1,9 +1,9 @@
 
-import tkinter as tk
 from typing import Optional
 
 from .base import HUDCenteredABC
 from Canvas.Widget.Radiobutton import Radiobutton
+from Canvas.HUDs.SubHUD.quantityselector import QuantitySelector
 from parameter import *
 
 class ChooseTypeVillager(HUDCenteredABC):
@@ -12,11 +12,14 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         # TODO: remplacer le choix de l'effectif par un QuantitySelector (et donc rajouter un callback dans QuantitySelector qui permettra de griser ou dégriser les choix)
 
-        self.desired_workforce = 1
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
         self.soldat_choice_id = 0
-        self.text_nb_immigrants_id = 0
+
+        self.quantity_selector_hum = QuantitySelector(
+            self.canvas, self.tag, "Effectif souhaité : ",
+            0, 10, self.callback_quantity_selector
+        )
 
         # tableau qui contiendra le dernier effectif choisi puis le dernier type de villageois choisi
         self.last_choice_made = []
@@ -63,51 +66,8 @@ class ChooseTypeVillager(HUDCenteredABC):
             fill=FILL_TEXT
         )
 
-        # Effectif souhaité
-        text = "Effectif souhaité : 1"
-
-        width_text = get_width_text(text)
-        custom_font = font.nametofont("TkDefaultFont").copy()
-        custom_font.config(size=6)
-
-        # TODO Utiliser StringVar ici
-
-        self.text_nb_immigrants_id = self.canvas.create_text(
+        self.quantity_selector_hum.create(
             center_x - 20, y0_cadre + pad_from_borders + 25,
-            text=text,
-            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            state="hidden",
-            fill=FILL_TEXT
-        )
-
-        # Bouton ajouter effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.plus_immigrants,
-            trigger_name=PLUS_IMMIGRANTS_TAG
-        ).draw(
-            center_x - 20 + width_text // 2,
-            y0_cadre + pad_from_borders + 15,
-            center_x + width_text // 2,
-            y0_cadre + pad_from_borders + 25,
-            text="▲",
-            text_font=custom_font,
-            state="hidden", is_temp=True
-        )
-
-        # Bouton retirer effectif
-        self.canvas.add_button(
-            hud_tag=self.tag,
-            func_triggered=self.minus_immigrants,
-            trigger_name=MINUS_IMMIGRANTS_TAG,
-        ).draw(
-            center_x - 20 + width_text // 2,
-            y0_cadre + pad_from_borders + 27,
-            center_x + width_text // 2,
-            y0_cadre + pad_from_borders + 37,
-            text="▼",
-            text_font=custom_font,
-            state="hidden", is_temp=True
         )
 
         # Paysan choix
@@ -164,6 +124,7 @@ class ChooseTypeVillager(HUDCenteredABC):
         pass
 
     def immigrate(self, e=None):
+        qt = self.quantity_selector_hum.quantity
 
         if self.radiobutton_choice.get_selected_option():
 
@@ -171,12 +132,12 @@ class ChooseTypeVillager(HUDCenteredABC):
                     self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
                 ).split(" ")[0].lower() == "soldat":
 
-                self.canvas.jeu.recruter_soldat(self.desired_workforce)
-                self.canvas.add_history_text(f"Vous avez recruté {self.desired_workforce} soldat(s) !")
+                self.canvas.jeu.recruter_soldat(qt)
+                self.canvas.add_history_text(f"Vous avez recruté {qt} soldat(s) !")
 
             else:
                 self.last_choice_made = [
-                    self.desired_workforce,
+                    qt,
                     self.canvas.itemcget(
                         self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
                     ).split(" ")[0].lower()
@@ -194,7 +155,7 @@ class ChooseTypeVillager(HUDCenteredABC):
     def cancel(self, e=None):
 
         # On reset l'effectif
-        self.desired_workforce = 1
+        self.quantity_selector_hum.reset()
 
         # On reset les choix
         self.radiobutton_choice.reset()
@@ -209,10 +170,11 @@ class ChooseTypeVillager(HUDCenteredABC):
         # On cache l'HUD
         self.hide()
 
-    def plus_immigrants(self, e=None):
-        self.desired_workforce += 1 if self.desired_workforce + 1 <= 10 else 0
+    def callback_quantity_selector(self, old_quantity: int):
 
-        if PA < self.desired_workforce * 2:
+        new_quantity = self.quantity_selector_hum.quantity
+
+        if PA < new_quantity * 2:
             # Si le joueur a selectionné ce choix
             if self.radiobutton_choice.get_selected_option() in [self.artisan_choice_id, self.soldat_choice_id]:
                 self.radiobutton_choice.reset()
@@ -221,7 +183,7 @@ class ChooseTypeVillager(HUDCenteredABC):
             self.griser(self.artisan_choice_id)
             self.griser(self.soldat_choice_id)
 
-            if PA < self.desired_workforce:
+            if PA < new_quantity:
                 # Si le joueur a selectionné ce choix
                 if self.radiobutton_choice.get_selected_option() == self.paysan_choice_id:
                     self.radiobutton_choice.reset()
@@ -229,31 +191,26 @@ class ChooseTypeVillager(HUDCenteredABC):
                 # Griser le bouton paysan et ne le rendre plus clickable
                 self.griser(self.paysan_choice_id)
 
-        self.refresh_text()
-
-    def minus_immigrants(self, e=None):
-        new_desired_workforce = self.desired_workforce - 1 if self.desired_workforce - 1 > 0 else 1
-
         # Si le nombre de PA du joueur dépasse le nouveau coût de l'effectif désiré d'artisan (donc affordable)
         # ET qu'avant ce n'était pas le cas, alors il faut dégriser.
         # if PA >= new_desired_workforce * 2 and PA < self.desired_workforce * 2:
-        if new_desired_workforce * 2 <= PA < self.desired_workforce * 2:
+        if new_quantity * 2 <= PA < old_quantity * 2:
 
             # Degriser le choix artisan et le rendre clickable
             self.degriser(self.artisan_choice_id)
             self.degriser(self.soldat_choice_id)
 
-        self.desired_workforce = new_desired_workforce
         self.refresh_text()
 
     def refresh_text(self):
+        qt = self.quantity_selector_hum.quantity
+
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.paysan_choice_id],
-                      text=f"Paysan {self.desired_workforce} PA")
+                      text=f"Paysan {qt} PA")
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.artisan_choice_id],
-                       text=f"Artisan {self.desired_workforce * 2} PA")
+                       text=f"Artisan {qt * 2} PA")
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.soldat_choice_id],
-                       text=f"Soldat {self.desired_workforce * 2} PA")
-        self.canvas.itemconfigure(self.text_nb_immigrants_id, text=f"Effectif souhaité : {self.desired_workforce}")
+                       text=f"Soldat {qt * 2} PA")
 
     def griser(self, button_id: int):
         tags = list(self.canvas.gettags(button_id))
