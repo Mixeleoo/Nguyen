@@ -3,6 +3,7 @@ from typing import Literal
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
+from Territoire.village import Village
 from parameter import *
 
 
@@ -25,6 +26,17 @@ class Jeu:
     @property
     def nb_joueurs(self) -> int:
         return len(self._joueurs)
+
+    def get_village(self, village_id: int) -> Village | None:
+        """
+        Cette méthode servira à récupérer le village en fonction de l'id. Si ce n'est pas le village de l'utilisateur alors
+        il retourne None
+        """
+        if village_id in self.joueur_actuel.dico_villages:
+            return self.joueur_actuel.dico_villages[village_id]
+
+        else:
+            return None
 
     def get_joueur(self, index: int) -> Noble:
         return self._joueurs[index]

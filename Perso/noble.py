@@ -1,7 +1,7 @@
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire.village import Village
-from parameter import nom_aleatoire_village, prenom_aleatoire
+from parameter import prenom_aleatoire
 
 
 class Noble(Personne):
@@ -58,7 +58,7 @@ class Noble(Personne):
     def population(self):
         pop = 0
         for village in self._dico_villages.values():
-            pop += len(village.liste_roturier)
+            pop += village.population
 
         return pop
 
