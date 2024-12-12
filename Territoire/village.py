@@ -18,7 +18,7 @@ class Village :
         self._identifiant = pid
 
         # Les roturiers que possède le noble
-        self._liste_roturier : list[Roturier] = []
+        self._liste_roturier : list[Roturier] = [Roturier() for _ in range(5)] + [Paysan() for _ in range(5)]
 
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
@@ -49,13 +49,11 @@ class Village :
         Elle servira lorsque le joueur choisira l'action 'Immigration'
         """
         for v in range(effectif) :
-            prenom = prenom_aleatoire()
-            argent = randint(1,5)
-            capacite_prod = randint(18,22)
+
             if type_v == "artisan" :
-                self._liste_roturier += [Roturier(prenom,argent,capacite_prod)]
+                self._liste_roturier += [Roturier()]
             elif type_v == "paysan" :
-                self._liste_roturier += [Paysan(prenom, capacite_prod)]
+                self._liste_roturier += [Paysan()]
 
         print(f"Roturiers du village : {self._nom} | {self._identifiant} : \n{self._liste_roturier}")
 
