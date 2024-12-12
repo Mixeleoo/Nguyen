@@ -20,8 +20,21 @@ class Jeu:
     def joueur_actuel(self) -> Noble|Seigneur:
         return self._joueurs[self._id_joueur_actuel]
 
+    @property
+    def nb_joueurs(self) -> int:
+        return len(self._joueurs)
+
     def get_joueur(self, index: int) -> Noble:
         return self._joueurs[index]
+
+    def get_nb_noble_de_joueur(self, index: int) -> int:
+        joueur = self._joueurs[index]
+
+        if isinstance(joueur, Seigneur):
+            return len(joueur.liste_nobles)
+
+        else:
+            return 0
 
     # Evenements en début de partie
 
@@ -152,8 +165,8 @@ class Jeu:
 
         if not(isinstance(self.joueur_actuel, Seigneur)) :
             new_seigneur = Seigneur(self.joueur_actuel.nom,self.joueur_actuel.ressources,self.joueur_actuel.argent)
-            new_seigneur._dico_villages = self.joueur_actuel.dico_villages
-            new_seigneur._liste_soldats = self.joueur_actuel.liste_soldats
+            new_seigneur.dico_villages = self.joueur_actuel.dico_villages
+            new_seigneur.liste_soldats = self.joueur_actuel.liste_soldats
             self._joueurs[self._id_joueur_actuel] = new_seigneur
 
         self.joueur_actuel.liste_nobles += [pnoble]
