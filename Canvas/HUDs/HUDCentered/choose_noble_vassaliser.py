@@ -6,11 +6,11 @@ from .base import HUDCenteredABC
 from Canvas.Widget.Button import Button
 import Canvas.HUDs.SubHUD as SubHUD
 
-class ChooseNoble(HUDCenteredABC):
+class ChooseNobleVassaliser(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag)
+        self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag, "Quel noble voulez-vous vassaliser ?")
         self.add_noble = self.choose_noble.add_option
         self.remove_noble = self.choose_noble.remove_option
 

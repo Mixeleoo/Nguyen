@@ -1,7 +1,7 @@
 
 from .base import HUDCenteredABC
 from .choose_arg_res import ChooseArgRes
-from .choose_noble import ChooseNoble
+from .choose_noble_vassaliser import ChooseNobleVassaliser
 from .choose_taxes import ChooseTaxes
 from .choose_type_villager import ChooseTypeVillager
 from .choose_village import ChooseVillage

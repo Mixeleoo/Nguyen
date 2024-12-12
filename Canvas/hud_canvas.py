@@ -37,7 +37,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_type_villager = HUDCentered.ChooseTypeVillager(self)
         self.hudmobile_choose_taxes = HUDCentered.ChooseTaxes(self)
         self.hudmobile_choose_village = HUDCentered.ChooseVillage(self)
-        self.hudmobile_choose_noble = HUDCentered.ChooseNoble(self)
+        self.hudmobile_choose_noble = HUDCentered.ChooseNobleVassaliser(self)
         self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
