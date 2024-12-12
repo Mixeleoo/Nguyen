@@ -119,6 +119,8 @@ class HighlightCanvas(Canvas):
             x0, y0, x1, y1 = self.coords(id_carre_clicked - CARRE_PAR_LIGNE)
             self.coords("highlight", x0, y1, x1, y1 + SPS)
 
+        self.dtag("highlight", "highlight")
+
     def highlight_clickable(self): self.itemconfigure("highlight", fill=fill_brighter[self.gettags("highlight")[COLOR_TAG_INDEX]])
     def unhighlight_clickable(self): self.itemconfigure("highlight", fill=self.gettags("highlight")[COLOR_TAG_INDEX])
     def highlight_toggleable(self): self.radiobuttons.toggle_switch_option(self.gettags("highlight")[GROUP_TAG_INDEX], self.find_withtag("highlight")[0])
