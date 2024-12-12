@@ -9,11 +9,6 @@ class HUDCanvas(BaseCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        from Canvas.HUDs.SubHUD import QuantitySelectorSupervisor
-
-        self.quantity_selectors = QuantitySelectorSupervisor(self)
-        self.add_quantity_selector = self.quantity_selectors.add
-
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
 
@@ -35,6 +30,7 @@ class HUDCanvas(BaseCanvas):
 
         self.hudmobile_village_info = HUDMobile.VillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
+        self.hudemobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
 
@@ -59,6 +55,9 @@ class HUDCanvas(BaseCanvas):
         # HUDs mobile
         self.hudmobile_village_info.create()
         self.hudmobile_yavillagegros.create()
+        self.hudemobile_ilfautfaireunchoixgros.create()
+
+        # HUD centrés
         self.hudmobile_choose_type_villager.create()
         self.hudmobile_choose_village.create()
         self.hudmobile_choose_noble.create()
