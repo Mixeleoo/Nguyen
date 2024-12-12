@@ -99,7 +99,7 @@ class HighlightCanvas(Canvas):
         )"""
 
         if coords != toward_coor:
-            self.after(10, self.highlight_square, toward_coor)
+            self.after(DELTA_MS_ANIMATION, self.highlight_square, toward_coor)
 
     def unhighlight_square(self):
         """
