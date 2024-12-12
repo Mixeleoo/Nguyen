@@ -71,6 +71,8 @@ class ChooseArgRes(HUDCenteredABC):
         if self.canvas.jeu.joueur_actuel.soumettre(
                 noble_selected, self.quantity_selector_arg.quantity, self.quantity_selector_res.quantity
         ):
+            self.canvas.jeu.vassalisation_confirmee(noble_selected, self.quantity_selector_arg.quantity, self.quantity_selector_res.quantity)
+
             self.canvas.add_history_text("Vous avez vassalisé " + noble_selected.nom)
 
             # Ajouter le nouveau choix de noble à imposer
