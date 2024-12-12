@@ -1,0 +1,50 @@
+
+from .base import HUDABC
+from parameter import *
+
+class EndTurn(HUDABC):
+    def __init__(self, canvas):
+        super().__init__(canvas)
+
+    @property
+    def tag(self):
+        return "EndTurn"
+
+    @property
+    def curr_show_pos(self) -> Position:
+        bbox = self.canvas.bbox(self.tag)
+        return Position(bbox[2], bbox[3])
+
+    @property
+    def curr_hide_pos(self) -> Position:
+        bbox = self.canvas.bbox(self.tag)
+        return Position(bbox[0], bbox[1])
+
+    @property
+    def arrival_pos_show(self) -> Position: return Position(self.canvas.master.winfo_width() - 10, self.canvas.master.winfo_height() - 10)
+    @property
+    def arrival_pos_hide(self) -> Position: return Position(self.canvas.master.winfo_width(), self.canvas.master.winfo_height())
+
+    def create(self, geometry_width, geometry_height):
+
+        width = WIDTH_HISTORY_HUD
+        height = HEIGHT_BOTTOM_HUD + PADY_BOTTOM_HUD
+
+        self.canvas.add_button(
+            hud_tag=self.tag,
+            trigger_name="end_turn",
+            func_triggered=self.trigger,
+            for_which_game_mode=("basic",)
+        ).draw(
+            x0=geometry_width - width,
+            y0=geometry_height - height,
+            x1=geometry_width,
+            y1=geometry_height,
+            text="Fin de tour"
+        )
+
+    def replace(self, *args) -> None:
+        pass
+
+    def trigger(self, *args):
+        pass

@@ -25,6 +25,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_build_church = HUDStandard.BuildChurch(self)
         self.hud_event = HUDStandard.Event(self)
         self.hud_top_side = HUDStandard.TopSide(self)
+        self.hud_end_turn = HUDStandard.EndTurn(self)
 
         import Canvas.HUDs.HUDMobile as HUDMobile
 
@@ -51,7 +52,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_build_city.create(geometry_width, geometry_height)
         self.hud_build_church.create(geometry_width, geometry_height)
         self.hud_event.create(geometry_width, geometry_height)
-        self.hud_top_side.create(geometry_width, geometry_height)
+        self.hud_end_turn.create(geometry_width, geometry_height)
 
         # HUDs mobile
         self.hudmobile_village_info.create()
@@ -81,6 +82,9 @@ class HUDCanvas(BaseCanvas):
         if self.hud_history.state == "normal":
             self.hud_history.bhide()
             self.to_show_if_cancel += [self.hud_history.bshow]
+
+        self.hud_end_turn.hide_animation()
+        self.to_show_if_cancel += [self.hud_end_turn.show_animation]
 
     def show_hidden_permanant_huds(self):
         # Réafficher les HUDs cachés lorsque le joueur a cliqué sur l'action pour construire un village
