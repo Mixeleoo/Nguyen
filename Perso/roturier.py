@@ -37,8 +37,8 @@ class Roturier(Personne):
         Le roturier imposé perdra une partie de son bonheur au cours de cette action (1 point de bonheur)
         """
 
-        imp_arg = self._argent * self._taux_impot
-        imp_ress = self._ressources * self._taux_impot
+        imp_arg = int(self._argent * self._taux_impot)
+        imp_ress = int(self._ressources * self._taux_impot)
 
         self._argent -= imp_arg
         self._ressources -= imp_ress
@@ -47,3 +47,5 @@ class Roturier(Personne):
             self.bonheur = 0
         else :
             self.bonheur -= 1
+
+        return imp_arg, imp_ress
