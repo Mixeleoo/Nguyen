@@ -82,6 +82,9 @@ class ChooseArgRes(HUDCenteredABC):
             self.canvas.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
             self.canvas.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
 
+            # Mettre à jour l'HUD d'en haut
+            self.canvas.hud_top_side.update()
+
         self.bhide()
 
     def bhide(self, *args):

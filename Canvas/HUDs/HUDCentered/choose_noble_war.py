@@ -51,6 +51,7 @@ class ChooseNobleWar(HUDCenteredABC):
 
                 self.canvas.hudcentered_choose_noble_war.remove_noble(noble_index)
                 self.canvas.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+                self.canvas.hud_top_side.update()
 
             else:
                 self.canvas.add_history_text(f"{noble.nom} vous a battu.")
