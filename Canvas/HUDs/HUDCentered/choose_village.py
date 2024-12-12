@@ -22,7 +22,7 @@ class ChooseVillage(HUDCenteredABC):
     def tag(self):
         return CHOOSE_VILLAGE_TAG
 
-    def create(self, *args):
+    def create(self):
 
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.choose_village.create(0, 0)
 

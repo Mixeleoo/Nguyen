@@ -1,8 +1,8 @@
+
 import tkinter as tk
 from parameter import *
 
 from Canvas.self_made_canvas import SelfMadeCanvas
-from jeu import Jeu
 
 
 class Interface(tk.Tk):
@@ -69,6 +69,6 @@ class Interface(tk.Tk):
     def lancer_partie(self):
         self.mainloop()
 
-
-jeu = Interface()
-jeu.lancer_partie()
+if __name__ == "__main__":
+    jeu = Interface()
+    jeu.lancer_partie()

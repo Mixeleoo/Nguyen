@@ -24,7 +24,7 @@ class ChooseNoble(HUDCenteredABC):
     def tag(self):
         return "CHOOSE_NOBLE"
 
-    def create(self, *args):
+    def create(self):
 
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.choose_noble.create(0, 0)
 
@@ -53,8 +53,6 @@ class ChooseNoble(HUDCenteredABC):
 
         else:
             print("T'as pas choisi de nobles là bro")
-
-        # TODO: ici il faut griser la séléction si aucun choix n'a été fait pour éviter de vérifier à chaque fois si un choix a été fait. (Dans le sous HUD SelectorInPage)
 
     def bhide(self, *args):
         self.hide()

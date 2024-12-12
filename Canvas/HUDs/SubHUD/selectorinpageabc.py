@@ -1,7 +1,7 @@
 
 from abc import ABC, abstractmethod
 
-from Canvas.HUDs.SubHUD.base import SubHUDABC
+from .base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
 from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
@@ -65,6 +65,20 @@ class SelectorInPageABC(SubHUDABC, ABC):
     def add_selector(self) -> callable:
         """
         Méthode qui retourne la fonction nécessaire pour ajouter un sélecteur
+        """
+        pass
+
+    @abstractmethod
+    def griser(self, *args) -> None:
+        """
+        Méthode qui "grisera" les choix sélectionnés (= cachera les choix sélectionnés).
+        """
+        pass
+
+    @abstractmethod
+    def degriser(self, *args) -> None:
+        """
+        Méthode qui "degrisera" les choix sélectionnés (= highlightera les choix sélectionnés).
         """
         pass
 
@@ -221,9 +235,6 @@ class SelectorInPageABC(SubHUDABC, ABC):
         selector_index = 0
         choix_index = 0
 
-        print(selector_index, len(self.selectors) - 1, flush=True)
-        print(choix_index, self.selectors[selector_index].nb_options - 1, "\n", flush=True)
-
         # Dès qu'on tombe sur le choix donnant sur item, la boucle s'arrêtera.
         while (selector_index < len(self.selectors) - 1 or choix_index < self.selectors[selector_index].nb_options - 1) and \
                 self.list_selector_choices_to_item[selector_index][self.choices_id[choix_index]] != item:
@@ -233,12 +244,9 @@ class SelectorInPageABC(SubHUDABC, ABC):
                 selector_index += 1
                 choix_index = 0
 
-            print(selector_index, len(self.selectors) - 1, flush=True)
-            print(choix_index, self.selectors[selector_index].nb_options - 1, "\n", flush=True)
-
         # Si le choix sur lequel on est tombé est le dernier, c'est que ce choix n'existe pas, il faut arrêter la méthode.
         if selector_index == len(self.selectors) - 1 and choix_index == self.selectors[selector_index].nb_options:
-            print("Le choix qui a été supprimé n'existe pas")
+            print("Le choix qui tenté d'être supprimé n'existe pas")
             return
 
         next_choice_index = int(choix_index)
@@ -342,17 +350,3 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         self.num_page = 1
         self.graphic_reset()
-
-    @abstractmethod
-    def griser(self, *args) -> None:
-        """
-        Méthode qui "grisera" les choix sélectionnés (= cachera les choix sélectionnés).
-        """
-        pass
-
-    @abstractmethod
-    def degriser(self, *args) -> None:
-        """
-        Méthode qui "degrisera" les choix sélectionnés (= highlightera les choix sélectionnés).
-        """
-        pass
