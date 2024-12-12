@@ -25,9 +25,9 @@ class History(HUDABC):
         return HUD_RIGHT_SIDE
 
     @property
-    def arrival_pos_show(self) -> Position: return Position(self.canvas.master.winfo_width() - 155, 0)
+    def arrival_pos_show(self) -> Position: return Position(self.canvas.master.winfo_width() - 15, 0)
     @property
-    def curr_show_pos(self) -> Position: return Position(self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2], 0)
+    def curr_show_pos(self) -> Position: return Position(self.canvas.coords(self.background_rect_id)[2], 0)
     @property
     def arrival_pos_hide(self) -> Position: return Position(self.canvas.master.winfo_width() - 5, 0)
     @property

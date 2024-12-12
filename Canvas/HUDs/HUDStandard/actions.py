@@ -28,11 +28,11 @@ class Actions(HUDABC):
     @property
     def tag(self): return HUD_BOTTOM
     @property
-    def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3])
+    def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(self.actions_rectangle_ids[0])[3])
     @property
     def curr_hide_pos(self) -> Position: return Position(0, self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3])
     @property
-    def arrival_pos_show(self) -> Position: return Position(0, self.canvas.master.winfo_height() - HEIGHT_BOTTOM_HUD - 5 - PADY_BOTTOM_HUD)
+    def arrival_pos_show(self) -> Position: return Position(0, self.canvas.master.winfo_height() - PADY_BOTTOM_HUD - 10)
     @property
     def arrival_pos_hide(self) -> Position: return Position(0, self.canvas.master.winfo_height() - 5)
 
