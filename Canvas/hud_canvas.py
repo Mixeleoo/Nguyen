@@ -72,6 +72,8 @@ class HUDCanvas(BaseCanvas):
 
         self.init_nobles()
 
+        self.hud_top_side.create(geometry_width, geometry_height)
+
     def hide_all_permanant_huds(self):
         # On simule un clic sur le bouton qui cache les pages d'actions
         if self.hud_actions.state == "normal":
