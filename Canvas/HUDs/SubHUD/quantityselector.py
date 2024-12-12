@@ -18,7 +18,7 @@ class QuantitySelector(SubHUDABC):
         QuantitySelector._instance_counter += 1
         self._group_tag = "quantity_selector" + str(self._index)
 
-        self._quantity = 0
+        self._quantity = min_quantity
         self.ms_start = 500
         self.ms = 500
         self._text = StringVar(canvas)
@@ -120,7 +120,8 @@ class QuantitySelector(SubHUDABC):
         """
         Méthode qui remettra à zéro la quantité voulue.
         """
-        self._quantity = 0
+        self._quantity = self._min_quantity
+        self._text.set(self.title)
 
     def deactivate(self):
         """

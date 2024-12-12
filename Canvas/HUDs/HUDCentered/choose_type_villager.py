@@ -10,15 +10,13 @@ class ChooseTypeVillager(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        # TODO: remplacer le choix de l'effectif par un QuantitySelector (et donc rajouter un callback dans QuantitySelector qui permettra de griser ou dégriser les choix)
-
         self.artisan_choice_id = 0
         self.paysan_choice_id = 0
         self.soldat_choice_id = 0
 
         self.quantity_selector_hum = QuantitySelector(
             self.canvas, self.tag, "Effectif souhaité : ",
-            0, 10, self.callback_quantity_selector
+            1, 10, self.callback_quantity_selector
         )
 
         # tableau qui contiendra le dernier effectif choisi puis le dernier type de villageois choisi
@@ -36,10 +34,6 @@ class ChooseTypeVillager(HUDCenteredABC):
         width = 400
 
         title_text = "Quelle sera la profession du villageois ?"
-
-        # Mesurer la largeur et la hauteur du texte
-        # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
-        text_width = get_width_text(title_text)
 
         # coordonnées du rectangle principal pour l'avoir au milieu de l'écran
         x0_cadre = 0
@@ -150,7 +144,9 @@ class ChooseTypeVillager(HUDCenteredABC):
             self.cancel()
 
         else:
-            print("T'as pas fait de choix là bro")
+            bbox = self.canvas.bbox(self.tag)
+            self.canvas.hudemobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.shake()
 
     def cancel(self, e=None):
 

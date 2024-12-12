@@ -6,7 +6,6 @@ from .base import HUDCenteredABC
 from Canvas.Widget.Button import Button
 import Canvas.HUDs.SubHUD as SubHUD
 
-
 class ChooseNoble(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
@@ -52,7 +51,9 @@ class ChooseNoble(HUDCenteredABC):
             self.canvas.hudmobile_choose_arg_res.show()
 
         else:
-            print("T'as pas choisi de nobles là bro")
+            bbox = self.canvas.bbox(self.tag)
+            self.canvas.hudemobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.shake()
 
     def bhide(self, *args):
         self.hide()
