@@ -21,10 +21,13 @@ class HUDCanvas(BaseCanvas):
         self.hud_actions = HUDStandard.Actions(self)
         self.hud_history = HUDStandard.History(self)
         self.add_history_text = self.hud_history.add_text
+
         self.hud_build_city = HUDStandard.BuildCity(self)
         self.hud_build_church = HUDStandard.BuildChurch(self)
         self.hud_event = HUDStandard.Event(self)
         self.hud_top_side = HUDStandard.TopSide(self)
+        self.update_hudtop = self.hud_top_side.update
+
         self.hud_end_turn = HUDStandard.EndTurn(self)
 
         import Canvas.HUDs.HUDMobile as HUDMobile

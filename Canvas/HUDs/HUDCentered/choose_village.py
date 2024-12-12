@@ -58,6 +58,7 @@ class ChooseVillage(HUDCenteredABC):
             )
 
             self.canvas.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
+            self.canvas.update_hudtop()
 
             # Même comportement que si on annulait, mais précédé par la validation
             self.bhide()

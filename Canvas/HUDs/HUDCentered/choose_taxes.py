@@ -54,8 +54,8 @@ class ChooseTaxes(HUDCenteredABC):
 
         else:
             self.canvas.jeu.imposer(self.choose_villages.selected_option, self.choose_nobles.selected_option)
-            print(self.choose_nobles.selected_option)
-            print(self.choose_villages.selected_option)
+            self.canvas.update_hudtop()
+            self.bhide()
 
     def bhide(self, *args):
         self.choose_villages.update()
