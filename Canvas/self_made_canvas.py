@@ -65,6 +65,7 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
             tags = self.gettags("highlight")
             if tags:
                 self.highlight_tag_on_drag[tags[HIGHLIGHT_TAG_INDEX]]()
+                self.dtag("highlight", "highlight")
 
         tags = self.gettags("active")
 
