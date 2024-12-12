@@ -45,20 +45,7 @@ class ChooseVillage(HUDCenteredABC):
         """
 
         if self.choose_village.selected_option:
-
-            effectif = self.canvas.hudmobile_choose_type_villager.last_choice_made[0]
-            type_v = self.canvas.hudmobile_choose_type_villager.last_choice_made[1]
-            village_id = self.choose_village.selected_option
-
-            # lancer l'immigration du jeu
-            self.canvas.jeu.immigrer(
-                effectif=effectif,
-                type_v=type_v,
-                village_id=village_id
-            )
-
-            self.canvas.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
-            self.canvas.update_hudtop()
+            self.canvas.immigrer(self.choose_village.selected_option)
 
             # Même comportement que si on annulait, mais précédé par la validation
             self.bhide()

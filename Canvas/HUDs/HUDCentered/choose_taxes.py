@@ -39,13 +39,13 @@ class ChooseTaxes(HUDCenteredABC):
 
         # Bouton OK qui lance l'immigration
         self.ok_button = self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.imposer, is_temp=True, state="hidden"
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, is_temp=True, state="hidden"
         )
 
     def update(self):
         pass
 
-    def imposer(self, *args):
+    def ok_trigger(self, *args):
 
         if not self.choose_nobles.selected_option and not self.choose_villages.selected_option:
             bbox = self.canvas.bbox(self.tag)
@@ -53,8 +53,7 @@ class ChooseTaxes(HUDCenteredABC):
             self.shake()
 
         else:
-            self.canvas.jeu.imposer(self.choose_villages.selected_option, self.choose_nobles.selected_option)
-            self.canvas.update_hudtop()
+            self.canvas.imposer(self.choose_villages.selected_option, self.choose_nobles.selected_option)
             self.bhide()
 
     def bhide(self, *args):

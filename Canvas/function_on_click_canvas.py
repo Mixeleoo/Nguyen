@@ -15,12 +15,10 @@ class FunctionOnClickCanvas(AnimationCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        self.game_mode = "basic"
-
         self.basic_mode_tag_foc[PLAINE_TAG] = dummy
         self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
-        self.basic_mode_tag_foc[BUILD_CITY] = self.hud_build_city.choose_plain_to_build
-        self.basic_mode_tag_foc[BUILD_CHURCH] = self.hud_build_church.choose_village_to_build
+        self.basic_mode_tag_foc[BUILD_CITY] = self.choose_plain_to_build
+        self.basic_mode_tag_foc[BUILD_CHURCH] = self.choose_village_to_build
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy
         self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hudmobile_choose_type_villager.show
         self.basic_mode_tag_foc[TAXES_TAG] = self.hudmobile_choose_taxes.show
@@ -28,10 +26,10 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc[WAR_TAG] = self.hudcentered_choose_noble_war.show
         self.basic_mode_tag_foc[NOTHING_TAG] = dummy
 
-        self.build_city_mode_tag_foc[PLAINE_TAG] = self.hud_build_city.build_city_on_plain
+        self.build_city_mode_tag_foc[PLAINE_TAG] = self.build_city_on_plain
         self.build_city_mode_tag_foc[VILLAGE_TAG] = lambda e: print("Y'a déjà un village ici ?")
         self.build_city_mode_tag_foc[NOTHING_TAG] = dummy
 
         self.build_church_mode_tag_foc[PLAINE_TAG] = dummy
-        self.build_church_mode_tag_foc[VILLAGE_TAG] = self.hud_build_church.build_church_on_village
+        self.build_church_mode_tag_foc[VILLAGE_TAG] = self.build_church_on_village
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy

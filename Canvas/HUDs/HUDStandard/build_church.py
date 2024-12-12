@@ -69,33 +69,14 @@ class BuildChurch(HUDABC):
         self.canvas.references += [ref]
 
         self.canvas.create_cancel_button(
-            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel_build_church
+            x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel
         )
 
     def replace(self, event: tk.Event) -> None:
         pass
 
-    def choose_village_to_build(self, event: tk.Event):
-        """
-        Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
-        votre eglise ? Passage en mode churchbuilding mgl
-        """
-        self.canvas.hide_all_permanant_huds()
-
-        # On affiche le rectangle de construction
-        self.show_animation()
-
-        self.canvas.game_mode = "build_church"
-
-    def cancel_build_church(self, e=None):
+    def cancel(self, e=None):
         self.canvas.show_hidden_permanant_huds()
 
         self.hide_animation()
         self.canvas.game_mode = "basic"
-
-    def build_church_on_village(self, e=None):
-
-        # Même comportement que si on annulait sa construction, mais on la construit vraiment
-        self.cancel_build_church()
-
-        self.canvas.jeu.construire_eglise(self.canvas.find_withtag("active")[0])

@@ -100,53 +100,8 @@ class BuildCity(HUDABC):
     def replace(self, event: tk.Event) -> None:
         pass
 
-    def choose_plain_to_build(self, event: tk.Event):
-        """
-        Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
-        votre village ? Passage en mode citybuilding mgl
-        """
-        # On eclairci la zone
-        self.canvas.hide_all_permanant_huds()
-
-        # On affiche le rectangle de construction
-        self.show_animation()
-
-        self.canvas.game_mode = "build_city"
-
     def cancel(self, e=None):
         self.canvas.show_hidden_permanant_huds()
 
         self.hide_animation()
         self.canvas.game_mode = "basic"
-
-    def build_city_on_plain(self, event: tk.Event):
-        """
-        Cette fonction crée un village si le joueur clique sur une plaine qui n'a pas de villages aux alentours.
-        Elle affiche également les HUDs qui étaient précédemment affichés avant de construire le village.
-        """
-        # Modifier la case en village
-        square_id = self.canvas.find_withtag("active")[0]
-        village_around_id = self.canvas.villages_around(square_id)
-
-        if village_around_id:
-            self.canvas.hudmobile_yavillagegros.show(village_around_id)
-
-        else:
-            # Même comportement que si on annulait la construction, sauf que là, on construit
-            self.cancel()
-
-            tags = list(self.canvas.gettags(square_id))
-
-            # Comme il y a un nouveau village, il faut update les HUDs qui permet de choisir le village
-            nom = nom_aleatoire_village()
-            self.canvas.hudmobile_choose_village.add_village(nom, square_id)
-            self.canvas.hudmobile_choose_taxes.add_village(nom, square_id)
-
-            # On lance la méthode qui influera sur le jeu
-            self.canvas.jeu.construire_village(village_id=square_id, nom=nom)
-
-            # On change son tag de trigger de fonction
-            self.canvas.engine_build_city(square_id, tags)
-
-            # On affiche dans l'historique son action
-            self.canvas.hud_history.add_text("Le joueur a crée un village !")
