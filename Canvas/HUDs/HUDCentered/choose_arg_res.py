@@ -65,7 +65,7 @@ class ChooseArgRes(HUDCenteredABC):
 
     def vassaliser(self, *args):
 
-        noble_selected_index = self.canvas.hudmobile_choose_noble.noble_index_selected
+        noble_selected_index = self.canvas.hudmobile_choose_noble_vassaliser.noble_index_selected
         noble_selected = self.canvas.jeu.get_joueur(noble_selected_index)
 
         if self.canvas.jeu.joueur_actuel.soumettre(
@@ -76,8 +76,9 @@ class ChooseArgRes(HUDCenteredABC):
             # Ajouter le nouveau choix de noble à imposer
             self.canvas.hudmobile_choose_taxes.add_noble(noble_selected.nom, noble_selected_index)
 
-            # Retirer le choix de noble à vassaliser
-            self.canvas.hudmobile_choose_noble.remove_noble(noble_selected_index)
+            # Retirer le choix de noble à vassaliser et guerre
+            self.canvas.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
+            self.canvas.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
 
         self.bhide()
 

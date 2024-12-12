@@ -37,8 +37,9 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_type_villager = HUDCentered.ChooseTypeVillager(self)
         self.hudmobile_choose_taxes = HUDCentered.ChooseTaxes(self)
         self.hudmobile_choose_village = HUDCentered.ChooseVillage(self)
-        self.hudmobile_choose_noble = HUDCentered.ChooseNobleVassaliser(self)
+        self.hudmobile_choose_noble_vassaliser = HUDCentered.ChooseNobleVassaliser(self)
         self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
+        self.hudcentered_choose_noble_war = HUDCentered.ChooseNobleWar(self)
 
         self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
 
@@ -60,9 +61,10 @@ class HUDCanvas(BaseCanvas):
         # HUD centrés
         self.hudmobile_choose_type_villager.create()
         self.hudmobile_choose_village.create()
-        self.hudmobile_choose_noble.create()
+        self.hudmobile_choose_noble_vassaliser.create()
         self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_arg_res.create()
+        self.hudcentered_choose_noble_war.create()
 
         for i in range(NB_NOBLE_AU_DEPART):
             self.hudwindow_more_info_supervisor.add()
@@ -103,5 +105,6 @@ class HUDCanvas(BaseCanvas):
             prenom = prenom_aleatoire()
 
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
-            self.hudmobile_choose_noble.choose_noble.add_option(prenom, noble + 1)
+            self.hudmobile_choose_noble_vassaliser.add_noble(prenom, noble + 1)
+            self.hudcentered_choose_noble_war.add_noble(prenom, noble + 1)
             self.jeu.creer_noble(square_id, prenom, nom_aleatoire_village())

@@ -24,7 +24,8 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy
         self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hudmobile_choose_type_villager.show
         self.basic_mode_tag_foc[TAXES_TAG] = self.hudmobile_choose_taxes.show
-        self.basic_mode_tag_foc[VASSALIZE_TAG] = self.hudmobile_choose_noble.show
+        self.basic_mode_tag_foc[VASSALIZE_TAG] = self.hudmobile_choose_noble_vassaliser.show
+        self.basic_mode_tag_foc[WAR_TAG] = self.hudcentered_choose_noble_war.show
         self.basic_mode_tag_foc[NOTHING_TAG] = dummy
 
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.hud_build_city.build_city_on_plain

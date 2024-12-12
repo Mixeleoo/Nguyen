@@ -86,6 +86,7 @@ INFO_EVENT_TAG = "INFO_EVENT"
 PAYSAN_OR_ARTISAN_TAG = "PAYSAN_OR_ARTISAN"
 TAXES_TAG = "TAXES"
 VASSALIZE_TAG = "VASSALIZE"
+WAR_TAG = "WAR"
 
 # si
 si = 'si'
@@ -127,7 +128,7 @@ ACTION_FOR_YOUR_TURN = [
         "text": "Déclarer la guerre",
         "PA": "8 PA",
         "additionalcost": "100 res",
-        "do": NOTHING_TAG
+        "do": WAR_TAG
     }
 ]
 NB_ACTIONS = len(ACTION_FOR_YOUR_TURN)

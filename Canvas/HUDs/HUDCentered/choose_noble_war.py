@@ -6,22 +6,20 @@ from .base import HUDCenteredABC
 from Canvas.Widget.Button import Button
 import Canvas.HUDs.SubHUD as SubHUD
 
-class ChooseNobleVassaliser(HUDCenteredABC):
+class ChooseNobleWar(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag, "Quel noble voulez-vous vassaliser ?")
+        self.choose_noble = SubHUD.ChooseNoble(canvas, self.tag, "Contre quel noble voulez-vous entrer en guerre ?")
         self.add_noble = self.choose_noble.add_option
         self.remove_noble = self.choose_noble.remove_option
-
-        self.noble_index_selected = None
 
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
 
     @property
     def tag(self):
-        return "CHOOSE_NOBLE_VASSALISER"
+        return "CHOOSE_NOBLE_WAR"
 
     def create(self):
 
@@ -44,11 +42,18 @@ class ChooseNobleVassaliser(HUDCenteredABC):
         """
         Méthode qui met à jour le dernier choix de l'utilisateur dans l'attribut self.last_choice_made
         """
-
-        if self.choose_noble.selected_option:
-            self.noble_index_selected = self.choose_noble.selected_option
+        noble_index = self.choose_noble.selected_option
+        if noble_index:
+            noble = self.canvas.jeu.get_joueur(noble_index)
             self.bhide()
-            self.canvas.hudmobile_choose_arg_res.show()
+            if self.canvas.jeu.guerre(noble):
+                self.canvas.add_history_text(f"Tu as battu {noble.nom}.")
+
+                self.canvas.hudcentered_choose_noble_war.remove_noble(noble_index)
+                self.canvas.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+
+            else:
+                self.canvas.add_history_text(f"{noble.nom} vous a battu.")
 
         else:
             bbox = self.canvas.bbox(self.tag)
