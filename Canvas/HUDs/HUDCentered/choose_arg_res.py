@@ -1,18 +1,19 @@
 
 from .base import HUDCenteredABC
+from ..SubHUD import QuantitySelector
 from parameter import *
 
 class ChooseArgRes(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.quantity_selector_arg = self.canvas.add_quantity_selector(
-            self.tag, "💰 : ",
+        self.quantity_selector_arg = QuantitySelector(
+            self.canvas, self.tag, "💰 : ",
             min_quantity=0,
             max_quantity=0
         )
-        self.quantity_selector_res = self.canvas.add_quantity_selector(
-            self.tag, "🍴 : ",
+        self.quantity_selector_res = QuantitySelector(
+            self.canvas, self.tag, "🍴 : ",
             min_quantity=0,
             max_quantity=0
         )
@@ -21,7 +22,7 @@ class ChooseArgRes(HUDCenteredABC):
     def tag(self):
         return "ChooseArgRes"
 
-    def create(self, *args):
+    def create(self):
 
         width = 300
         height = 100
@@ -59,15 +60,14 @@ class ChooseArgRes(HUDCenteredABC):
         )
 
     def update(self, *args) -> None:
-        self.quantity_selector_arg.update()
-        self.quantity_selector_res.update()
+        self.quantity_selector_arg.update(max_quantity=self.canvas.jeu.joueur_actuel.argent)
+        self.quantity_selector_res.update(max_quantity=self.canvas.jeu.joueur_actuel.ressources)
 
     def vassaliser(self, *args):
 
         noble_selected_index = self.canvas.hudmobile_choose_noble.noble_index_selected
         noble_selected = self.canvas.jeu.get_joueur(noble_selected_index)
 
-        # TODO: Retirer le noble des choix de nobles à vassaliser
         if self.canvas.jeu.joueur_actuel.soumettre(
                 noble_selected, self.quantity_selector_arg.quantity, self.quantity_selector_res.quantity
         ):
