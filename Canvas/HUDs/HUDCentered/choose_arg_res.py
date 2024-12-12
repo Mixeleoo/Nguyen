@@ -82,4 +82,7 @@ class ChooseArgRes(HUDCenteredABC):
         self.bhide()
 
     def bhide(self, *args):
+        self.quantity_selector_arg.reset()
+        self.quantity_selector_res.reset()
+
         self.hide()
