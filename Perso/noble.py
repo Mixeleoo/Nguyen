@@ -30,9 +30,17 @@ class Noble(Personne):
     def dico_villages(self):
         return self._dico_villages
 
+    @dico_villages.setter
+    def dico_villages(self, dico_villages: dict[int, Village]):
+        self._dico_villages = dico_villages
+
     @property
     def liste_soldats(self):
         return self._liste_soldats
+
+    @liste_soldats.setter
+    def liste_soldats(self, liste_soldats: list[Soldat]):
+        self._liste_soldats = liste_soldats
 
     @property
     def bonheur_general(self):
@@ -46,6 +54,13 @@ class Noble(Personne):
             nb_village += 1
         return round(bonheur/nb_village,2)
 
+    @property
+    def population(self):
+        pop = 0
+        for village in self._dico_villages.values():
+            pop += len(village.liste_roturier)
+
+        return pop
 
     def payer_impot(self):
         """

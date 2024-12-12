@@ -1,5 +1,8 @@
-from Perso.personne import Personne
+
 from random import randint
+
+from Perso.personne import Personne
+from parameter import prenom_aleatoire
 
 
 class Roturier(Personne):
@@ -7,7 +10,11 @@ class Roturier(Personne):
     Un roturier est une personne qui a en plus une capacité de prodcution qui lui est propre (minimum de 2)
     il a également un taux d'impôt prédéfinit (25%)
     """
-    def __init__(self, pnom: str, parg: int, cdp: int):
+    def __init__(self, pnom: str = None, parg: int = None, cdp: int = None):
+        if pnom is None: pnom = prenom_aleatoire()
+        if parg is None: parg = randint(1, 5)
+        if cdp is None: cdp = randint(18, 22)
+
         Personne.__init__(self, pnom, 0 , parg)
         self.cdp = cdp
         self._taux_impot = 0.25

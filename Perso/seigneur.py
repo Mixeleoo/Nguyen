@@ -16,6 +16,9 @@ class Seigneur(Noble):
     def liste_nobles(self):
         return self._liste_nobles
 
+    @liste_nobles.setter
+    def liste_nobles(self, liste_nobles: list[Noble]):
+        self._liste_nobles = liste_nobles
 
     def prend_impot_noble(self, indice_noble : int):
         """
