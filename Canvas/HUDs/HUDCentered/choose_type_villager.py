@@ -106,7 +106,7 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         # Ok bouton
         self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.immigrate, state="hidden", is_temp=True
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, state="hidden", is_temp=True
         )
 
         # Annuler bouton
@@ -115,37 +115,21 @@ class ChooseTypeVillager(HUDCenteredABC):
         )
 
     def update(self):
-        pass
+        self.callback_quantity_selector(self.quantity_selector_hum.quantity)
 
-    def immigrate(self, e=None):
+    def ok_trigger(self, e=None):
         qt = self.quantity_selector_hum.quantity
+        type_v = self.radiobutton_choice.get_selected_option()
 
-        if self.radiobutton_choice.get_selected_option():
-
-            if self.canvas.itemcget(
-                    self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
-                ).split(" ")[0].lower() == "soldat":
-
-                self.canvas.jeu.recruter_soldat(qt)
-                self.canvas.add_history_text(f"Vous avez recruté {qt} soldat(s) !")
-
-            else:
-                self.last_choice_made = [
-                    qt,
-                    self.canvas.itemcget(
-                        self.canvas.text_id_in_rectangle_id[self.radiobutton_choice.get_selected_option()], "text"
-                    ).split(" ")[0].lower()
-                ]
-
-                # On affiche le choix du village
-                self.canvas.hudmobile_choose_village.show()
+        if type_v:
+            self.canvas.save_villager_choice(type_v, qt)
 
             # Même comportement que si on ne voulait pas construire l'église, sauf qu'ici, on la construit
             self.cancel()
 
         else:
             bbox = self.canvas.bbox(self.tag)
-            self.canvas.hudemobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.canvas.hudmobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
             self.shake()
 
     def cancel(self, e=None):
@@ -170,7 +154,7 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         new_quantity = self.quantity_selector_hum.quantity
 
-        if PA < new_quantity * 2:
+        if self.canvas.jeu.joueur_actuel.pa < new_quantity * 2:
             # Si le joueur a selectionné ce choix
             if self.radiobutton_choice.get_selected_option() in [self.artisan_choice_id, self.soldat_choice_id]:
                 self.radiobutton_choice.reset()
@@ -179,7 +163,7 @@ class ChooseTypeVillager(HUDCenteredABC):
             self.griser(self.artisan_choice_id)
             self.griser(self.soldat_choice_id)
 
-            if PA < new_quantity:
+            if self.canvas.jeu.joueur_actuel.pa < new_quantity:
                 # Si le joueur a selectionné ce choix
                 if self.radiobutton_choice.get_selected_option() == self.paysan_choice_id:
                     self.radiobutton_choice.reset()
@@ -190,11 +174,14 @@ class ChooseTypeVillager(HUDCenteredABC):
         # Si le nombre de PA du joueur dépasse le nouveau coût de l'effectif désiré d'artisan (donc affordable)
         # ET qu'avant ce n'était pas le cas, alors il faut dégriser.
         # if PA >= new_desired_workforce * 2 and PA < self.desired_workforce * 2:
-        if new_quantity * 2 <= PA < old_quantity * 2:
+        if new_quantity * 2 <= self.canvas.jeu.joueur_actuel.pa < old_quantity * 2:
 
             # Degriser le choix artisan et le rendre clickable
             self.degriser(self.artisan_choice_id)
             self.degriser(self.soldat_choice_id)
+
+        if self.canvas.jeu.joueur_actuel.pa >= new_quantity:
+            self.degriser(self.paysan_choice_id)
 
         self.refresh_text()
 
