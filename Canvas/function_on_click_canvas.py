@@ -1,6 +1,8 @@
 
-from parameter import *
+import tkinter as tk
+
 from Canvas.animation_canvas import AnimationCanvas
+from parameter import *
 
 
 class FunctionOnClickCanvas(AnimationCanvas):
@@ -15,15 +17,24 @@ class FunctionOnClickCanvas(AnimationCanvas):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
+        self.actions = {
+            BUILD_CITY: self.choose_plain_to_build,
+            BUILD_CHURCH: self.choose_village_to_build,
+            PAYSAN_OR_ARTISAN_TAG: self.hudmobile_choose_type_villager.show,
+            TAXES_TAG: self.hudmobile_choose_taxes.show,
+            VASSALIZE_TAG: self.hudmobile_choose_noble_vassaliser.show,
+            WAR_TAG: self.hudcentered_choose_noble_war.show
+        }
+
         self.basic_mode_tag_foc[PLAINE_TAG] = dummy
-        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
-        self.basic_mode_tag_foc[BUILD_CITY] = self.choose_plain_to_build
-        self.basic_mode_tag_foc[BUILD_CHURCH] = self.choose_village_to_build
+        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show,
+        self.basic_mode_tag_foc[BUILD_CITY] = lambda e: self.before_action(BUILD_CITY, e)
+        self.basic_mode_tag_foc[BUILD_CHURCH] = lambda e: self.before_action(BUILD_CHURCH, e)
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy
-        self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = self.hudmobile_choose_type_villager.show
-        self.basic_mode_tag_foc[TAXES_TAG] = self.hudmobile_choose_taxes.show
-        self.basic_mode_tag_foc[VASSALIZE_TAG] = self.hudmobile_choose_noble_vassaliser.show
-        self.basic_mode_tag_foc[WAR_TAG] = self.hudcentered_choose_noble_war.show
+        self.basic_mode_tag_foc[PAYSAN_OR_ARTISAN_TAG] = lambda e: self.before_action(PAYSAN_OR_ARTISAN_TAG, e)
+        self.basic_mode_tag_foc[TAXES_TAG] = lambda e: self.before_action(TAXES_TAG, e)
+        self.basic_mode_tag_foc[VASSALIZE_TAG] = lambda e: self.before_action(VASSALIZE_TAG, e)
+        self.basic_mode_tag_foc[WAR_TAG] = lambda e: self.before_action(WAR_TAG, e)
         self.basic_mode_tag_foc[NOTHING_TAG] = dummy
 
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.build_city_on_plain
@@ -33,3 +44,10 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[PLAINE_TAG] = dummy
         self.build_church_mode_tag_foc[VILLAGE_TAG] = self.build_church_on_village
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
+
+    def before_action(self, tag: str, event: tk.Event):
+        if not self.jeu.joueur_actuel.pa >= ACTIONS_TAG_COST[tag]:
+            self.hudmobile_taspasassezdePAgros.show(100, 100)
+
+        else:
+            self.actions[tag](event)
