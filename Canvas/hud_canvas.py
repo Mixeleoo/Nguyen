@@ -39,7 +39,7 @@ class HUDCanvas(BaseCanvas):
 
         self.hudmobile_village_info = HUDMobile.VillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
-        self.hudemobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
+        self.hudmobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
 

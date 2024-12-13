@@ -49,7 +49,7 @@ class ChooseNobleWar(HUDCenteredABC):
 
         else:
             bbox = self.canvas.bbox(self.tag)
-            self.canvas.hudemobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.canvas.hudmobile_ilfautfaireunchoixgros.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
             self.shake()
 
     def bhide(self, *args):
