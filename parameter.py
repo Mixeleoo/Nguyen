@@ -93,6 +93,15 @@ WAR_TAG = "WAR"
 # si
 si = 'si'
 
+# Coûts des actions en fonction de leurs tag
+ACTIONS_TAG_COST = {
+    PAYSAN_OR_ARTISAN_TAG: 0,
+    BUILD_CHURCH: 6,
+    VASSALIZE_TAG: 4,
+    BUILD_CITY: 8,
+    TAXES_TAG: 5,
+    WAR_TAG: 8
+}
 
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
 ACTION_FOR_YOUR_TURN = [
@@ -104,31 +113,31 @@ ACTION_FOR_YOUR_TURN = [
     },
     {
         "text": "Construire une église",
-        "PA": "6 PA",
+        "PA": f"{ACTIONS_TAG_COST[BUILD_CHURCH]} PA",
         "additionalcost": "100 arg, 50 res",
         "do": BUILD_CHURCH
     },
     {
         "text": "Vassaliser",
-        "PA": "4 PA",
+        "PA": f"{ACTIONS_TAG_COST[VASSALIZE_TAG]} PA",
         "additionalcost": "Y arg, Z res",
         "do": VASSALIZE_TAG
     },
     {
         "text": "Construire un village",
-        "PA": "8 PA",
+        "PA": f"{ACTIONS_TAG_COST[BUILD_CITY]} PA",
         "additionalcost": "300 arg, 150 res",
         "do": BUILD_CITY
     },
     {
         "text": "Impôt",
-        "PA": "5 PA",
+        "PA": f"{ACTIONS_TAG_COST[TAXES_TAG]} PA",
         "additionalcost": "",
         "do": TAXES_TAG
     },
     {
         "text": "Déclarer la guerre",
-        "PA": "8 PA",
+        "PA": f"{ACTIONS_TAG_COST[WAR_TAG]} PA",
         "additionalcost": "100 res",
         "do": WAR_TAG
     }
