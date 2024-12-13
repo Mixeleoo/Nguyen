@@ -16,7 +16,7 @@ class Noble(Personne):
     def __init__(self, pnom: str, pres: int, parg: int):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
-        self.pa = 10
+        self._pa = 10
 
         # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
         # Servira à accéder à la liste de Roturiers que le noble possède
@@ -25,6 +25,12 @@ class Noble(Personne):
         # Liste des soldats sous les ordres du noble
         self._liste_soldats: list[Soldat] = []
 
+    @property
+    def pa(self) -> int:
+        return self._pa
+
+    def retirer_pa(self, qt: int):
+        self._pa -= qt
 
     @property
     def dico_villages(self):
