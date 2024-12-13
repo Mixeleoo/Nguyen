@@ -40,6 +40,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_village_info = HUDMobile.VillageInfo(self)
         self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
         self.hudmobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
+        self.hudmobile_taspasassezdePAgros = HUDMobile.TasPasAssezDePAGros(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
 
@@ -65,7 +66,8 @@ class HUDCanvas(BaseCanvas):
         # HUDs mobile
         self.hudmobile_village_info.create()
         self.hudmobile_yavillagegros.create()
-        self.hudemobile_ilfautfaireunchoixgros.create()
+        self.hudmobile_ilfautfaireunchoixgros.create()
+        self.hudmobile_taspasassezdePAgros.create()
 
         # HUD centrés
         self.hudmobile_choose_type_villager.create()
@@ -168,6 +170,10 @@ class HUDCanvas(BaseCanvas):
             # On affiche dans l'historique son action
             self.hud_history.add_text("Le joueur a crée un village !")
 
+            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+            self.jeu.joueur_actuel.retirer_pa(8)
+            self.update_hudtop()
+
     def choose_village_to_build(self, event: tk.Event):
         """
         Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
@@ -186,6 +192,10 @@ class HUDCanvas(BaseCanvas):
         self.hud_build_church.cancel()
 
         self.jeu.construire_eglise(self.find_withtag("active")[0])
+
+        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+        self.jeu.joueur_actuel.retirer_pa(6)
+        self.update_hudtop()
 
     def vassaliser(self, don_argent: int, don_ressources: int):
 
@@ -210,7 +220,8 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
             self.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
 
-            # Mettre à jour l'HUD d'en haut
+            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+            self.jeu.joueur_actuel.retirer_pa(4)
             self.update_hudtop()
 
     def war(self, noble_index: int):
@@ -221,6 +232,9 @@ class HUDCanvas(BaseCanvas):
 
             self.hudcentered_choose_noble_war.remove_noble(noble_index)
             self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+
+            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+            self.jeu.joueur_actuel.retirer_pa(8)
             self.update_hudtop()
 
         else:
@@ -228,7 +242,34 @@ class HUDCanvas(BaseCanvas):
 
     def imposer(self, l_villages: list[int], l_nobles: list[int]):
         self.jeu.imposer(l_villages, l_nobles)
+
+        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+        self.jeu.joueur_actuel.retirer_pa(5)
         self.update_hudtop()
+
+    def save_villager_choice(self, type_v: int, quantity: int):
+
+        if self.itemcget(
+                self.text_id_in_rectangle_id[type_v], "text"
+        ).split(" ")[0].lower() == "soldat":
+
+            self.jeu.recruter_soldat(quantity)
+            self.add_history_text(f"Vous avez recruté {quantity} soldat(s) !")
+
+            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+            self.jeu.joueur_actuel.retirer_pa(quantity * 2)
+            self.update_hudtop()
+
+        else:
+            self.hudmobile_choose_type_villager.last_choice_made = [
+                quantity,
+                self.itemcget(
+                    self.text_id_in_rectangle_id[type_v], "text"
+                ).split(" ")[0].lower()
+            ]
+
+            # On affiche le choix du village
+            self.hudmobile_choose_village.show()
 
     def immigrer(self, village_id: int):
 
@@ -243,4 +284,8 @@ class HUDCanvas(BaseCanvas):
         )
 
         self.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
+
+        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+        if type_v == "artisan": self.jeu.joueur_actuel.retirer_pa(effectif * 2)
+        else: self.jeu.joueur_actuel.retirer_pa(effectif)
         self.update_hudtop()
