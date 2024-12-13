@@ -4,8 +4,6 @@ from PIL import Image, ImageTk, ImageEnhance
 from .base import HUDMobileABC
 from parameter import *
 
-# TODO: afficher cet HUD à chaque selecteur où l'utilisateur n'a rien sélectionné.
-
 class IlFautFaireUnChoixGros(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
