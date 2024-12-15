@@ -17,7 +17,7 @@ class HUDCanvas(BaseCanvas):
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
 
-        from Canvas.HUDs.HUDWindow import HUDWindowMoreInfoSupervisor
+        from Canvas.HUDs.HUDWindow import HUDWindowSupervisor
 
         self.to_show_if_cancel = []
 
@@ -51,7 +51,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
         self.hudcentered_choose_noble_war = HUDCentered.ChooseNobleWar(self)
 
-        self.hudwindow_more_info_supervisor = HUDWindowMoreInfoSupervisor(self)
+        self.hudwindow_supervisor = HUDWindowSupervisor(self)
 
     def create_HUDs(self, geometry_width: int, geometry_height: int):
 

@@ -4,7 +4,7 @@ from Canvas.highlight_canvas import HighlightCanvas
 class StringVar:
     def __init__(self, canvas: HighlightCanvas):
         self._canvas = canvas
-        self._text = ""
+        self._content = ""
         self._id = None
 
     @property
@@ -16,8 +16,8 @@ class StringVar:
         self._id = text_id
 
     @property
-    def text(self) -> str:
-        return self._text
+    def content(self) -> str:
+        return self._content
 
     def set(self, text: str):
         """
@@ -25,7 +25,7 @@ class StringVar:
         :param text:
         :return:
         """
-        self._text = text
+        self._content = text
         self._canvas.itemconfigure(self._id, text=text)
 
         return self

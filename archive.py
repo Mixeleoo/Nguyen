@@ -38,7 +38,7 @@
             rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG) + (TEMP_TAG,),
             text_tags=set_tags() + (TEXT_TAG, TEMP_TAG,),
             text_font=text_font,
-            text=choices_text[0]
+            content=choices_text[0]
         )
 
         self.create_text_in_rectangle(
@@ -49,7 +49,7 @@
             rectangle_tags=set_tags(highlight_tag=CLICKABLE_TAG) + (TEMP_TAG,),
             text_tags=set_tags() + (TEXT_TAG, TEMP_TAG,),
             text_font=text_font,
-            text=choices_text[1]
+            content=choices_text[1]
         )
 
         self.create_text_in_rectangle(
@@ -60,7 +60,7 @@
             rectangle_tags=set_tags() + (TEMP_TAG,),
             text_tags=set_tags() + (TEMP_TAG,),
             text_font=text_font,
-            text=title_text
+            content=title_text
         )
 """
 

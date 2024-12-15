@@ -155,7 +155,7 @@ class BaseCanvas(HighlightCanvas):
                 )
 
                 # Pour débug les carrés
-                # self.create_text((self.sps * row_i + self.sps * (row_i + 1)) / 2, (self.sps * col_i + self.sps * (col_i + 1)) / 2, text=f"{row_i, col_i}")
+                # self.create_text((self.sps * row_i + self.sps * (row_i + 1)) / 2, (self.sps * col_i + self.sps * (col_i + 1)) / 2, content=f"{row_i, col_i}")
 
                 all_squares_id += [square_id]
 
