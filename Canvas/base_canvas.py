@@ -26,6 +26,8 @@ class BaseCanvas(HighlightCanvas):
         self.build_city_mode_tag_foc: [str, callable] = {}
         self.build_church_mode_tag_foc: [str, callable] = {}
 
+        # TODO: pour éviter le bug graphique où le move_back_square est lancé et on clique sur un carré, je pourrai créer une nouveau mode de jeu auquel cliquer sur les carrés ne donne plus rien?
+
         self.tag_foc = {
             "basic": self.basic_mode_tag_foc,
             "build_city": self.build_city_mode_tag_foc,
