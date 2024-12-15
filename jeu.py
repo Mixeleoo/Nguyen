@@ -7,11 +7,11 @@ from Territoire.village import Village
 from parameter import *
 # TODO: écran début, écran de fin
 # TODO: établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
-# TODO: Afficher le nb de soldats en haut ⚔🗡
 # TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
 # TODO: Créer un HUD pour l'évènement vassalisation voulez-vous accepter toto comme vassal ?
 # TODO: Afficher l'HUD event quand il y a un évènement, également les infos suplémentaires avec le bouton "i".
 # TODO: Afficher plus d'info sur le village quand on clique sur "plus d'info"
+# TODO: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
 
 class Jeu:
     def __init__(self):
@@ -224,31 +224,15 @@ class Jeu:
         :param pnoble : Noble auquel la guerre est déclarée
         """
         # initialisation des deux armées
-        armee_joueur = self.joueur_actuel.liste_soldats + [self._id_joueur_actuel]
-        armee_ennemie = pnoble.liste_soldats + [pnoble]
-
-        # points_joueur = 0
-        # points_ennemie = 0
-
-        # remplissage de l'armée du joueur/bot
-        if isinstance(self.joueur_actuel, Seigneur):
-            armee_joueur += self.joueur_actuel.liste_nobles
-            for noble in self.joueur_actuel.liste_nobles :
-                armee_joueur += noble.liste_soldats
-
-        # remplissage de l'armée ennemie
-        if isinstance(pnoble,Seigneur) :
-            armee_ennemie += pnoble.liste_nobles
-            for noble in pnoble.liste_nobles :
-                armee_ennemie += noble.liste_soldats
+        effectif_armee_joueur = self.joueur_actuel.effectif_armee
+        effectif_armee_ennemie = pnoble.effectif_armee
 
         # choix vainqueur
-
-        victoire = len(armee_joueur) > len(armee_ennemie) or (len(armee_ennemie) == len(armee_joueur) and randint(0,1) == 1)
-
-        # Conquête des villages du noble vaincu
-        if victoire :
+        if effectif_armee_joueur > effectif_armee_ennemie or effectif_armee_joueur == effectif_armee_ennemie and randint(0,1) == 1:
+            # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
+            return True
 
-        return victoire
+        else:
+            return False

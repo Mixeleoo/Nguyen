@@ -73,6 +73,7 @@ class TopSide(HUDABC):
             f"😊 {joueur.bonheur_general}",
             f"🍴 {joueur.ressources}",
             f"🧑🏻‍🌾 {joueur.population}",
+            f"⚔🗡 {joueur.effectif_armee}",
             f"💥 {self.canvas.jeu.nb_joueurs - 1 - self.canvas.jeu.get_nb_noble_de_joueur(0)} / {NB_NOBLE_AU_DEPART}"
         ]
 

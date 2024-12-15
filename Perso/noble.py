@@ -68,6 +68,10 @@ class Noble(Personne):
 
         return pop
 
+    @property
+    def effectif_armee(self) -> int:
+        return len(self._liste_soldats)
+
     def payer_impot(self):
         """
         Méthode d'impôt en fonction du pourcentage d'impot attribué noble

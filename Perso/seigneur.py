@@ -20,6 +20,10 @@ class Seigneur(Noble):
     def liste_nobles(self, liste_nobles: list[Noble]):
         self._liste_nobles = liste_nobles
 
+    @property
+    def effectif_armee(self) -> int:
+        return len(self._liste_soldats) + len(self._liste_nobles)
+
     def prend_impot_noble(self, indice_noble : int):
         """
         Ajoute aux ressources du seigneur les impot perçu pour le noble se trouvant à l'indice indice_noble de sa liste de nobles sous ses ordres
