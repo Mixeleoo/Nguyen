@@ -10,8 +10,8 @@ from parameter import *
 # TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
 # TODO: Créer un HUD pour l'évènement vassalisation voulez-vous accepter toto comme vassal ?
 # TODO: Afficher l'HUD event quand il y a un évènement, également les infos suplémentaires avec le bouton "i".
-# TODO: Afficher plus d'info sur le village quand on clique sur "plus d'info"
 # TODO: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
+# TODO: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
 
 class Jeu:
     def __init__(self):

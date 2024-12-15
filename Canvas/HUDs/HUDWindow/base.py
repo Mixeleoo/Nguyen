@@ -1,50 +1,77 @@
 
 import tkinter as tk
-from abc import ABC
+from abc import ABC, abstractmethod
 
+from Canvas.Widget.StringVar import StringVar
 from parameter import *
 from Canvas.HUDs.HUDMobile.base import HUDMobileABC
 
 
 class HUDWindowABC(HUDMobileABC, ABC):
+    _instance_counter = 0
+
     def __init__(self, canvas):
         super().__init__(canvas)
+
+        self._index = HUDWindowABC._instance_counter
+        HUDWindowABC._instance_counter += 1
+        self._group_tag = f"hudwindow_{self._index}"
 
         # Liste des coins permettant de pouvoir agrandir la fenêtre
         self.drag_corners = []
 
-        self.item_text_id = 0
-        self._text = ""
+        self._text = StringVar(self.canvas)
+        self._text.set("Plus d'info dans cette fenêtre (ou pas)")
+
         self.pin_id = 0
+
+    @property
+    def tag(self):
+        return self._group_tag
 
     @property
     def text(self):
         return self._text
 
-    @text.setter
-    def text(self, value):
-        self._text = value
-        self.canvas.itemconfigure(self.item_text_id, text=value)
+    @property
+    @abstractmethod
+    def id(self):
+        """
+        Méthode retournant un moyen d'identifier la fenêtre.
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def title(self):
+        """
+        Méthode retournant le titre de la fenêtre.
+        """
+        pass
 
     def create(self):
 
-        width = 200
-        height = 100
+        width = 300
+        height = 150
 
         x0_cadre = 100
         y0_cadre = 100
         x1_cadre = x0_cadre + width
         y1_cadre = y0_cadre + height
 
+        self.canvas.new_trigger(OPEN_WINDOW_TAG + str(self.id), self.show, ("basic",))
+
         # Gros rectangle contenant toutes les infos
-        self.item_text_id = self.canvas.create_text_in_rectangle(
+        rect_id = self.canvas.create_text_in_rectangle(
             x0=x0_cadre, y0=y0_cadre + 20, x1=x1_cadre, y1=y1_cadre,
             fill=FILL_ACTION_BOX,
-            text=self.text,
+            text=self.text.content,
             rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
             state="hidden"
         )
+
+        self._text.id = self.canvas.text_id_in_rectangle_id[rect_id]
 
         # Bouton pour fermer
         self.canvas.add_button(
@@ -89,7 +116,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
             fill=FILL_ACTION_BOX,
             rectangle_tags=set_tags(drag_tag="move_" + self.tag + "_window", hud_tag=self.tag, group_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
-            text=self.tag,
+            text=self.title,
             state="hidden"
         )
 
@@ -114,9 +141,6 @@ class HUDWindowABC(HUDMobileABC, ABC):
                 self.canvas.tag_lower(item, MAP_TAG)
                 self.drag_corners.append(item)
 
-    def replace(self, *args) -> None:
-        pass
-
     def drag(self, event: tk.Event):
         dx = event.x - self.canvas.mouse_coor[0]
         dy = event.y - self.canvas.mouse_coor[1]
@@ -139,15 +163,16 @@ class HUDWindowABC(HUDMobileABC, ABC):
 
         # Bouton pour fermer
         self.canvas.coords(window_items[6], x1_cadre - 20, y0_cadre, x1_cadre, y0_cadre + 20)
-        self.canvas.coords(window_items[7], (x1_cadre - 20 + x1_cadre) // 2, (y0_cadre + y0_cadre + 20) // 2)
+        self.canvas.coords(window_items[7], x1_cadre - 20, y0_cadre, x1_cadre, y0_cadre + 20)
+        self.canvas.coords(window_items[8], (x1_cadre - 20 + x1_cadre) // 2, (y0_cadre + y0_cadre + 20) // 2)
 
         # Bouton pour pin
-        self.canvas.coords(window_items[8], x1_cadre - 40, y0_cadre, x1_cadre - 20, y0_cadre + 20)
-        self.canvas.coords(window_items[9], (x1_cadre - 40 + x1_cadre - 20) // 2, (y0_cadre + y0_cadre + 20) // 2)
+        self.canvas.coords(window_items[9], x1_cadre - 40, y0_cadre, x1_cadre - 20, y0_cadre + 20)
+        self.canvas.coords(window_items[10], (x1_cadre - 40 + x1_cadre - 20) // 2, (y0_cadre + y0_cadre + 20) // 2)
 
         # Rectangle pour bouger la fenêtre (en haut dcp)
-        self.canvas.coords(window_items[10], x0_cadre, y0_cadre, x1_cadre - 40, y0_cadre + 20)
-        self.canvas.coords(window_items[11], (x0_cadre + x1_cadre - 40) // 2, (y0_cadre + y0_cadre + 20) // 2)
+        self.canvas.coords(window_items[11], x0_cadre, y0_cadre, x1_cadre - 40, y0_cadre + 20)
+        self.canvas.coords(window_items[12], (x0_cadre + x1_cadre - 40) // 2, (y0_cadre + y0_cadre + 20) // 2)
 
         # Rectangles pour changer la taille de la fenêtre.
         # Ils sont créés dans cet ordre :

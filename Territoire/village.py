@@ -28,6 +28,10 @@ class Village :
         return self._nom
 
     @property
+    def id(self):
+        return self._identifiant
+
+    @property
     def liste_roturier(self):
         return self._liste_roturier
 

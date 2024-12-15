@@ -49,9 +49,7 @@ class VillageInfo(HUDMobileABC):
             y = int(ny)
 
         self.more_info_button_id = self.canvas.add_button(
-            hud_tag=self.tag,
-            trigger_name=MORE_INFO_TAG,
-            func_triggered=lambda *args: self.canvas.hudwindow_more_info_supervisor.get_active_window().show(),
+            hud_tag=self.tag
         ).draw(
             x0=0,
             y0=y,
@@ -75,15 +73,18 @@ class VillageInfo(HUDMobileABC):
         if event.x + 100 > self.canvas.master.winfo_width():
             dx = event.x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[2]
 
+        # Déplacement de l'HUD là où il a été cliqué
         self.canvas.move(self.tag, dx, dy)
 
+        # Récupération de l'id du carré du village qui a été cliqué
         active_village_id = self.canvas.find_withtag("active")[0]
+
+        # Mise à jour du texte de l'HUD en fonction des infos du village.
         self._refresh_text(active_village_id)
 
-        active_village_tags = self.canvas.gettags(active_village_id)
-
+        # Le bouton reçoit le tag OPEN_WINDOW_TAG + l'identifiant de la fenêtre dans son emplacement "TRIGGER_TAG"
         tags = list(self.canvas.gettags(self.more_info_button_id))
-        tags[GROUP_TAG_INDEX] = active_village_tags[GROUP_TAG_INDEX]
+        tags[TRIGGER_TAG_INDEX] = OPEN_WINDOW_TAG + str(active_village_id)
 
         self.canvas.itemconfigure(self.more_info_button_id, tags=tags)
 

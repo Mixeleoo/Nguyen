@@ -11,7 +11,7 @@ class ButtonABC(ABC):
 
     def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
                  func_triggered: callable = dummy,
-                 for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")):
+                 for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")):
 
         # Attribus dépendant des arguments
         self.canvas = canvas
@@ -37,25 +37,10 @@ class ButtonABC(ABC):
         """
         pass
 
-    def attach_trigger_to_button(self, func: callable, for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")):
+    def attach_trigger_to_button(self, func: callable, for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")):
         # S'il y a une fonction à attacher au tag
         if func:
-            # Pour chaque mode de jeu existant
-            for game_mode in ("basic", "build_city", "build_church"):
-
-                # Si la fonction est censée être trigger durant ce mode de jeu
-                if game_mode in for_which_game_mode:
-
-                    # Si le nom du trigger apparaît dores et déjà dans le dictionnaire, c'est pas bon
-                    if self.trigger_name in game_mode:
-                        raise TypeError(f"{self.trigger_name} a déjà une fonction attribuée dans le mode de jeu {game_mode}.")
-
-                    else:
-                        self.canvas.tag_foc[game_mode][self.trigger_name] = func
-
-                # Sinon ça veut dire qu'il faut attacher lambda e=None: None à ce tag pour le mode de jeu
-                else:
-                    self.canvas.tag_foc[game_mode][self.trigger_name] = dummy
+            self.canvas.new_trigger(self.trigger_name, func, for_which_game_mode)
 
     def move(self, dx: float, dy: float) -> None:
         """
@@ -150,7 +135,7 @@ class ButtonSupervisor:
         self.canvas = canvas
 
     def add(
-            self, hud_tag: str, trigger_name: str,
+            self, hud_tag: str, trigger_name: str = NOTHING_TAG,
             func_triggered: callable = dummy,
             for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
     ) -> Button:
