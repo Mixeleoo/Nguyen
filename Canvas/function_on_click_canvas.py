@@ -27,7 +27,7 @@ class FunctionOnClickCanvas(AnimationCanvas):
         }
 
         self.basic_mode_tag_foc[PLAINE_TAG] = dummy
-        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show,
+        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
         self.basic_mode_tag_foc[BUILD_CITY] = lambda e: self.before_action(BUILD_CITY, e)
         self.basic_mode_tag_foc[BUILD_CHURCH] = lambda e: self.before_action(BUILD_CHURCH, e)
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy

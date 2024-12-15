@@ -99,7 +99,7 @@ class VillageInfo(HUDMobileABC):
         village = self.canvas.jeu.get_village(village_id)
         if village is not None:
             return [
-                f"🧑🏻‍🌾 {village.population}",
+                f"🧑🏻‍🌾 {village.population}/80",
                 f"🍴 {village.ressources}",
                 f"😊 {village.bonheur_general}"
             ]

@@ -5,7 +5,13 @@ from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Territoire.village import Village
 from parameter import *
-
+# TODO: écran début, écran de fin
+# TODO: établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
+# TODO: Afficher le nb de soldats en haut ⚔🗡
+# TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
+# TODO: Créer un HUD pour l'évènement vassalisation voulez-vous accepter toto comme vassal ?
+# TODO: Afficher l'HUD event quand il y a un évènement, également les infos suplémentaires avec le bouton "i".
+# TODO: Afficher plus d'info sur le village quand on clique sur "plus d'info"
 
 class Jeu:
     def __init__(self):
@@ -70,13 +76,13 @@ class Jeu:
                     if villageois.esperance_vie < esp :
                         nb_morts += 1
                         village.liste_roturier.remove(villageois)
-            return "épidémie", nb_morts
+            return "Épidémie", nb_morts
 
         elif 6 <= choix_ev <= 10 :
             # incendies : un village aléatoire parmis la liste de villages du joueur/bot disparaît
             if len(self.joueur_actuel.dico_villages.values()) > 1 :
                 id_village_supp = choice(self.joueur_actuel.dico_villages.keys())
-                return "incendie", id_village_supp
+                return "Incendie", id_village_supp
 
         elif 11 <= choix_ev <= 20 :
             # pillage : l'argent et les ressources d'un village son volés
@@ -84,14 +90,14 @@ class Jeu:
             for villageois in self.joueur_actuel.dico_villages[id_village_pie].liste_roturier :
                 villageois._ressources = 0
                 villageois._argent = 0
-            return "pillage", self.joueur_actuel.dico_villages[id_village_pie].nom
+            return "Pillage", self.joueur_actuel.dico_villages[id_village_pie].nom
 
         elif 21 <= choix_ev <= 40 :
             # famine : les ressources des terres sont divisées par 2
             return "Famine"
 
         elif 41 <= choix_ev <= 64 :
-            return "Rien"
+            return "rien"
 
         elif 65 <= choix_ev <= 84 :
             # récolte abondante : ressources des terres doublées
@@ -103,7 +109,7 @@ class Jeu:
             nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
-            return "immigration", nb_immigres
+            return "Immigration", nb_immigres
 
         elif 95 <= choix_ev <= 100 :
             # vassalisation : un noble se propose comme vassal
