@@ -128,7 +128,9 @@ class Noble(Personne):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
-        self._dico_villages[pid] = Village(pid, nom)
+        v = Village(pid, nom)
+        self._dico_villages[pid] = v
+        return v
 
     def ajout_soldat(self, peffectif: int):
         """

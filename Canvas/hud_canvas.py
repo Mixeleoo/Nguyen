@@ -77,9 +77,6 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_arg_res.create()
         self.hudcentered_choose_noble_war.create()
 
-        for i in range(NB_NOBLE_AU_DEPART):
-            self.hudwindow_more_info_supervisor.add()
-
         self.init_nobles()
 
         self.hud_top_side.create(geometry_width, geometry_height)
@@ -113,17 +110,25 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_village.choose_village.add_option(nom, square_id)
         self.hudmobile_choose_taxes.add_village(nom, square_id)
 
-        self.jeu.creer_noble(square_id, prenom_aleatoire(), nom)
+        village = self.jeu.creer_noble(square_id, prenom_aleatoire(), nom)
+
+        # Ajouter la fenêtre du village
+        self.hudwindow_supervisor.add_more_info(village)
 
         # Ajout des villages aléatoirement
         for noble in range(NB_NOBLE_AU_DEPART):
+
             square_id = self.engine_build_city()
             prenom = prenom_aleatoire()
+            nom_village = nom_aleatoire_village()
 
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
             self.hudmobile_choose_noble_vassaliser.add_noble(prenom, noble + 1)
             self.hudcentered_choose_noble_war.add_noble(prenom, noble + 1)
-            self.jeu.creer_noble(square_id, prenom, nom_aleatoire_village())
+            village = self.jeu.creer_noble(square_id, prenom, nom_village)
+
+            # Ajouter la fenêtre du village
+            self.hudwindow_supervisor.add_more_info(village)
 
     def choose_plain_to_build(self, event: tk.Event):
         """

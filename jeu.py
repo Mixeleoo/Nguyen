@@ -129,9 +129,11 @@ class Jeu:
         :param nom_village: nom du village
         """
         nouveau_noble = Noble(prenom, 100, 10)
-        nouveau_noble.ajouter_village(village_id, nom_village)
+        v = nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)
+
+        return v
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
         """

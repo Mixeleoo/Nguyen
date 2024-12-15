@@ -1,33 +1,43 @@
 
+from Territoire.village import Village
 from .base import HUDWindowABC
 from Canvas.hud_canvas import HUDCanvas
-from parameter import *
 
-class HUDWindowMoreInfo(HUDWindowABC):
-    def __init__(self, canvas, village_tag: str):
+class HUDMoreInfoWindow(HUDWindowABC):
+    def __init__(self, canvas: HUDCanvas, village: Village):
         super().__init__(canvas)
-        self._text = "Plus d'info dans cette fenêtre (ou pas)"
-        self._village_tag = village_tag
+
+        self._village = village
 
     @property
-    def tag(self):
-        return self._village_tag
+    def title(self):
+        return self._village.nom
+
+    @property
+    def id(self) -> int:
+        return self._village.id
+
+    def replace(self, *args) -> None:
+        t = f"🧑🏻‍🌾 {self._village.population}/80\n"\
+            f"🍴 {self._village.ressources}\n"\
+            f"😊 {self._village.bonheur_general}\n(vachement plus d'info ici n'est ce pas)"
+
+        self._text.set(t)
 
 
-class HUDWindowMoreInfoSupervisor:
+class HUDWindowSupervisor:
     def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas
-        self.current_group_id = 0
 
-        self.windows: dict[str: HUDWindowMoreInfo] = {}
+        self.windows: dict[str: HUDWindowABC] = {}
 
-    def add(self, village_name: str | None=None):
-        tag = village_name or f"village_{self.current_group_id}"
+    def add_more_info(self, village: Village):
+        w = HUDMoreInfoWindow(self.canvas, village)
 
-        self.windows["p" + tag] = HUDWindowMoreInfo(self.canvas, tag)
-        self.windows[tag] = self.windows["p" + tag]
-        self.windows["p" + tag].create()
+        self.windows["p" + w.tag] = w
+        self.windows[w.tag] = self.windows["p" + w.tag]
+        self.windows["p" + w.tag].create()
 
-        self.current_group_id += 1
+    def get_active_window(self, tag: str) -> HUDWindowABC: return self.windows[tag]
 
-    def get_active_window(self) -> HUDWindowMoreInfo: return self.windows[self.canvas.gettags("active")[GROUP_TAG_INDEX]]
+    def show_window(self, tag: str): self.get_active_window(tag).show()
