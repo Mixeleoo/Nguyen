@@ -202,3 +202,26 @@ class BaseCanvas(HighlightCanvas):
                 village_id = square_id + square_around_id
 
         return village_id
+
+    def new_trigger(self, tag: str, func: callable, which_game_mode: tuple[str] = ("basic", "build_city", "build_church")):
+        """
+        Méthode pour généraliser la création de nouveaux comportements d'highlight.
+        """
+
+        # Pour chaque mode de jeu existant
+        for game_mode in ("basic", "build_city", "build_church"):
+
+            # Si la fonction est censée être trigger durant ce mode de jeu
+            if game_mode in which_game_mode:
+
+                # Si le nom du trigger apparaît dores et déjà dans le dictionnaire, c'est pas bon
+                if tag in game_mode:
+                    raise TypeError(
+                        f"{tag} a déjà une fonction attribuée dans le mode de jeu {game_mode}.")
+
+                else:
+                    self.tag_foc[game_mode][tag] = func
+
+            # Sinon ça veut dire qu'il faut attacher lambda e=None: None à ce tag pour le mode de jeu
+            else:
+                self.tag_foc[game_mode][tag] = dummy
