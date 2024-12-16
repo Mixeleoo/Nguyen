@@ -64,11 +64,13 @@ class Village :
         Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.
         Elle servira lorsque le joueur choisira l'action 'Immigration'
         """
-        for v in range(effectif) :
+        # Réduire la taille maximale à 80 habitants.
+        effectif = 80 - self.population if 80 - self.population < effectif else effectif
 
-            if type_v == "artisan" :
+        for v in range(effectif):
+            if type_v == "artisan":
                 self._liste_roturier += [Roturier()]
-            elif type_v == "paysan" :
+            elif type_v == "paysan":
                 self._liste_roturier += [Paysan()]
 
         print(f"Roturiers du village : {self._nom} | {self._identifiant} : \n{self._liste_roturier}")
