@@ -43,6 +43,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_taspasassezdePAgros = HUDMobile.TasPasAssezDePAGros(self)
         self.hudmobile_start_menu = HUDMobile.StartMenu(self)
         self.hudmobile_end_menu = HUDMobile.EndMenu(self)
+        self.hudmobile_more_info_event = HUDMobile.MoreInfoEvent(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
 
@@ -71,6 +72,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros.create()
         self.hudmobile_ilfautfaireunchoixgros.create()
         self.hudmobile_taspasassezdePAgros.create()
+        self.hudmobile_more_info_event.create(geometry_width, geometry_height)
 
         # HUD centrés
         self.hudmobile_choose_type_villager.create()
