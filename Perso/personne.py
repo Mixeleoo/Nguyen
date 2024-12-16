@@ -27,9 +27,15 @@ class Personne:
     def ressources(self):
         return self._ressources
 
+    def reset_resssources(self):
+        self._ressources = 0
+
     @property
     def argent(self):
         return self._argent
+
+    def reset_argent(self):
+        self._argent = 0
 
     def gestion_ressources(self, value: int) -> bool:
         """

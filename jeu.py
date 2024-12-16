@@ -1,5 +1,5 @@
 
-from typing import Literal
+from typing import Literal, Any
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
@@ -59,15 +59,14 @@ class Jeu:
             return 0
 
     # Evenements en début de partie
-
-    def evenement(self):
+    def evenement(self) -> tuple[str, tuple[str, ...], Any]:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
         choix_ev = randint(1,100)
 
-        if 1 <= choix_ev <= 5 :
-            # épidémie : tous les villageois qui ont un espérance de vie inférieure à esp meurent
+        if 1 <= choix_ev <= 5:
+            # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent
             esp = randint(50,100)
             nb_morts = 0
             for village in list(self.joueur_actuel.dico_villages.values()) :
@@ -75,47 +74,58 @@ class Jeu:
                     if villageois.esperance_vie < esp :
                         nb_morts += 1
                         village.liste_roturier.remove(villageois)
-            return "Épidémie", nb_morts
 
-        elif 6 <= choix_ev <= 10 :
-            # incendies : un village aléatoire parmis la liste de villages du joueur/bot disparaît
-            if len(self.joueur_actuel.dico_villages.values()) > 1 :
-                id_village_supp = choice(self.joueur_actuel.dico_villages.keys())
-                return "Incendie", id_village_supp
+            return "Épidémie", (f"Morts : {nb_morts}",), None
 
-        elif 11 <= choix_ev <= 20 :
+        elif 6 <= choix_ev <= 10:
+            # incendies : un village aléatoire parmi la liste de villages du joueur/bot disparaît
+            id_village_supp = choice(list(self.joueur_actuel.dico_villages.keys()))
+            village_supp = self.joueur_actuel.dico_villages.pop(id_village_supp)
+            return "Incendie", (f"Village disparu : {village_supp.nom}",), village_supp
+
+        elif 11 <= choix_ev <= 20:
             # pillage : l'argent et les ressources d'un village son volés
             id_village_pie = choice(list(self.joueur_actuel.dico_villages.keys()))
-            for villageois in self.joueur_actuel.dico_villages[id_village_pie].liste_roturier :
-                villageois._ressources = 0
-                villageois._argent = 0
-            return "Pillage", self.joueur_actuel.dico_villages[id_village_pie].nom
+            qt_arg = 0
+            qt_res = 0
 
-        elif 21 <= choix_ev <= 40 :
+            for villageois in self.joueur_actuel.dico_villages[id_village_pie].liste_roturier:
+                qt_arg += villageois.argent
+                qt_res += villageois.ressources
+
+                villageois.reset_resssources()
+                villageois.reset_argent()
+
+            return "Pillage", (
+                f"Village pillé : {self.joueur_actuel.dico_villages[id_village_pie].nom}",
+                f"Quantité de ressources volées : {qt_res}",
+                f"Quantité d'argent volé : {qt_arg}"
+            ), self.joueur_actuel.dico_villages[id_village_pie]
+
+
+        elif 21 <= choix_ev <= 40:
             # famine : les ressources des terres sont divisées par 2
-            return "Famine"
+            return "Famine", ("Les ressources des terres sont divisées par 2",), None
 
-        elif 41 <= choix_ev <= 64 :
-            return "rien"
+        elif 41 <= choix_ev <= 64:
+            return "Rien", (), None
 
-        elif 65 <= choix_ev <= 84 :
+        elif 65 <= choix_ev <= 84:
             # récolte abondante : ressources des terres doublées
-            return "Récolte abondante"
+            return "Récolte abondante", ("Les ressources des terres sont doublées",), None
 
-        elif 85 <= choix_ev <= 94 :
+        elif 85 <= choix_ev <= 94:
             # immigration : des roturiers augmentent la population d'un village
             id_village_peuple = choice(list(self.joueur_actuel.dico_villages.keys()))
             nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
-            return "Immigration", nb_immigres
+            return "Immigration", (f"Effectif : {nb_immigres}", f"Type : {type_imigres}"), None
 
-        elif 95 <= choix_ev <= 100 :
+        elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
-            return "Vassalisation"
-
-
-
+            noble = choice(self._joueurs)
+            return "Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble
 
     # Actions
 

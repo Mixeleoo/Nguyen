@@ -2,6 +2,8 @@
 import tkinter as tk
 
 from Canvas.base_canvas import BaseCanvas
+from Perso.noble import Noble
+from Territoire.village import Village
 from parameter import *
 
 class HUDCanvas(BaseCanvas):
@@ -311,3 +313,37 @@ class HUDCanvas(BaseCanvas):
         if type_v == "artisan": self.jeu.joueur_actuel.retirer_pa(effectif * 2)
         else: self.jeu.joueur_actuel.retirer_pa(effectif)
         self.update_hudtop()
+
+    def event(self):
+        res = self.jeu.evenement()
+
+        events = {
+            "Incendie": self.event_incendie,
+            "Vassalisation": self.event_vassalisation,
+            "Autre": self.event_autre
+        }
+
+        events.get(res[0], "Autre")(*res)
+
+    def event_incendie(self, type_ev: str, texts: list[str, ...], v: Village):
+        if not len(self.jeu.joueur_actuel.dico_villages):
+            self.hudmobile_end_menu.lose()
+
+        else:
+            # TODO: Retirer le village de la carte et des choix d'impôts.
+            pass
+
+        self.hudmobile_more_info_event.refresh_text(v.nom)
+
+    def event_vassalisation(self, type_ev: str, texts: tuple[str], n: Noble):
+        # TODO: Créer cet HUD
+        self.hudcentered_accept_vassal.show()
+        self.hudmobile_more_info_event.refresh_text(texts)
+
+    def event_autre(self, type_ev: str, texts: tuple[str], *args):
+
+        self.hudmobile_more_info_event.refresh_text(texts)
+        self.update_hudtop()
+
+        self.hud_event.set_text(type_ev)
+        self.hud_event.show_animation()
