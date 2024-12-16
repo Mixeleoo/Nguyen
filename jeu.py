@@ -186,41 +186,44 @@ class Jeu:
         """
         self.joueur_actuel.ajout_soldat(effectif)
 
-    def vassalisation_confirmee(self, pvassaliseur: Noble | Seigneur, pvassalise : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
+    def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
         """
         Méthode qui permet de vassaliser le noble/seigneur mis en paramètre s'il a accepté de se soumettre
         Si le joueur/bot n'est pas encore un Seigneur( n'a encore vassalisé aucun noble), alors il en devient un
         Puis dans sa liste de noble est ajouté le nouveau vassal
 
-        :param pvassaliseur: Joueur vassaliseur.
-        :param pvassalise: Joueur vassalisé.
+        :param pnoble: Joueur vassalisé.
         :param parg: Quantité d'argent que le joueur/bot souhaite offrir à son futur vassal qui lui sont donc retiré
         :param pres: Quantité de ressources que le joueur/bot souhaite offir à son futur vassal qui lui sont donc retiré
         """
 
-        pvassaliseur.gestion_ressources(-pres)
-        pvassaliseur.gestion_argent(-parg)
+        self.joueur_actuel.gestion_ressources(-pres)
+        self.joueur_actuel.gestion_argent(-parg)
 
-        nobles_vassalises = [pvassalise]
+        nobles_vassalises = [pnoble]
 
-        if not(isinstance(pvassaliseur, Seigneur)):
-            new_seigneur = Seigneur(pvassaliseur.nom, pvassaliseur.ressources, pvassaliseur.argent)
-            new_seigneur.dico_villages = pvassaliseur.dico_villages
-            new_seigneur.liste_soldats = pvassaliseur.liste_soldats
-            self._joueurs[self.get_joueur_index(pvassaliseur)] = new_seigneur
-            self._const_joueurs[self.get_joueur_index(pvassaliseur)] = new_seigneur
+        if not(isinstance(self.joueur_actuel, Seigneur)):
+            new_seigneur = Seigneur(self.joueur_actuel.nom, self.joueur_actuel.ressources, self.joueur_actuel.argent)
+            new_seigneur.dico_villages = self.joueur_actuel.dico_villages
+            new_seigneur.liste_soldats = self.joueur_actuel.liste_soldats
 
-        # Si le Noble vassalisé est un seigneur, on gagne ses vassaux.
-        if isinstance(pvassalise, Seigneur):
-            self._joueurs[self.get_joueur_index(pvassaliseur)].liste_nobles = pvassalise.liste_nobles
-            nobles_vassalises += pvassalise.liste_nobles
+            index = self.get_joueur_index(self.joueur_actuel)
+            self._joueurs[index] = new_seigneur
+            self._const_joueurs[index] = new_seigneur
+
+        # Si le noble vassalisé est un seigneur, le noble vassaliseur gagne ses vassaux.
+        if isinstance(pnoble, Seigneur):
+            self.joueur_actuel.liste_nobles = pnoble.liste_nobles
+            nobles_vassalises += pnoble.liste_nobles
 
         # Transformation du Noble en vassal
-        new_vassal = Vassal(pvassalise.nom, pvassalise.ressources, pvassalise.argent)
-        new_vassal.dico_villages = pvassalise.dico_villages
-        new_vassal.liste_soldats = pvassalise.liste_soldats
-        self._joueurs[self.get_joueur_index(pvassalise)] = new_vassal
-        self._const_joueurs[self.get_joueur_index(pvassalise)] = new_vassal
+        new_vassal = Vassal(pnoble.nom, pnoble.ressources, pnoble.argent)
+        new_vassal.dico_villages = pnoble.dico_villages
+        new_vassal.liste_soldats = pnoble.liste_soldats
+
+        index = self.get_joueur_index(pnoble)
+        self._joueurs[index] = new_vassal
+        self._const_joueurs[index] = new_vassal
 
         self.joueur_actuel.liste_nobles += [new_vassal]
 
@@ -285,4 +288,7 @@ class Jeu:
 
         else:
             # TODO Éloïse.
+
+            # Je mets ça juste pour que ça ne fasse pas une boucle infinie, tu pourras l'enlever
+            self.joueur_actuel.retirer_pa(1)
             pass

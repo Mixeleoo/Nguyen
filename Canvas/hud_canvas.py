@@ -350,9 +350,9 @@ class HUDCanvas(BaseCanvas):
 
     def event_accept_vassal(self, n: Noble):
 
-        self.jeu.vassalisation_confirmee(n, 0, 0)
         # TODO: Si le noble vassalisé est un seigneur, ajouter tous ses vassaux.
         noble_index = self.jeu.get_joueur_index(n)
+        self.jeu.vassalisation_confirmee(n, 0, 0)
 
         if self.jeu.nb_joueurs == 1:
             self.hudmobile_end_menu.win()
