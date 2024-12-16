@@ -338,14 +338,14 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_end_menu.lose()
 
         else:
-            # TODO: Retirer le village de la carte.
+            # TODO Léo: Retirer le village de la carte.
             self.hudmobile_choose_taxes.remove_village(v.id)
             pass
 
         self.hudmobile_more_info_event.refresh_text(v.nom)
 
     def event_vassalisation(self, type_ev: str, texts: tuple[str], n: Noble):
-        self.hudmobile_accept_vassal.show(n)
+        self.hudcentered_accept_vassal.show(n)
         self.hudmobile_more_info_event.refresh_text(texts)
 
     def event_accept_vassal(self, n: Noble):

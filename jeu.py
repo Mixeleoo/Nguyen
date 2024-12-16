@@ -3,6 +3,7 @@ from typing import Literal, Any
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
+from Perso.vassal import Vassal
 from Territoire.village import Village
 from parameter import *
 
@@ -15,25 +16,39 @@ from parameter import *
 class Jeu:
     def __init__(self):
 
-        self._const_joueurs: list[Noble] = []
-        self._joueurs: list[Noble] = []
+        self._const_joueurs: list[Vassal | Noble | Seigneur] = []
+        self._joueurs: list[Vassal | Noble | Seigneur] = []
 
         """
         Variable qui indique l'indice du joueur en train de jouer,
         est incrémentée lorsque le joueur clique sur "fin de tour" ou quand le bot fini son tour
         """
-        self._id_joueur_actuel = 0
+        self._index_joueur_actuel = 0
 
     @property
-    def joueur_actuel(self) -> Noble|Seigneur:
-        return self._joueurs[self._id_joueur_actuel]
+    def joueur_actuel(self) -> Noble | Seigneur:
+        return self._joueurs[self._index_joueur_actuel]
+
+    def fin_de_tour(self):
+        self._index_joueur_actuel = (self._index_joueur_actuel + 1) % (NB_NOBLE_AU_DEPART + 1)
 
     @property
     def nb_joueurs(self) -> int:
-        return len(self._joueurs)
+        return len([j for j in self._joueurs if isinstance(j, Noble)])
 
     def get_joueur_index(self, n: Noble) -> int:
+    def get_joueur(self, index: int) -> Noble:
+        return self._joueurs[index]
+
+    def get_joueur_index(self, n: Noble | Seigneur) -> int:
         return self._joueurs.index(n)
+
+    def get_const_joueur(self, index: int) -> Noble:
+        return self._const_joueurs[index]
+
+    @property
+    def index_joueur_actuel(self):
+        return self._index_joueur_actuel
 
     def get_village(self, village_id: int) -> Village | None:
         """
