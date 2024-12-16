@@ -55,6 +55,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_noble_vassaliser = HUDCentered.ChooseNobleVassaliser(self)
         self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
         self.hudcentered_choose_noble_war = HUDCentered.ChooseNobleWar(self)
+        self.hudmobile_accept_vassal = HUDCentered.AcceptVassal(self)
 
         self.hudwindow_supervisor = HUDWindowSupervisor(self)
 
@@ -83,6 +84,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_arg_res.create()
         self.hudcentered_choose_noble_war.create()
+        self.hudmobile_accept_vassal.create()
 
         self.init_nobles()
 
@@ -319,26 +321,46 @@ class HUDCanvas(BaseCanvas):
 
         events = {
             "Incendie": self.event_incendie,
-            "Vassalisation": self.event_vassalisation,
-            "Autre": self.event_autre
+            "Vassalisation": self.event_vassalisation
         }
 
-        events.get(res[0], "Autre")(*res)
+        events.get(res[0], self.event_autre)(*res)
 
     def event_incendie(self, type_ev: str, texts: list[str, ...], v: Village):
         if not len(self.jeu.joueur_actuel.dico_villages):
             self.hudmobile_end_menu.lose()
 
         else:
-            # TODO: Retirer le village de la carte et des choix d'impôts.
+            # TODO: Retirer le village de la carte.
+            self.hudmobile_choose_taxes.remove_village(v.id)
             pass
 
         self.hudmobile_more_info_event.refresh_text(v.nom)
 
     def event_vassalisation(self, type_ev: str, texts: tuple[str], n: Noble):
-        # TODO: Créer cet HUD
-        self.hudcentered_accept_vassal.show()
+        self.hudmobile_accept_vassal.show(n)
         self.hudmobile_more_info_event.refresh_text(texts)
+
+    def event_accept_vassal(self, n: Noble):
+
+        self.jeu.vassalisation_confirmee(n, 0, 0)
+        noble_index = self.jeu.get_joueur_index(n)
+
+        if self.jeu.nb_joueurs == 1:
+            self.hudmobile_end_menu.win()
+
+        else:
+            self.add_history_text("Vous avez vassalisé " + n.nom)
+
+            # Ajouter le nouveau choix de noble à imposer
+            self.hudmobile_choose_taxes.add_noble(n.nom, noble_index)
+
+            # Retirer le choix de noble à vassaliser et guerre
+            self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+            self.hudcentered_choose_noble_war.remove_noble(noble_index)
+
+            # On met à jour l'HUD des caractéristiques
+            self.update_hudtop()
 
     def event_autre(self, type_ev: str, texts: tuple[str], *args):
 

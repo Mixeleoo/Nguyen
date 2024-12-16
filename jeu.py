@@ -7,7 +7,6 @@ from Territoire.village import Village
 from parameter import *
 # TODO: établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
 # TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
-# TODO: Créer un HUD pour l'évènement vassalisation voulez-vous accepter toto comme vassal ?
 # TODO: Afficher l'HUD event quand il y a un évènement, également les infos suplémentaires avec le bouton "i".
 # TODO: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
 # TODO: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
@@ -31,6 +30,9 @@ class Jeu:
     @property
     def nb_joueurs(self) -> int:
         return len(self._joueurs)
+
+    def get_joueur_index(self, n: Noble) -> int:
+        return self._joueurs.index(n)
 
     def get_village(self, village_id: int) -> Village | None:
         """
@@ -63,7 +65,7 @@ class Jeu:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
-        choix_ev = randint(1,100)
+        choix_ev = 100 #randint(1,100)
 
         if 1 <= choix_ev <= 5:
             # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent
