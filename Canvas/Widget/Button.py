@@ -66,7 +66,7 @@ class ButtonABC(ABC):
 class Button(ButtonABC):
     def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
                  func_triggered: callable = dummy,
-                 for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")):
+                 for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")):
 
         super().__init__(canvas, hud_tag, trigger_name, func_triggered, for_which_game_mode)
 
@@ -137,7 +137,7 @@ class ButtonSupervisor:
     def add(
             self, hud_tag: str, trigger_name: str = NOTHING_TAG,
             func_triggered: callable = dummy,
-            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
         Méthode qui servira à ajouter des boutons
@@ -156,7 +156,7 @@ class ButtonSupervisor:
     def create_ok_button(
             self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
             state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
-            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
         Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
@@ -179,7 +179,7 @@ class ButtonSupervisor:
     def create_cancel_button(
             self, x0_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
             state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
-            for_which_game_mode: tuple[str, ...] = ("basic", "build_city", "build_church")
+            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
     ) -> Button:
         """
         Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
