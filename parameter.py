@@ -213,6 +213,43 @@ def get_width_text(text: str):
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
 
+
+def separer_chaine_sans_couper(chaine, n):
+    # Vérifie que n est un entier positif
+    if n <= 0:
+        raise ValueError("n doit être un entier positif non nul")
+
+    # Cas où n == 1 : toute la chaîne dans un seul segment
+    if n == 1:
+        return chaine.strip()
+
+    # Calcul de la longueur d'un segment approximatif
+    segment_length = len(chaine) // n
+    if segment_length == 0:
+        raise ValueError("n est trop grand par rapport à la longueur de la chaîne.")
+
+    # Liste pour stocker les segments
+    segments = []
+    segment = ""
+
+    # Parcours des mots
+    for mot in chaine.split():
+        # Ajoute le mot si le segment ne dépasse pas la longueur cible
+        if len(segment) + len(mot) + 1 <= segment_length:
+            segment += (mot + " ")
+        else:
+            # Ajoute le segment terminé à la liste et démarre un nouveau
+            segments.append(segment.strip())
+            segment = mot + " "
+
+    # Ajoute le dernier segment
+    if segment:
+        segments.append(segment.strip())
+
+    # Assemble les segments avec "\n"
+    return '\n'.join(segments)
+
+
 Position = namedtuple('Position', ['x', 'y'])
 
 noms_village = [
