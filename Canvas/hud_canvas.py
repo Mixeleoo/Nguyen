@@ -227,6 +227,7 @@ class HUDCanvas(BaseCanvas):
                 don_argent,
                 don_ressources
             )
+            # TODO: Si le noble vassalisé est un seigneur, ajouter tous ses vassaux.
 
             if self.jeu.nb_joueurs == 1:
                 self.hudmobile_end_menu.win()
@@ -244,6 +245,10 @@ class HUDCanvas(BaseCanvas):
                 # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
                 self.jeu.joueur_actuel.retirer_pa(4)
                 self.update_hudtop()
+
+        else:
+            # TODO Léo: Vassalisation refusée -> guerre
+            pass
 
     def war(self, noble_index: int):
 
@@ -346,6 +351,7 @@ class HUDCanvas(BaseCanvas):
     def event_accept_vassal(self, n: Noble):
 
         self.jeu.vassalisation_confirmee(n, 0, 0)
+        # TODO: Si le noble vassalisé est un seigneur, ajouter tous ses vassaux.
         noble_index = self.jeu.get_joueur_index(n)
 
         if self.jeu.nb_joueurs == 1:
