@@ -5,7 +5,6 @@ from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Territoire.village import Village
 from parameter import *
-# TODO: écran début, écran de fin
 # TODO: établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
 # TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
 # TODO: Créer un HUD pour l'évènement vassalisation voulez-vous accepter toto comme vassal ?
@@ -188,6 +187,7 @@ class Jeu:
 
         self.joueur_actuel.gestion_ressources(-pres)
         self.joueur_actuel.gestion_argent(-parg)
+        # TODO: Transformer les nouveaux vassaux en Vassal
 
         if not(isinstance(self.joueur_actuel, Seigneur)) :
             new_seigneur = Seigneur(self.joueur_actuel.nom,self.joueur_actuel.ressources,self.joueur_actuel.argent)

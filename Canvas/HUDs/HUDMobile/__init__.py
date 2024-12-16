@@ -4,6 +4,8 @@ from .village_info import VillageInfo
 from .yaunvillagegros import YaUnVillageGros
 from .ilfautfaireunchoixgros import IlFautFaireUnChoixGros
 from .taspasassezdePAgros import TasPasAssezDePAGros
+from .start_menu import StartMenu
+from .end_menu import EndMenu
 
 __all__ = [
     name for name, obj in globals().items() if not name.startswith('_')

@@ -41,6 +41,8 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
         self.hudmobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
         self.hudmobile_taspasassezdePAgros = HUDMobile.TasPasAssezDePAGros(self)
+        self.hudmobile_start_menu = HUDMobile.StartMenu(self)
+        self.hudmobile_end_menu = HUDMobile.EndMenu(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
 
@@ -62,6 +64,7 @@ class HUDCanvas(BaseCanvas):
         self.hud_build_church.create(geometry_width, geometry_height)
         self.hud_event.create(geometry_width, geometry_height)
         self.hud_end_turn.create(geometry_width, geometry_height)
+        self.hudmobile_end_menu.create(geometry_width, geometry_height)
 
         # HUDs mobile
         self.hudmobile_village_info.create()
@@ -80,6 +83,7 @@ class HUDCanvas(BaseCanvas):
         self.init_nobles()
 
         self.hud_top_side.create(geometry_width, geometry_height)
+        self.hudmobile_start_menu.create(geometry_width, geometry_height)
 
     def hide_all_permanant_huds(self):
         # On simule un clic sur le bouton qui cache les pages d'actions
@@ -216,34 +220,45 @@ class HUDCanvas(BaseCanvas):
                 don_ressources
             )
 
-            self.add_history_text("Vous avez vassalisé " + noble_selected.nom)
+            if self.jeu.nb_joueurs == 1:
+                self.hudmobile_end_menu.win()
 
-            # Ajouter le nouveau choix de noble à imposer
-            self.hudmobile_choose_taxes.add_noble(noble_selected.nom, noble_selected_index)
+            else:
+                self.add_history_text("Vous avez vassalisé " + noble_selected.nom)
 
-            # Retirer le choix de noble à vassaliser et guerre
-            self.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
-            self.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
+                # Ajouter le nouveau choix de noble à imposer
+                self.hudmobile_choose_taxes.add_noble(noble_selected.nom, noble_selected_index)
 
-            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-            self.jeu.joueur_actuel.retirer_pa(4)
-            self.update_hudtop()
+                # Retirer le choix de noble à vassaliser et guerre
+                self.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
+                self.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
+
+                # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+                self.jeu.joueur_actuel.retirer_pa(4)
+                self.update_hudtop()
 
     def war(self, noble_index: int):
 
         noble = self.jeu.get_const_joueur(noble_index)
+        # Si le joueur remporte la guerre.
         if self.jeu.guerre(noble):
-            self.add_history_text(f"Tu as battu {noble.nom}.")
 
-            self.hudcentered_choose_noble_war.remove_noble(noble_index)
-            self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+            # S'il est le dernier alors, il a gagné.
+            if self.jeu.nb_joueurs == 1:
+                self.hudmobile_end_menu.win()
 
-            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-            self.jeu.joueur_actuel.retirer_pa(8)
-            self.update_hudtop()
+            else:
+                self.add_history_text(f"Tu as battu {noble.nom}.")
+
+                self.hudcentered_choose_noble_war.remove_noble(noble_index)
+                self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+
+                # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
+                self.jeu.joueur_actuel.retirer_pa(8)
+                self.update_hudtop()
 
         else:
-            self.add_history_text(f"{noble.nom} vous a battu.")
+            self.hudmobile_end_menu.lose()
 
     def imposer(self, l_villages: list[int], l_nobles: list[int]):
         self.jeu.imposer(l_villages, l_nobles)
