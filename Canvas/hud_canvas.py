@@ -55,7 +55,8 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_noble_vassaliser = HUDCentered.ChooseNobleVassaliser(self)
         self.hudmobile_choose_arg_res = HUDCentered.ChooseArgRes(self)
         self.hudcentered_choose_noble_war = HUDCentered.ChooseNobleWar(self)
-        self.hudmobile_accept_vassal = HUDCentered.AcceptVassal(self)
+        self.hudcentered_accept_vassal = HUDCentered.AcceptVassal(self)
+        self.hudcentered_results_war = HUDCentered.ResultsWar(self)
 
         self.hudwindow_supervisor = HUDWindowSupervisor(self)
 
@@ -84,7 +85,8 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_taxes.create()
         self.hudmobile_choose_arg_res.create()
         self.hudcentered_choose_noble_war.create()
-        self.hudmobile_accept_vassal.create()
+        self.hudcentered_accept_vassal.create()
+        self.hudcentered_results_war.create()
 
         self.init_nobles()
 
