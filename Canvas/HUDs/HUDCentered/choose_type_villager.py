@@ -110,7 +110,7 @@ class ChooseTypeVillager(HUDCenteredABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.cancel, state="hidden", is_temp=True
         )
 
-    def update(self):
+    def update(self, *args):
         self.callback_quantity_selector(self.quantity_selector_hum.quantity)
 
     def ok_trigger(self, e=None):

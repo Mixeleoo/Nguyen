@@ -12,7 +12,7 @@ class HUDCenteredABC(HUDMobileABC, ABC):
         self.shake_it = 0
 
     @abstractmethod
-    def update(self):
+    def update(self, *args):
         """
         Méthode lancée avant le replace.
         """
@@ -20,7 +20,7 @@ class HUDCenteredABC(HUDMobileABC, ABC):
 
     def replace(self, *args) -> None:
 
-        self.update()
+        self.update(*args)
 
         bbox = self.canvas.bbox(self.tag)
 

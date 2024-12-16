@@ -32,7 +32,7 @@ class ChooseVillage(HUDCenteredABC):
             x0_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.bhide, is_temp=True, state="hidden"
         )
 
-    def update(self):
+    def update(self, *args):
         pass
 
     def ok_trigger(self, event: tk.Event) -> None:

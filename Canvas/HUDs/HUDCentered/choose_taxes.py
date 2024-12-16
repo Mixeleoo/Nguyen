@@ -14,7 +14,7 @@ class ChooseTaxes(HUDCenteredABC):
         self.choose_nobles = ChooseNobles(canvas, self.tag)
 
         self.add_village = self.choose_villages.add_option
-        self.remove_noble = self.choose_villages.remove_option
+        self.remove_village = self.choose_villages.remove_option
 
         self.add_noble = self.choose_nobles.add_option
         self.remove_noble = self.choose_nobles.remove_option
@@ -38,7 +38,7 @@ class ChooseTaxes(HUDCenteredABC):
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, is_temp=True, state="hidden"
         )
 
-    def update(self):
+    def update(self, *args):
         pass
 
     def ok_trigger(self, *args):
