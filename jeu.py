@@ -251,3 +251,22 @@ class Jeu:
 
         else:
             return False
+
+    def tour_noble(self) -> tuple[str, ...]:
+        """
+        Méthode qui lancera UNE action du noble actuellement en train de jouer.
+        S'il fait la guerre contre le joueur (l'utilisateur) et que le joueur perd, plus besoin de finir les tours des nobles.
+
+        :return: un tuple comportant (
+            "Titre action effectuée",
+            "Message à écrire dans l'historique",
+            Noble vassalisé ou Noble déclérant la guerre au joueur sinon None.
+        )
+        """
+
+        if self.joueur_actuel.pa == 0:
+            self.fin_de_tour()
+
+        else:
+            # TODO Éloïse.
+            pass

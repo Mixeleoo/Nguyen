@@ -43,5 +43,4 @@ class EndTurn(HUDABC):
         pass
 
     def trigger(self, *args):
-        # TODO: Il faut laisser les bots jouer avant de lancer tout ça mais pour l'instant c'est le test
-        self.canvas.event()
+        self.canvas.end_turn_trigger()

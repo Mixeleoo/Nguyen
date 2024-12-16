@@ -371,3 +371,24 @@ class HUDCanvas(BaseCanvas):
 
         self.hud_event.set_text(type_ev)
         self.hud_event.show_animation()
+
+    def end_turn_trigger(self):
+        self.jeu.fin_de_tour()
+        rev = self.jeu.joueur_actuel.reaction_revolte()
+        if rev:
+            # VICTOIRE
+            if rev[0] == "V":
+                self.hudcentered_results_war.show(rev[1])
+
+            # DEFAITE
+            else:
+                self.hudmobile_end_menu.lose()
+
+        # Tour des nobles.
+
+        while self.jeu.index_joueur_actuel != 0:
+            self.jeu.tour_noble()
+            # TODO Léo: Gérer le cas de l'affichage des guerres déclenchées par les bots et si on s'est fait vaincre.
+            # TODO Léo: Gérer le cas des vassalisations, supprimer le noble des choix.
+
+        self.event()

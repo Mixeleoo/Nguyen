@@ -135,3 +135,14 @@ class Vassal(Personne):
             self._liste_soldats = self._liste_soldats[:self._ressources]
 
         return deces
+
+    def reaction_revolte(self) -> tuple:
+        """
+        Méthode lancée par le jeu après avoir cliqué sur fin de tour.
+        Si une révolte se produit.
+            Si le joueur gagne, renvoyer "V" puis le nombre de soldats ensuite de roturiers perdus sous forme de chaîne de caractère.
+            Sinon supprimer le village de la liste des villages comme dans l'évènement Incendie et renvoyer "D".
+        Sinon renvoyer un tuple vide.
+        """
+        # TODO Éloïse
+        pass
