@@ -5,9 +5,10 @@ from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Territoire.village import Village
 from parameter import *
-# TODO: établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
-# TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
-# TODO: Afficher l'HUD event quand il y a un évènement, également les infos suplémentaires avec le bouton "i".
+
+# TODO: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre. 80 pop max par village.
+# TODO: Créer l'HUD pour afficher les résultats de la guerre, pour l'action ET pour la réaction si vassalisation refusée ET pour la révolte. Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
+# TODO: Ajouter le tour des nobles.
 # TODO: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
 # TODO: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
 

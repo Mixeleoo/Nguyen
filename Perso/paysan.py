@@ -1,6 +1,4 @@
 
-from random import randint
-
 from Perso.roturier import Roturier
 
 class Paysan(Roturier):
