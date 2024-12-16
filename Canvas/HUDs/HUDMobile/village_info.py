@@ -13,10 +13,6 @@ class VillageInfo(HUDMobileABC):
         self.more_info_button_id = 0
         self.texts: list[StringVar] = []
 
-    @property
-    def tag(self):
-        return TEMP_VILLAGE_INFO_TAG
-
     def create(self):
 
         width = 120

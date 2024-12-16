@@ -18,10 +18,6 @@ class ChooseArgRes(HUDCenteredABC):
             max_quantity=0
         )
 
-    @property
-    def tag(self):
-        return "ChooseArgRes"
-
     def create(self):
 
         width = 300

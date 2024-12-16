@@ -13,10 +13,6 @@ class TopSide(HUDABC):
         self.texts: list[StringVar] = []
 
     @property
-    def tag(self):
-        return HUD_TOP_SIDE
-
-    @property
     def arrival_pos_show(self) -> Position: return Position(0, 0)
     @property
     def curr_show_pos(self) -> Position: return Position(0, 0)

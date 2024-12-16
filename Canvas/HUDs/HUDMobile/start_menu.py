@@ -6,10 +6,6 @@ class StartMenu(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-    @property
-    def tag(self):
-        return "StartMenu"
-
     def create(self, geometry_width, geometry_height):
 
         center_x = geometry_width // 2

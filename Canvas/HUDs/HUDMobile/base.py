@@ -8,12 +8,8 @@ class HUDMobileABC(ABC):
         self.canvas = canvas
 
     @property
-    @abstractmethod
     def tag(self):
-        """
-        Méthode pour retourner le tag de l'HUD
-        """
-        pass
+        return self.__class__.__name__
 
     @abstractmethod
     def create(self, *args):

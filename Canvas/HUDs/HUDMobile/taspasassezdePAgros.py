@@ -11,10 +11,6 @@ class TasPasAssezDePAGros(HUDMobileABC):
         self.id = 0
         self.after_hide_id = None
 
-    @property
-    def tag(self):
-        return "TasPasAssezDePAGros"
-
     def create(self) -> None:
 
         text = "T'as pas assez de PA gros"

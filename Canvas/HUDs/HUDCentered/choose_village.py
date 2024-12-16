@@ -18,10 +18,6 @@ class ChooseVillage(HUDCenteredABC):
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
 
-    @property
-    def tag(self):
-        return CHOOSE_VILLAGE_TAG
-
     def create(self):
 
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.choose_village.create(0, 0)

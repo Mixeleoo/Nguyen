@@ -26,8 +26,6 @@ class Actions(HUDABC):
         self.temp_tag_storage: list[str] = ["", ""]
 
     @property
-    def tag(self): return HUD_BOTTOM
-    @property
     def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(self.actions_rectangle_ids[0])[3])
     @property
     def curr_hide_pos(self) -> Position: return Position(0, self.canvas.coords(SHOW_OR_HIDE_PAGE_TAG)[3])
@@ -164,7 +162,7 @@ class Actions(HUDABC):
         - mouvement sur y : On déplace tous les éléments
         """
         self.canvas.move(
-            HUD_BOTTOM,
+            self.tag,
             PADX_BOTTOM_HUD + 5 - self.canvas.coords(self.canvas.find_withtag(CHANGE_PAGE_MINUS)[0])[0],
             event.height - self.canvas.master.previous_geometry[1]
         )

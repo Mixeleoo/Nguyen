@@ -24,10 +24,6 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         self.radiobutton_choice: Optional[Radiobutton] = None
 
-    @property
-    def tag(self):
-        return PAYSAN_OR_ARTISAN_WINDOW_TAG
-
     def create(self):
 
         height = 150

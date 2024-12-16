@@ -21,10 +21,6 @@ class History(HUDABC):
         self.longueur_texte = 0
 
     @property
-    def tag(self):
-        return HUD_RIGHT_SIDE
-
-    @property
     def arrival_pos_show(self) -> Position: return Position(self.canvas.master.winfo_width() - 15, 0)
     @property
     def curr_show_pos(self) -> Position: return Position(self.canvas.coords(self.background_rect_id)[2], 0)

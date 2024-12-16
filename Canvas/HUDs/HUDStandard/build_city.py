@@ -12,10 +12,6 @@ class BuildCity(HUDABC):
         self.background_rect_id = 0
 
     @property
-    def tag(self):
-        return HUD_BUILD_CITY
-
-    @property
     def arrival_pos_show(self) -> Position: return Position(0, PADY_BUILD_CITY_HUD)
     @property
     def curr_show_pos(self) -> Position: return Position(0, self.canvas.coords(self.background_rect_id)[1])

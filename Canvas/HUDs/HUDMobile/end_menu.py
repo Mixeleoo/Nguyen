@@ -35,10 +35,6 @@ class EndMenu(HUDMobileABC):
 
         self._text = StringVar(self.canvas)
 
-    @property
-    def tag(self):
-        return self.__class__.__name__
-
     def create(self, geometry_width, geometry_height):
 
         center_x = geometry_width // 2

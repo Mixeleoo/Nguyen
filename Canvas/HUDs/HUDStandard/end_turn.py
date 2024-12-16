@@ -7,10 +7,6 @@ class EndTurn(HUDABC):
         super().__init__(canvas)
 
     @property
-    def tag(self):
-        return "EndTurn"
-
-    @property
     def curr_show_pos(self) -> Position:
         bbox = self.canvas.bbox(self.tag)
         return Position(bbox[2], bbox[3])

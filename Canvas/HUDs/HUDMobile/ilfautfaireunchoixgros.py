@@ -11,10 +11,6 @@ class IlFautFaireUnChoixGros(HUDMobileABC):
         self.id = 0
         self.after_hide_id = None
 
-    @property
-    def tag(self):
-        return "IlFautFaireUnChoixGros"
-
     def create(self) -> None:
 
         text = "Il faut faire un choix gros"

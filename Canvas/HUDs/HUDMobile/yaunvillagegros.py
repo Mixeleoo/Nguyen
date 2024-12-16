@@ -9,10 +9,6 @@ class YaUnVillageGros(HUDMobileABC):
 
         self.triangle_id = 0
 
-    @property
-    def tag(self):
-        return TEMP_YAUNVILLAGEICIGROS_TAG
-
     def create(self) -> None:
         # On va créer l'HUDs sur la première case
         village_coords = self.canvas.coords(self.canvas.find_withtag(MAP_TAG)[0])
