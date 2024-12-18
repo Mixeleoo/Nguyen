@@ -156,7 +156,7 @@ class Jeu:
         :param prenom: prenom du noble
         :param nom_village: nom du village
         """
-        nouveau_noble = Noble(prenom, 100, 10)
+        nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs))
         v = nouveau_noble.ajouter_village(village_id, nom_village)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)
@@ -238,7 +238,7 @@ class Jeu:
         nobles_vassalises = [pnoble]
 
         if not(isinstance(self.joueur_actuel, Seigneur)):
-            new_seigneur = Seigneur(self.joueur_actuel.nom, self.joueur_actuel.ressources, self.joueur_actuel.argent)
+            new_seigneur = Seigneur(self.joueur_actuel.nom, self.joueur_actuel.ressources, self.joueur_actuel.argent, self.joueur_actuel.id)
             new_seigneur.dico_villages = self.joueur_actuel.dico_villages
             new_seigneur.liste_soldats = self.joueur_actuel.liste_soldats
 
@@ -252,7 +252,7 @@ class Jeu:
             nobles_vassalises += pnoble.liste_nobles
 
         # Transformation du Noble en vassal
-        new_vassal = Vassal(pnoble.nom, pnoble.ressources, pnoble.argent)
+        new_vassal = Vassal(pnoble.nom, pnoble.ressources, pnoble.argent, pnoble.id)
         new_vassal.dico_villages = pnoble.dico_villages
         new_vassal.liste_soldats = pnoble.liste_soldats
 

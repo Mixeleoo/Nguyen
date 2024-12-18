@@ -14,10 +14,12 @@ class Vassal(Personne):
     en cours de partie
     Il sera réinitialisé à chaque fin de tour
     """
-    def __init__(self, pnom: str, pres: int, parg: int):
+    def __init__(self, pnom: str, pres: int, parg: int, index: int):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
         self._pa = 100
+
+        self._id = index  # ça sera simplement l'index du noble dans la liste des joueurs CRÉE AU DEBUT DU JEU
 
         # Dictionnaire des villages que le noble dirige avec la structure suivante : identifiant_village : int -> Village
         # Servira à accéder à la liste de Roturiers que le noble possède
@@ -25,6 +27,10 @@ class Vassal(Personne):
 
         # Liste des soldats sous les ordres du noble
         self._liste_soldats: list[Soldat] = []
+
+    @property
+    def id(self) -> int:
+        return self._id
 
     @property
     def pa(self) -> int:
