@@ -1,11 +1,19 @@
 
-from typing import Literal, Any
+from typing import Literal
+from dataclasses import dataclass
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
 from Territoire.village import Village
 from parameter import *
+
+@dataclass
+class EventInfo:
+    type: Literal["Épidémie", "Incendie", "Pillage", "Famine", "Rien", "Récolte abondante", "Immigration", "Vassalisation"]
+    descriptif: str = ""
+    noble_vassalise: Vassal = None
+    village_incendie: Village = None
 
 # TODO Léo: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
 # TODO Léo: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
@@ -60,7 +68,7 @@ class Jeu:
             return None
 
     # Evenements en début de partie
-    def evenement(self) -> tuple[str, tuple[str, ...], Any]:
+    def evenement(self) -> EventInfo:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
@@ -76,13 +84,14 @@ class Jeu:
                         nb_morts += 1
                         village.liste_roturier.remove(villageois)
 
-            return "Épidémie", (f"Morts : {nb_morts}",), None
+            return EventInfo("Épidémie", f"Morts : {nb_morts}")
 
         elif 6 <= choix_ev <= 10:
             # incendies : un village aléatoire parmi la liste de villages du joueur/bot disparaît
             id_village_supp = choice(list(self.joueur_actuel.dico_villages.keys()))
             village_supp = self.joueur_actuel.dico_villages.pop(id_village_supp)
-            return "Incendie", (f"Village disparu : {village_supp.nom}",), village_supp
+
+            return EventInfo("Incendie", f"Village disparu : {village_supp.nom}", village_incendie=village_supp)
 
         elif 11 <= choix_ev <= 20:
             # pillage : l'argent et les ressources d'un village son volés
@@ -97,23 +106,21 @@ class Jeu:
                 villageois.reset_resssources()
                 villageois.reset_argent()
 
-            return "Pillage", (
-                f"Village pillé : {self.joueur_actuel.dico_villages[id_village_pie].nom}",
-                f"Quantité de ressources volées : {qt_res}",
-                f"Quantité d'argent volé : {qt_arg}"
-            ), self.joueur_actuel.dico_villages[id_village_pie]
-
+            return EventInfo("Pillage",
+                f"Village pillé : {self.joueur_actuel.dico_villages[id_village_pie].nom}\n"
+                f"Quantité de ressources volées : {qt_res}\n"
+                f"Quantité d'argent volé : {qt_arg}")
 
         elif 21 <= choix_ev <= 40:
             # famine : les ressources des terres sont divisées par 2
-            return "Famine", ("Les ressources des terres sont divisées par 2",), None
+            return EventInfo("Famine", "Les ressources des terres sont divisées par 2")
 
         elif 41 <= choix_ev <= 64:
-            return "Rien", (), None
+            return EventInfo("Rien")
 
         elif 65 <= choix_ev <= 84:
             # récolte abondante : ressources des terres doublées
-            return "Récolte abondante", ("Les ressources des terres sont doublées",), None
+            return EventInfo("Récolte abondante", "Les ressources des terres sont doublées")
 
         elif 85 <= choix_ev <= 94:
             # immigration : des roturiers augmentent la population d'un village
@@ -121,12 +128,12 @@ class Jeu:
             nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
-            return "Immigration", (f"Effectif : {nb_immigres}", f"Type : {type_imigres}"), None
+            return EventInfo("Immigration", f"Effectif : {nb_immigres}\nType : {type_imigres}")
 
         elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
             noble = choice(self._joueurs)
-            return "Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble
+            return EventInfo("Vassalisation", f"Se propose comme vassal : {noble.nom}", noble_vassalise=noble)
 
     # Actions
 
@@ -171,6 +178,7 @@ class Jeu:
         Méthode qui va ajouter un village dans la liste de villages du joueur
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
+        :param nom:
         """
         self.joueur_actuel.ajouter_village(village_id, nom)
         print("ID emplacement :",village_id)
