@@ -252,6 +252,9 @@ class HUDCanvas(BaseCanvas):
             self.war(noble_selected_index)
 
     def war(self, noble_index: int):
+        """
+        Méthode qui gère la guerre entre le joueur actuel et noble_index
+        """
 
         noble = self.jeu.get_const_joueur(noble_index)
 
@@ -277,6 +280,10 @@ class HUDCanvas(BaseCanvas):
             self.lose()
 
     def imposer(self, l_villages: list[int], l_nobles: list[int]):
+        """
+        Méthode appelée lors du clic gauche sur le bouton OK du choix de qui taxer.
+        """
+
         self.jeu.imposer(l_villages, l_nobles)
 
         # On met à jour l'HUD des caractéristiques
@@ -401,8 +408,10 @@ class HUDCanvas(BaseCanvas):
         events.get(eventinfo.type, self.event_autre)(eventinfo)
 
     def event_incendie(self, eventinfo: EventInfo):
+
+        # Si le joueur n'a plus qu'un village, il a perdu.
         if not len(self.jeu.joueur_actuel.dico_villages):
-            self.hudmobile_end_menu.lose()
+            self.lose()
 
         else:
             # Avant le village, il y avait forcément une plaine, donc on va transformer la case village en case plaine.
