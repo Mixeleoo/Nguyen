@@ -8,7 +8,6 @@ from Territoire.village import Village
 from parameter import *
 
 # TODO Léo: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
-# TODO Éloïse: Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
 # TODO Léo: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
 # TODO Léo: Si les nobles se vassalisent entre eux, ils sont à supprimer des nobles à vaincre.
 # TODO Léo: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
@@ -252,8 +251,8 @@ class Jeu:
         Si c'est 1, le joueur/bot a gagné
         Si c'est 0, il a perdu
 
-        En cas de victoire du joueur/bot, on ajoute les villages du noble vaincu au dico de village du joueur/bot
-        et le noble vaincu est suprimé de la liste des joueurs
+        En cas de victoire du joueur/bot, on ajoute les villages du noble vaincu au dico de village du joueur/bot et perd 50% de l'effectif
+        de l'armée ennemie parmis ses soldat et le noble vaincu est suprimé de la liste des joueurs
 
         :param pnoble : Noble auquel la guerre est déclarée
         """
@@ -266,6 +265,9 @@ class Jeu:
             # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
+
+            pertes_soldats = len(self.joueur_actuel.liste_soldats) - (0,5 * effectif_armee_ennemie) #quantité de soldat restant au joueur après la bataille
+            self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:pertes_soldats] #supression des soldats perdus
             return True
 
         else:
