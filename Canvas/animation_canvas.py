@@ -50,3 +50,7 @@ class AnimationCanvas(HUDCanvas):
             # Déplace tous les carrés avec le tag "square"
             self.move(MAP_TAG, dx, dy)
             self.after(DELTA_MS_ANIMATION, self.move_back_square)
+
+        else:
+            # On rerend le highlight aux carrés de la MAP.
+            self.highlight_tag_on_click[MAP_TAG] = self.highlight_square

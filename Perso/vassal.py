@@ -150,5 +150,5 @@ class Vassal(Personne):
             Sinon supprimer le village de la liste des villages comme dans l'évènement Incendie et renvoyer "D".
         Sinon renvoyer un tuple vide.
         """
-        # TODO Éloïse
+        # TODO Éloïse: Établir les conditions d'une révolte.
         pass

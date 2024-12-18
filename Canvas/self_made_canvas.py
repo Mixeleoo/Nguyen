@@ -98,8 +98,14 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
             finally:
                 self.dtag("active", "active")
 
-        # Animation stylée si le joueur s'amuse à sortir de la map
         else:
+            """
+            On supprime le highlight des carrés de la MAP pour éviter les bugs graphiques où
+            l'animation de move_back_square est cumulée à celle d'highlight_square.
+            """
+            self.highlight_tag_on_click[MAP_TAG] = dummy
+
+            # Animation stylée si le joueur s'amuse à sortir de la map
             self.move_back_square()
 
         self.dtag("active", "active")
@@ -109,9 +115,6 @@ class SelfMadeCanvas(FunctionOnClickCanvas, FunctionOnDragCanvas):
             # On unhighlight l'objet actif
             self.highlight_tag_on_release[tags[HIGHLIGHT_TAG_INDEX]]()
             self.dtag("highlight", "highlight")
-
-        # Sauter une ligne
-        print()
 
     #                                                 CLIC DROIT                                                 #
     def on_click_right(self, event: tk.Event) -> None:
