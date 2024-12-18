@@ -152,7 +152,7 @@ class Jeu:
 
         return v
 
-    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
+    def immigrer(self, village_id: int, type_v: str, effectif: int):
         """
         Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 
@@ -330,9 +330,25 @@ class Jeu:
             action = choice(action_liste)
 
             if action == "Immigration":
-                if self.joueur_actuel.pa >= 10 :
+                # choix aléatoire du type de villageois voulu en fonction du nombre de PA restants au bot
+                village = choice(list(self.joueur_actuel.dico_villages.keys()))
+                nb_villageois = 0
+                if self.joueur_actuel.pa >= 2 :
                     type_villageois = choice(["artisan","paysan"])
-                pass
+                    if type_villageois == "paysan":
+                        nb_villageois = randint(1,self.joueur_actuel.pa)
+                    elif type_villageois == "artisan":
+                        nb_villageois = randint(1,self.joueur_actuel.pa//2)
+
+                    self.immigrer(village, type_villageois, nb_villageois)
+                    return "Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}."
+
+                elif self.joueur_actuel.pa == 1 :
+                    self.immigrer(village, "paysan", 1)
+                    return "Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan."
+
+
+
 
 
             elif action == "Soldat" and self.joueur_actuel.pa >= 2:
@@ -340,7 +356,8 @@ class Jeu:
                 nb_soldats = randint(1,self.joueur_actuel.pa//2)
                 self.recruter_soldat(nb_soldats)
 
-                return "Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats"
+                return "Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats."
+
 
             elif action == "Eglise" and self.joueur_actuel.pa >= 6 and self.joueur_actuel.ressources >= 50 and self.joueur_actuel.argent >= 100:
                 #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
@@ -350,11 +367,42 @@ class Jeu:
 
                 return "Eglise", f"{self.joueur_actuel.nom} a construit une église"
 
+
             elif action == "Village":
                 # TODO : gérer choix emplacement village
                 pass
+
+
             elif action == "Impôt":
-                pass
+                #Choix aléatoire du nombre de village et/ou de nobles à imposer + choix aléatoire des quels
+                nobles = []
+                nb_nobles = 0
+                nb_villages = randint(1,len(list(self.joueur_actuel.dico_villages.keys())))
+                villages = list(self.joueur_actuel.dico_villages.keys()).copy()
+
+                if isinstance(self.joueur_actuel, Seigneur) :
+                    nb_nobles = randint(1, len(self.joueur_actuel.liste_nobles)-1)
+                    nobles = self.joueur_actuel.liste_nobles.copy()
+
+                villages_id = []
+                nobles_i = []
+
+                for ivillage in range(nb_villages):
+                    choix = choice(villages)
+                    villages_id += [choix]
+                    villages.remove(choix)
+
+                for inoble in range(nb_nobles) :
+                    choix_noble = nobles[randint(0,len(nobles)-1)]
+                    nobles_i += [choix_noble]
+                    nobles.remove(choix_noble)
+
+                self.imposer(villages_id, nobles_i)
+
+                return "Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt"
+
+
+
             elif action == "Guerre":
                 pass
             elif action == "Vassalisation":
