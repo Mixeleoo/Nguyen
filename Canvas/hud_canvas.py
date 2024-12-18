@@ -347,7 +347,7 @@ class HUDCanvas(BaseCanvas):
 
         # Tour des nobles, le temps que ce n'est pas le tour du joueur.
         while self.jeu.index_joueur_actuel != 0:
-            actionbotinfo: ActionBotInfo = self.jeu.tour_noble()
+            actionbotinfo: ActionBotInfo = self.jeu.tour_bots()
 
             # Si le bot a fait la guerre.
             if actionbotinfo.type == "Guerre":

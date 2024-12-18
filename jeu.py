@@ -314,7 +314,7 @@ class Jeu:
         else:
             return False
 
-    def tour_noble(self) -> ActionBotInfo:
+    def tour_bots(self) -> ActionBotInfo:
         """
         Méthode qui lancera UNE action du noble actuellement en train de jouer.
         S'il fait la guerre contre le joueur (l'utilisateur) et que le joueur perd, plus besoin de finir les tours des nobles.
