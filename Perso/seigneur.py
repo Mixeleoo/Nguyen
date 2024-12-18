@@ -1,3 +1,4 @@
+from Perso.vassal import Vassal
 from Perso.noble import Noble
 
 
@@ -10,14 +11,14 @@ class Seigneur(Noble):
         Noble.__init__(self, pnom, pres, parg)
 
         # Liste des vassaux du seigneur (nobles sous les ordres du seigneur)
-        self._liste_nobles: list[Noble] = []
+        self._liste_nobles: list[Vassal] = []
 
     @property
     def liste_nobles(self):
         return self._liste_nobles
 
     @liste_nobles.setter
-    def liste_nobles(self, liste_nobles: list[Noble]):
+    def liste_nobles(self, liste_nobles: list[Vassal]):
         self._liste_nobles = liste_nobles
 
     @property

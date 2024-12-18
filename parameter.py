@@ -433,6 +433,59 @@ noms_pretres = [
 def nom_aleatoire_pretres() :
     return choice([noms_pretres])
 
+noms_nobles =[
+    "Sir Guillaume",
+    "Dame Éléonore",
+    "Duc Geoffroy",
+    "Comtesse Isabelle",
+    "Baron Robert",
+    "Seigneur Richard",
+    "Princesse Béatrice",
+    "Sir Henri",
+    "Dame Marguerite",
+    "Vicomte Gilbert",
+    "Duchesse Agnès",
+    "Baronne Catherine",
+    "Seigneur Thomas",
+    "Comte Baudouin",
+    "Princesse Alice",
+    "Duc Philippe",
+    "Dame Mathilde",
+    "Sir Bertrand",
+    "Comtesse Marie",
+    "Seigneur Hugues",
+    "Baronne Alice",
+    "Sir Eustache",
+    "Duchesse Jeanne",
+    "Seigneur Édouard",
+    "Comtesse Blanche",
+    "Baron Guillaume",
+    "Dame Cécile",
+    "Duc Édouard",
+    "Sir Thomas",
+    "Princesse Hélène",
+    "Seigneur Alexandre",
+    "Comtesse Éléonore",
+    "Baron Richard",
+    "Duchesse Mathilde",
+    "Sir Jean",
+    "Dame Isabelle",
+    "Vicomte Robert",
+    "Duc Henri",
+    "Comtesse Sibylle",
+    "Seigneur Simon",
+    "Princesse Marguerite",
+    "Baronne Jeanne",
+    "Sir Robert",
+    "Duchesse Agnès",
+    "Dame Alice",
+    "Comtesse Jeanne",
+    "Seigneur Raymond",
+    "Baronne Isabelle",
+    "Sir Guy"]
+
+def nom_aleatoire_nobles() :
+    return choice([noms_nobles])
 
 def dummy(*args):
     pass

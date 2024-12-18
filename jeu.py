@@ -8,7 +8,6 @@ from Territoire.village import Village
 from parameter import *
 
 # TODO Léo: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
-# TODO Éloïse: Le joueur perd 1/2 soldats de l'armée ennemie quand il gagne.
 # TODO Léo: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
 # TODO Léo: Si les nobles se vassalisent entre eux, ils sont à supprimer des nobles à vaincre.
 # TODO Léo: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
@@ -26,7 +25,7 @@ class Jeu:
         self._index_joueur_actuel = 0
 
     @property
-    def joueur_actuel(self) -> Noble | Seigneur:
+    def joueur_actuel(self) -> Noble | Seigneur | Vassal:
         return self._joueurs[self._index_joueur_actuel]
 
     def fin_de_tour(self):
@@ -146,7 +145,7 @@ class Jeu:
 
         return v
 
-    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan", "soldat"], effectif: int):
+    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
         """
         Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 
@@ -161,6 +160,12 @@ class Jeu:
 
         self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
+        if type_v == "paysan":
+            self.joueur_actuel.retirer_pa(effectif)
+
+        elif type_v == "artisan":
+            self.joueur_actuel.retirer_pa(effectif*2)
+
     def construire_village(self, village_id: int, nom: str):
         """
         Méthode qui va ajouter un village dans la liste de villages du joueur
@@ -170,6 +175,10 @@ class Jeu:
         self.joueur_actuel.ajouter_village(village_id, nom)
         print("ID emplacement :",village_id)
 
+        self.joueur_actuel.retirer_pa(8)
+        self.joueur_actuel.gestion_argent(-300)
+        self.joueur_actuel.gestion_ressources(-150)
+
     def construire_eglise(self, village_id: int):
         """
         Méthode pour construire une Église dans un village choisi
@@ -178,6 +187,10 @@ class Jeu:
         """
         self.joueur_actuel.dico_villages[village_id].creer_eglise()
 
+        self.joueur_actuel.retirer_pa(6)
+        self.joueur_actuel.gestion_argent(-100)
+        self.joueur_actuel.gestion_ressources(-50)
+
     def recruter_soldat(self, effectif: int):
         """
         Méthode qui ajoute à la liste de soldats du joueur/bot le nombre de soldats désiré
@@ -185,6 +198,8 @@ class Jeu:
         :param effectif: NOMBRE DE SOLDATS DESIRE
         """
         self.joueur_actuel.ajout_soldat(effectif)
+
+        self.joueur_actuel.retirer_pa(effectif * 2)
 
     def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
         """
@@ -199,6 +214,7 @@ class Jeu:
 
         self.joueur_actuel.gestion_ressources(-pres)
         self.joueur_actuel.gestion_argent(-parg)
+        self.joueur_actuel.retirer_pa(4)
 
         nobles_vassalises = [pnoble]
 
@@ -241,6 +257,8 @@ class Jeu:
         for ivillage in l_villages :
             self.joueur_actuel.prend_impot_village(ivillage)
 
+        self.joueur_actuel.retirer_pa(5)
+
     def guerre(self, pnoble : Noble | Seigneur):
         """
         Méthode qui permettra de gérer la guerre si le joueur/bot la déclare OU si un noble refuse de se soumettre
@@ -252,11 +270,14 @@ class Jeu:
         Si c'est 1, le joueur/bot a gagné
         Si c'est 0, il a perdu
 
-        En cas de victoire du joueur/bot, on ajoute les villages du noble vaincu au dico de village du joueur/bot
-        et le noble vaincu est suprimé de la liste des joueurs
+        En cas de victoire du joueur/bot, on ajoute les villages du noble vaincu au dico de village du joueur/bot et perd 50% de l'effectif
+        de l'armée ennemie parmis ses soldat et le noble vaincu est suprimé de la liste des joueurs
 
         :param pnoble : Noble auquel la guerre est déclarée
         """
+        self.joueur_actuel.retirer_pa(8)
+        self.joueur_actuel.gestion_ressources(-100)
+
         # initialisation des deux armées
         effectif_armee_joueur = self.joueur_actuel.effectif_armee
         effectif_armee_ennemie = pnoble.effectif_armee
@@ -266,6 +287,9 @@ class Jeu:
             # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
+
+            pertes_soldats = len(self.joueur_actuel.liste_soldats) - (0.5 * effectif_armee_ennemie) #quantité de soldat restant au joueur après la bataille
+            self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:pertes_soldats] #supression des soldats perdus
             return True
 
         else:
@@ -283,12 +307,53 @@ class Jeu:
         )
         """
 
+        action_liste = ["Immigration","Soldat","Eglise","Village","Impôt","Guerre","Vassalisation"]
+
         if self.joueur_actuel.pa == 0:
             self.fin_de_tour()
 
         else:
             # TODO Éloïse.
 
-            # Je mets ça juste pour que ça ne fasse pas une boucle infinie, tu pourras l'enlever
+            if isinstance(self.joueur_actuel,Vassal) :
+                action_liste.remove("Vassalisation")
+                action_liste.remove("Guerre")
+
+            action = choice(action_liste)
+
+            if action == "Immigration":
+                if self.joueur_actuel.pa >= 10 :
+                    type_villageois = choice(["artisan","paysan"])
+                pass
+
+
+            elif action == "Soldat" and self.joueur_actuel.pa >= 2:
+                #Choix aléatoire du nombre de soldats recrutés en fonction du nombre de PA du bot
+                nb_soldats = randint(1,self.joueur_actuel.pa//2)
+                self.recruter_soldat(nb_soldats)
+
+                return "Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats"
+
+            elif action == "Eglise" and self.joueur_actuel.pa >= 6 and self.joueur_actuel.ressources >= 50 and self.joueur_actuel.argent >= 100:
+                #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
+                village = choice(list(self.joueur_actuel.dico_villages.keys()))
+                self.construire_eglise(village)
+
+
+                return "Eglise", f"{self.joueur_actuel.nom} a construit une église"
+
+            elif action == "Village":
+                # TODO : gérer choix emplacement village
+                pass
+            elif action == "Impôt":
+                pass
+            elif action == "Guerre":
+                pass
+            elif action == "Vassalisation":
+                pass
+
+
+
+
             self.joueur_actuel.retirer_pa(1)
             pass
