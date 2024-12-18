@@ -8,12 +8,22 @@ from Perso.vassal import Vassal
 from Territoire.village import Village
 from parameter import *
 
+
 @dataclass
 class EventInfo:
     type: Literal["Épidémie", "Incendie", "Pillage", "Famine", "Rien", "Récolte abondante", "Immigration", "Vassalisation"]
-    descriptif: str = ""
-    noble_vassalise: Vassal = None
+    descriptif: tuple[str, ...] = ()  # Le fait qu'il soit en tuple m'aide pour savoir la taille qu'aura la fenêtre des infos.
+    noble_vassalise: Noble = None
     village_incendie: Village = None
+
+
+@dataclass
+class ActionBotInfo:
+    type: Literal["Immigration", "Soldat", "Eglise", "Village", "Impôt", "Guerre", "Vassalisation", ""]
+    descriptif: str
+    noble_vassalise: Noble = None
+    noble_vaincu: Noble = None
+
 
 # TODO Léo: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
 # TODO Léo: Les Nobles étant dans notre liste peuvent aussi jouer avec moins d'actions.
@@ -84,14 +94,14 @@ class Jeu:
                         nb_morts += 1
                         village.liste_roturier.remove(villageois)
 
-            return EventInfo("Épidémie", f"Morts : {nb_morts}")
+            return EventInfo("Épidémie", (f"Morts : {nb_morts}",))
 
         elif 6 <= choix_ev <= 10:
             # incendies : un village aléatoire parmi la liste de villages du joueur/bot disparaît
             id_village_supp = choice(list(self.joueur_actuel.dico_villages.keys()))
             village_supp = self.joueur_actuel.dico_villages.pop(id_village_supp)
 
-            return EventInfo("Incendie", f"Village disparu : {village_supp.nom}", village_incendie=village_supp)
+            return EventInfo("Incendie", (f"Village disparu : {village_supp.nom}",), village_incendie=village_supp)
 
         elif 11 <= choix_ev <= 20:
             # pillage : l'argent et les ressources d'un village son volés
@@ -106,21 +116,22 @@ class Jeu:
                 villageois.reset_resssources()
                 villageois.reset_argent()
 
-            return EventInfo("Pillage",
-                f"Village pillé : {self.joueur_actuel.dico_villages[id_village_pie].nom}\n"
-                f"Quantité de ressources volées : {qt_res}\n"
-                f"Quantité d'argent volé : {qt_arg}")
+            return EventInfo(
+                "Pillage",
+                (f"Village pillé : {self.joueur_actuel.dico_villages[id_village_pie].nom}",
+                f"Quantité de ressources volées : {qt_res}",
+                f"Quantité d'argent volé : {qt_arg}"))
 
         elif 21 <= choix_ev <= 40:
             # famine : les ressources des terres sont divisées par 2
-            return EventInfo("Famine", "Les ressources des terres sont divisées par 2")
+            return EventInfo("Famine", ("Les ressources des terres sont divisées par 2",))
 
         elif 41 <= choix_ev <= 64:
             return EventInfo("Rien")
 
         elif 65 <= choix_ev <= 84:
             # récolte abondante : ressources des terres doublées
-            return EventInfo("Récolte abondante", "Les ressources des terres sont doublées")
+            return EventInfo("Récolte abondante", ("Les ressources des terres sont doublées",))
 
         elif 85 <= choix_ev <= 94:
             # immigration : des roturiers augmentent la population d'un village
@@ -128,12 +139,12 @@ class Jeu:
             nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
-            return EventInfo("Immigration", f"Effectif : {nb_immigres}\nType : {type_imigres}")
+            return EventInfo("Immigration", (f"Effectif : {nb_immigres}\nType : {type_imigres}",))
 
         elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
             noble = choice(self._joueurs)
-            return EventInfo("Vassalisation", f"Se propose comme vassal : {noble.nom}", noble_vassalise=noble)
+            return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
     # Actions
 
@@ -303,7 +314,7 @@ class Jeu:
         else:
             return False
 
-    def tour_noble(self) -> tuple[str, ...]:
+    def tour_noble(self) -> ActionBotInfo:
         """
         Méthode qui lancera UNE action du noble actuellement en train de jouer.
         S'il fait la guerre contre le joueur (l'utilisateur) et que le joueur perd, plus besoin de finir les tours des nobles.
@@ -319,6 +330,7 @@ class Jeu:
 
         if self.joueur_actuel.pa == 0:
             self.fin_de_tour()
+            return ActionBotInfo("", "")
 
         else:
             # TODO Éloïse.
@@ -341,11 +353,11 @@ class Jeu:
                         nb_villageois = randint(1,self.joueur_actuel.pa//2)
 
                     self.immigrer(village, type_villageois, nb_villageois)
-                    return "Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}."
+                    return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}.")
 
                 elif self.joueur_actuel.pa == 1 :
                     self.immigrer(village, "paysan", 1)
-                    return "Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan."
+                    return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan.")
 
 
 
@@ -356,7 +368,7 @@ class Jeu:
                 nb_soldats = randint(1,self.joueur_actuel.pa//2)
                 self.recruter_soldat(nb_soldats)
 
-                return "Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats."
+                return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
 
 
             elif action == "Eglise" and self.joueur_actuel.pa >= 6 and self.joueur_actuel.ressources >= 50 and self.joueur_actuel.argent >= 100:
@@ -365,12 +377,11 @@ class Jeu:
                 self.construire_eglise(village)
 
 
-                return "Eglise", f"{self.joueur_actuel.nom} a construit une église"
+                return ActionBotInfo("Eglise", f"{self.joueur_actuel.nom} a construit une église")
 
 
             elif action == "Village":
-                # TODO : gérer choix emplacement village
-                pass
+                return ActionBotInfo("Village", f"{self.joueur_actuel.nom} a construit un village !")
 
 
             elif action == "Impôt":
@@ -399,17 +410,16 @@ class Jeu:
 
                 self.imposer(villages_id, nobles_i)
 
-                return "Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt"
-
-
+                return ActionBotInfo("Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt")
 
             elif action == "Guerre":
-                pass
+                # TODO: Éloïse action bot guerre
+
+                self.joueur_actuel.retirer_pa(8)
+                return ActionBotInfo("Guerre", "INFOGUERRE", noble_vaincu=None)
+
             elif action == "Vassalisation":
-                pass
+                # TODO: Éloïse action bot vassalisation
 
-
-
-
-            self.joueur_actuel.retirer_pa(1)
-            pass
+                self.joueur_actuel.retirer_pa(4)
+                return ActionBotInfo("Vassalisation", "INFOGUERRE", noble_vassalise=None)
