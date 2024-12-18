@@ -46,7 +46,7 @@ class MoreInfoEvent(HUDMobileABC):
     def replace(self, *args) -> None:
         pass
 
-    def refresh_text(self, texts: tuple[str]):
+    def refresh_text(self, texts: tuple[str, ...]):
         height = 20
         final_text = ""
         max_width = 0

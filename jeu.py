@@ -333,7 +333,9 @@ class Jeu:
             return ActionBotInfo("", "")
 
         else:
-            # TODO Éloïse.
+            # TODO Éloïse il faut vérifier que le bot peut bien faire les actions et donc qu'il a assez de PA
+            # Pour ça on peut utiliser le dictionnaire ACTIONS_TAG_COST de parameter.py, et vérifier avec ça et
+            # la fameuse boucle qui récupérera un choix au pif le temps que l'action choisie est payable.
 
             if isinstance(self.joueur_actuel,Vassal) :
                 action_liste.remove("Vassalisation")

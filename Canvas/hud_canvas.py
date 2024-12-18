@@ -3,7 +3,7 @@ import tkinter as tk
 
 from Canvas.base_canvas import BaseCanvas
 from Perso.noble import Noble
-from Territoire.village import Village
+from jeu import EventInfo, ActionBotInfo
 from parameter import *
 
 class HUDCanvas(BaseCanvas):
@@ -45,6 +45,9 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_taspasassezdePAgros = HUDMobile.TasPasAssezDePAGros(self)
         self.hudmobile_start_menu = HUDMobile.StartMenu(self)
         self.hudmobile_end_menu = HUDMobile.EndMenu(self)
+        self.lose = self.hudmobile_end_menu.lose
+        self.win = self.hudmobile_end_menu.win
+
         self.hudmobile_more_info_event = HUDMobile.MoreInfoEvent(self)
 
         import Canvas.HUDs.HUDCentered as HUDCentered
@@ -187,8 +190,7 @@ class HUDCanvas(BaseCanvas):
             # On affiche dans l'historique son action
             self.hud_history.add_text("Le joueur a crée un village !")
 
-            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-            self.jeu.joueur_actuel.retirer_pa(8)
+            # On met à jour l'HUD des caractéristiques
             self.update_hudtop()
 
     def choose_village_to_build(self, event: tk.Event):
@@ -210,8 +212,7 @@ class HUDCanvas(BaseCanvas):
 
         self.jeu.construire_eglise(self.find_withtag("active")[0])
 
-        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-        self.jeu.joueur_actuel.retirer_pa(6)
+        # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
 
     def vassaliser(self, don_argent: int, don_ressources: int):
@@ -229,7 +230,7 @@ class HUDCanvas(BaseCanvas):
             )
 
             if self.jeu.nb_joueurs == 1:
-                self.hudmobile_end_menu.win()
+                self.win()
 
             else:
                 self.add_history_text("Vous avez vassalisé " + noble_selected.nom)
@@ -241,13 +242,14 @@ class HUDCanvas(BaseCanvas):
                 self.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
                 self.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
 
-                # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-                self.jeu.joueur_actuel.retirer_pa(4)
+                # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
 
         else:
-            # TODO Léo: Vassalisation refusée -> guerre
-            pass
+            # Vassalisation refusée = guerre déclarée
+            # ChatGPT m'a écrit cette phrase ci-dessous.
+            self.add_history_text(f"Le noble chevalier, {noble_selected.nom}, a décliné vostre offre avec mépris, et vous adresse une missive cinglante déclarant la guerre !")
+            self.war(noble_selected_index)
 
     def war(self, noble_index: int):
 
@@ -257,7 +259,7 @@ class HUDCanvas(BaseCanvas):
 
             # S'il est le dernier alors, il a gagné.
             if self.jeu.nb_joueurs == 1:
-                self.hudmobile_end_menu.win()
+                self.win()
 
             else:
                 self.add_history_text(f"Tu as battu {noble.nom}.")
@@ -265,18 +267,16 @@ class HUDCanvas(BaseCanvas):
                 self.hudcentered_choose_noble_war.remove_noble(noble_index)
                 self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
 
-                # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-                self.jeu.joueur_actuel.retirer_pa(8)
+                # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
 
         else:
-            self.hudmobile_end_menu.lose()
+            self.lose()
 
     def imposer(self, l_villages: list[int], l_nobles: list[int]):
         self.jeu.imposer(l_villages, l_nobles)
 
-        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-        self.jeu.joueur_actuel.retirer_pa(5)
+        # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
 
     def save_villager_choice(self, type_v: int, quantity: int):
@@ -333,36 +333,87 @@ class HUDCanvas(BaseCanvas):
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
 
+    def end_turn_trigger(self):
+        self.jeu.fin_de_tour()
+        rev = self.jeu.joueur_actuel.reaction_revolte()
+        if rev:
+            # VICTOIRE
+            if rev[0] == "V":
+                self.hudcentered_results_war.show(rev[1])
+
+            # DEFAITE
+            else:
+                self.lose()
+
+        # Tour des nobles, le temps que ce n'est pas le tour du joueur.
+        while self.jeu.index_joueur_actuel != 0:
+            actionbotinfo: ActionBotInfo = self.jeu.tour_noble()
+
+            # Si le bot a fait la guerre.
+            if actionbotinfo.type == "Guerre":
+
+                # Si le joueur est vaincu, il a perdu.
+                if actionbotinfo.noble_vaincu == self.jeu.get_joueur(0):
+                    self.lose()
+
+                # Si ce n'est pas le joueur qui est vaincu:
+                else:
+                    self.add_history_text(actionbotinfo.descriptif)
+                    self.hudcentered_choose_noble_war.remove_noble(actionbotinfo.noble_vaincu.id)
+                    self.hudmobile_choose_noble_vassaliser.remove_noble(actionbotinfo.noble_vaincu.id)
+
+            # Si le bot choisit de vassaliser
+            elif actionbotinfo.type == "Vassaliser":
+
+                # Si le joueur est choisi
+                if actionbotinfo.noble_vassalise == self.jeu.get_joueur(0):
+                    """On permet vraiment au joueur d'accepter de se faire vassaliser ? ça serait marrant"""
+                    pass
+
+                # Si ce n'est pas un noble qui est visé
+                else:
+
+                    # Un noble vassalisé ne peut plus être vassalisé.
+                    self.hudmobile_choose_noble_vassaliser.remove_noble(actionbotinfo.noble_vaincu.id)
+
+            # Ajout du texte
+            self.add_history_text(actionbotinfo.descriptif)
+
+        self.event()
+
     def event(self):
         """
         Méthode qui gère les évènements pré-tour du joueur.
         """
 
-        # Récupération des retours
-        res = self.jeu.evenement()
+        # Récupération des retours.
+        eventinfo = self.jeu.evenement()
 
-        #
-        events = {
+        # On attribue les cas spéciaux à leurs propres méthodes.
+        events: [str, callable] = {
             "Incendie": self.event_incendie,
             "Vassalisation": self.event_vassalisation
         }
 
-        events.get(res[0], self.event_autre)(*res)
+        events.get(eventinfo.type, self.event_autre)(eventinfo)
 
-    def event_incendie(self, type_ev: str, texts: list[str, ...], v: Village):
+    def event_incendie(self, eventinfo: EventInfo):
         if not len(self.jeu.joueur_actuel.dico_villages):
             self.hudmobile_end_menu.lose()
 
         else:
-            # TODO Léo: Retirer le village de la carte.
-            self.hudmobile_choose_taxes.remove_village(v.id)
-            pass
+            # Avant le village il y avait forcément une plaine, donc on va transformer la case village en case plaine.
+            self.itemconfigure(eventinfo.village_incendie.id, fill=couleurs[PLAINE_TAG]())
+            self.itemconfigure(eventinfo.village_incendie.id, tags=set_tags(MAP_TAG, PLAINE_TAG, MAP_TAG))
 
-        self.hudmobile_more_info_event.refresh_text(v.nom)
+            # On retire
+            self.hudmobile_choose_taxes.remove_village(eventinfo.village_incendie.id)
 
-    def event_vassalisation(self, type_ev: str, texts: tuple[str], n: Noble):
-        self.hudcentered_accept_vassal.show(n)
-        self.hudmobile_more_info_event.refresh_text(texts)
+        self.hudmobile_more_info_event.refresh_text(eventinfo.village_incendie.nom)
+
+    def event_vassalisation(self, eventinfo: EventInfo):
+        self.hudcentered_accept_vassal.show(eventinfo.noble_vassalise)
+        self.hudmobile_more_info_event.refresh_text(eventinfo.descriptif)
 
     def event_accept_vassal(self, n: Noble):
 
@@ -385,31 +436,10 @@ class HUDCanvas(BaseCanvas):
             # On met à jour l'HUD des caractéristiques
             self.update_hudtop()
 
-    def event_autre(self, type_ev: str, texts: tuple[str], *args):
+    def event_autre(self, eventinfo: EventInfo):
 
-        self.hudmobile_more_info_event.refresh_text(texts)
+        self.hudmobile_more_info_event.refresh_text(eventinfo.descriptif)
         self.update_hudtop()
 
-        self.hud_event.set_text(type_ev)
+        self.hud_event.set_text(eventinfo.type)
         self.hud_event.show_animation()
-
-    def end_turn_trigger(self):
-        self.jeu.fin_de_tour()
-        rev = self.jeu.joueur_actuel.reaction_revolte()
-        if rev:
-            # VICTOIRE
-            if rev[0] == "V":
-                self.hudcentered_results_war.show(rev[1])
-
-            # DEFAITE
-            else:
-                self.hudmobile_end_menu.lose()
-
-        # Tour des nobles.
-
-        while self.jeu.index_joueur_actuel != 0:
-            self.jeu.tour_noble()
-            # TODO Léo: Gérer le cas de l'affichage des guerres déclenchées par les bots et si on s'est fait vaincre.
-            # TODO Léo: Gérer le cas des vassalisations, supprimer le noble des choix.
-
-        self.event()
