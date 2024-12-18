@@ -280,18 +280,25 @@ class HUDCanvas(BaseCanvas):
         self.update_hudtop()
 
     def save_villager_choice(self, type_v: int, quantity: int):
+        """
+        Méthode lancée lors du clic gauche sur le bouton OK du choix du type de villageois.
+        """
 
+        # Si le choix fait est soldat, alors pas besoin de choisir dans quel village l'immigrer.
         if self.itemcget(
                 self.text_id_in_rectangle_id[type_v], "text"
         ).split(" ")[0].lower() == "soldat":
 
+            # On lance la méthode du jeu.
             self.jeu.recruter_soldat(quantity)
+
+            # On ajoute le texte descriptif à l'historique.
             self.add_history_text(f"Vous avez recruté {quantity} soldat(s) !")
 
-            # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-            self.jeu.joueur_actuel.retirer_pa(quantity * 2)
+            # On met à jour l'HUD des caractéristiques.
             self.update_hudtop()
 
+        # Sinon c'est un artisan ou un paysan, il faut donc les immigrer dans un village.
         else:
             self.hudmobile_choose_type_villager.last_choice_made = [
                 quantity,
