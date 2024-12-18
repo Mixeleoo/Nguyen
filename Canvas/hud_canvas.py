@@ -254,6 +254,7 @@ class HUDCanvas(BaseCanvas):
     def war(self, noble_index: int):
 
         noble = self.jeu.get_const_joueur(noble_index)
+
         # Si le joueur remporte la guerre.
         if self.jeu.guerre(noble):
 
@@ -264,12 +265,14 @@ class HUDCanvas(BaseCanvas):
             else:
                 self.add_history_text(f"Tu as battu {noble.nom}.")
 
+                # Retirer le noble des choix.
                 self.hudcentered_choose_noble_war.remove_noble(noble_index)
                 self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
 
                 # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
 
+        # Si le joueur perd la guerre
         else:
             self.lose()
 
@@ -402,7 +405,7 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_end_menu.lose()
 
         else:
-            # Avant le village il y avait forcément une plaine, donc on va transformer la case village en case plaine.
+            # Avant le village, il y avait forcément une plaine, donc on va transformer la case village en case plaine.
             self.itemconfigure(eventinfo.village_incendie.id, fill=couleurs[PLAINE_TAG]())
             self.itemconfigure(eventinfo.village_incendie.id, tags=set_tags(MAP_TAG, PLAINE_TAG, MAP_TAG))
 
