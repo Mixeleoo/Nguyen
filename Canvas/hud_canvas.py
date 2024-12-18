@@ -300,6 +300,7 @@ class HUDCanvas(BaseCanvas):
 
         # Sinon c'est un artisan ou un paysan, il faut donc les immigrer dans un village.
         else:
+            # On sauvegarde les choix du type de villageois.
             self.hudmobile_choose_type_villager.last_choice_made = [
                 quantity,
                 self.itemcget(
@@ -311,7 +312,11 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_choose_village.show()
 
     def immigrer(self, village_id: int):
+        """
+        Méthode lancée lors du clic gauche sur le bouton OK du choix du village pour l'immigration.
+        """
 
+        # Récupération des choix précédemment faits.
         effectif = self.hudmobile_choose_type_villager.last_choice_made[0]
         type_v = self.hudmobile_choose_type_villager.last_choice_made[1]
 
@@ -322,16 +327,21 @@ class HUDCanvas(BaseCanvas):
             village_id=village_id
         )
 
+        # Ajout du texte descriptif de l'action dans l'historique.
         self.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
 
-        # On retire les points d'actions du joueur et on met à jour l'HUD des caractéristiques
-        if type_v == "artisan": self.jeu.joueur_actuel.retirer_pa(effectif * 2)
-        else: self.jeu.joueur_actuel.retirer_pa(effectif)
+        # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
 
     def event(self):
+        """
+        Méthode qui gère les évènements pré-tour du joueur.
+        """
+
+        # Récupération des retours
         res = self.jeu.evenement()
 
+        #
         events = {
             "Incendie": self.event_incendie,
             "Vassalisation": self.event_vassalisation
