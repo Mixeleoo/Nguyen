@@ -1,4 +1,7 @@
+
 from random import choice
+from typing import Literal
+from dataclasses import dataclass
 
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
@@ -6,7 +9,13 @@ from Perso.roturier import Roturier
 from Territoire.eglise import Eglise
 from parameter import nom_aleatoire_pretres, nom_aleatoire_eglise
 
-from typing import Literal
+
+# TODO Éloïse: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
+@dataclass
+class Terre:
+    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
+    nb_roturiers: int
+
 
 class Village :
     """
