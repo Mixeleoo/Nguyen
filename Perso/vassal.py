@@ -3,7 +3,7 @@ from typing import Literal
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire.village import Village, Terre
-from parameter import prenom_aleatoire
+from parameter import prenom_aleatoire, RevolteInfo, ActionCost, NB_NOBLE_AU_DEPART, ACTIONS_NAME_COST
 
 
 class Vassal(Personne):
@@ -18,7 +18,9 @@ class Vassal(Personne):
     def __init__(self, pnom: str, pres: int, parg: int, index: int):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
-        self._pa = 100
+
+        self._pa = 0
+        self.reset_pa()
 
         self._id = index  # ça sera simplement l'index du noble dans la liste des joueurs CRÉE AU DEBUT DU JEU
 
@@ -42,6 +44,9 @@ class Vassal(Personne):
 
     def retirer_pa(self, qt: int):
         self._pa -= qt
+
+    def reset_pa(self):
+        self._pa = 10
 
     @property
     def dico_villages(self):
@@ -82,6 +87,11 @@ class Vassal(Personne):
     @property
     def effectif_armee(self) -> int:
         return len(self._liste_soldats)
+
+    def action_possible(self, actioncost: ActionCost):
+        return self.pa >= actioncost.pa and\
+        self.argent >= actioncost.argent and\
+        self.ressources >= actioncost.ressources
 
     def payer_impot(self):
         """
@@ -133,6 +143,9 @@ class Vassal(Personne):
         for _ in range(peffectif):
             self._liste_soldats += [Soldat(prenom_aleatoire())]
 
+            self.gestion_argent(-ACTIONS_NAME_COST["Soldat"].argent)
+            self.retirer_pa(2)
+
     def nourrir_soldats(self) -> int:
         """
         Retourne zéro si le seigneur a assez de ressources pour nourrir ses soldats.
@@ -146,3 +159,87 @@ class Vassal(Personne):
             self._liste_soldats = self._liste_soldats[:self._ressources]
 
         return deces
+
+    def reaction_revolte(self) -> list[RevolteInfo]:
+        """
+        Méthode lancée par le jeu après avoir cliqué sur fin de tour.
+        Vérifie si des révoltes se produisent dans une ou plusieurs villages du joueur/bot
+        """
+        l_revoltes = []
+        for village in list(self.dico_villages.values()) :
+            l_revoltes.append(village.revolte(self.liste_soldats))
+
+        return l_revoltes
+
+    def construire_eglise(self, village_id: int):
+        """
+        Méthode pour construire une Église dans un village choisi
+
+        :param village_id : id du village dans lequel le joueur veut construir une église
+        """
+        self.dico_villages[village_id].creer_eglise()
+
+        self.retirer_pa(6)
+        self.gestion_argent(-100)
+        self.gestion_ressources(-50)
+
+    def construire_village(self, village_id: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
+        """
+        Méthode qui va ajouter un village dans la liste de villages du joueur
+
+        :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
+        :param nom: nom du village
+        :param l_terre : liste des 8 terres entourant le village
+        """
+        self.ajouter_village(village_id, nom, l_terre)
+        print("ID emplacement :",village_id)
+
+        self.retirer_pa(8)
+        self.gestion_argent(-300)
+        self.gestion_ressources(-150)
+
+    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
+        """
+        Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
+
+        :param effectif : nombre de villageois désirés par le joueur
+        :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
+        :param village_id : l'id du village dans lequel les futurs villageois habiteront
+        """
+
+        print("choix nombre :", effectif)
+        print("type_villageois :", type_v)
+        print("choix village :", village_id)
+
+        print([v for v in self.dico_villages.keys()])
+        self.dico_villages[village_id].ajouter_villageois(type_v, effectif)
+
+        if type_v == "paysan":
+            self.retirer_pa(effectif)
+
+        elif type_v == "artisan":
+            self.retirer_pa(effectif*2)
+
+    def imposer(self, l_villages : list[int], l_nobles: list[int] = None):
+        """
+        Methode qui permet d'imposer un village et/ou un noble suivant les choix qu'aura fait le joueur/bot
+
+        :param l_villages : liste d'id des villages choisis
+        :param l_nobles
+        """
+
+        for ivillage in l_villages :
+            self.prend_impot_village(ivillage)
+
+        self.retirer_pa(5)
+
+    def get_village(self, village_id: int) -> Village | None:
+        """
+        Cette méthode servira à récupérer le village en fonction de l'id. Si ce n'est pas le village de l'utilisateur alors
+        il retourne None
+        """
+        if village_id in self.dico_villages:
+            return self.dico_villages[village_id]
+
+        else:
+            return None

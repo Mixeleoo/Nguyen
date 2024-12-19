@@ -159,19 +159,7 @@ class Jeu:
             noble = choice([j for j in self._joueurs[1:] if type(j) != Vassal])
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
-    # Réaction
-
-    def reaction_revolte(self) -> tuple:
-        """
-        Méthode lancée par le jeu après avoir cliqué sur fin de tour.
-        Vérifie si des révoltes se produisent dans une ou plusieurs villages du joueur/bot
-        """
-        for village in list(self.joueur_actuel.dico_villages.values(())) :
-            return village.revolte(self.joueur_actuel.liste_soldats)
-
-
     # Actions
-
     def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
@@ -188,66 +176,6 @@ class Jeu:
 
         return v
 
-    def immigrer(self, village_id: int, type_v: str, effectif: int):
-        """
-        Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
-
-        :param effectif : nombre de villageois désirés par le joueur
-        :param type_v: type de villageois (PS : Literal["paysan", "artisan"] veut dire soit "paysan", soit "artisan" rien d'autre)
-        :param village_id : l'id du village dans lequel les futurs villageois habiteront
-        """
-
-        print("choix nombre :", effectif)
-        print("type_villageois :", type_v)
-        print("choix village :", village_id)
-
-        print([v for v in self.joueur_actuel.dico_villages.keys()])
-        self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
-
-        if type_v == "paysan":
-            self.joueur_actuel.retirer_pa(effectif)
-
-        elif type_v == "artisan":
-            self.joueur_actuel.retirer_pa(effectif*2)
-
-    def construire_village(self, village_id: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
-        """
-        Méthode qui va ajouter un village dans la liste de villages du joueur
-
-        :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
-        :param nom: nom du village
-        :param l_terre : liste des 8 terres entourant le village
-        """
-        self.joueur_actuel.ajouter_village(village_id, nom, l_terre)
-        print("ID emplacement :",village_id)
-
-        self.joueur_actuel.retirer_pa(8)
-        self.joueur_actuel.gestion_argent(-300)
-        self.joueur_actuel.gestion_ressources(-150)
-
-    def construire_eglise(self, village_id: int):
-        """
-        Méthode pour construire une Église dans un village choisi
-
-        :param village_id : id du village dans lequel le joueur veut construir une église
-        """
-        self.joueur_actuel.dico_villages[village_id].creer_eglise()
-
-        self.joueur_actuel.retirer_pa(6)
-        self.joueur_actuel.gestion_argent(-100)
-        self.joueur_actuel.gestion_ressources(-50)
-
-    def recruter_soldat(self, effectif: int):
-        """
-        Méthode qui ajoute à la liste de soldats du joueur/bot le nombre de soldats désiré
-
-        :param effectif: NOMBRE DE SOLDATS DESIRE
-        """
-        self.joueur_actuel.ajout_soldat(effectif)
-
-        self.joueur_actuel.gestion_argent(-40)
-        self.joueur_actuel.retirer_pa(effectif * 2)
-
     def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
         """
         Méthode qui permet de vassaliser le noble/seigneur mis en paramètre s'il a accepté de se soumettre
@@ -261,7 +189,6 @@ class Jeu:
 
         self.joueur_actuel.gestion_ressources(-pres)
         self.joueur_actuel.gestion_argent(-parg)
-
 
         nobles_vassalises = [pnoble]
 
@@ -291,20 +218,6 @@ class Jeu:
         self.joueur_actuel.liste_nobles += [new_vassal]
 
         return nobles_vassalises
-
-    def imposer(self, l_villages : list[int], l_noble : list[int]):
-        """
-        Methode qui permet d'imposer un village et/ou un noble suivant les choix qu'aura fait le joueur/bot
-
-        :param l_villages : liste d'id des villages choisis
-        :param l_noble : liste d'id des nobles choisis
-        """
-        for inoble in l_noble :
-            self.joueur_actuel.prend_impot_noble(inoble)
-        for ivillage in l_villages :
-            self.joueur_actuel.prend_impot_village(ivillage)
-
-        self.joueur_actuel.retirer_pa(5)
 
     def guerre(self, pnoble : Noble | Seigneur, cause : Literal["V","G"]):
         """
@@ -401,24 +314,24 @@ class Jeu:
                     elif type_villageois == "artisan":
                         nb_villageois = randint(1,self.joueur_actuel.pa//2)
 
-                    self.immigrer(village, type_villageois, nb_villageois)
+                    self.joueur_actuel.immigrer(village, type_villageois, nb_villageois)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}.")
 
                 elif self.joueur_actuel.pa == 1:
-                    self.immigrer(village, "paysan", 1)
+                    self.joueur_actuel.immigrer(village, "paysan", 1)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan.")
 
             elif action == "Soldat":
                 #Choix aléatoire du nombre de soldats recrutés en fonction du nombre de PA du bot
-                nb_soldats = randint(1,self.joueur_actuel.pa//2)
-                self.recruter_soldat(nb_soldats)
+                nb_soldats = randint(1, self.joueur_actuel.pa // 2 if self.joueur_actuel.pa // 2 < self.joueur_actuel.argent // 20 else self.joueur_actuel.argent // 20)
+                self.joueur_actuel.ajout_soldat(nb_soldats)
 
                 return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
 
             elif action == "Eglise":
                 #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
                 village = choice(list(self.joueur_actuel.dico_villages.keys()))
-                self.construire_eglise(village)
+                self.joueur_actuel.construire_eglise(village)
                 return ActionBotInfo("Eglise", f"{self.joueur_actuel.nom} a construit une église.")
 
             elif action == "Village":
@@ -448,7 +361,7 @@ class Jeu:
                     nobles_i += [choix_noble]
                     nobles.remove(choix_noble)
 
-                self.imposer(villages_id, nobles_i)
+                self.joueur_actuel.imposer(villages_id, nobles_i)
 
                 return ActionBotInfo("Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt.")
 
@@ -492,4 +405,3 @@ class Jeu:
                         noble_victorieux = noble_choisi
 
                     return ActionBotInfo("Guerre", f"{noble_choisi.nom} a refusé d'être le vassal de {self.joueur_actuel.nom}.\nUne guerre a éclaté, {noble_victorieux.nom} en ressort victorieux.", noble_vaincu)
-
