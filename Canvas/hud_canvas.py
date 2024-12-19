@@ -344,6 +344,10 @@ class HUDCanvas(BaseCanvas):
         self.update_hudtop()
 
     def end_turn_trigger(self):
+        """
+        Méthode appelée quand on clique sur fin de tour
+        """
+
         self.jeu.fin_de_tour()
         rev = self.jeu.joueur_actuel.reaction_revolte()
         if rev:

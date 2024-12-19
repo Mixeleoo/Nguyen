@@ -107,7 +107,7 @@ ACTIONS_NAME_COST = {
     "Vassalisation": ActionCost(4),
     "Village": ActionCost(8, 300, 150),
     "Impôt": ActionCost(4),
-    "Guerre": ActionCost(8)
+    "Guerre": ActionCost(8, ressources=100)
 }
 
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
