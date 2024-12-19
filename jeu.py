@@ -6,10 +6,8 @@ import random
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
-from Territoire.village import Village
 from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST
 from Territoire.village import Village, Terre
-from parameter import *
 
 
 @dataclass
