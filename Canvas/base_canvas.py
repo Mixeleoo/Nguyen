@@ -21,6 +21,7 @@ class BaseCanvas(HighlightCanvas):
 
         self.custom_font = font.Font(family="Enchanted Land", size=20)
         self.references = []
+        self.square_id_to_tag: dict[int, str] = {}
 
         self.basic_mode_tag_foc: [str, callable] = {}
         self.build_city_mode_tag_foc: [str, callable] = {}
@@ -151,6 +152,8 @@ class BaseCanvas(HighlightCanvas):
                     tags=set_tags(MAP_TAG, which_type if which_type == PLAINE_TAG else NOTHING_TAG, MAP_TAG),
                     width=0
                 )
+
+                self.square_id_to_tag[square_id] = which_type
 
                 # Pour débug les carrés
                 # self.create_text((self.sps * row_i + self.sps * (row_i + 1)) / 2, (self.sps * col_i + self.sps * (col_i + 1)) / 2, content=f"{row_i, col_i}")

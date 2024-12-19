@@ -90,7 +90,7 @@ class Button(ButtonABC):
             x0, y0, x1, y1,
             outline="#CCCCCC",
             width=1,
-            tags=set_tags(color_tag="#CCCCCC", hud_tag=self.hud_tag, group_tag=self.group_tag) + if_temp,
+            tags=set_tags(color_tag="#CCCCCC", hud_tag=self.hud_tag) + if_temp,
             state=state
         )
 
@@ -103,10 +103,9 @@ class Button(ButtonABC):
                 HIGHLIGHT_BUTTON_TAG,
                 self.trigger_name,
                 color_tag=fill,
-                hud_tag=self.hud_tag,
-                group_tag=self.group_tag
+                hud_tag=self.hud_tag
             ) + if_temp,
-            text_tags=set_tags(hud_tag=self.hud_tag, group_tag=self.group_tag) + (TEXT_TAG,) + if_temp,
+            text_tags=set_tags(hud_tag=self.hud_tag) + (TEXT_TAG,) + if_temp,
             fill=fill_brighter[fill], state=state
         )
 

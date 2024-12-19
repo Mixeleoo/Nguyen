@@ -1,7 +1,8 @@
+from typing import Literal
 
 from Perso.personne import Personne
 from Perso.soldat import Soldat
-from Territoire.village import Village
+from Territoire.village import Village, Terre
 from parameter import prenom_aleatoire
 
 
@@ -111,11 +112,12 @@ class Vassal(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def ajouter_village(self, pid: int, nom: str):
+    def ajouter_village(self, pid: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
-        v = Village(pid, nom)
+
+        v = Village(pid, nom, l_terre)
         self._dico_villages[pid] = v
         return v
 
@@ -141,14 +143,3 @@ class Vassal(Personne):
             self._liste_soldats = self._liste_soldats[:self._ressources]
 
         return deces
-
-    def reaction_revolte(self) -> tuple:
-        """
-        Méthode lancée par le jeu après avoir cliqué sur fin de tour.
-        Si une révolte se produit.
-            Si le joueur gagne, renvoyer "V" puis le nombre de soldats ensuite de roturiers perdus sous forme de chaîne de caractère.
-            Sinon supprimer le village de la liste des villages comme dans l'évènement Incendie et renvoyer "D".
-        Sinon renvoyer un tuple vide.
-        """
-        # TODO Éloïse: Établir les conditions d'une révolte.
-        pass

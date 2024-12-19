@@ -3,26 +3,25 @@ from random import choice
 from typing import Literal
 from dataclasses import dataclass
 
+
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
 from Territoire.eglise import Eglise
-from parameter import nom_aleatoire_pretres, nom_aleatoire_eglise
+from Perso.soldat import Soldat
+from parameter import *
 
 
 # TODO Éloïse: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
-@dataclass
-class Terre:
-    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
-    nb_roturiers: int
+
 
 
 class Village :
     """
-    Un village est représenté par son id (qui servira pour l'associer à son emplacement sur la map)
+    Un village est représenté par son id (qui servira pour l'associer à son emplacement sur la map), par une liste des terres qui l'entourent
     par sa population de roturiers (une liste de roturiers) et des églises qui la composent (liste d'églises)
     """
-    def __init__(self, pid : int, nom : str) :
+    def __init__(self, pid : int, nom : str, l_terres : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]) :
         self._nom = nom
         self._identifiant = pid
 
@@ -31,6 +30,13 @@ class Village :
 
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
+
+        # Liste du type des 8 terres entourant le village
+        terres: list[Terre] = []
+        for type_terre in l_terres:
+            terres.append(Terre(type_terre))
+
+        self._liste_terres : list[Terre] = terres
 
     @property
     def nom(self):
@@ -68,21 +74,42 @@ class Village :
             effectif += 1
         return round(bonheur / effectif, 2)
 
-    def ajouter_villageois(self, type_v: Literal["paysan", "artisan", "soldat"], effectif : int) :
+    def recuperer_recoltes(self):
+        """
+        Méthode qui permet de gérer la récupération des ressources sur les terres autour du village par chacun des villageois
+        En fonction de la capcacité de la terre sur laquelle il travail + sa capactité de production
+        """
+        for villageois in self.liste_roturier :
+            villageois.gestion_ressources(capacite_prod_terre[villageois.terre.type] + villageois.produit())
+
+    def ajouter_villageois(self, type_v: Literal["paysan", "artisan"], effectif : int) -> int :
         """
         Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.
         Elle servira lorsque le joueur choisira l'action 'Immigration'
+
+        :param type_v : type de villageois souhaité
+        :param effectif : nombre de villageaois souhaité
+
+        :return: nombre de place disponible dans le village si effectif souhaité trop grand
         """
-        # Réduire la taille maximale à 80 habitants.
-        effectif = 80 - self.population if 80 - self.population < effectif else effectif
+        # Limite la taille maximale à 80 habitants.
+        if self.population + effectif > 80  :
+            return 80 - self.population
 
         for v in range(effectif):
-            if type_v == "artisan":
-                self._liste_roturier += [Roturier()]
-            elif type_v == "paysan":
-                self._liste_roturier += [Paysan()]
+            terre = choice(self._liste_terres)
+            while terre.nb_roturiers >= 10:
+                terre = choice(self._liste_terres)
 
-        print(f"Roturiers du village : {self._nom} | {self._identifiant} : \n{self._liste_roturier}")
+            if type_v == "artisan":
+                self._liste_roturier += [Roturier(terre)]
+
+            elif type_v == "paysan":
+                self._liste_roturier += [Paysan(terre)]
+
+            terre.nb_roturiers += 1
+
+
 
     def creer_eglise(self):
         """
@@ -126,3 +153,24 @@ class Village :
                     villageois.esperance_vie += 1  # valeur à determiner
                 elif don == 3 :
                     villageois.cdp += 1  # valeur à determiner
+
+    def revolte(self, l_soldat : list[Soldat]) :
+        """
+        Méthode qui gère un cas de révolte dans une village
+        Si une révolte se produit.
+        Le joueur/bot gagne s'il a plus de la moitié de ses effectifs de roturiers comme effectif de soldats
+            Si le joueur gagne, renvoyer "V" puis le nombre de roturiers perdus (25% de ses roturiers) sous forme de chaîne de caractère.
+            Sinon renvoyer "D".
+        Sinon renvoyer un tuple vide.
+        """
+
+        if self.bonheur_general > 1 :
+            return ()
+
+        if len(l_soldat) > len(self.liste_roturier)//2 :
+            perte_revolutionnaires = int(len(self.liste_roturier) * 0.25)
+            self.liste_roturier = self.liste_roturier[:len(self.liste_roturier)-perte_revolutionnaires]
+            return "V", str(perte_revolutionnaires)
+
+        elif len(l_soldat) <= len(self.liste_roturier)//2 :
+            return ("D",)

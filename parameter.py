@@ -1,8 +1,11 @@
 from collections import namedtuple
+from dataclasses import dataclass
 # -*- coding: utf-8 -*-
 
 from random import randint, choice
 from tkinter import font
+from typing import Literal
+
 
 MAX_WIDTH = 1024
 MAX_HEIGHT = 600
@@ -91,6 +94,22 @@ ACTIONS_TAG_COST = {
     BUILD_CITY: 8,
     TAXES_TAG: 5,
     WAR_TAG: 8
+}
+
+@dataclass
+class ActionCost:
+    pa: int
+    argent: int = 0
+    ressources: int = 0
+
+ACTIONS_NAME_COST = {
+    "Immigration": ActionCost(1),
+    "Soldat": ActionCost(2),
+    "Eglise": ActionCost(6, 100, 50),
+    "Vassalisation": ActionCost(4),
+    "Village": ActionCost(8, 300, 150),
+    "Impôt": ActionCost(4),
+    "Guerre": ActionCost(8, ressources=100)
 }
 
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
@@ -201,7 +220,6 @@ def get_width_text(text: str):
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
 
-
 def separer_chaine_sans_couper(chaine, n):
     # Vérifie que n est un entier positif
     if n <= 0:
@@ -239,6 +257,12 @@ def separer_chaine_sans_couper(chaine, n):
 
 
 Position = namedtuple('Position', ['x', 'y'])
+
+
+@dataclass
+class Terre:
+    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
+    nb_roturiers: int = 0
 
 noms_village = [
     "Lande-Cendrée",
@@ -431,7 +455,7 @@ noms_pretres = [
 ]
 
 def nom_aleatoire_pretres() :
-    return choice([noms_pretres])
+    return choice(noms_pretres)
 
 noms_nobles =[
     "Sir Guillaume",
@@ -485,7 +509,10 @@ noms_nobles =[
     "Sir Guy"]
 
 def nom_aleatoire_nobles() :
-    return choice([noms_nobles])
+    return choice(noms_nobles)
+
+# Quantité de ressources associée au type de terre sur la carte
+capacite_prod_terre = {"PLAIN" : 7, "MOUNTAIN" : 2, "LAKE" : 5, "FOREST" : 9}
 
 def dummy(*args):
     pass
