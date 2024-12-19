@@ -28,18 +28,16 @@ class Village :
         # Les roturiers que possède le noble
         self._liste_roturier : list[Roturier] = []
 
-        self.ajouter_villageois("paysan",5)
-        self.ajouter_villageois("roturier",5)
-
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
 
         # Liste du type des 8 terres entourant le village
-        terres: list[Terre] = []
+        self._liste_terres: list[Terre] = []
         for type_terre in l_terres:
-            terres.append(Terre(type_terre))
+            self._liste_terres.append(Terre(type_terre))
 
-        self._liste_terres : list[Terre] = terres
+        self.ajouter_villageois("paysan",5)
+        self.ajouter_villageois("artisan",5)
 
     @property
     def nom(self):
