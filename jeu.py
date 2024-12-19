@@ -156,7 +156,7 @@ class Jeu:
 
         elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
-            noble = choice(self._joueurs)
+            noble = choice([j for j in self._joueurs[1:] if type(j) != Vassal])
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
     # Réaction
