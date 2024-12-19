@@ -13,7 +13,7 @@ class TasPasAssezDePAGros(HUDMobileABC):
 
     def create(self) -> None:
 
-        text = "T'as pas assez de PA gros"
+        text = "T'as pas assez de PA gros (ou d'argent) (ou de ressources)"
 
         width = get_width_text(text)
         height = 20
