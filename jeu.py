@@ -442,7 +442,6 @@ class Jeu:
                 return ActionBotInfo("Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt.")
 
             elif action == "Guerre":
-                # TODO: Éloïse action bot guerre
                  noble_choisi = choice(self._joueurs)
 
                  victoire = self.guerre(noble_choisi,"G")
@@ -459,7 +458,6 @@ class Jeu:
                  return ActionBotInfo("Guerre",f"{noble_victorieux.nom} a vaincu {noble_vaincu.nom}." , noble_vaincu)
 
             elif action == "Vassalisation":
-                #TODO : voir le return
 
                 noble_choisi = choice(self._joueurs)
                 while isinstance(noble_choisi, Vassal) :
