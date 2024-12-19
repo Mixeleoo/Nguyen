@@ -1,12 +1,12 @@
 
 from typing import Literal
 from dataclasses import dataclass
-from random import randint, choice
+import random
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
-from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST
+from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST, Terre
 from Territoire.village import Village
 
 
@@ -161,13 +161,14 @@ class Jeu:
 
     # Actions
 
-    def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Terre]):
+    def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
 
         :param village_id: id du village crée
         :param prenom: prenom du noble
         :param nom_village: nom du village
+        :param l_terre: liste des terres du village
         """
         nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs))
         v = nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
@@ -198,7 +199,7 @@ class Jeu:
         elif type_v == "artisan":
             self.joueur_actuel.retirer_pa(effectif*2)
 
-    def construire_village(self, village_id: int, nom: str, l_terre : list[Terre]):
+    def construire_village(self, village_id: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Méthode qui va ajouter un village dans la liste de villages du joueur
 
@@ -206,7 +207,7 @@ class Jeu:
         :param nom: nom du village
         :param l_terre : liste des 8 terres entourant le village
         """
-        self.joueur_actuel.ajouter_village(village_id, nom,l_terre)
+        self.joueur_actuel.ajouter_village(village_id, nom, l_terre)
         print("ID emplacement :",village_id)
 
         self.joueur_actuel.retirer_pa(8)
@@ -428,20 +429,20 @@ class Jeu:
 
             elif action == "Guerre":
                 # TODO: Éloïse action bot guerre
-                 noble_choisi = choice(self._joueurs)
+                 noble_choisi = random.choice(self._joueurs)
 
 
-                return ActionBotInfo("Guerre", "INFOGUERRE", noble_vaincu=None)
+                 return ActionBotInfo("Guerre", "INFOGUERRE", noble_vaincu=None)
 
             elif action == "Vassalisation":
                 #TODO : voir le return + retrait PA
 
-                noble_choisi = choice(self._joueurs)
+                noble_choisi = random.choice(self._joueurs)
                 while isinstance(noble_choisi, Vassal) :
-                    noble_choisi = choice(self._joueurs)
+                    noble_choisi = random.choice(self._joueurs)
 
-                argent = randint(1,self.joueur_actuel.argent*0.75)
-                ressources = randint(1,self.joueur_actuel.ressources * 0.75)
+                argent = random.randint(1,self.joueur_actuel.argent*0.75)
+                ressources = random.randint(1,self.joueur_actuel.ressources * 0.75)
 
                 if self.joueur_actuel.soumettre(noble_choisi, argent, ressources)  :
                     self.vassalisation_confirmee(noble_choisi, argent, ressources)

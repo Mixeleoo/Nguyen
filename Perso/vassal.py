@@ -1,3 +1,4 @@
+from typing import Literal
 
 from Perso.personne import Personne
 from Perso.soldat import Soldat
@@ -111,11 +112,12 @@ class Vassal(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def ajouter_village(self, pid: int, nom: str, l_terre : list[Terre]):
+    def ajouter_village(self, pid: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
-        v = Village(pid, nom)
+
+        v = Village(pid, nom, l_terre)
         self._dico_villages[pid] = v
         return v
 

@@ -5,7 +5,7 @@ def x_on_100_chance(x):
     return 1 if random.randint(0, 100) < x else 0
 
 
-def create_biome_map(rows, cols):
+def create_biome_map(rows, cols) -> list[list[str]]:
     # Initialisation de la carte avec des "plaines" par défaut
     map_grid = [[PLAINE_TAG for _ in range(cols)] for _ in range(rows)]
 

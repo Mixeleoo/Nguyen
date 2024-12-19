@@ -117,6 +117,25 @@ class HUDCanvas(BaseCanvas):
 
         self.to_show_if_cancel = []
 
+    def land_around(self, square_id: int) -> tuple[str, ...]:
+        l = ()
+
+        for i in [
+            square_id - CARRE_PAR_LIGNE - 1,
+            square_id - CARRE_PAR_LIGNE,
+            square_id - CARRE_PAR_LIGNE + 1,
+            square_id - 1,
+            square_id + 1,
+            square_id + CARRE_PAR_LIGNE - 1,
+            square_id + CARRE_PAR_LIGNE,
+            square_id + CARRE_PAR_LIGNE + 1
+        ]:
+            e = self.square_id_to_tag.get(i, None)
+            if e is not None:
+                l += (e,)
+
+        return l
+
     def init_nobles(self):
         # Ajouter un village au joueur
         square_id = self.engine_build_city()
@@ -125,7 +144,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_village.choose_village.add_option(nom, square_id)
         self.hudmobile_choose_taxes.add_village(nom, square_id)
 
-        village = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom)
+        village = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id))
 
         # Ajouter la fenêtre du village
         self.hudwindow_supervisor.add_more_info(village)
@@ -140,7 +159,7 @@ class HUDCanvas(BaseCanvas):
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
             self.hudmobile_choose_noble_vassaliser.add_noble(prenom, noble + 1)
             self.hudcentered_choose_noble_war.add_noble(prenom, noble + 1)
-            village = self.jeu.creer_noble(square_id, prenom, nom_village)
+            village = self.jeu.creer_noble(square_id, prenom, nom_village, self.land_around(square_id))
 
             # Ajouter la fenêtre du village
             self.hudwindow_supervisor.add_more_info(village)

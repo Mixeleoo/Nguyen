@@ -262,7 +262,7 @@ Position = namedtuple('Position', ['x', 'y'])
 @dataclass
 class Terre:
     type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
-    nb_roturiers: int
+    nb_roturiers: int = 0
 
 noms_village = [
     "Lande-Cendrée",

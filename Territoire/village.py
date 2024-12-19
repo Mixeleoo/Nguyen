@@ -21,7 +21,7 @@ class Village :
     Un village est représenté par son id (qui servira pour l'associer à son emplacement sur la map), par une liste des terres qui l'entourent
     par sa population de roturiers (une liste de roturiers) et des églises qui la composent (liste d'églises)
     """
-    def __init__(self, pid : int, nom : str, l_terres : list[Terre]) :
+    def __init__(self, pid : int, nom : str, l_terres : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]) :
         self._nom = nom
         self._identifiant = pid
 
@@ -32,7 +32,11 @@ class Village :
         self._liste_eglises : list[Eglise] = []
 
         # Liste du type des 8 terres entourant le village
-        self._liste_terres : list[Terre] = l_terres
+        terres: list[Terre] = []
+        for type_terre in l_terres:
+            terres.append(Terre(type_terre))
+
+        self._liste_terres : list[Terre] = terres
 
     @property
     def nom(self):
