@@ -2,8 +2,7 @@
 from random import randint
 
 from Perso.personne import Personne
-from parameter import prenom_aleatoire
-from Territoire.village import Terre
+from parameter import *
 
 
 class Roturier(Personne):
