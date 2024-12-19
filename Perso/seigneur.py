@@ -23,7 +23,10 @@ class Seigneur(Noble):
 
     @property
     def effectif_armee(self) -> int:
-        return len(self._liste_soldats) + len(self._liste_nobles)
+        armee = len(self._liste_soldats) + len(self._liste_nobles)
+        for vassal in self._liste_nobles:
+            armee += len(vassal.liste_soldats)
+        return armee
 
     def prend_impot_noble(self, indice_noble : int):
         """

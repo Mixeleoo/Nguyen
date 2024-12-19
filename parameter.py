@@ -104,7 +104,7 @@ class ActionCost:
 
 ACTIONS_NAME_COST = {
     "Immigration": ActionCost(1),
-    "Soldat": ActionCost(2),
+    "Soldat": ActionCost(2, 20, 20),
     "Eglise": ActionCost(6, 100, 50),
     "Vassalisation": ActionCost(4),
     "Village": ActionCost(8, 300, 150),

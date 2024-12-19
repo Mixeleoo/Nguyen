@@ -27,5 +27,6 @@ class Noble(Vassal):
         :param press: Quantité de ressources offertes au noble
         :return : True si le noble accepte de devenir vassal, False sinon
         """
+        self.retirer_pa(4)
 
         return (pnoble.argent * 0.25 < pargent and pnoble.ressources * 0.25 < press) or (len(pnoble.liste_soldats) < len(self.liste_soldats))

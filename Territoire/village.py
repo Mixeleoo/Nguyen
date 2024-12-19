@@ -26,7 +26,10 @@ class Village :
         self._identifiant = pid
 
         # Les roturiers que possède le noble
-        self._liste_roturier : list[Roturier] = [Roturier() for _ in range(5)] + [Paysan() for _ in range(5)]
+        self._liste_roturier : list[Roturier] = []
+
+        self.ajouter_villageois("paysan",5)
+        self.ajouter_villageois("roturier",5)
 
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
