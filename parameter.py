@@ -201,7 +201,6 @@ def get_width_text(text: str):
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
     return text_font.measure(text) + pad_from_borders
 
-
 def separer_chaine_sans_couper(chaine, n):
     # Vérifie que n est un entier positif
     if n <= 0:
@@ -431,7 +430,7 @@ noms_pretres = [
 ]
 
 def nom_aleatoire_pretres() :
-    return choice([noms_pretres])
+    return choice(noms_pretres)
 
 noms_nobles =[
     "Sir Guillaume",
@@ -485,7 +484,7 @@ noms_nobles =[
     "Sir Guy"]
 
 def nom_aleatoire_nobles() :
-    return choice([noms_nobles])
+    return choice(noms_nobles)
 
 def dummy(*args):
     pass

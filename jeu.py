@@ -8,6 +8,21 @@ from Perso.vassal import Vassal
 from Territoire.village import Village
 from parameter import *
 
+@dataclass
+class ActionCost:
+    pa: int
+    argent: int = 0
+    ressources: int = 0
+
+ACTIONS_NAME_COST = {
+    "Immigration": ActionCost(1),
+    "Soldat": ActionCost(2),
+    "Eglise": ActionCost(6, 100, 50),
+    "Vassalisation": ActionCost(4),
+    "Village": ActionCost(8, 300, 150),
+    "Impôt": ActionCost(4),
+    "Guerre": ActionCost(8)
+}
 
 @dataclass
 class EventInfo:
@@ -71,6 +86,11 @@ class Jeu:
 
         else:
             return None
+
+    def action_possible(self, actioncost: ActionCost):
+        return self.joueur_actuel.pa >= actioncost.pa and\
+        self.joueur_actuel.argent >= actioncost.argent and\
+        self.joueur_actuel.ressources >= actioncost.ressources
 
     # Evenements en début de partie
     def evenement(self) -> EventInfo:
@@ -171,6 +191,7 @@ class Jeu:
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
+        print([v for v in self.joueur_actuel.dico_villages.keys()])
         self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
         if type_v == "paysan":
@@ -328,7 +349,7 @@ class Jeu:
             return ActionBotInfo("", "")
 
         else:
-            # TODO Éloïse il faut vérifier que le bot peut bien faire les actions et donc qu'il a assez de PA
+            # TODO Éloïse il faut vérifier que le bot peut bien faire les actions avant de les lancer et donc qu'il a assez de PA
             # Pour ça on peut utiliser le dictionnaire ACTIONS_TAG_COST de parameter.py, et vérifier avec ça et
             # la fameuse boucle qui récupérera un choix au pif le temps que l'action choisie est payable.
 
@@ -337,6 +358,9 @@ class Jeu:
                 action_liste.remove("Guerre")
 
             action = choice(action_liste)
+
+            while not self.action_possible(ACTIONS_NAME_COST[action]):
+                action = choice(action_liste)
 
             if action == "Immigration":
                 # choix aléatoire du type de villageois voulu en fonction du nombre de PA restants au bot
@@ -352,34 +376,26 @@ class Jeu:
                     self.immigrer(village, type_villageois, nb_villageois)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}.")
 
-                elif self.joueur_actuel.pa == 1 :
+                elif self.joueur_actuel.pa == 1:
                     self.immigrer(village, "paysan", 1)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan.")
 
+            elif action == "Soldat":
 
-
-
-
-            elif action == "Soldat" and self.joueur_actuel.pa >= 2:
-                #Choix aléatoire du nombre de soldats recrutés en fonction du nombre de PA du bot
+                # Choix aléatoire du nombre de soldats recrutés en fonction du nombre de PA du bot
                 nb_soldats = randint(1,self.joueur_actuel.pa//2)
                 self.recruter_soldat(nb_soldats)
 
                 return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
 
-
-            elif action == "Eglise" and self.joueur_actuel.pa >= 6 and self.joueur_actuel.ressources >= 50 and self.joueur_actuel.argent >= 100:
+            elif action == "Eglise":
                 #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
                 village = choice(list(self.joueur_actuel.dico_villages.keys()))
                 self.construire_eglise(village)
-
-
                 return ActionBotInfo("Eglise", f"{self.joueur_actuel.nom} a construit une église")
-
 
             elif action == "Village":
                 return ActionBotInfo("Village", f"{self.joueur_actuel.nom} a construit un village !")
-
 
             elif action == "Impôt":
                 #Choix aléatoire du nombre de village et/ou de nobles à imposer + choix aléatoire des quels
