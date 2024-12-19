@@ -11,6 +11,9 @@ class CheckbuttonInPageABC(SelectorInPageABC, ABC):
 
         self.checkbuttons: list[Checkbutton] = [self.canvas.add_checkbutton()]
 
+        # PYREVERSE
+        #self.checkbuttons = Checkbutton()
+
     @property
     def selectors(self) -> list[Checkbutton]:
         return self.checkbuttons

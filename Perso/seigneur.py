@@ -13,6 +13,9 @@ class Seigneur(Noble):
         # Liste des vassaux du seigneur (nobles sous les ordres du seigneur)
         self._liste_nobles: list[Vassal] = []
 
+        # PYREVERSE
+        #self._liste_nobles = Vassal()
+
     @property
     def liste_nobles(self):
         return self._liste_nobles

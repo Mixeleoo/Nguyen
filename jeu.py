@@ -31,7 +31,18 @@ class Jeu:
     def __init__(self):
 
         self._const_joueurs: list[Vassal | Noble | Seigneur] = []
+
+        # PYREVERSE
+        #self._const_joueurs = Vassal()
+        #self._const_joueurs = Noble()
+        #self._const_joueurs = Seigneur()
+
         self._joueurs: list[Vassal | Noble | Seigneur] = []
+
+        # PYREVERSE
+        #self._liste_terres = Vassal()
+        #self._liste_terres = Noble()
+        #self._liste_terres = Seigneur()
 
         """
         Variable qui indique l'indice du joueur en train de jouer,

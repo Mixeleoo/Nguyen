@@ -26,7 +26,6 @@ class HUDMoreInfoWindow(HUDWindowABC):
 
         self._text.set(t)
 
-
 class HUDWindowSupervisor:
     def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas

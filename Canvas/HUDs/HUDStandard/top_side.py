@@ -12,6 +12,9 @@ class TopSide(HUDABC):
 
         self.texts: list[StringVar] = []
 
+        # PYREVERSE
+        #self.texts = StringVar()
+
     @property
     def arrival_pos_show(self) -> Position: return Position(0, 0)
     @property

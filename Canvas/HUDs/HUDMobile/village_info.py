@@ -13,6 +13,9 @@ class VillageInfo(HUDMobileABC):
         self.more_info_button_id = 0
         self.texts: list[StringVar] = []
 
+        # PYREVERSE
+        #self.texts = StringVar()
+
     def create(self):
 
         width = 120

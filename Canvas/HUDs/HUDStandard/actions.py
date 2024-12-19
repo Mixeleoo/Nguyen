@@ -17,8 +17,19 @@ class Actions(HUDABC):
 
         self.t_page = StringVar(canvas)
         self.ts_title_action: list[StringVar] = []
+
+        # PYREVERSE
+        #self.ts_title_action = StringVar()
+
         self.ts_additionnal_cost: list[StringVar] = []
+
+        # PYREVERSE
+        #self.ts_additionnal_cost = StringVar()
+
         self.ts_PA: list[StringVar] = []
+
+        # PYREVERSE
+        #self.ts_PA = StringVar()
 
         self.title_font = self.canvas.font.copy()
         self.title_font.config(weight="bold")

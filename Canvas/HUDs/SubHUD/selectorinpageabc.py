@@ -23,6 +23,9 @@ class SelectorInPageABC(SubHUDABC, ABC):
         self.choices_id: list[int] = []
         self.choices_texts: list[StringVar] = []
 
+        # PYREVERSE
+        #self.choices_texts = StringVar()
+
         # Dictionnaire des index des checkbutton qui mènent vers leurs différentes catégories qui mènent vers
         # L'id des villages
         self.list_selector_choices_to_item: list[dict[int, int]] = [{}]

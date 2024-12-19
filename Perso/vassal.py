@@ -29,6 +29,9 @@ class Vassal(Personne):
         # Liste des soldats sous les ordres du noble
         self._liste_soldats: list[Soldat] = []
 
+        # PYREVERSE
+        #self._liste_soldats = Soldat()
+
     @property
     def id(self) -> int:
         return self._id
