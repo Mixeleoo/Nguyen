@@ -149,7 +149,7 @@ class Jeu:
 
     # Actions
 
-    def creer_noble(self, village_id: int, prenom: str, nom_village: str):
+    def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Terre]):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
 
@@ -158,7 +158,7 @@ class Jeu:
         :param nom_village: nom du village
         """
         nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs))
-        v = nouveau_noble.ajouter_village(village_id, nom_village)
+        v = nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)
 
@@ -369,12 +369,8 @@ class Jeu:
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan.")
 
             elif action == "Soldat":
-
-
-
-            elif action == "Soldat" and self.joueur_actuel.pa >= 2:
                 #Choix aléatoire du nombre de soldats recrutés en fonction du nombre de PA du bot
-                nb_soldats = randint(1,self.joueur_actuel.pa//2)
+                nb_soldats = random.randint(1,self.joueur_actuel.pa//2)
                 self.recruter_soldat(nb_soldats)
 
                 return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
@@ -396,19 +392,19 @@ class Jeu:
                 villages = list(self.joueur_actuel.dico_villages.keys()).copy()
 
                 if isinstance(self.joueur_actuel, Seigneur) :
-                    nb_nobles = randint(1, len(self.joueur_actuel.liste_nobles)-1)
+                    nb_nobles = random.randint(1, len(self.joueur_actuel.liste_nobles)-1)
                     nobles = self.joueur_actuel.liste_nobles.copy()
 
                 villages_id = []
                 nobles_i = []
 
                 for ivillage in range(nb_villages):
-                    choix = choice(villages)
+                    choix = random.choice(villages)
                     villages_id += [choix]
                     villages.remove(choix)
 
                 for inoble in range(nb_nobles) :
-                    choix_noble = nobles[randint(0,len(nobles)-1)]
+                    choix_noble = nobles[random.randint(0,len(nobles)-1)]
                     nobles_i += [choix_noble]
                     nobles.remove(choix_noble)
 
