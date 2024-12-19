@@ -268,9 +268,9 @@ class HUDCanvas(BaseCanvas):
             # Vassalisation refusée = guerre déclarée
             # ChatGPT m'a écrit cette phrase ci-dessous.
             self.add_history_text(f"Le noble chevalier, {noble_selected.nom}, a décliné vostre offre avec mépris, et vous adresse une missive cinglante déclarant la guerre !")
-            self.war(noble_selected_index)
+            self.war(noble_selected_index, "V")
 
-    def war(self, noble_index: int):
+    def war(self, noble_index: int, cause: Literal["V", "G"]):
         """
         Méthode qui gère la guerre entre le joueur actuel et noble_index
         """
@@ -278,7 +278,7 @@ class HUDCanvas(BaseCanvas):
         noble = self.jeu.get_const_joueur(noble_index)
 
         # Si le joueur remporte la guerre.
-        if self.jeu.guerre(noble):
+        if self.jeu.guerre(noble, cause):
 
             # S'il est le dernier alors, il a gagné.
             if self.jeu.nb_joueurs == 1:

@@ -40,7 +40,7 @@ class ChooseNobleWar(HUDCenteredABC):
         """
         noble_index = self.choose_noble.selected_option
         if noble_index:
-            self.canvas.war(noble_index)
+            self.canvas.war(noble_index, "G")
             self.bhide()
 
         else:
