@@ -1,10 +1,13 @@
 
 from typing import Literal
 from dataclasses import dataclass
+import random
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
+from Territoire.village import Village
+from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST
 from Territoire.village import Village, Terre
 from parameter import *
 
@@ -72,6 +75,11 @@ class Jeu:
         else:
             return None
 
+    def action_possible(self, actioncost: ActionCost):
+        return self.joueur_actuel.pa >= actioncost.pa and\
+        self.joueur_actuel.argent >= actioncost.argent and\
+        self.joueur_actuel.ressources >= actioncost.ressources
+
     # Evenements en début de partie
     def evenement(self) -> EventInfo:
         """
@@ -81,7 +89,7 @@ class Jeu:
 
         if 1 <= choix_ev <= 5:
             # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent
-            esp = randint(50,100)
+            esp = random.randint(50,100)
             nb_morts = 0
             for village in list(self.joueur_actuel.dico_villages.values()) :
                 for villageois in village.liste_roturier :
@@ -93,14 +101,14 @@ class Jeu:
 
         elif 6 <= choix_ev <= 10:
             # incendies : un village aléatoire parmi la liste de villages du joueur/bot disparaît
-            id_village_supp = choice(list(self.joueur_actuel.dico_villages.keys()))
+            id_village_supp = random.choice(list(self.joueur_actuel.dico_villages.keys()))
             village_supp = self.joueur_actuel.dico_villages.pop(id_village_supp)
 
             return EventInfo("Incendie", (f"Village disparu : {village_supp.nom}",), village_incendie=village_supp)
 
         elif 11 <= choix_ev <= 20:
             # pillage : l'argent et les ressources d'un village son volés
-            id_village_pie = choice(list(self.joueur_actuel.dico_villages.keys()))
+            id_village_pie = random.choice(list(self.joueur_actuel.dico_villages.keys()))
             qt_arg = 0
             qt_res = 0
 
@@ -130,15 +138,15 @@ class Jeu:
 
         elif 85 <= choix_ev <= 94:
             # immigration : des roturiers augmentent la population d'un village
-            id_village_peuple = choice(list(self.joueur_actuel.dico_villages.keys()))
-            nb_immigres = randint(1,3)
-            type_imigres = choice(["artisan","paysan"])
+            id_village_peuple = random.choice(list(self.joueur_actuel.dico_villages.keys()))
+            nb_immigres = random.randint(1,3)
+            type_imigres = random.choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
             return EventInfo("Immigration", (f"Effectif : {nb_immigres}\nType : {type_imigres}",))
 
         elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
-            noble = choice(self._joueurs)
+            noble = random.choice(self._joueurs)
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
     # Actions
@@ -171,6 +179,7 @@ class Jeu:
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
+        print([v for v in self.joueur_actuel.dico_villages.keys()])
         self.joueur_actuel.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
         if type_v == "paysan":
@@ -299,7 +308,7 @@ class Jeu:
         effectif_armee_ennemie = pnoble.effectif_armee
 
         # choix vainqueur
-        if effectif_armee_joueur > effectif_armee_ennemie or effectif_armee_joueur == effectif_armee_ennemie and randint(0,1) == 1:
+        if effectif_armee_joueur > effectif_armee_ennemie or effectif_armee_joueur == effectif_armee_ennemie and random.randint(0,1) == 1:
             # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
@@ -330,7 +339,7 @@ class Jeu:
             return ActionBotInfo("", "")
 
         else:
-            # TODO Éloïse il faut vérifier que le bot peut bien faire les actions et donc qu'il a assez de PA
+            # TODO Éloïse il faut vérifier que le bot peut bien faire les actions avant de les lancer et donc qu'il a assez de PA
             # Pour ça on peut utiliser le dictionnaire ACTIONS_TAG_COST de parameter.py, et vérifier avec ça et
             # la fameuse boucle qui récupérera un choix au pif le temps que l'action choisie est payable.
 
@@ -338,27 +347,30 @@ class Jeu:
                 action_liste.remove("Vassalisation")
                 action_liste.remove("Guerre")
 
-            action = choice(action_liste)
+            action = random.choice(action_liste)
+
+            while not self.action_possible(ACTIONS_NAME_COST[action]):
+                action = random.choice(action_liste)
 
             if action == "Immigration":
                 # choix aléatoire du type de villageois voulu en fonction du nombre de PA restants au bot
-                village = choice(list(self.joueur_actuel.dico_villages.keys()))
+                village = random.choice(list(self.joueur_actuel.dico_villages.keys()))
                 nb_villageois = 0
                 if self.joueur_actuel.pa >= 2 :
-                    type_villageois = choice(["artisan","paysan"])
+                    type_villageois = random.choice(["artisan","paysan"])
                     if type_villageois == "paysan":
-                        nb_villageois = randint(1,self.joueur_actuel.pa)
+                        nb_villageois = random.randint(1,self.joueur_actuel.pa)
                     elif type_villageois == "artisan":
-                        nb_villageois = randint(1,self.joueur_actuel.pa//2)
+                        nb_villageois = random.randint(1,self.joueur_actuel.pa//2)
 
                     self.immigrer(village, type_villageois, nb_villageois)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli {nb_villageois} nouveau(x) {type_villageois}.")
 
-                elif self.joueur_actuel.pa == 1 :
+                elif self.joueur_actuel.pa == 1:
                     self.immigrer(village, "paysan", 1)
                     return ActionBotInfo("Immigration", f"{self.joueur_actuel.nom} a accueilli 1 nouveau paysan.")
 
-
+            elif action == "Soldat":
 
 
 
@@ -369,25 +381,20 @@ class Jeu:
 
                 return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
 
-
-            elif action == "Eglise" and self.joueur_actuel.pa >= 6 and self.joueur_actuel.ressources >= 50 and self.joueur_actuel.argent >= 100:
+            elif action == "Eglise":
                 #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
-                village = choice(list(self.joueur_actuel.dico_villages.keys()))
+                village = random.choice(list(self.joueur_actuel.dico_villages.keys()))
                 self.construire_eglise(village)
-
-
                 return ActionBotInfo("Eglise", f"{self.joueur_actuel.nom} a construit une église")
-
 
             elif action == "Village":
                 return ActionBotInfo("Village", f"{self.joueur_actuel.nom} a construit un village !")
-
 
             elif action == "Impôt":
                 #Choix aléatoire du nombre de village et/ou de nobles à imposer + choix aléatoire des quels
                 nobles = []
                 nb_nobles = 0
-                nb_villages = randint(1,len(list(self.joueur_actuel.dico_villages.keys())))
+                nb_villages = random.randint(1,len(list(self.joueur_actuel.dico_villages.keys())))
                 villages = list(self.joueur_actuel.dico_villages.keys()).copy()
 
                 if isinstance(self.joueur_actuel, Seigneur) :
@@ -422,5 +429,3 @@ class Jeu:
 
                 self.joueur_actuel.retirer_pa(4)
                 return ActionBotInfo("Vassalisation", "INFOGUERRE", noble_vassalise=None)
-
-
