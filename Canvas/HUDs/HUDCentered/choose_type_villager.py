@@ -111,7 +111,18 @@ class ChooseTypeVillager(HUDCenteredABC):
         )
 
     def update(self, *args):
-        self.callback_quantity_selector(self.quantity_selector_hum.quantity)
+        if self.canvas.jeu.joueur_actuel.pa < 2:
+            # Griser le bouton et ne le rendre plus clickable
+            self.griser(self.artisan_choice_id)
+            self.griser(self.soldat_choice_id)
+
+            if self.canvas.jeu.joueur_actuel.pa < 1:
+                # Griser le bouton et ne le rendre plus clickable
+                self.griser(self.paysan_choice_id)
+
+        elif self.canvas.jeu.joueur_actuel.argent < 20:
+            # Griser le bouton et ne le rendre plus clickable
+            self.griser(self.soldat_choice_id)
 
     def ok_trigger(self, e=None):
         qt = self.quantity_selector_hum.quantity
@@ -146,38 +157,44 @@ class ChooseTypeVillager(HUDCenteredABC):
         # On cache l'HUD
         self.hide()
 
-    def callback_quantity_selector(self, old_quantity: int):
+    def check_choice_affordable(self, choice_id: int, previous_pa_cost: int, pa_cost: int, money_cost: int = 0, previous_money_cost: int = 0):
+        # TODO.
+        """
+        Quand je clique sur +:
+            Si j'ai dépassé le CAP de PA et/ou argent pour immigrer/recruter:
+                Si j'ai préalablement sélectionné le choix:
+                    Déselectionner le choix
+                Griser le choix
+
+        Quand je clique sur -:
+            Si j'ai de nouveau assez pour immigrer/recruter:
+                Degriser le choix
+        """
+        if previous_pa_cost <= self.canvas.jeu.joueur_actuel.pa < pa_cost or previous_money_cost <= self.canvas.jeu.joueur_actuel.argent < money_cost:
+            # Si le joueur a selectionné ce choix
+            if self.radiobutton_choice.get_selected_option() == choice_id:
+                self.radiobutton_choice.reset()
+
+            # Griser le bouton et ne le rendre plus clickable
+            self.griser(choice_id)
+
+        # Si précédemment il y avait pas assez de PA ou d'argent ET que la nouvelle quantité d'argent et de PA est affordable.
+        elif (previous_pa_cost > self.canvas.jeu.joueur_actuel.pa or previous_money_cost > self.canvas.jeu.joueur_actuel.argent) and self.canvas.jeu.joueur_actuel.pa >= pa_cost and self.canvas.jeu.joueur_actuel.argent >= money_cost:
+            self.degriser(choice_id)
+
+    def callback_quantity_selector(self, previous_quantity: int):
 
         new_quantity = self.quantity_selector_hum.quantity
 
-        if self.canvas.jeu.joueur_actuel.pa < new_quantity * 2:
-            # Si le joueur a selectionné ce choix
-            if self.radiobutton_choice.get_selected_option() in [self.artisan_choice_id, self.soldat_choice_id]:
-                self.radiobutton_choice.reset()
-
-            # Griser le bouton artisan et ne le rendre plus clickable
-            self.griser(self.artisan_choice_id)
-            self.griser(self.soldat_choice_id)
-
-            if self.canvas.jeu.joueur_actuel.pa < new_quantity:
-                # Si le joueur a selectionné ce choix
-                if self.radiobutton_choice.get_selected_option() == self.paysan_choice_id:
-                    self.radiobutton_choice.reset()
-
-                # Griser le bouton paysan et ne le rendre plus clickable
-                self.griser(self.paysan_choice_id)
-
-        # Si le nombre de PA du joueur dépasse le nouveau coût de l'effectif désiré d'artisan (donc affordable)
-        # ET qu'avant ce n'était pas le cas, alors il faut dégriser.
-        # if PA >= new_desired_workforce * 2 and PA < self.desired_workforce * 2:
-        if new_quantity * 2 <= self.canvas.jeu.joueur_actuel.pa < old_quantity * 2:
-
-            # Degriser le choix artisan et le rendre clickable
-            self.degriser(self.artisan_choice_id)
-            self.degriser(self.soldat_choice_id)
-
-        if self.canvas.jeu.joueur_actuel.pa >= new_quantity:
-            self.degriser(self.paysan_choice_id)
+        self.check_choice_affordable(self.paysan_choice_id, previous_quantity, new_quantity)
+        self.check_choice_affordable(self.artisan_choice_id, previous_quantity * 2, new_quantity * 2)
+        self.check_choice_affordable(
+            self.soldat_choice_id,
+            previous_quantity * 2,
+            new_quantity * 2,
+            previous_money_cost=previous_quantity * 20,
+            money_cost=new_quantity * 20
+        )
 
         self.refresh_text()
 
