@@ -35,7 +35,7 @@ class ResultsWar(HUDCenteredABC):
 
         # Bouton OK qui lance l'immigration
         self.canvas.create_ok_button(
-            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.ok_trigger, is_temp=True, state="hidden"
+            x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide, is_temp=True, state="hidden"
         )
 
     def update(self, results: str) -> None:
@@ -43,7 +43,3 @@ class ResultsWar(HUDCenteredABC):
 
     def replace(self, results: str) -> None: HUDCenteredABC.replace(self, results)
     def show(self, results: str) -> None: HUDCenteredABC.show(self, results)
-
-    def ok_trigger(self, *args):
-        self.canvas.event_accept_vassal(self.noble_proposal)
-        self.hide()
