@@ -1,7 +1,7 @@
 
 from Perso.personne import Personne
 from Perso.soldat import Soldat
-from Territoire.village import Village
+from Territoire.village import Village, Terre
 from parameter import prenom_aleatoire
 
 
@@ -111,7 +111,7 @@ class Vassal(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def ajouter_village(self, pid: int, nom: str):
+    def ajouter_village(self, pid: int, nom: str, l_terre : list[Terre]):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """

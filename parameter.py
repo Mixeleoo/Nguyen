@@ -487,5 +487,8 @@ noms_nobles =[
 def nom_aleatoire_nobles() :
     return choice([noms_nobles])
 
+# Quantité de ressources associée au type de terre sur la carte
+capacite_prod_terre = {"PLAIN" : 7, "MOUNTAIN" : 2, "LAKE" : 5, "FOREST" : 9}
+
 def dummy(*args):
     pass

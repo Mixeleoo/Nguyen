@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
-from Territoire.village import Village
+from Territoire.village import Village, Terre
 from parameter import *
 
 
@@ -179,14 +179,15 @@ class Jeu:
         elif type_v == "artisan":
             self.joueur_actuel.retirer_pa(effectif*2)
 
-    def construire_village(self, village_id: int, nom: str):
+    def construire_village(self, village_id: int, nom: str, l_terre : list[Terre]):
         """
         Méthode qui va ajouter un village dans la liste de villages du joueur
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
-        :param nom:
+        :param nom: nom du village
+        :param l_terre : liste des 8 terres entourant le village
         """
-        self.joueur_actuel.ajouter_village(village_id, nom)
+        self.joueur_actuel.ajouter_village(village_id, nom,l_terre)
         print("ID emplacement :",village_id)
 
         self.joueur_actuel.retirer_pa(8)
@@ -213,6 +214,7 @@ class Jeu:
         """
         self.joueur_actuel.ajout_soldat(effectif)
 
+        self.joueur_actuel.gestion_argent(-40)
         self.joueur_actuel.retirer_pa(effectif * 2)
 
     def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
@@ -420,3 +422,5 @@ class Jeu:
 
                 self.joueur_actuel.retirer_pa(4)
                 return ActionBotInfo("Vassalisation", "INFOGUERRE", noble_vassalise=None)
+
+
