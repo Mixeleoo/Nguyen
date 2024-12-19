@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 from random import randint, choice
 from tkinter import font
+from typing import Literal
+
 
 MAX_WIDTH = 1024
 MAX_HEIGHT = 600
@@ -255,6 +257,12 @@ def separer_chaine_sans_couper(chaine, n):
 
 
 Position = namedtuple('Position', ['x', 'y'])
+
+
+@dataclass
+class Terre:
+    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
+    nb_roturiers: int
 
 noms_village = [
     "Lande-Cendrée",

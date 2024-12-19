@@ -1,13 +1,13 @@
 
 from typing import Literal
 from dataclasses import dataclass
-import random
+from random import randint, choice
 
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
 from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST
-from Territoire.village import Village, Terre
+from Territoire.village import Village
 
 
 @dataclass
@@ -147,6 +147,18 @@ class Jeu:
             noble = random.choice(self._joueurs)
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
+    # Réaction
+
+    def reaction_revolte(self) -> tuple:
+        """
+        Méthode lancée par le jeu après avoir cliqué sur fin de tour.
+        Vérifie si des révoltes se produisent dans une ou plusieurs villages du joueur/bot
+        """
+        # TODO Éloïse: Établir les conditions d'une révolte.
+        for village in list(self.joueur_actuel.dico_villages.values(())) :
+            return village.revolte(self.joueur_actuel.liste_soldats)
+
+
     # Actions
 
     def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Terre]):
@@ -282,7 +294,7 @@ class Jeu:
 
         self.joueur_actuel.retirer_pa(5)
 
-    def guerre(self, pnoble : Noble | Seigneur):
+    def guerre(self, pnoble : Noble | Seigneur, cause : Literal["V","G"]):
         """
         Méthode qui permettra de gérer la guerre si le joueur/bot la déclare OU si un noble refuse de se soumettre
         On remplira la liste des membre de l'armée du joueur/bot et celle du noble/seigneur auquel il déclare la guerre
@@ -297,9 +309,11 @@ class Jeu:
         de l'armée ennemie parmis ses soldat et le noble vaincu est suprimé de la liste des joueurs
 
         :param pnoble : Noble auquel la guerre est déclarée
+        :param cause : Paramètre qui permet de dire si la guerre est déclanchée suite à une vassalisation(V) ou par choix(G)
         """
-        self.joueur_actuel.retirer_pa(8)
-        self.joueur_actuel.gestion_ressources(-100)
+        if cause == "G" :
+            self.joueur_actuel.retirer_pa(8)
+            self.joueur_actuel.gestion_ressources(-100)
 
         # initialisation des deux armées
         effectif_armee_joueur = self.joueur_actuel.effectif_armee
@@ -311,8 +325,8 @@ class Jeu:
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
 
-            pertes_soldats = len(self.joueur_actuel.liste_soldats) - (0.5 * effectif_armee_ennemie) #quantité de soldat restant au joueur après la bataille
-            self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:pertes_soldats] #supression des soldats perdus
+            soldats_restants = len(self.joueur_actuel.liste_soldats) - (0.5 * effectif_armee_ennemie) #quantité de soldat restant au joueur après la bataille
+            self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:soldats_restants] #supression des soldats perdus
             return True
 
         else:
@@ -414,12 +428,24 @@ class Jeu:
 
             elif action == "Guerre":
                 # TODO: Éloïse action bot guerre
+                 noble_choisi = choice(self._joueurs)
 
-                self.joueur_actuel.retirer_pa(8)
+
                 return ActionBotInfo("Guerre", "INFOGUERRE", noble_vaincu=None)
 
             elif action == "Vassalisation":
-                # TODO: Éloïse action bot vassalisation
+                #TODO : voir le return + retrait PA
 
-                self.joueur_actuel.retirer_pa(4)
+                noble_choisi = choice(self._joueurs)
+                while isinstance(noble_choisi, Vassal) :
+                    noble_choisi = choice(self._joueurs)
+
+                argent = randint(1,self.joueur_actuel.argent*0.75)
+                ressources = randint(1,self.joueur_actuel.ressources * 0.75)
+
+                if self.joueur_actuel.soumettre(noble_choisi, argent, ressources)  :
+                    self.vassalisation_confirmee(noble_choisi, argent, ressources)
+                else :
+                    self.guerre(noble_choisi,"V")
+
                 return ActionBotInfo("Vassalisation", "INFOGUERRE", noble_vassalise=None)

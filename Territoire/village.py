@@ -8,14 +8,12 @@ from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
 from Territoire.eglise import Eglise
+from Perso.soldat import Soldat
 from parameter import *
 
 
 # TODO Éloïse: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
-@dataclass
-class Terre:
-    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
-    nb_roturiers: int
+
 
 
 class Village :
@@ -95,13 +93,19 @@ class Village :
             return 80 - self.population
 
         for v in range(effectif):
-            if type_v == "artisan":
+            terre = choice(self._liste_terres)
+            while terre.nb_roturiers >= 10:
                 terre = choice(self._liste_terres)
+
+            if type_v == "artisan":
                 self._liste_roturier += [Roturier(terre)]
 
             elif type_v == "paysan":
-                terre = choice(self._liste_terres)
                 self._liste_roturier += [Paysan(terre)]
+
+            terre.nb_roturiers += 1
+
+
 
     def creer_eglise(self):
         """
@@ -145,3 +149,24 @@ class Village :
                     villageois.esperance_vie += 1  # valeur à determiner
                 elif don == 3 :
                     villageois.cdp += 1  # valeur à determiner
+
+    def revolte(self, l_soldat : list[Soldat]) :
+        """
+        Méthode qui gère un cas de révolte dans une village
+        Si une révolte se produit.
+        Le joueur/bot gagne s'il a plus de la moitié de ses effectifs de roturiers comme effectif de soldats
+            Si le joueur gagne, renvoyer "V" puis le nombre de roturiers perdus (25% de ses roturiers) sous forme de chaîne de caractère.
+            Sinon renvoyer "D".
+        Sinon renvoyer un tuple vide.
+        """
+
+        if self.bonheur_general > 1 :
+            return ()
+
+        if len(l_soldat) > len(self.liste_roturier)//2 :
+            perte_revolutionnaires = int(len(self.liste_roturier) * 0.25)
+            self.liste_roturier = self.liste_roturier[:len(self.liste_roturier)-perte_revolutionnaires]
+            return "V", str(perte_revolutionnaires)
+
+        elif len(l_soldat) <= len(self.liste_roturier)//2 :
+            return ("D",)

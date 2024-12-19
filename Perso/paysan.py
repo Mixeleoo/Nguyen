@@ -1,6 +1,6 @@
 
 from Perso.roturier import Roturier
-from Territoire.village import Terre
+from parameter import *
 
 class Paysan(Roturier):
 
