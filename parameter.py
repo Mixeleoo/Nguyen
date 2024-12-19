@@ -1,4 +1,5 @@
 from collections import namedtuple
+from dataclasses import dataclass
 # -*- coding: utf-8 -*-
 
 from random import randint, choice
@@ -91,6 +92,22 @@ ACTIONS_TAG_COST = {
     BUILD_CITY: 8,
     TAXES_TAG: 5,
     WAR_TAG: 8
+}
+
+@dataclass
+class ActionCost:
+    pa: int
+    argent: int = 0
+    ressources: int = 0
+
+ACTIONS_NAME_COST = {
+    "Immigration": ActionCost(1),
+    "Soldat": ActionCost(2),
+    "Eglise": ActionCost(6, 100, 50),
+    "Vassalisation": ActionCost(4),
+    "Village": ActionCost(8, 300, 150),
+    "Impôt": ActionCost(4),
+    "Guerre": ActionCost(8)
 }
 
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
