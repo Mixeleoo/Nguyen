@@ -86,15 +86,10 @@ OPEN_WINDOW_TAG = "OPEN_WINDOW"
 # si
 si = 'si'
 
-# Coûts des actions en fonction de leurs tag
-ACTIONS_TAG_COST = {
-    PAYSAN_OR_ARTISAN_TAG: 0,
-    BUILD_CHURCH: 6,
-    VASSALIZE_TAG: 4,
-    BUILD_CITY: 8,
-    TAXES_TAG: 5,
-    WAR_TAG: 8
-}
+@dataclass
+class RevolteInfo:
+    issue: Literal[None, "Victoire", "Défaite"] = None
+    pertes: str = ""
 
 @dataclass
 class ActionCost:
@@ -102,14 +97,14 @@ class ActionCost:
     argent: int = 0
     ressources: int = 0
 
-ACTIONS_NAME_COST = {
-    "Immigration": ActionCost(1),
-    "Soldat": ActionCost(2, 20, 20),
-    "Eglise": ActionCost(6, 100, 50),
-    "Vassalisation": ActionCost(4),
-    "Village": ActionCost(8, 300, 150),
-    "Impôt": ActionCost(4),
-    "Guerre": ActionCost(8, ressources=100)
+ACTIONS_NAME_COST: [str, ActionCost] = {
+    PAYSAN_OR_ARTISAN_TAG: ActionCost(1),
+    "Soldat": ActionCost(2, argent=20),
+    BUILD_CHURCH: ActionCost(6, 100, 50),
+    VASSALIZE_TAG: ActionCost(4),
+    BUILD_CITY: ActionCost(8, 300, 150),
+    TAXES_TAG: ActionCost(5),
+    WAR_TAG: ActionCost(8, ressources=100)
 }
 
 # LES ACTIONS SONT DANS L'ORDRE SUIVANT : DE GAUCHE A DROITE **PUIS** DE HAUT EN BAS
@@ -122,31 +117,31 @@ ACTION_FOR_YOUR_TURN = [
     },
     {
         "text": "Construire une église",
-        "PA": f"{ACTIONS_TAG_COST[BUILD_CHURCH]} PA",
+        "PA": f"{ACTIONS_NAME_COST[BUILD_CHURCH].pa} PA",
         "additionalcost": "100 arg, 50 res",
         "do": BUILD_CHURCH
     },
     {
         "text": "Vassaliser",
-        "PA": f"{ACTIONS_TAG_COST[VASSALIZE_TAG]} PA",
+        "PA": f"{ACTIONS_NAME_COST[VASSALIZE_TAG].pa} PA",
         "additionalcost": "Y arg, Z res",
         "do": VASSALIZE_TAG
     },
     {
         "text": "Construire un village",
-        "PA": f"{ACTIONS_TAG_COST[BUILD_CITY]} PA",
+        "PA": f"{ACTIONS_NAME_COST[BUILD_CITY].pa} PA",
         "additionalcost": "300 arg, 150 res",
         "do": BUILD_CITY
     },
     {
         "text": "Impôt",
-        "PA": f"{ACTIONS_TAG_COST[TAXES_TAG]} PA",
+        "PA": f"{ACTIONS_NAME_COST[TAXES_TAG].pa} PA",
         "additionalcost": "",
         "do": TAXES_TAG
     },
     {
         "text": "Déclarer la guerre",
-        "PA": f"{ACTIONS_TAG_COST[WAR_TAG]} PA",
+        "PA": f"{ACTIONS_NAME_COST[WAR_TAG].pa} PA",
         "additionalcost": "100 res",
         "do": WAR_TAG
     }

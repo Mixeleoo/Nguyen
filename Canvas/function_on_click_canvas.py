@@ -46,8 +46,8 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        if self.jeu.action_possible(ACTIONS_NAME_COST[tag]):
-            self.hudmobile_taspasassezdePAgros.show(100, 100)
+        if self.jeu.joueur_actuel.action_possible(ACTIONS_NAME_COST[tag]):
+            self.actions[tag](event)
 
         else:
-            self.actions[tag](event)
+            self.hudmobile_taspasassezdePAgros.show(100, 100)
