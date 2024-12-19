@@ -201,7 +201,7 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_choose_taxes.add_village(nom, square_id)
 
             # On lance la méthode qui influera sur le jeu
-            self.jeu.construire_village(village_id=square_id, nom=nom)
+            self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom)
 
             # On change son tag de trigger de fonction
             self.engine_build_city(square_id, tags)
@@ -229,7 +229,7 @@ class HUDCanvas(BaseCanvas):
         # Même comportement que si on annulait sa construction, mais on la construit vraiment
         self.hud_build_church.cancel()
 
-        self.jeu.construire_eglise(self.find_withtag("active")[0])
+        self.jeu.joueur_actuel.construire_eglise(self.find_withtag("active")[0])
 
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
@@ -303,7 +303,7 @@ class HUDCanvas(BaseCanvas):
         Méthode appelée lors du clic gauche sur le bouton OK du choix de qui taxer.
         """
 
-        self.jeu.imposer(l_villages, l_nobles)
+        self.jeu.joueur_actuel.imposer(l_villages, l_nobles)
 
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
@@ -319,7 +319,7 @@ class HUDCanvas(BaseCanvas):
         ).split(" ")[0].lower() == "soldat":
 
             # On lance la méthode du jeu.
-            self.jeu.recruter_soldat(quantity)
+            self.jeu.joueur_actuel.ajout_soldat(quantity)
 
             # On ajoute le texte descriptif à l'historique.
             self.add_history_text(f"Vous avez recruté {quantity} soldat(s) !")
@@ -350,7 +350,7 @@ class HUDCanvas(BaseCanvas):
         type_v = self.hudmobile_choose_type_villager.last_choice_made[1]
 
         # lancer l'immigration du jeu
-        self.jeu.immigrer(
+        self.jeu.joueur_actuel.immigrer(
             effectif=effectif,
             type_v=type_v,
             village_id=village_id
@@ -368,15 +368,16 @@ class HUDCanvas(BaseCanvas):
         """
 
         self.jeu.fin_de_tour()
-        rev = self.jeu.joueur_actuel.reaction_revolte()
-        if rev:
-            # VICTOIRE
-            if rev[0] == "V":
-                self.hudcentered_results_war.show(rev[1])
 
-            # DEFAITE
-            else:
-                self.lose()
+        for rev in self.jeu.joueur_actuel.reaction_revolte():
+            if rev.issue is not None:
+                # VICTOIRE
+                if rev.issue == "Victoire":
+                    self.hudcentered_results_war.show(rev.pertes)
+
+                # DEFAITE
+                else:
+                    self.lose()
 
         # Tour des nobles, le temps que ce n'est pas le tour du joueur.
         while self.jeu.index_joueur_actuel != 0:
@@ -412,6 +413,9 @@ class HUDCanvas(BaseCanvas):
             # Ajout du texte
             self.add_history_text(actionbotinfo.descriptif)
 
+            print(actionbotinfo.descriptif)
+
+        self.jeu.joueur_actuel.reset_pa()
         self.event()
 
     def event(self):
@@ -427,6 +431,9 @@ class HUDCanvas(BaseCanvas):
             "Incendie": self.event_incendie,
             "Vassalisation": self.event_vassalisation
         }
+
+        self.hud_event.set_text(eventinfo.type)
+        self.hud_event.show_animation()
 
         events.get(eventinfo.type, self.event_autre)(eventinfo)
 
@@ -475,6 +482,3 @@ class HUDCanvas(BaseCanvas):
 
         self.hudmobile_more_info_event.refresh_text(eventinfo.descriptif)
         self.update_hudtop()
-
-        self.hud_event.set_text(eventinfo.type)
-        self.hud_event.show_animation()

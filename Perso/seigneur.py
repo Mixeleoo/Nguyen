@@ -38,3 +38,15 @@ class Seigneur(Noble):
         impot =  self._liste_nobles[indice_noble].payer_impot()
         self._argent += impot[0]
         self._ressources += impot[1]
+
+    def imposer(self, l_villages : list[int], l_noble : list[int] = None):
+        """
+        Methode qui permet d'imposer un village et/ou un noble suivant les choix qu'aura fait le joueur/bot
+
+        :param l_villages : liste d'id des villages choisis
+        :param l_noble : liste d'id des nobles choisis
+        """
+        for inoble in l_noble :
+            self.prend_impot_noble(inoble)
+
+        Noble.imposer(self, l_villages)

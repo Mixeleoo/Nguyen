@@ -7,7 +7,8 @@ from math import ceil
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
-from parameter import NB_NOBLE_AU_DEPART, ActionCost, ACTIONS_NAME_COST, Terre
+from parameter import ACTIONS_NAME_COST, NB_NOBLE_AU_DEPART, PAYSAN_OR_ARTISAN_TAG, BUILD_CHURCH, BUILD_CITY, TAXES_TAG, \
+    WAR_TAG, VASSALIZE_TAG
 from Territoire.village import Village
 
 
@@ -54,9 +55,6 @@ class Jeu:
     def joueur_actuel(self) -> Noble | Seigneur | Vassal:
         return self._joueurs[self._index_joueur_actuel]
 
-    def fin_de_tour(self):
-        self._index_joueur_actuel = (self._index_joueur_actuel + 1) % (NB_NOBLE_AU_DEPART + 1)
-
     @property
     def nb_joueurs(self) -> int:
         return len([j for j in self._joueurs if isinstance(j, Noble)])
@@ -74,28 +72,15 @@ class Jeu:
     def index_joueur_actuel(self):
         return self._index_joueur_actuel
 
-    def get_village(self, village_id: int) -> Village | None:
-        """
-        Cette méthode servira à récupérer le village en fonction de l'id. Si ce n'est pas le village de l'utilisateur alors
-        il retourne None
-        """
-        if village_id in self.joueur_actuel.dico_villages:
-            return self.joueur_actuel.dico_villages[village_id]
-
-        else:
-            return None
-
-    def action_possible(self, actioncost: ActionCost):
-        return self.joueur_actuel.pa >= actioncost.pa and\
-        self.joueur_actuel.argent >= actioncost.argent and\
-        self.joueur_actuel.ressources >= actioncost.ressources
+    def fin_de_tour(self):
+        self._index_joueur_actuel = (self._index_joueur_actuel + 1) % len(self._joueurs)
 
     # Evenements en début de partie
     def evenement(self) -> EventInfo:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
-        choix_ev = 100 #randint(1,100)
+        choix_ev = randint(1,100)
 
         if 1 <= choix_ev <= 5:
             # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent
@@ -244,31 +229,39 @@ class Jeu:
         effectif_armee_joueur = self.joueur_actuel.effectif_armee
         effectif_armee_ennemie = pnoble.effectif_armee
 
-        # choix vainqueur
+        # L'attaquant gagne
         if effectif_armee_joueur > effectif_armee_ennemie or effectif_armee_joueur == effectif_armee_ennemie and randint(0,1) == 1:
             # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
             self._joueurs.remove(pnoble)
 
-            perte_soldats = 0.5 * effectif_armee_ennemie  # quantité de soldat en moins dans l'armée total du joueur/bot après la bataille (soldats des vassaux compris)
+            # Si le défenseur a une armée, l'attaqueur a des pertes.
+            if effectif_armee_ennemie:
+                perte_soldats = 0.5 * effectif_armee_ennemie  # quantité de soldat en moins dans l'armée total du joueur/bot après la bataille (soldats des vassaux compris)
 
-            self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:len(self.joueur_actuel.liste_soldats) - ceil((perte_soldats*len(self.joueur_actuel.liste_soldats))/effectif_armee_joueur)] #supression des soldats perdus
-            if isinstance(self.joueur_actuel, Seigneur) :
-                for chevalier in self.joueur_actuel.liste_nobles:
-                   chevalier.liste_soldats = chevalier.liste_soldats[:len(chevalier.liste_soldats) - ceil((perte_soldats * len(chevalier.liste_soldats)) / effectif_armee_joueur)]  # supression des soldats perdus
+                self.joueur_actuel.liste_soldats = self.joueur_actuel.liste_soldats[:len(self.joueur_actuel.liste_soldats) - ceil((perte_soldats*len(self.joueur_actuel.liste_soldats))/effectif_armee_joueur)] #supression des soldats perdus
+                if isinstance(self.joueur_actuel, Seigneur) :
+                    for chevalier in self.joueur_actuel.liste_nobles:
+                       chevalier.liste_soldats = chevalier.liste_soldats[:len(chevalier.liste_soldats) - ceil((perte_soldats * len(chevalier.liste_soldats)) / effectif_armee_joueur)]  # supression des soldats perdus
+
             return True
 
+        # Le défenseur gagne
         else:
             # Conquête des villages du noble vaincu
             pnoble._dico_villages = pnoble.dico_villages | self.joueur_actuel.dico_villages
             self._joueurs.remove(self.joueur_actuel)
 
-            perte_soldats = 0.5 * effectif_armee_joueur  # quantité de soldat en moins dans l'armée total du noble en paramètre après la bataille (soldats des vassaux compris)
+            # Si l'attaquant a une armée, le défenseur a des pertes.
+            if effectif_armee_joueur:
+                perte_soldats = 0.5 * effectif_armee_joueur  # quantité de soldat en moins dans l'armée total du noble en paramètre après la bataille (soldats des vassaux compris)
 
-            pnoble.liste_soldats = pnoble.liste_soldats[:len(pnoble.liste_soldats) - ceil((perte_soldats * len(pnoble.liste_soldats)) / effectif_armee_ennemie)]  # supression des soldats perdus
-            if isinstance(pnoble, Seigneur):
-                for chevalier in pnoble.liste_nobles:
-                    chevalier.liste_soldats = chevalier.liste_soldats[:len(chevalier.liste_soldats) - ceil((perte_soldats * len(chevalier.liste_soldats)) / effectif_armee_ennemie)]  # supression des soldats perdus
+                pnoble.liste_soldats = pnoble.liste_soldats[:len(pnoble.liste_soldats) - ceil((perte_soldats * len(pnoble.liste_soldats)) / effectif_armee_ennemie)]  # supression des soldats perdus
+
+                if isinstance(pnoble, Seigneur):
+                    for chevalier in pnoble.liste_nobles:
+                        chevalier.liste_soldats = chevalier.liste_soldats[:len(chevalier.liste_soldats) - ceil((perte_soldats * len(chevalier.liste_soldats)) / effectif_armee_ennemie)]  # supression des soldats perdus
+
             return False
 
     def tour_bots(self) -> ActionBotInfo:
@@ -283,9 +276,10 @@ class Jeu:
         )
         """
 
-        action_liste = ["Immigration","Soldat","Eglise","Village","Impôt","Guerre","Vassalisation"]
+        action_liste = [PAYSAN_OR_ARTISAN_TAG, "Soldat", BUILD_CHURCH, BUILD_CITY, TAXES_TAG, WAR_TAG, VASSALIZE_TAG]
 
         if self.joueur_actuel.pa == 0:
+            self.joueur_actuel.reset_pa()
             self.fin_de_tour()
             return ActionBotInfo("", "")
 
@@ -294,21 +288,19 @@ class Jeu:
             # Pour ça on peut utiliser le dictionnaire ACTIONS_TAG_COST de parameter.py, et vérifier avec ça et
             # la fameuse boucle qui récupérera un choix au pif le temps que l'action choisie est payable.
 
-            if isinstance(self.joueur_actuel,Vassal) :
-                action_liste.remove("Vassalisation")
-                action_liste.remove("Guerre")
+            if isinstance(self.joueur_actuel, Vassal):
+                action_liste.remove(VASSALIZE_TAG)
+                action_liste.remove(WAR_TAG)
 
-            action = choice(action_liste)
+            action = choice([a for a in action_liste if self.joueur_actuel.action_possible(ACTIONS_NAME_COST[a])])
 
-            while not self.action_possible(ACTIONS_NAME_COST[action]):
-                action = choice(action_liste)
-
-            if action == "Immigration":
+            if action == PAYSAN_OR_ARTISAN_TAG:
                 # choix aléatoire du type de villageois voulu en fonction du nombre de PA restants au bot
                 village = choice(list(self.joueur_actuel.dico_villages.keys()))
                 nb_villageois = 0
                 if self.joueur_actuel.pa >= 2 :
-                    type_villageois = choice(["artisan","paysan"])
+                    type_villageois: Literal["paysan", "artisan"] = choice(["artisan","paysan"])
+
                     if type_villageois == "paysan":
                         nb_villageois = randint(1,self.joueur_actuel.pa)
                     elif type_villageois == "artisan":
@@ -328,16 +320,16 @@ class Jeu:
 
                 return ActionBotInfo("Soldat", f"{self.joueur_actuel.nom} a recruté {nb_soldats} soldats.")
 
-            elif action == "Eglise":
+            elif action == BUILD_CHURCH:
                 #Construction d'une église dans un village choisi aléatoirement parmis ceux du bot
                 village = choice(list(self.joueur_actuel.dico_villages.keys()))
                 self.joueur_actuel.construire_eglise(village)
                 return ActionBotInfo("Eglise", f"{self.joueur_actuel.nom} a construit une église.")
 
-            elif action == "Village":
+            elif action == BUILD_CITY:
                 return ActionBotInfo("Village", f"{self.joueur_actuel.nom} a construit un village.")
 
-            elif action == "Impôt":
+            elif action == TAXES_TAG:
                 #Choix aléatoire du nombre de village et/ou de nobles à imposer + choix aléatoire des quels
                 nobles = []
                 nb_nobles = 0
@@ -365,7 +357,7 @@ class Jeu:
 
                 return ActionBotInfo("Impôt", f"{self.joueur_actuel.nom} a récupéré l'impôt.")
 
-            elif action == "Guerre":
+            elif action == WAR_TAG:
                  noble_choisi = choice(self._joueurs)
 
                  victoire = self.guerre(noble_choisi,"G")
@@ -381,7 +373,7 @@ class Jeu:
 
                  return ActionBotInfo("Guerre",f"{noble_victorieux.nom} a vaincu {noble_vaincu.nom}." , noble_vaincu)
 
-            elif action == "Vassalisation":
+            elif action == VASSALIZE_TAG:
 
                 noble_choisi = choice(self._joueurs)
                 while isinstance(noble_choisi, Vassal) :

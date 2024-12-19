@@ -1,20 +1,13 @@
 
-from random import choice
+import random
 from typing import Literal
-from dataclasses import dataclass
-
 
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
 from Territoire.eglise import Eglise
 from Perso.soldat import Soldat
-from parameter import *
-
-
-# TODO Éloïse: Établir une quantité de ressources récoltées pour chaque type de terre autour du village. 10 Roturiers max par terre.
-
-
+from parameter import Terre, capacite_prod_terre, nom_aleatoire_pretres, nom_aleatoire_eglise, RevolteInfo
 
 class Village :
     """
@@ -103,14 +96,12 @@ class Village :
 
         :return: nombre de place disponible dans le village si effectif souhaité trop grand
         """
-        # Limite la taille maximale à 80 habitants.
-        if self.population + effectif > 80  :
-            return 80 - self.population
+        # Limite la taille maximale à 10 fois le nombre de terre (car 10 habitants par terre) habitants.
+        if self.population + effectif > len(self._liste_terres) * 10 :
+            return len(self._liste_terres) * 10 - self.population
 
         for v in range(effectif):
-            terre = choice(self._liste_terres)
-            while terre.nb_roturiers >= 10:
-                terre = choice(self._liste_terres)
+            terre = random.choice([t for t in self._liste_terres if t.nb_roturiers < 10])
 
             if type_v == "artisan":
                 self._liste_roturier += [Roturier(terre)]
@@ -119,8 +110,6 @@ class Village :
                 self._liste_roturier += [Paysan(terre)]
 
             terre.nb_roturiers += 1
-
-
 
     def creer_eglise(self):
         """
@@ -143,7 +132,7 @@ class Village :
 
         if nb_eglises > nb_villageois :
             for villageois in new_liste_roturier :
-                eglise = choice(new_liste_eglise)
+                eglise = random.choice(new_liste_eglise)
                 new_liste_eglise.remove(eglise)
                 don = eglise.pretre.don
                 if don == 1 :
@@ -155,7 +144,7 @@ class Village :
 
         else :
             for eglise in new_liste_eglise :
-                villageois = choice(new_liste_roturier)
+                villageois = random.choice(new_liste_roturier)
                 new_liste_roturier.remove(villageois)
                 don = eglise.pretre.don
                 if don == 1 :
@@ -165,7 +154,7 @@ class Village :
                 elif don == 3 :
                     villageois.cdp += 1  # valeur à determiner
 
-    def revolte(self, l_soldat : list[Soldat]) :
+    def revolte(self, l_soldat : list[Soldat]) -> RevolteInfo:
         """
         Méthode qui gère un cas de révolte dans une village
         Si une révolte se produit.
@@ -176,12 +165,12 @@ class Village :
         """
 
         if self.bonheur_general > 1 :
-            return ()
+            return RevolteInfo()
 
         if len(l_soldat) > len(self.liste_roturier)//2 :
             perte_revolutionnaires = int(len(self.liste_roturier) * 0.25)
-            self.liste_roturier = self.liste_roturier[:len(self.liste_roturier)-perte_revolutionnaires]
-            return "V", str(perte_revolutionnaires)
+            self._liste_roturier = self.liste_roturier[:len(self.liste_roturier)-perte_revolutionnaires]
+            return RevolteInfo("Victoire", pertes=str(perte_revolutionnaires))
 
         elif len(l_soldat) <= len(self.liste_roturier)//2 :
-            return ("D",)
+            return RevolteInfo("Défaite")
