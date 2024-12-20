@@ -413,10 +413,10 @@ class HUDCanvas(BaseCanvas):
             # Ajout du texte
             self.add_history_text(actionbotinfo.descriptif)
 
-            print(actionbotinfo.descriptif)
-
         self.jeu.joueur_actuel.reset_pa()
         self.event()
+
+        # TODO Léo: Ajouter un texte dans l'historique pour indiquer l'année (le tour) actuel
 
     def event(self):
         """

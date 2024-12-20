@@ -96,7 +96,7 @@ class VillageInfo(HUDMobileABC):
         """
         Méthode retournant les infos du village clické si le village appartient au joueur sinon retourne Inconnu
         """
-        village = self.canvas.jeu.get_village(village_id)
+        village = self.canvas.jeu.joueur_actuel.get_village(village_id)
         if village is not None:
             return [
                 f"🧑🏻‍🌾 {village.population}/80",
