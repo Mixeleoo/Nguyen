@@ -233,6 +233,17 @@ class Vassal(Personne):
 
         self.retirer_pa(5)
 
+    def morts_villageois(self):
+        """
+        Méthode qui permet de compter le nombre de perte de villageois d'un noble
+
+        :return: Phrase qui sera affichée dans l'historique
+        """
+        nb_morts = 0
+        for village in self.dico_villages.values() :
+                village.vieillsement_population()
+        return f"{nb_morts} de roturiers sont morts cette année dans les villages de {self.nom}"
+
     def get_village(self, village_id: int) -> Village | None:
         """
         Cette méthode servira à récupérer le village en fonction de l'id. Si ce n'est pas le village de l'utilisateur alors

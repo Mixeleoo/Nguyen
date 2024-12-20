@@ -24,6 +24,10 @@ class Personne:
         return self._nom
 
     @property
+    def age(self):
+        return self._age
+
+    @property
     def ressources(self):
         return self._ressources
 
@@ -58,3 +62,9 @@ class Personne:
             return False
         else:
             return True
+
+    def vieillir(self):
+        """
+        Méthode qui permet de viellir une personne de 1 an (à chaque tour)
+        """
+        self._age += 1

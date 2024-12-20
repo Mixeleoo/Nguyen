@@ -122,6 +122,8 @@ class Jeu:
 
         elif 21 <= choix_ev <= 40:
             # famine : les ressources des terres sont divisées par 2
+            for village in self.joueur_actuel.dico_villages.values():
+                village.facteur_recolte = 0.5
             return EventInfo("Famine", ("Les ressources des terres sont divisées par 2",))
 
         elif 41 <= choix_ev <= 64:
@@ -129,6 +131,8 @@ class Jeu:
 
         elif 65 <= choix_ev <= 84:
             # récolte abondante : ressources des terres doublées
+            for village in self.joueur_actuel.dico_villages.values() :
+                village.facteur_recolte = 2
             return EventInfo("Récolte abondante", ("Les ressources des terres sont doublées",))
 
         elif 85 <= choix_ev <= 94:
@@ -143,6 +147,7 @@ class Jeu:
             # vassalisation : un noble se propose comme vassal
             noble = choice([j for j in self._joueurs[1:] if type(j) != Vassal])
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
+
 
     # Actions
     def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
@@ -397,3 +402,15 @@ class Jeu:
                         noble_victorieux = noble_choisi
 
                     return ActionBotInfo("Guerre", f"{noble_choisi.nom} a refusé d'être le vassal de {self.joueur_actuel.nom}.\nUne guerre a éclaté, {noble_victorieux.nom} en ressort victorieux.", noble_vaincu)
+
+    # Fin de tour
+    def fin_tour(self) -> list[str]:
+        """
+        Méthode qui sera appelée en fin de tour
+
+        :return: liste des phrases à afficher dans l'historique pour la morts de tous les roturiers sur la map
+        """
+        phrases = []
+        for joueur in self._joueurs :
+            phrases += [joueur.morts_villageois()]
+        return phrases
