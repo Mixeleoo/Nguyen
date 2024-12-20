@@ -33,6 +33,8 @@ class Village :
         # Liste du type des 8 terres entourant le village
         self._liste_terres: list[Terre] = []
 
+        self.facteur_recolte = 1
+
         # PYREVERSE
         #self._liste_terres = Terre()
 
@@ -84,7 +86,8 @@ class Village :
         En fonction de la capcacité de la terre sur laquelle il travail + sa capactité de production
         """
         for villageois in self.liste_roturier :
-            villageois.gestion_ressources(capacite_prod_terre[villageois.terre.type] + villageois.produit())
+            villageois.produit(self.facteur_recolte)
+        self.facteur_recolte = 1
 
     def ajouter_villageois(self, type_v: Literal["paysan", "artisan"], effectif : int) -> int :
         """
@@ -174,3 +177,17 @@ class Village :
 
         elif len(l_soldat) <= len(self.liste_roturier)//2 :
             return RevolteInfo("Défaite")
+
+    def vieillsement_population(self):
+        """
+        Méthode qui permet de viellir toute la population d'un village  et vérifier s'il y a des décès
+
+        :return: Le nombre de mort après une année
+        """
+        nb_morts = 0
+        for villageois in self._liste_roturier :
+            villageois.vieillir()
+            if villageois.esperance_vie >= villageois.age :
+                nb_morts += 1
+                self.liste_roturier.remove(villageois)
+        return nb_morts

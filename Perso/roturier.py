@@ -18,18 +18,18 @@ class Roturier(Personne):
 
 
         Personne.__init__(self, pnom, 0 , parg)
-        self.cdp = cdp
-        self._taux_impot = 0.25
         self.terre = terre
+        self.cdp = cdp* capacite_prod_terre[terre]
+        self._taux_impot = 0.25
 
-    def produit(self) -> int:
+    def produit(self, facteur : int) -> int:
         """
-        Produit ajoute à ressource la capacité de production (CDP) annuelle (chaque tour du jeu)
+        Produit ajoute aux ressources la capacité de production (CDP) annuelle (chaque tour du jeu)
         la quantité ajoutée aux ressources recoltées par le roturier est calculé aléatoirement entre la moitié de sa capacité
         et sa capacité complète
         """
         production = randint(self.cdp // 2, self.cdp)
-        self._ressources += production
+        self.gestion_ressources(production//facteur)
         return production
 
     def payer_impot(self):
@@ -52,3 +52,4 @@ class Roturier(Personne):
             self.bonheur -= 1
 
         return imp_arg, imp_ress
+
