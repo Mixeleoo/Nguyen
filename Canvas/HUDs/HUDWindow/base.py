@@ -49,7 +49,7 @@ class HUDWindowABC(HUDMobileABC, ABC):
         """
         pass
 
-    def create(self):
+    def create(self) -> tuple[int, int, int, int]:
 
         width = 300
         height = 150
@@ -140,6 +140,8 @@ class HUDWindowABC(HUDMobileABC, ABC):
                 self.canvas.tag_fod["drag_corner_" + self.tag + "_window"] = self.drag_corner_window
                 self.canvas.tag_lower(item, MAP_TAG)
                 self.drag_corners.append(item)
+
+        return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
     def drag(self, event: tk.Event):
         dx = event.x - self.canvas.mouse_coor[0]

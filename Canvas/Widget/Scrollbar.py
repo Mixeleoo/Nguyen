@@ -24,7 +24,9 @@ class Scrollbar:
         # Pour savoir où couper le texte qu'il ne dépasse pas
         self._width_hud = 0
 
-    def create(self, x0: float, y0: float, x1: float, y1: float):
+    def create(self, x0: float, y0: float, x1: float, y1: float, is_temp: bool=False, state: Literal["normal", "hidden"] = "normal"):
+
+        temp = (TEMP_TAG,) if is_temp else ()
 
         # Scrollbar
         self._thumb_id = self.canvas.create_rectangle(
@@ -32,7 +34,9 @@ class Scrollbar:
             0,
             x1 - 5,
             0,
-            fill=FILL_ACTION_BOX, tags=set_tags(DRAGGABLE_TAG, drag_tag=SCROLLBAR_TAG + str(self._index), hud_tag=self.tag)
+            fill=FILL_ACTION_BOX,
+            tags=set_tags(DRAGGABLE_TAG, drag_tag=SCROLLBAR_TAG + str(self._index), hud_tag=self.tag) + temp,
+            state=state
         )
 
         self.canvas.tag_fod[SCROLLBAR_TAG + str(self._index)] = self.on_drag_scrollbar
@@ -43,7 +47,9 @@ class Scrollbar:
             y0 + 1,
             x1,
             y0 + 20,
-            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag), width=0
+            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + temp,
+            width=0,
+            state=state
         )
 
         self._rect_hiding_bottom_text_id = self.canvas.create_rectangle(
@@ -51,7 +57,9 @@ class Scrollbar:
             y1 - 20,
             x1,
             y1,
-            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag), width=0
+            fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + temp,
+            width=0,
+            state=state
         )
 
 
@@ -179,4 +187,3 @@ class Scrollbar:
         # fraction defilée = distance effectuee / taille de la viewport
         distance_defilee = (dy / longueur_viewport) * self._longueur_texte
         self.drag_text(-distance_defilee)
-

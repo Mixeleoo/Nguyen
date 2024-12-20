@@ -2,6 +2,8 @@
 from Territoire.village import Village
 from .base import HUDWindowABC
 from Canvas.hud_canvas import HUDCanvas
+from ...Widget.Scrollbar import Scrollbar
+
 
 # TODO Léo: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
 
@@ -10,6 +12,7 @@ class HUDMoreInfoWindow(HUDWindowABC):
         super().__init__(canvas)
 
         self._village = village
+        self.scrollbar = Scrollbar(self.canvas, self.tag, "MoreInfoText")
 
     @property
     def title(self):
@@ -18,6 +21,14 @@ class HUDMoreInfoWindow(HUDWindowABC):
     @property
     def id(self) -> int:
         return self._village.id
+
+    def create(self) -> tuple[int, int, int, int]:
+        x0_cadre, y0_cadre, x1_cadre, y1_cadre = super().create()
+        y0_cadre += 20
+
+        self.scrollbar.create(x0_cadre, y0_cadre, x1_cadre, y1_cadre, is_temp=True, state="hidden")
+
+        return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
     def replace(self, *args) -> None:
         t = f"🧑🏻‍🌾 {self._village.population}/80\n"\
