@@ -70,7 +70,7 @@ class History(HUDABC):
         self.canvas.move(
             self.tag,
             event.width - self.canvas.master.previous_geometry[0],
-            PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[3]
+            PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[1]
         )
 
     def bhide(self):

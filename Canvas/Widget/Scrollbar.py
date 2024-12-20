@@ -32,7 +32,7 @@ class Scrollbar:
             0,
             x1 - 5,
             0,
-            fill=FILL_ACTION_BOX, tags=set_tags(DRAGGABLE_TAG, drag_tag=SCROLLBAR_TAG, hud_tag=self.tag)
+            fill=FILL_ACTION_BOX, tags=set_tags(DRAGGABLE_TAG, drag_tag=SCROLLBAR_TAG + str(self._index), hud_tag=self.tag)
         )
 
         self.canvas.tag_fod[SCROLLBAR_TAG + str(self._index)] = self.on_drag_scrollbar
@@ -65,9 +65,11 @@ class Scrollbar:
         Elle refera calculer la nouvelle taille du thumb de la scrollbar.
         """
 
-        coords = self.canvas.coords(self._rect_hiding_top_text_id)[:2] + self.canvas.coords(self._rect_hiding_bottom_text_id)[2:]
+        coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
+        coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
+        coords = [coords1[0], coords1[3], coords2[2], coords2[1]]
 
-        # On doit savoir combien de fois il faut séparer le texte de \n pour qu'il rentre dans l'historique
+        # On doit savoir combien de fois, il faut séparer le texte de \n pour qu'il rentre dans l'historique
         fractions = 1
         length = get_width_text(text)
         while length / fractions > WIDTH_HISTORY_HUD:
@@ -109,20 +111,28 @@ class Scrollbar:
         self.resize_thumb()
 
     def resize_thumb(self):
-        coords = self.canvas.coords(self._rect_hiding_top_text_id)[:2] + self.canvas.coords(self._rect_hiding_bottom_text_id)[2:]
+        coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
+        coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
+        coords = [coords1[0], coords1[3], coords2[2], coords2[1]]
+
+        self.canvas.create_oval(coords[0] - 5, coords[1] - 5, coords[0] + 5, coords[1] + 5)
+        self.canvas.create_oval(coords[2] - 5, coords[3] - 5, coords[2] + 5, coords[3] + 5)
+
         height = coords[3] - coords[1]
 
-        longueur_viewport = height - 50
-        taille_scrollbar = height - 50
+        longueur_viewport = height
+        taille_scrollbar = height
 
         # (longueur_viewport / longueur_contenu) * taille_scrollbar
-        longueur_thumb = (longueur_viewport / self._longueur_texte) * taille_scrollbar
+        longueur_thumb = (longueur_viewport // self._longueur_texte) * taille_scrollbar if self._longueur_texte > longueur_viewport else height - 1
 
         # On limite la taille du thumb de la scrollbar quand même
         longueur_thumb = longueur_thumb if longueur_thumb > 20 else 20
 
+        print(longueur_viewport, self._longueur_texte, taille_scrollbar, longueur_thumb)
+
         coords_thumb = self.canvas.coords(self._thumb_id)
-        self.canvas.coords(self._thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 25, coords_thumb[2], coords[3] - 25)
+        self.canvas.coords(self._thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 1, coords_thumb[2], coords[3] - 1)
 
     def drag_text(self, dy: int | float):
         self.canvas.move(self._text_group_tag, 0, dy)
@@ -158,10 +168,12 @@ class Scrollbar:
         # Déplace tous les carrés avec le tag "square"
         self.canvas.move("active", 0, dy)
 
-        coords = self.canvas.coords(self._rect_hiding_top_text_id)[:2] + self.canvas.coords(self._rect_hiding_bottom_text_id)[2:]
+        coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
+        coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
+        coords = [coords1[0], coords1[3], coords2[2], coords2[1]]
         height = coords[3] - coords[1]
 
-        longueur_viewport = height - 50
+        longueur_viewport = height
 
         # distance_defilée = fraction défilée * taille totale du contenu
         # fraction defilée = distance effectuee / taille de la viewport
