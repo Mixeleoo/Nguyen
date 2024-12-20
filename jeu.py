@@ -7,7 +7,7 @@ from math import ceil
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
-from parameter import ACTIONS_NAME_COST, NB_NOBLE_AU_DEPART, PAYSAN_OR_ARTISAN_TAG, BUILD_CHURCH, BUILD_CITY, TAXES_TAG, \
+from parameter import ACTIONS_NAME_COST, PAYSAN_OR_ARTISAN_TAG, BUILD_CHURCH, BUILD_CITY, TAXES_TAG, \
     WAR_TAG, VASSALIZE_TAG
 from Territoire.village import Village
 
@@ -45,11 +45,17 @@ class Jeu:
         #self._liste_terres = Noble()
         #self._liste_terres = Seigneur()
 
+        self._tour = 1
+
         """
         Variable qui indique l'indice du joueur en train de jouer,
         est incrémentée lorsque le joueur clique sur "fin de tour" ou quand le bot fini son tour
         """
         self._index_joueur_actuel = 0
+
+    @property
+    def tour(self):
+        return self._tour
 
     @property
     def joueur_actuel(self) -> Noble | Seigneur | Vassal:
@@ -404,12 +410,13 @@ class Jeu:
                     return ActionBotInfo("Guerre", f"{noble_choisi.nom} a refusé d'être le vassal de {self.joueur_actuel.nom}.\nUne guerre a éclaté, {noble_victorieux.nom} en ressort victorieux.", noble_vaincu)
 
     # Fin de tour
-    def fin_tour(self) -> list[str]:
+    def fin_annee(self) -> list[str]:
         """
         Méthode qui sera appelée en fin de tour
 
         :return: liste des phrases à afficher dans l'historique pour la morts de tous les roturiers sur la map
         """
+        self._tour += 1
         phrases = []
         for joueur in self._joueurs :
             phrases += [joueur.morts_villageois()]

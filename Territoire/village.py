@@ -61,6 +61,10 @@ class Village :
         return len(self._liste_roturier)
 
     @property
+    def population_max(self):
+        return len(self._liste_terres) * 10
+
+    @property
     def ressources(self):
         res = 0
         for r in self._liste_roturier:
@@ -100,7 +104,7 @@ class Village :
         :return: nombre de place disponible dans le village si effectif souhaité trop grand
         """
         # Limite la taille maximale à 10 fois le nombre de terre (car 10 habitants par terre) habitants.
-        if self.population + effectif > len(self._liste_terres) * 10 :
+        if self.population + effectif > self.population_max :
             return len(self._liste_terres) * 10 - self.population
 
         for v in range(effectif):

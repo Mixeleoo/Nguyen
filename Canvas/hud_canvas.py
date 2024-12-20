@@ -416,7 +416,10 @@ class HUDCanvas(BaseCanvas):
         self.jeu.joueur_actuel.reset_pa()
         self.event()
 
-        # TODO Léo: Ajouter un texte dans l'historique pour indiquer l'année (le tour) actuel
+        for p in self.jeu.fin_annee():
+            self.add_history_text(p)
+
+        self.add_history_text(f"Année n°{self.jeu.tour}")
 
     def event(self):
         """

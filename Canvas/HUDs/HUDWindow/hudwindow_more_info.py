@@ -6,6 +6,12 @@ from ...Widget.Scrollbar import Scrollbar
 
 
 # TODO Léo: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.
+"""
+En fait on peut :
+- Dans une première page, afficher les infos du village + l'historique des gains dépenses ptet
+- Dans une deuxième page, afficher les villageois, clickables qui ouvrirait un nouvel onglet avec une flèche pour retourner en arrière et qui afficherait les détails du villageois.
+"""
+
 
 class HUDMoreInfoWindow(HUDWindowABC):
     def __init__(self, canvas: HUDCanvas, village: Village):
@@ -31,7 +37,7 @@ class HUDMoreInfoWindow(HUDWindowABC):
         return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
     def replace(self, *args) -> None:
-        t = f"🧑🏻‍🌾 {self._village.population}/80\n"\
+        t = f"🧑🏻‍🌾 {self._village.population}/{self._village.population_max}\n"\
             f"🍴 {self._village.ressources}\n"\
             f"😊 {self._village.bonheur_general}\n(vachement plus d'info ici n'est ce pas)"
 

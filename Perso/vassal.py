@@ -5,6 +5,7 @@ from Perso.soldat import Soldat
 from Territoire.village import Village, Terre
 from parameter import prenom_aleatoire, RevolteInfo, ActionCost, NB_NOBLE_AU_DEPART, ACTIONS_NAME_COST
 
+# TODO Éloïse: Ajouter une méthode pour faire produire tous ses villages.
 
 class Vassal(Personne):
 
@@ -242,7 +243,7 @@ class Vassal(Personne):
         nb_morts = 0
         for village in self.dico_villages.values() :
                 village.vieillsement_population()
-        return f"{nb_morts} de roturiers sont morts cette année dans les villages de {self.nom}"
+        return f"{nb_morts} roturier(s) sont mort cette année dans les villages de {self.nom}"
 
     def get_village(self, village_id: int) -> Village | None:
         """

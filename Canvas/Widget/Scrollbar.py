@@ -86,6 +86,8 @@ class Scrollbar:
         text = separer_chaine_sans_couper(text, fractions)
         tags = list(set_tags(hud_tag=self.tag) + (TEXT_TAG,))
 
+        # TODO Léo: Séparer le texte à plusieurs lignes en plusieurs textes à une ligne pour garder la magie de la disparition du texte sous les rectangles.
+
         # On ancre le texte au sud donc on met ses coordonnées en bas du rectangle
         # On ancre le texte à l'ouest donc on met ses coordonnées à gauche du rectangle
         text_id = self.canvas.create_text(
@@ -122,9 +124,6 @@ class Scrollbar:
         coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
         coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
         coords = [coords1[0], coords1[3], coords2[2], coords2[1]]
-
-        self.canvas.create_oval(coords[0] - 5, coords[1] - 5, coords[0] + 5, coords[1] + 5)
-        self.canvas.create_oval(coords[2] - 5, coords[3] - 5, coords[2] + 5, coords[3] + 5)
 
         height = coords[3] - coords[1]
 

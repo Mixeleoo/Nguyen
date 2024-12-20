@@ -158,7 +158,6 @@ class ChooseTypeVillager(HUDCenteredABC):
         self.hide()
 
     def check_choice_affordable(self, choice_id: int, previous_pa_cost: int, pa_cost: int, money_cost: int = 0, previous_money_cost: int = 0):
-        # TODO.
         """
         Quand je clique sur +:
             Si j'ai dépassé le CAP de PA et/ou argent pour immigrer/recruter:

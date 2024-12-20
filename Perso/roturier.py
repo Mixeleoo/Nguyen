@@ -19,7 +19,7 @@ class Roturier(Personne):
 
         Personne.__init__(self, pnom, 0 , parg)
         self.terre = terre
-        self.cdp = cdp* capacite_prod_terre[terre]
+        self.cdp = cdp* capacite_prod_terre[terre.type]
         self._taux_impot = 0.25
 
     def produit(self, facteur : int) -> int:
