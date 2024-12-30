@@ -414,10 +414,21 @@ class Jeu:
         """
         Méthode qui sera appelée en fin de tour
 
-        :return: liste des phrases à afficher dans l'historique pour la morts de tous les roturiers sur la map
+        :return: liste des phrases à afficher dans l'historique pour chaque action de fin de tour
         """
         self._tour += 1
         phrases = []
+
         for joueur in self._joueurs :
-            phrases += [joueur.morts_villageois()]
+            phrases += [joueur.morts_villageois()]  # vérifier le nombre de roturiers mourrant de vieillesse
+            phrases += [joueur.morts_soldats()] # vérifier le nombre de soldats mourrant de vieillesse
+
+        for joueur in self._joueurs :
+            for village in joueur.dico_villages.values() :
+                village.recuperer_recoltes() # récupération des récoltes en début de tour
+
+            phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
+            phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris
+
+
         return phrases

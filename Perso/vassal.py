@@ -1,5 +1,7 @@
 from typing import Literal
 
+from PIL.ImageOps import solarize
+
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire.village import Village, Terre
@@ -147,7 +149,7 @@ class Vassal(Personne):
             self.gestion_argent(-ACTIONS_NAME_COST["Soldat"].argent)
             self.retirer_pa(2)
 
-    def nourrir_soldats(self) -> int:
+    def nourrir_soldats(self) :
         """
         Retourne zéro si le seigneur a assez de ressources pour nourrir ses soldats.
         Retourne le nombre de ressources manquantes sinon (ce sera le nombre de soldats qui seront morts de faim)
@@ -159,7 +161,22 @@ class Vassal(Personne):
             deces = nb_soldats - self._ressources
             self._liste_soldats = self._liste_soldats[:self._ressources]
 
-        return deces
+        if deces > 0 :
+            return f"{self.nom} n'a pas pu nourrir {deces} de ses soldats"
+        else :
+            return f""
+
+    def nourrir_peuple(self):
+        """
+        Permet de nourrir tout le peuple d'un noble
+        """
+        nb_morts = 0
+        for village in self.dico_villages.values() :
+            nb_morts += village.nourrir_population()
+        if nb_morts > 0:
+            return f"{nb_morts} roturiers sont morts de faim dans le(s) village(s) de {self.nom}"
+        else :
+            return f""
 
     def reaction_revolte(self) -> list[RevolteInfo]:
         """
@@ -243,7 +260,26 @@ class Vassal(Personne):
         nb_morts = 0
         for village in self.dico_villages.values() :
                 village.vieillsement_population()
-        return f"{nb_morts} roturier(s) sont mort cette année dans les villages de {self.nom}"
+        if nb_morts > 0 :
+            return f"{nb_morts} roturier(s) sont mort de vieillesse cette année dans les villages de {self.nom}"
+        else :
+            return f""
+
+    def morts_soldats(self):
+        """
+        Méthode qui permet de compter le nombre de perte de soldats d'un noble suite à leur vieillisement
+        Si le soldat a atteint son espérance de vie, il meurt
+        """
+        nb_morts = 0
+        for soldat in self.liste_soldats :
+            soldat.vieillir()
+            if soldat.age >= soldat.esperance_vie :
+                nb_morts += 1
+                self._liste_soldats.remove(soldat)
+        if nb_morts > 0 :
+            return f"{nb_morts} soldats sont morts de vieillessse dans les rangs de {self.nom}"
+        else :
+            return f""
 
     def get_village(self, village_id: int) -> Village | None:
         """

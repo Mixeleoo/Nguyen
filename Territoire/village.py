@@ -118,6 +118,19 @@ class Village :
 
             terre.nb_roturiers += 1
 
+    def nourrir_population(self):
+        """
+        Méthode qui permet à chaque roturier d'un village de consomer une de ses ressources
+        Si le roturier n'a pas assez de ressource pour se nourrir, il meurt
+        """
+        nb_morts = 0
+        for villageois in self.liste_roturier :
+            villageois.gestion_ressources(-1)
+            if villageois.ressources < 0 :
+                nb_morts += 1
+                self.liste_roturier.remove(villageois)
+        return nb_morts
+
     def creer_eglise(self):
         """
         ajoute à la liste d'églises du village une nouvelle église
