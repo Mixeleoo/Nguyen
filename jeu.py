@@ -244,9 +244,14 @@ class Jeu:
         if effectif_armee_joueur > effectif_armee_ennemie or effectif_armee_joueur == effectif_armee_ennemie and randint(0,1) == 1:
             # Conquête des villages du noble vaincu
             self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | pnoble.dico_villages
+            # conquete des villages des vassaux si le noble vaincu est un seigneur
+            if isinstance(pnoble,Seigneur) :
+                for noble in pnoble.liste_nobles :
+                    self.joueur_actuel._dico_villages = self.joueur_actuel.dico_villages | noble.dico_villages
+                    self._joueurs.remove(noble)
             self._joueurs.remove(pnoble)
 
-            # Si le défenseur a une armée, l'attaqueur a des pertes.
+            # Si le défenseur a une armée, l'attaquant a des pertes.
             if effectif_armee_ennemie:
                 perte_soldats = 0.5 * effectif_armee_ennemie  # quantité de soldat en moins dans l'armée total du joueur/bot après la bataille (soldats des vassaux compris)
 
@@ -261,6 +266,11 @@ class Jeu:
         else:
             # Conquête des villages du noble vaincu
             pnoble._dico_villages = pnoble.dico_villages | self.joueur_actuel.dico_villages
+            # conquete des villages des vassaux si le noble vaincu est un seigneur
+            if isinstance(self.joueur_actuel, Seigneur):
+                for noble in self.joueur_actuel.liste_nobles:
+                    pnoble._dico_villages = pnoble.dico_villages | noble.dico_villages
+                    self._joueurs.remove(noble)
             self._joueurs.remove(self.joueur_actuel)
 
             # Si l'attaquant a une armée, le défenseur a des pertes.
