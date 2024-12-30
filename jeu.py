@@ -426,6 +426,7 @@ class Jeu:
         for joueur in self._joueurs :
             for village in joueur.dico_villages.values() :
                 village.recuperer_recoltes() # récupération des récoltes en début de tour
+                village.appliquer_don() # appliquer le don associée à(aux) église(s) du village
 
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris
