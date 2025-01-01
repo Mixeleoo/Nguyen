@@ -285,11 +285,14 @@ class HUDCanvas(BaseCanvas):
                 self.win()
 
             else:
-                self.add_history_text(f"Tu as battu {noble.nom}.")
+                self.add_history_text(f"Vous avez battu {noble.nom}.")
 
                 # Retirer le noble des choix.
                 self.hudcentered_choose_noble_war.remove_noble(noble_index)
                 self.hudmobile_choose_noble_vassaliser.remove_noble(noble_index)
+
+                for village in noble.dico_villages.values():
+                    self.hudmobile_choose_taxes.add_village(village.nom,village.id)
 
                 # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
@@ -304,6 +307,15 @@ class HUDCanvas(BaseCanvas):
         """
 
         self.jeu.joueur_actuel.imposer(l_villages, l_nobles)
+
+        phrase = f"vous avez imposé"
+        if len(l_villages) > 0 and len(l_nobles) > 0:
+            phrase += f" {len(l_villages)} village(s) et {len(l_nobles)} noble(s)"
+        elif len(l_villages) > 0:
+            phrase += f" {len(l_villages)} village(s)"
+        elif len(l_nobles) > 0:
+            phrase += f" {len(l_nobles)} noble(s)"
+        self.add_history_text(phrase)
 
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
@@ -357,7 +369,7 @@ class HUDCanvas(BaseCanvas):
         )
 
         # Ajout du texte descriptif de l'action dans l'historique.
-        self.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {village_id} !")
+        self.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")
 
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
@@ -413,7 +425,7 @@ class HUDCanvas(BaseCanvas):
             # Ajout du texte
             self.add_history_text(actionbotinfo.descriptif)
 
-        self.jeu.joueur_actuel.reset_pa()
+        #self.jeu.joueur_actuel.reset_pa()
         self.event()
 
         for p in self.jeu.fin_annee():

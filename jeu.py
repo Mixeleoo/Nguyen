@@ -108,14 +108,15 @@ class Jeu:
             return EventInfo("Incendie", (f"Village disparu : {village_supp.nom}",), village_incendie=village_supp)
 
         elif 11 <= choix_ev <= 20:
-            # pillage : l'argent et les ressources d'un village son volés
+            # pillage : l'argent et les ressources d'un village sont volés
             id_village_pie = choice(list(self.joueur_actuel.dico_villages.keys()))
             qt_arg = 0
             qt_res = 0
 
             for villageois in self.joueur_actuel.dico_villages[id_village_pie].liste_roturier:
-                qt_arg += villageois.argent
                 qt_res += villageois.ressources
+                qt_arg += villageois.argent
+
 
                 villageois.reset_resssources()
                 villageois.reset_argent()
@@ -300,7 +301,7 @@ class Jeu:
         action_liste = [PAYSAN_OR_ARTISAN_TAG, "Soldat", BUILD_CHURCH, BUILD_CITY, TAXES_TAG, WAR_TAG, VASSALIZE_TAG]
 
         if self.joueur_actuel.pa == 0:
-            self.joueur_actuel.reset_pa()
+            #self.joueur_actuel.reset_pa()
             self.fin_de_tour()
             return ActionBotInfo("", "")
 
@@ -432,6 +433,7 @@ class Jeu:
         for joueur in self._joueurs :
             phrases += [joueur.morts_villageois()]  # vérifier le nombre de roturiers mourrant de vieillesse
             phrases += [joueur.morts_soldats()] # vérifier le nombre de soldats mourrant de vieillesse
+            joueur.reset_pa()
 
         for joueur in self._joueurs :
             for village in joueur.dico_villages.values() :

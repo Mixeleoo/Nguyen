@@ -84,6 +84,10 @@ class Scrollbar:
             fractions += 1
 
         text = separer_chaine_sans_couper(text, fractions)
+        if fractions > 1 :
+            for t in text :
+                self.add_text(t)
+            return
         tags = list(set_tags(hud_tag=self.tag) + (TEXT_TAG,))
 
         # TODO Léo: Séparer le texte à plusieurs lignes en plusieurs textes à une ligne pour garder la magie de la disparition du texte sous les rectangles.

@@ -39,7 +39,8 @@ class ChooseTaxes(HUDCenteredABC):
         )
 
     def update(self, *args):
-        pass
+        self.choose_villages.update()
+        self.choose_nobles.update()
 
     def ok_trigger(self, *args):
 
@@ -53,6 +54,5 @@ class ChooseTaxes(HUDCenteredABC):
             self.bhide()
 
     def bhide(self, *args):
-        self.choose_villages.update()
-        self.choose_nobles.update()
+        self.update()
         self.hide()

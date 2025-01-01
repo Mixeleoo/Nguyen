@@ -103,8 +103,8 @@ class Vassal(Personne):
         et enlève cette quantité de l'argent ET des ressources de ce noble
         Une partie de son bonheur lui sera enlevé à l'issu de cette action
         """
-        imp_arg = self._argent * self._taux_impot
-        imp_ress = self._ressources * self._taux_impot
+        imp_arg = int(self._argent * self._taux_impot)
+        imp_ress = int(self._ressources * self._taux_impot)
 
         self._argent -= imp_arg
         self._ressources -= imp_ress
@@ -174,7 +174,7 @@ class Vassal(Personne):
         for village in self.dico_villages.values() :
             nb_morts += village.nourrir_population()
         if nb_morts > 0:
-            return f"{nb_morts} roturiers sont morts de faim dans le(s) village(s) de {self.nom}"
+            return f"{nb_morts} roturiers est(sont) mort(s) de faim dans le(s) village(s) de {self.nom}"
         else :
             return f""
 

@@ -112,25 +112,25 @@ ACTION_FOR_YOUR_TURN = [
     {
         "text": "Agrandir population",
         "PA": "1-10 PA",
-        "additionalcost": "0-40, 0-40 res",
+        "additionalcost": "0-100 💰",
         "do": PAYSAN_OR_ARTISAN_TAG
     },
     {
         "text": "Construire une église",
         "PA": f"{ACTIONS_NAME_COST[BUILD_CHURCH].pa} PA",
-        "additionalcost": "100 arg, 50 res",
+        "additionalcost": "100 💰, 50 🍴",
         "do": BUILD_CHURCH
     },
     {
         "text": "Vassaliser",
         "PA": f"{ACTIONS_NAME_COST[VASSALIZE_TAG].pa} PA",
-        "additionalcost": "Y arg, Z res",
+        "additionalcost": "Y 💰, Z 🍴",
         "do": VASSALIZE_TAG
     },
     {
         "text": "Construire un village",
         "PA": f"{ACTIONS_NAME_COST[BUILD_CITY].pa} PA",
-        "additionalcost": "300 arg, 150 res",
+        "additionalcost": "300 💰, 150 🍴",
         "do": BUILD_CITY
     },
     {
@@ -142,7 +142,7 @@ ACTION_FOR_YOUR_TURN = [
     {
         "text": "Déclarer la guerre",
         "PA": f"{ACTIONS_NAME_COST[WAR_TAG].pa} PA",
-        "additionalcost": "100 res",
+        "additionalcost": "100 🍴",
         "do": WAR_TAG
     }
 ]
@@ -248,7 +248,7 @@ def separer_chaine_sans_couper(chaine, n):
         segments.append(segment.strip())
 
     # Assemble les segments avec "\n"
-    return '\n'.join(segments)
+    return segments
 
 
 Position = namedtuple('Position', ['x', 'y'])
@@ -258,6 +258,9 @@ Position = namedtuple('Position', ['x', 'y'])
 class Terre:
     type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
     nb_roturiers: int = 0
+
+# Quantité de ressources associée au type de terre sur la carte
+capacite_prod_terre = {"PLAIN" : 1, "MOUNTAIN" : 0.8, "LAKE" : 1, "FOREST" : 1.2}
 
 noms_village = [
     "Lande-Cendrée",
@@ -506,8 +509,7 @@ noms_nobles =[
 def nom_aleatoire_nobles() :
     return choice(noms_nobles)
 
-# Quantité de ressources associée au type de terre sur la carte
-capacite_prod_terre = {"PLAIN" : 1, "MOUNTAIN" : 0.8, "LAKE" : 1, "FOREST" : 1.2}
+
 
 def dummy(*args):
     pass

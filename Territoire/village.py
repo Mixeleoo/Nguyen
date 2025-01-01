@@ -121,11 +121,11 @@ class Village :
 
     def peupler(self):
         """
-        Méthode qui sera permet d'aaugmenter la pouplation au hasard pour simuler des "naissances" (les villageois étant agés de minimum 20 ans)
+        Méthode qui sera permet d'augmenter la pouplation au hasard pour simuler des "naissances" (les villageois étant agés de minimum 20 ans)
         """
         max_ajout = self.population_max - self.population
         if max_ajout >= 5:
-            nb_villageois = randint(2,5)
+            nb_villageois = randint(0,1)
             type_v = choice(["paysan","artisan"])
             self.ajouter_villageois(type_v, nb_villageois)
         elif max_ajout >= 1 :
