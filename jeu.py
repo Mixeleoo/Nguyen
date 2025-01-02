@@ -440,6 +440,8 @@ class Jeu:
                 village.recuperer_recoltes() # récupération des récoltes en début de tour
                 village.appliquer_don() # appliquer le don associée à(aux) église(s) du village
                 village.peupler() # des villageois viennet peupler les villages
+                for villageois in village.liste_roturier:
+                    villageois.commercer() #commerce en cas de surplus de ressource
 
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris

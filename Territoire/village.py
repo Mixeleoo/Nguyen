@@ -94,6 +94,17 @@ class Village :
             villageois.produit(self.facteur_recolte)
         self.facteur_recolte = 1
 
+    def calculer_impot(self):
+        """
+        Méthode permettant de calculer le montant gagné par le joueur s'il impose le village
+        """
+        imp_arg = 0
+        imp_res = 0
+        for villageois in self.liste_roturier :
+            imp_arg += villageois.payer_impot()[0]
+            imp_res += villageois.payer_impot()[1]
+        return imp_arg, imp_res
+
     def ajouter_villageois(self, type_v: Literal["paysan", "artisan"], effectif : int) -> int :
         """
         Cette fonction prend en paramètre le type de villageois qui sera ajouté et leur nombre.
