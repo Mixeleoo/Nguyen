@@ -91,10 +91,19 @@ class Vassal(Personne):
     def effectif_armee(self) -> int:
         return len(self._liste_soldats)
 
+    def action_possible_pa(self, actioncost: ActionCost):
+        return self.pa >= actioncost.pa
+
+    def action_possible_argent(self, actioncost: ActionCost):
+        return self.argent >= actioncost.argent
+
+    def action_possible_ressources(self, actioncost: ActionCost):
+        return self.ressources >= actioncost.ressources
+
     def action_possible(self, actioncost: ActionCost):
-        return self.pa >= actioncost.pa and\
-        self.argent >= actioncost.argent and\
-        self.ressources >= actioncost.ressources
+        return self.action_possible_pa(actioncost) and\
+        self.action_possible_argent(actioncost) and\
+        self.action_possible_ressources(actioncost)
 
     def payer_impot(self):
         """
