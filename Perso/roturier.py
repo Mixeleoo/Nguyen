@@ -53,3 +53,15 @@ class Roturier(Personne):
 
         return imp_arg, imp_ress
 
+    def commercer(self):
+        """
+        Méthode qui permet à un roturier de commercer en fonction de sa quantité de ressources
+        L'échange ne se fera pas avec d'autre roturier, mais avec un commerçant imaginaire que nous simulerons
+        Si le roturier possède moins de ressources que le nombre qui sera tiré au hasard pour décider de s'il commerce, alors il peut vendre
+        des ressources contre de l'argent, sinon rien ne se passe
+        """
+        lancer_commerce = randint(0,100)
+        if self.ressources <= lancer_commerce :
+            echange = int(self.ressources * 0.50) # si commerce alors vente de 50% des ressources
+            self.gestion_ressources(-echange)
+            self.argent(echange)
