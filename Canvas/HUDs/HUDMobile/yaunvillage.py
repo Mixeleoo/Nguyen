@@ -3,7 +3,7 @@ from .base import HUDMobileABC
 from parameter import *
 
 
-class YaUnVillageGros(HUDMobileABC):
+class YaUnVillage(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -13,7 +13,7 @@ class YaUnVillageGros(HUDMobileABC):
         # On va créer l'HUDs sur la première case
         village_coords = self.canvas.coords(self.canvas.find_withtag(MAP_TAG)[0])
 
-        text = "y'a un village ici gros"
+        text = "y'a un village ici"
 
         width = get_width_text(text)
         height = 20

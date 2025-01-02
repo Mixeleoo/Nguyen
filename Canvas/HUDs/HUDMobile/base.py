@@ -4,12 +4,15 @@ from abc import ABC, abstractmethod
 from Canvas.hud_canvas import HUDCanvas
 
 class HUDMobileABC(ABC):
+    _instance_counter = 0
     def __init__(self, canvas: HUDCanvas):
         self.canvas = canvas
+        self._index = HUDMobileABC._instance_counter
+        HUDMobileABC._instance_counter += 1
 
     @property
     def tag(self):
-        return self.__class__.__name__
+        return self.__class__.__name__ + str(self._index)
 
     @abstractmethod
     def create(self, *args):

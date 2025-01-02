@@ -40,9 +40,11 @@ class HUDCanvas(BaseCanvas):
         import Canvas.HUDs.HUDMobile as HUDMobile
 
         self.hudmobile_village_info = HUDMobile.VillageInfo(self)
-        self.hudmobile_yavillagegros = HUDMobile.YaUnVillageGros(self)
-        self.hudmobile_ilfautfaireunchoixgros = HUDMobile.IlFautFaireUnChoixGros(self)
-        self.hudmobile_taspasassezdePAgros = HUDMobile.TasPasAssezDePAGros(self)
+        self.hudmobile_yavillage = HUDMobile.YaUnVillage(self)
+        self.hudmobile_ilfautfaireunchoix = HUDMobile.IlFautFaireUnChoix(self)
+        self.hudmobile_taspasassezdePA = HUDMobile.TasPasAssezDe(self, "e PA")
+        self.hudmobile_taspasassezdargent = HUDMobile.TasPasAssezDe(self, "'argent")
+        self.hudmobile_taspasassezderessources = HUDMobile.TasPasAssezDe(self, "e ressources")
         self.hudmobile_start_menu = HUDMobile.StartMenu(self)
         self.hudmobile_end_menu = HUDMobile.EndMenu(self)
         self.lose = self.hudmobile_end_menu.lose
@@ -76,9 +78,11 @@ class HUDCanvas(BaseCanvas):
 
         # HUDs mobile
         self.hudmobile_village_info.create()
-        self.hudmobile_yavillagegros.create()
-        self.hudmobile_ilfautfaireunchoixgros.create()
-        self.hudmobile_taspasassezdePAgros.create()
+        self.hudmobile_yavillage.create()
+        self.hudmobile_ilfautfaireunchoix.create()
+        self.hudmobile_taspasassezdePA.create()
+        self.hudmobile_taspasassezdargent.create()
+        self.hudmobile_taspasassezderessources.create()
         self.hudmobile_more_info_event.create(geometry_width, geometry_height)
 
         # HUD centrés
@@ -187,7 +191,7 @@ class HUDCanvas(BaseCanvas):
         village_around_id = self.villages_around(square_id)
 
         if village_around_id:
-            self.hudmobile_yavillagegros.show(village_around_id)
+            self.hudmobile_yavillage.show(village_around_id)
 
         else:
             # Même comportement que si on annulait la construction, sauf que là, on construit

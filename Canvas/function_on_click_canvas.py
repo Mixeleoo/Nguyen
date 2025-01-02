@@ -46,8 +46,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        #TODO Léo : vérifier ce qu'il manque au jouer et déplacer le DOIGT sur la bonne case
-        #TODO Léo : ENLEVER LES "gros" EN FIN DE PHRASES PUTAIN
         #TODO Léo : expliquer au joeur pk il DEAD
         #TODO Léo : Afficher "village de [nom du bot]" si c'est pas un village du joueur
         #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
@@ -57,8 +55,22 @@ class FunctionOnClickCanvas(AnimationCanvas):
         #TODO Léo : comprendre pk vassaliser n'enlève pas de PA
         #TODO Léo : virer le texte de l'historique sur l'écran de fin
         #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt
-        if self.jeu.joueur_actuel.action_possible(ACTIONS_NAME_COST[tag]):
-            self.actions[tag](event)
+        #TODO Léo : bon j'ai l'impression quel'histoire de révolte ça s'affiche jamais dans l'historique? vu comment le bonheur des villageois était bas et que rine ne s'est passé???
+        #TODO Léo : Faire agrandir l'hud topside quand on aggrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)
+        joueur = self.jeu.joueur_actuel
+        action_possible = True
 
-        else:
-            self.hudmobile_taspasassezdePAgros.show(100, 100)
+        if not joueur.action_possible_pa(ACTIONS_NAME_COST[tag]):
+            self.hudmobile_taspasassezdePA.show(100, 100)
+            action_possible = False
+
+        if not joueur.action_possible_argent(ACTIONS_NAME_COST[tag]):
+            self.hudmobile_taspasassezdargent.show(250, 100)
+            action_possible = False
+
+        if not joueur.action_possible_ressources(ACTIONS_NAME_COST[tag]):
+            self.hudmobile_taspasassezderessources.show(550, 100)
+            action_possible = False
+
+        if action_possible:
+            self.actions[tag](event)

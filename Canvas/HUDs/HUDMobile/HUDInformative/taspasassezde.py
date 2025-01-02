@@ -1,19 +1,21 @@
 
 from PIL import Image, ImageTk, ImageEnhance
 
-from .base import HUDMobileABC
+from Canvas.HUDs.HUDMobile.HUDInformative.base import HUDInformativeABC
+from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
-class IlFautFaireUnChoixGros(HUDMobileABC):
-    def __init__(self, canvas):
+class TasPasAssezDe(HUDInformativeABC):
+    def __init__(self, canvas: HUDCanvas, title: str):
+        """
+        title: str qui suivra la phrase : "T'as pas assez d"
+        """
         super().__init__(canvas)
-
-        self.id = 0
-        self.after_hide_id = None
+        self.title = title
 
     def create(self) -> None:
 
-        text = "Il faut faire un choix gros"
+        text = "T'as pas assez d" + self.title
 
         width = get_width_text(text)
         height = 20
@@ -22,17 +24,6 @@ class IlFautFaireUnChoixGros(HUDMobileABC):
         y0_cadre = 0
         x1_cadre = width
         y1_cadre = height
-
-        self.id = self.canvas.create_text_in_rectangle(
-            x0=x0_cadre,
-            y0=y0_cadre,
-            x1=x1_cadre,
-            y1=y1_cadre,
-            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text=text,
-            state="hidden"
-        )
 
         original_image = Image.open("./assets/pointing-hand.png")
 
@@ -45,7 +36,10 @@ class IlFautFaireUnChoixGros(HUDMobileABC):
         # Le -1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         resized_image = original_image.resize((image_width - 1, image_height))
 
-        enhancer = ImageEnhance.Brightness(resized_image)
+        # Appliquer une rotation
+        rotated_image = resized_image.rotate(-45, expand=True)
+
+        enhancer = ImageEnhance.Brightness(rotated_image)
         image_assombrie = enhancer.enhance(0.8)
 
         # Convertir l'image redimensionnée en format Tkinter
@@ -54,27 +48,19 @@ class IlFautFaireUnChoixGros(HUDMobileABC):
         # Le +1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         # Image d'en haut
         self.canvas.create_image(
-            x0_cadre - ref.width() // 2 - 1, image_height // 2 + y0_cadre + 1,
+            x0_cadre, y0_cadre + 1 - image_height // 2,
             image=ref, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
         self.canvas.references += [ref]
 
-    def replace(self, x0: float, y0: float) -> None:
-
-        dx = x0 - self.canvas.coords(self.id)[0]
-        dy = y0 - self.canvas.coords(self.id)[1]
-
-        self.canvas.move(self.tag, dx, dy)
-
-        # On cache après trois seconde
-        if self.after_hide_id is not None:
-            self.canvas.after_cancel(self.after_hide_id)
-
-        self.after_hide_id = self.canvas.after(3000, self.bhide)
-
-    def show(self, x0: float, y0: float) -> None: super().show(x0, y0)
-
-    def bhide(self):
-        self.after_hide_id = None
-        self.hide()
+        self.id = self.canvas.create_text_in_rectangle(
+            x0=x0_cadre,
+            y0=y0_cadre,
+            x1=x1_cadre,
+            y1=y1_cadre,
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text=text,
+            state="hidden"
+        )
