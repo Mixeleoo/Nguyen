@@ -64,4 +64,4 @@ class Roturier(Personne):
         if self.ressources <= lancer_commerce :
             echange = int(self.ressources * 0.50) # si commerce alors vente de 50% des ressources
             self.gestion_ressources(-echange)
-            self.argent(echange)
+            self.gestion_argent(echange)
