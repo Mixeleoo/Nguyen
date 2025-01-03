@@ -11,7 +11,6 @@ from Perso.roturier import Roturier
 from .eglise import Eglise
 from Perso.soldat import Soldat
 from .terre import Terre
-from parameter import nom_aleatoire_pretres, nom_aleatoire_eglise
 
 
 @dataclass
@@ -22,12 +21,30 @@ class RevolteInfo:
 
 
 class Village :
+    _noms_village = [
+        "Lande-Cendrée", "Bois-Ruiné", "Gorgemort", "Ombrecombe", "Rochebrèche", "Val-Silencieux", "Tertre-Vaillant",
+        "Creux-du-Déchu", "Abîmeclair", "Couronne-Froide", "Haute-Désolation", "Fosse-du-Purgé", "Larmes-Grises",
+        "Tourbe-Sombre", "Havre-Funèbre", "Sépultroc", "Pointe-Flétrie", "Nécroval", "Cime-Morne", "Pierrefeu",
+        "Flammecreuse", "Aube-Délétère", "Brise-Ombre", "Chant-du-Vide", "Fanal-Terreux", "Ravin-Spectral",
+        "Monts-Saignants", "Graviombre", "Givreclair", "Linceul-de-Vers", "Halte-Pâle", "Grondeval", "Terre-Fumante",
+        "Veine-Sanguine", "Pic-du-Vernis", "Grotte-des-Lamentations", "Vent-Glacial", "Clairière-Creuse",
+        "Failles-Grondantes", "Rive-Austère", "Fort-Plaie", "Brasier-Cinéraire", "Cœur-Brisé", "Plaine-Hurlante",
+        "Bastion-Froid", "Détroit-du-Malheur", "Aiguilles-Mortelles", "Hauts-Rendus", "Lac-Sépia", "Fond-du-Désespoir"
+    ]
+
     """
     Un village est représenté par son id (qui servira pour l'associer à son emplacement sur la map), par une liste des terres qui l'entourent
     par sa population de roturiers (une liste de roturiers) et des églises qui la composent (liste d'églises)
     """
-    def __init__(self, pid : int, nom : str, l_terres : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]) :
-        self._nom = nom
+    def __init__(self, pid : int, l_terres : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]], pnom : str = None) :
+
+        if pnom is None:
+            self._nom = random.choice(Village._noms_village)
+            Village._noms_village.remove(self._nom)
+
+        else:
+            self._nom = pnom
+
         self._identifiant = pid
 
         # Les roturiers que possède le noble
@@ -177,8 +194,8 @@ class Village :
         """
         ajoute à la liste d'églises du village une nouvelle église
         """
-        pretre = Ecceclesiastique(nom_aleatoire_pretres())
-        self._liste_eglises += [Eglise(pretre, nom_aleatoire_eglise())]
+        pretre = Ecceclesiastique()
+        self._liste_eglises += [Eglise(pretre)]
 
     def appliquer_don(self):
         """

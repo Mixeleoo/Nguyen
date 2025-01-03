@@ -1,25 +1,51 @@
 
-from random import randint
+import random
 
 from .personne import Personne
 from Territoire.terre import Terre
-from parameter import prenom_aleatoire, capacite_prod_terre
+from parameter import capacite_prod_terre
 
 
 
 class Roturier(Personne):
+    _prenoms_perso = [
+        "Alaric", "Béranger", "Adélaïde", "Eudes", "Clotilde", "Léonard", "Ysabeau", "Godefroy", "Agnès", "Hugues",
+        "Géraldine", "Baudoin", "Armand", "Isabeau", "Aimé", "Perrin", "Tanguy", "Clothilde", "Florent", "Sygarde",
+        "Gildas", "Théodora", "Renaud", "Béatrice", "Geoffroy", "Hildegarde", "Roland", "Mathilde", "Thierry",
+        "Gertrude", "Bernard", "Edwige", "Louis", "Aubrée", "Gérald", "Renée", "Frédéric", "Alix", "Frédérique",
+        "Foulques", "Hélène", "Henri", "Aude", "Mathieu", "Judith", "Galeran", "Constance", "Géraud", "Solange",
+        "Renaude", "Esteban", "Eustache", "Brunehaut", "Déodat", "Lancelot", "Lison", "Eléonore", "Sénéchal",
+        "Aldegarde", "Béatrice","Térence", "Iseult", "Roger", "Pépin", "Blanche", "Godefroy", "Tiberius", "Hildebrand",
+        "Eadric", "Sigismond", "Gaétane", "Éléonore", "Thibault", "Isolde", "Géron", "Luce", "Guy", "Sibylle",
+        "Bertrand", "Mathurin", "Lothaire", "Théodore", "Hermenegilde", "Aldric", "Adeline", "Justine", "Yvain",
+        "Guibert", "Pétronille", "Floriane", "Valérie", "Ulric", "Adhémar", "Bérengère", "Gauthier", "Adalbert",
+        "Lambert", "Gervais", "Clovis", "Eugénie", "Héribert", "Philomène", "Mathias", "Frédégonde", "Hildegarde",
+        "Édouard", "Pétronille", "Arsène", "Carlotta", "Geoffroy", "Aldebert", "Aymon", "Béna", "Géraldine", "Alvéran",
+        "Théophane", "Maud", "Roland", "Odilon", "Arnaud", "Adèle", "Maïeul", "Cécile", "Thierry", "Milburge",
+        "Madeleine", "Hildegarde", "Olivier", "Rémacle", "Hélier", "Hélène", "Eberhard", "Côme", "Eustache", "Éva",
+        "Grégoire", "Aimée", "Fulbert", "Agnès", "Baudouin", "Désiré", "Arnould", "Sybille", "Agathe", "Enguerrand",
+        "Yvette", "Roderick", "Ivo", "Guillaume", "Otton", "Léon", "Claire", "Dido", "Ernestine", "Clément", "Irène",
+        "Gauthier", "Béatrix", "Anselme", "Godefroy", "Quentin", "Madeleine", "Liévin", "Olric", "Odon", "Géraud",
+        "Venance", "Alix", "Eloise", "Engelbert", "Gauthier", "Raoul", "Théobald", "Perrine", "Ethelred", "Gisèle",
+        "Mathilde", "Thierry", "François", "Orabel", "Sigismond", "Léonidas", "Godfrey", "Alice", "Audebert", "Romain",
+        "Berthe", "André", "Maurin", "Agnès", "Godefroy", "Norbert", "Millicent", "Eulalie", "Bertrade", "Hermenegilde",
+        "Louis", "Gilbert", "Beatrix", "Gildas"
+    ]
     """
     Un roturier est une personne qui a en plus une capacité de prodcution qui lui est propre (minimum de 2)
     il a également un taux d'impôt prédéfinit (25%)
     Une terre lui est également associée pour qu'il puisse y récupérer ses récoltes
     """
     def __init__(self,terre : Terre, pnom: str = None, parg: int = None, cdp: int = None):
-        if pnom is None: pnom = prenom_aleatoire()
-        if parg is None: parg = randint(1, 5)
-        if cdp is None: cdp = randint(18, 22)
+        if parg is None: parg = random.randint(1, 5)
+        if cdp is None: cdp = random.randint(18, 22)
 
+        Personne.__init__(self, 0 , parg, pnom)
 
-        Personne.__init__(self, pnom, 0 , parg)
+        if pnom is None:
+            self._nom = random.choice(Roturier._prenoms_perso)
+            Roturier._prenoms_perso.remove(self._nom)
+
         self.terre = terre
         self.cdp = int(cdp * capacite_prod_terre[terre.type])
         self._taux_impot = 0.25
@@ -30,7 +56,7 @@ class Roturier(Personne):
         la quantité ajoutée aux ressources recoltées par le roturier est calculé aléatoirement entre la moitié de sa capacité
         et sa capacité complète
         """
-        production = randint(self.cdp // 2, self.cdp)
+        production = random.randint(self.cdp // 2, self.cdp)
         self.gestion_ressources(production//facteur)
         return production
 
@@ -62,7 +88,7 @@ class Roturier(Personne):
         Si le roturier possède moins de ressources que le nombre qui sera tiré au hasard pour décider de s'il commerce, alors il peut vendre
         des ressources contre de l'argent, sinon rien ne se passe
         """
-        lancer_commerce = randint(0,100)
+        lancer_commerce = random.randint(0,100)
         if self.ressources <= lancer_commerce :
             echange = int(self.ressources * 0.50) # si commerce alors vente de 50% des ressources
             self.gestion_ressources(-echange)
