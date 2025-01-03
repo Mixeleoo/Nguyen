@@ -302,3 +302,10 @@ class Vassal(Personne):
 
         else:
             return None
+
+    def village_allie(self, village_id: int) -> bool:
+        #TODO Eloise : coucou c'est léo du 03/01/2025 à 3h du matin tu pourrais m'écrire cette méthode qui renvoie:
+        # - Vrai si le village passé en paramètre est un village allié (si c'est un village du vassal)
+        # - Faux si ça ne l'est pas
+        # La méthode est écrasée dans Seigneur je t'invite à voir
+        pass

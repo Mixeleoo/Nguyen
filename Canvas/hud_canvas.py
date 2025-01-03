@@ -43,7 +43,8 @@ class HUDCanvas(BaseCanvas):
 
         import Canvas.HUDs.HUDMobile as HUDMobile
 
-        self.hudmobile_village_info = HUDMobile.VillageInfo(self)
+        self.hudmobile_ally_village_info = HUDMobile.AllyVillageInfo(self)
+        self.hudmobile_enemy_village_info = HUDMobile.EnemyVillageInfo(self)
         self.hudmobile_yavillage = HUDMobile.YaUnVillage(self)
         self.hudmobile_ilfautfaireunchoix = HUDMobile.IlFautFaireUnChoix(self)
         self.hudmobile_taspasassezdePA = HUDMobile.TasPasAssezDe(self, "e PA")
@@ -81,7 +82,8 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_end_menu.create(geometry_width, geometry_height)
 
         # HUDs mobile
-        self.hudmobile_village_info.create()
+        self.hudmobile_ally_village_info.create()
+        self.hudmobile_enemy_village_info.create()
         self.hudmobile_yavillage.create()
         self.hudmobile_ilfautfaireunchoix.create()
         self.hudmobile_taspasassezdePA.create()

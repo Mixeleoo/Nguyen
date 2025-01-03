@@ -6,7 +6,7 @@ from parameter import *
 from ...Widget.StringVar import StringVar
 
 
-class VillageInfo(HUDMobileABC):
+class AllyVillageInfo(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

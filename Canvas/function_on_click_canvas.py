@@ -27,7 +27,7 @@ class FunctionOnClickCanvas(AnimationCanvas):
         }
 
         self.basic_mode_tag_foc[PLAINE_TAG] = dummy
-        self.basic_mode_tag_foc[VILLAGE_TAG] = self.hudmobile_village_info.show
+        self.basic_mode_tag_foc[VILLAGE_TAG] = self.before_village_info
         self.basic_mode_tag_foc[BUILD_CITY] = lambda e: self.before_action(BUILD_CITY, e)
         self.basic_mode_tag_foc[BUILD_CHURCH] = lambda e: self.before_action(BUILD_CHURCH, e)
         self.basic_mode_tag_foc[INFO_EVENT_TAG] = dummy
@@ -69,3 +69,12 @@ class FunctionOnClickCanvas(AnimationCanvas):
 
         if action_possible:
             self.actions[tag](event)
+
+    def before_village_info(self):
+        village_id = self.find_withtag("active")[0]
+
+        if self.jeu.joueur_actuel.village_allie(village_id):
+            self.hudmobile_ally_village_info.show(village_id)
+
+        else:
+            self.hudmobile_ally_village_info.show(village_id)

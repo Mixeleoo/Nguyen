@@ -1,9 +1,10 @@
 
 from .base import HUDMobileABC
-from .ally_village_info import VillageInfo
+from .ally_village_info import AllyVillageInfo
+from .enemy_village_info import EnemyVillageInfo
 from .yaunvillage import YaUnVillage
-from Canvas.HUDs.HUDMobile.HUDInformative.ilfautfaireunchoix import IlFautFaireUnChoix
-from Canvas.HUDs.HUDMobile.HUDInformative.taspasassezde import TasPasAssezDe
+from .HUDInformative.ilfautfaireunchoix import IlFautFaireUnChoix
+from .HUDInformative.taspasassezde import TasPasAssezDe
 from .start_menu import StartMenu
 from .end_menu import EndMenu
 from .more_info_event import MoreInfoEvent
