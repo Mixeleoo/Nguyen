@@ -2,11 +2,11 @@
 import tkinter as tk
 from typing import Literal
 
-from .base import HUDABC
+from .base import HUDStaticABC
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
 
-class Actions(HUDABC):
+class Actions(HUDStaticABC):
     def __init__(self, canvas):
         super().__init__(canvas)
         self.num_page = 1

@@ -1,7 +1,7 @@
 
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDMobile.HUDInformative.base import HUDInformativeABC
+from Canvas.HUDs.HUDStandard.HUDInformative.base import HUDInformativeABC
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 

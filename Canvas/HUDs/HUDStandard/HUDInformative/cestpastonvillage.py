@@ -1,17 +1,17 @@
 
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDMobile.HUDInformative.base import HUDInformativeABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.HUDs.HUDStandard.HUDInformative.base import HUDInformativeABC
 from parameter import *
 
-class IlFautFaireUnChoix(HUDInformativeABC):
-    def __init__(self, canvas: HUDCanvas):
+
+class CestPasTonVillage(HUDInformativeABC):
+    def __init__(self, canvas):
         super().__init__(canvas)
 
     def create(self) -> None:
 
-        text = "Il faut faire un choix"
+        text = "C'est pas ton village"
 
         width = get_width_text(text)
         height = 20
@@ -20,17 +20,6 @@ class IlFautFaireUnChoix(HUDInformativeABC):
         y0_cadre = 0
         x1_cadre = width
         y1_cadre = height
-
-        self.id = self.canvas.create_text_in_rectangle(
-            x0=x0_cadre,
-            y0=y0_cadre,
-            x1=x1_cadre,
-            y1=y1_cadre,
-            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text=text,
-            state="hidden"
-        )
 
         original_image = Image.open("./assets/pointing-hand.png")
 
@@ -43,7 +32,10 @@ class IlFautFaireUnChoix(HUDInformativeABC):
         # Le -1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         resized_image = original_image.resize((image_width - 1, image_height))
 
-        enhancer = ImageEnhance.Brightness(resized_image)
+        # Appliquer une rotation
+        rotated_image = resized_image.rotate(-45, expand=True)
+
+        enhancer = ImageEnhance.Brightness(rotated_image)
         image_assombrie = enhancer.enhance(0.8)
 
         # Convertir l'image redimensionnée en format Tkinter
@@ -52,8 +44,21 @@ class IlFautFaireUnChoix(HUDInformativeABC):
         # Le +1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         # Image d'en haut
         self.canvas.create_image(
-            x0_cadre - ref.width() // 2 - 1, image_height // 2 + y0_cadre + 1,
+            x0_cadre, y0_cadre + 1 - image_height // 2,
             image=ref, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
         self.canvas.references += [ref]
+
+        self.id = self.canvas.create_text_in_rectangle(
+            x0=x0_cadre,
+            y0=y0_cadre,
+            x1=x1_cadre,
+            y1=y1_cadre,
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text=text,
+            state="hidden"
+        )
+
+    def replace(self, x0: float, y0: float) -> None: HUDInformativeABC.replace(self, x0 + 15, y0 + 45)

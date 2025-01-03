@@ -1,16 +1,11 @@
 
-from .base import HUDCenteredABC
-from Perso.noble import Noble
-from ...Widget.StringVar import StringVar
+from .base import HUDInformativeABC
 from parameter import *
 
 
-class ResultsWar(HUDCenteredABC):
+class CityFull(HUDInformativeABC):
     def __init__(self, canvas):
         super().__init__(canvas)
-
-        self._text = StringVar(self.canvas)
-        self.noble_proposal: Noble | None = None
 
     def create(self):
 
@@ -26,11 +21,13 @@ class ResultsWar(HUDCenteredABC):
             x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
-        self._text.id = self.canvas.create_text(
+        self.canvas.create_text(
             (x0_cadre + x1_cadre) // 2,
             (y0_cadre + y1_cadre) // 2,
             tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            fill=FILL_TEXT
+            fill=FILL_TEXT,
+            text="Plus de place dans le village choisi",
+            state="hidden"
         )
 
         # Bouton OK qui lance l'immigration
@@ -38,8 +35,4 @@ class ResultsWar(HUDCenteredABC):
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide, is_temp=True, state="hidden"
         )
 
-    def update(self, results: str) -> None:
-        self._text.set("Les résultats de la guerre sont : " + results + "perte(s).")
-
-    def replace(self, results: str) -> None: HUDCenteredABC.replace(self, results)
-    def show(self, results: str) -> None: HUDCenteredABC.show(self, results)
+    def show(self) -> None:

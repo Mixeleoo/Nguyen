@@ -1,12 +1,12 @@
 
 import tkinter as tk
 
-from .base import HUDMobileABC
+from .base import HUDStandardABC
 from parameter import *
 from ...Widget.StringVar import StringVar
 
 
-class EnemyVillageInfo(HUDMobileABC):
+class EnemyVillageInfo(HUDStandardABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

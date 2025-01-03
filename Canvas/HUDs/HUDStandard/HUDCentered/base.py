@@ -1,11 +1,11 @@
 
 from abc import ABC, abstractmethod
 
-from ..HUDMobile import HUDMobileABC
+from Canvas.HUDs.HUDStandard import HUDStandardABC
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
-class HUDCenteredABC(HUDMobileABC, ABC):
+class HUDCenteredABC(HUDStandardABC, ABC):
     def __init__(self, canvas: HUDCanvas):
         super().__init__(canvas)
 

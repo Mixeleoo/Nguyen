@@ -25,42 +25,41 @@ class HUDCanvas(BaseCanvas):
 
         self.eventmanager = EventManager(self.jeu, self)
 
-        from Canvas.HUDs.HUDWindow import HUDWindowSupervisor
+        from Canvas.HUDs.HUDStandard.HUDWindow import HUDWindowSupervisor
 
         self.to_show_if_cancel = []
 
-        import Canvas.HUDs.HUDStandard as HUDStandard
+        import Canvas.HUDs.HUDStandard.HUDStatic as HUDStandard
 
-        self.hud_actions = HUDStandard.Actions(self)
-        self.hud_history = HUDStandard.History(self)
+        self.hud_actions = HUDStatic.Actions(self)
+        self.hud_history = HUDStatic.History(self)
         self.add_history_text = self.hud_history.add_text
 
-        self.hud_build_city = HUDStandard.BuildCity(self)
-        self.hud_build_church = HUDStandard.BuildChurch(self)
-        self.hud_event = HUDStandard.Event(self)
-        self.hud_top_side = HUDStandard.TopSide(self)
+        self.hud_build_city = HUDStatic.BuildCity(self)
+        self.hud_build_church = HUDStatic.BuildChurch(self)
+        self.hud_event = HUDStatic.Event(self)
+        self.hud_top_side = HUDStatic.TopSide(self)
         self.update_hudtop = self.hud_top_side.update
 
-        self.hud_end_turn = HUDStandard.EndTurn(self)
+        self.hud_end_turn = HUDStatic.EndTurn(self)
 
-        import Canvas.HUDs.HUDMobile as HUDMobile
-
-        self.hudmobile_cestpastonvillage = HUDMobile.CestPasTonVillage(self)
-        self.hudmobile_ally_village_info = HUDMobile.AllyVillageInfo(self)
-        self.hudmobile_enemy_village_info = HUDMobile.EnemyVillageInfo(self)
-        self.hudmobile_yavillage = HUDMobile.YaUnVillage(self)
-        self.hudmobile_ilfautfaireunchoix = HUDMobile.IlFautFaireUnChoix(self)
-        self.hudmobile_taspasassezdePA = HUDMobile.TasPasAssezDe(self, "e PA")
-        self.hudmobile_taspasassezdargent = HUDMobile.TasPasAssezDe(self, "'argent")
-        self.hudmobile_taspasassezderessources = HUDMobile.TasPasAssezDe(self, "e ressources")
-        self.hudmobile_start_menu = HUDMobile.StartMenu(self)
-        self.hudmobile_end_menu = HUDMobile.EndMenu(self)
+        self.hudinfo_city_full = HUDStandard.CityFull(self)
+        self.hudmobile_cestpastonvillage = HUDStandard.CestPasTonVillage(self)
+        self.hudmobile_ally_village_info = HUDStandard.AllyVillageInfo(self)
+        self.hudmobile_enemy_village_info = HUDStandard.EnemyVillageInfo(self)
+        self.hudmobile_yavillage = HUDStandard.YaUnVillage(self)
+        self.hudmobile_ilfautfaireunchoix = HUDStandard.IlFautFaireUnChoix(self)
+        self.hudmobile_taspasassezdePA = HUDStandard.TasPasAssezDe(self, "e PA")
+        self.hudmobile_taspasassezdargent = HUDStandard.TasPasAssezDe(self, "'argent")
+        self.hudmobile_taspasassezderessources = HUDStandard.TasPasAssezDe(self, "e ressources")
+        self.hudmobile_start_menu = HUDStandard.StartMenu(self)
+        self.hudmobile_end_menu = HUDStandard.EndMenu(self)
         self.lose = self.hudmobile_end_menu.lose
         self.win = self.hudmobile_end_menu.win
 
-        self.hudmobile_more_info_event = HUDMobile.MoreInfoEvent(self)
+        self.hudmobile_more_info_event = HUDStandard.MoreInfoEvent(self)
 
-        import Canvas.HUDs.HUDCentered as HUDCentered
+        import Canvas.HUDs.HUDStandard.HUDCentered as HUDCentered
 
         self.hudmobile_choose_type_villager = HUDCentered.ChooseTypeVillager(self)
         self.hudmobile_choose_taxes = HUDCentered.ChooseTaxes(self)
@@ -85,6 +84,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_end_menu.create(geometry_width, geometry_height)
 
         # HUDs mobile
+        self.hudinfo_city_full.create()
         self.hudmobile_cestpastonvillage.create()
         self.hudmobile_ally_village_info.create()
         self.hudmobile_enemy_village_info.create()
@@ -414,8 +414,7 @@ class HUDCanvas(BaseCanvas):
         )
 
         if v is not None:
-            # TODO Léo : afficher un message d'erreur disant qu'il y a pas assez de place pour le nombre de villageoois demandés
-            pass
+            self.hudinfo_city_full.show()
 
         # Ajout du texte descriptif de l'action dans l'historique.
         self.add_history_text(f"Vous avez immigré {effectif} {type_v}{'s' if effectif > 1 else ''} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")

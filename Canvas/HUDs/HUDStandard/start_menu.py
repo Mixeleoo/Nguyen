@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from decimal import DivisionImpossible
 from tkinter import font
 
-from Canvas.HUDs.HUDMobile.base import HUDMobileABC
+from Canvas.HUDs.HUDStandard.base import HUDStandardABC
 from Perso import Vassal
 from parameter import set_tags, FILL_ACTION_BOX, FILL_TEXT, TOGGLEABLE_TAG, TEXT_TAG, COLOR_TAG_INDEX
 
@@ -20,7 +20,7 @@ ldifficulties: list[Difficulty] = [
     Difficulty("Difficile", 10, "10 nobles à vaincre", "#ad2128")
 ]
 
-class StartMenu(HUDMobileABC):
+class StartMenu(HUDStandardABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

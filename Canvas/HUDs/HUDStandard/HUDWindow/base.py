@@ -4,10 +4,10 @@ from abc import ABC, abstractmethod
 
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
-from Canvas.HUDs.HUDMobile.base import HUDMobileABC
+from Canvas.HUDs.HUDStandard.base import HUDStandardABC
 
 
-class HUDWindowABC(HUDMobileABC, ABC):
+class HUDWindowABC(HUDStandardABC, ABC):
     _instance_counter = 0
 
     def __init__(self, canvas):

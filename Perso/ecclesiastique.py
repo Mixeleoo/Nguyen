@@ -26,4 +26,3 @@ class Ecceclesiastique(Personne):
 
         if pnom is None:
             self._nom = random.choice(Ecceclesiastique._noms_pretres)
-            Ecceclesiastique._noms_pretres.remove(self._nom)

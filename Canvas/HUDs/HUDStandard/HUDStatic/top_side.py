@@ -1,12 +1,12 @@
 
 import tkinter as tk
 
-from .base import HUDABC
-from ...Widget.StringVar import StringVar
+from .base import HUDStaticABC
+from Canvas.Widget.StringVar import StringVar
 from parameter import *
 
 
-class TopSide(HUDABC):
+class TopSide(HUDStaticABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

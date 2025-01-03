@@ -1,10 +1,10 @@
 
-from .base import HUDMobileABC
+from .base import HUDStandardABC
 from parameter import *
 from ...Widget.StringVar import StringVar
 
 
-class MoreInfoEvent(HUDMobileABC):
+class MoreInfoEvent(HUDStandardABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

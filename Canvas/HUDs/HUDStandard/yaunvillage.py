@@ -1,9 +1,9 @@
 
-from .base import HUDMobileABC
+from .base import HUDStandardABC
 from parameter import *
 
 
-class YaUnVillage(HUDMobileABC):
+class YaUnVillage(HUDStandardABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

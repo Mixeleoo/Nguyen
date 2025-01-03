@@ -3,10 +3,10 @@ import tkinter as tk
 from typing import Literal
 
 from Canvas.Widget.Scrollbar import Scrollbar
-from .base import HUDABC
+from .base import HUDStaticABC
 from parameter import *
 
-class History(HUDABC):
+class History(HUDStaticABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

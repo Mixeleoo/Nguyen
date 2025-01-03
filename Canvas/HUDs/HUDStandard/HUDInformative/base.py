@@ -2,16 +2,16 @@
 from abc import ABC
 
 from Canvas.hud_canvas import HUDCanvas
-from ...HUDMobile.base import HUDMobileABC
+from ...HUDStandard.base import HUDStandardABC
 
-class HUDInformativeABC(HUDMobileABC, ABC):
+class HUDInformativeABC(HUDStandardABC, ABC):
     def __init__(self, canvas: HUDCanvas):
         super().__init__(canvas)
 
         self.id = 0
         self.after_hide_id = None
 
-    def replace(self, x0: float, y0: float) -> None:
+    def replace(self, *args) -> None:
 
         dx = x0 - self.canvas.coords(self.id)[0]
         dy = y0 - self.canvas.coords(self.id)[1]

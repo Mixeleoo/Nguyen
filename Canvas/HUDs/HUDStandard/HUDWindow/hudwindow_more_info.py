@@ -2,7 +2,7 @@
 from Territoire.village import Village
 from .base import HUDWindowABC
 from Canvas.hud_canvas import HUDCanvas
-from ...Widget.Scrollbar import Scrollbar
+from Canvas.Widget.Scrollbar import Scrollbar
 
 
 # TODO Léo: Dans la fenêtre plus d'info, permettre d'afficher tous les villageois sous forme de scrollbar (automatiser la scrollbar du coup flemme de la refaire), et si on clique sur un villageois afficher ses détails dans la même fenêtre + un bouton pour revenir en arrière.

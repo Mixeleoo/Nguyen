@@ -2,12 +2,12 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 
-from .base import HUDABC
+from .base import HUDStaticABC
 from parameter import *
-from ...Widget.StringVar import StringVar
+from Canvas.Widget.StringVar import StringVar
 
 
-class Event(HUDABC):
+class Event(HUDStaticABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 

@@ -1,6 +1,6 @@
 
 from .base import HUDCenteredABC
-from ..SubHUD import QuantitySelector
+from Canvas.HUDs.SubHUD import QuantitySelector
 from parameter import *
 
 class ChooseArgRes(HUDCenteredABC):
