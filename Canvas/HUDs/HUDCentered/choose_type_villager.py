@@ -127,6 +127,8 @@ class ChooseTypeVillager(HUDCenteredABC):
             # Griser le bouton et ne le rendre plus clickable
             self.griser(self.soldat_choice_id)
 
+        self.quantity_selector_hum.set_max_quantity(self.canvas.jeu.joueur_actuel.pa)
+
     def ok_trigger(self, e=None):
         qt = self.quantity_selector_hum.quantity
         type_v = self.radiobutton_choice.get_selected_option()

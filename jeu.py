@@ -318,7 +318,20 @@ class Jeu:
 
         action_liste = [PAYSAN_OR_ARTISAN_TAG, "Soldat", BUILD_CHURCH, BUILD_CITY, TAXES_TAG, WAR_TAG, VASSALIZE_TAG]
 
-        if self.joueur_actuel.pa == 0:
+        if isinstance(self.joueur_actuel, Vassal):
+            action_liste.remove(VASSALIZE_TAG)
+            action_liste.remove(WAR_TAG)
+
+        popmax = 0
+        for village in self.joueur_actuel.dico_villages.values():
+            popmax += village.population_max
+
+        if self.joueur_actuel.population == popmax:
+            action_liste.remove(PAYSAN_OR_ARTISAN_TAG)
+
+        action_liste = [a for a in action_liste if self.joueur_actuel.action_possible(ACTIONS_NAME_COST[a])]
+
+        if self.joueur_actuel.pa == 0 or action_liste == []:
             #self.joueur_actuel.reset_pa()
             self.fin_de_tour()
             return ActionBotInfo("", "")
@@ -328,11 +341,7 @@ class Jeu:
             # Pour ça on peut utiliser le dictionnaire ACTIONS_TAG_COST de parameter.py, et vérifier avec ça et
             # la fameuse boucle qui récupérera un choix au pif le temps que l'action choisie est payable.
 
-            if isinstance(self.joueur_actuel, Vassal):
-                action_liste.remove(VASSALIZE_TAG)
-                action_liste.remove(WAR_TAG)
-
-            action = choice([a for a in action_liste if self.joueur_actuel.action_possible(ACTIONS_NAME_COST[a])])
+            action = choice(action_liste)
 
             if action == PAYSAN_OR_ARTISAN_TAG:
                 # choix aléatoire du type de villageois voulu en fonction du nombre de PA restants au bot

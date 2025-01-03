@@ -26,6 +26,7 @@ class StartMenu(HUDMobileABC):
 
         self.radiobutton_color = self.canvas.add_radiobutton()
         self.radiobutton_difficulty = self.canvas.add_radiobutton()
+        self.radiobutton_tutoriel = self.canvas.add_radiobutton()
 
         self.dict_difficulty: [int, Difficulty] = {}
 
@@ -128,7 +129,7 @@ class StartMenu(HUDMobileABC):
             center_x - 60,
             center_y + 60,
             center_x + 60,
-            center_y + 80,
+            center_y + 100,
             text="Commencer"
         )
 
@@ -140,9 +141,40 @@ class StartMenu(HUDMobileABC):
             center_x - 60,
             center_y + 120,
             center_x + 60,
-            center_y + 140,
+            center_y + 160,
             text="Sortez-moi de là"
         )
+
+        self.canvas.create_text(
+            center_x + 200, center_y + 100, tags=set_tags(hud_tag=self.tag), fill=FILL_TEXT, text="Voulez-vous du tutoriel ?"
+        )
+
+        self.radiobutton_tutoriel.add_option(self.canvas.create_text_in_rectangle(
+            center_x + 160,
+            center_y + 120,
+            center_x + 200,
+            center_y + 160,
+            text="Oui",
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+            rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag),
+        ))
+
+        rect_id = self.canvas.create_text_in_rectangle(
+            center_x + 200,
+            center_y + 120,
+            center_x + 240,
+            center_y + 160,
+            text="Non",
+            text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
+            rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag),
+        )
+
+        self.radiobutton_tutoriel.add_option(rect_id)
+
+        # On simule un clic sur Non
+        self.canvas.give_tag_to(rect_id, "highlight")
+        self.radiobutton_tutoriel.toggle_switch_option(rect_id)
+        self.canvas.dtag("highlight", "highlight")
 
     def replace(self, *args) -> None:
         self.canvas.tag_raise(self.tag)

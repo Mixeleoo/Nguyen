@@ -251,7 +251,7 @@ class Vassal(Personne):
         print("ID emplacement :",village_id)
         return self.ajouter_village(village_id, l_terre)
 
-    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
+    def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int) -> int | None:
         """
         Méthode qui va ajouter au village (village_id) le nombre (effectif) de villageois (type_v)
 
@@ -264,7 +264,9 @@ class Vassal(Personne):
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
-        self.dico_villages[village_id].ajouter_villageois(type_v, effectif)
+        v = self.dico_villages[village_id].ajouter_villageois(type_v, effectif)
+        if v is not None:
+            return v
 
         if type_v == "paysan":
             self.retirer_pa(effectif)

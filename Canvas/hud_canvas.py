@@ -407,11 +407,15 @@ class HUDCanvas(BaseCanvas):
         type_v = self.hudmobile_choose_type_villager.last_choice_made[1]
 
         # lancer l'immigration du jeu
-        self.jeu.joueur_actuel.immigrer(
+        v = self.jeu.joueur_actuel.immigrer(
             effectif=effectif,
             type_v=type_v,
             village_id=village_id
         )
+
+        if v is not None:
+            # TODO Léo : afficher un message d'erreur disant qu'il y a pas assez de place pour le nombre de villageoois demandés
+            pass
 
         # Ajout du texte descriptif de l'action dans l'historique.
         self.add_history_text(f"Vous avez immigré {effectif} {type_v}{'s' if effectif > 1 else ''} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")
@@ -528,6 +532,8 @@ class HUDCanvas(BaseCanvas):
     def start(self, e):
         self.init_nobles()
         self.hudmobile_start_menu.hide()
+
+        # Début du tutoriel
 
     def restart(self, e):
         pass

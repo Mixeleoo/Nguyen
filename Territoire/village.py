@@ -149,8 +149,8 @@ class Village :
         """
 
         # Limite la taille maximale à 10 fois le nombre de terre (car 10 habitants par terre) habitants.
-        if self.population + effectif > self.population_max :
-            return len(self._liste_terres) * 10 - self.population
+        if self.population + effectif > self.population_max:
+            return self.population_max - self.population
 
         for v in range(effectif):
             terre = random.choice([t for t in self._liste_terres if t.nb_roturiers < 10])
@@ -160,6 +160,9 @@ class Village :
 
             elif type_v == "paysan":
                 self._liste_roturier += [Paysan(terre)]
+
+            else:
+                print("ERREUR OMG ERREUR")
 
             terre.nb_roturiers += 1
 
@@ -188,6 +191,8 @@ class Village :
             if villageois.ressources < 0 :
                 nb_morts += 1
                 self.liste_roturier.remove(villageois)
+                villageois.terre.nb_roturiers -= 1
+
         return nb_morts
 
     def creer_eglise(self):
@@ -266,6 +271,8 @@ class Village :
             if villageois.esperance_vie <= villageois.age :
                 nb_morts += 1
                 self.liste_roturier.remove(villageois)
+                villageois.terre.nb_roturiers -= 1
+
         return nb_morts
 
     def recuperation_bonheur(self):

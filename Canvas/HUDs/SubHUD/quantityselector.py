@@ -34,6 +34,9 @@ class QuantitySelector(SubHUDABC):
     def quantity(self) -> int:
         return self._quantity
 
+    def set_max_quantity(self, max_quantity: int):
+        self._max_quantity = max_quantity
+
     def create(self, center_x: float, center_y: float):
 
         text_width = get_width_text(self.title)
