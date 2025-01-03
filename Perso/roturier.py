@@ -67,3 +67,14 @@ class Roturier(Personne):
             echange = int(self.ressources * 0.50) # si commerce alors vente de 50% des ressources
             self.gestion_ressources(-echange)
             self.gestion_argent(echange)
+            self.recuperation_bonheur()
+
+    def recuperation_bonheur(self):
+        """
+        Méthode qui permet aux roturiers de gagner des points de bonheur
+        """
+        if self.bonheur + 1 > 10 :
+            self.bonheur = 10
+        else :
+            self.bonheur += 1
+

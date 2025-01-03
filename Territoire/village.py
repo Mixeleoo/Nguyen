@@ -250,3 +250,10 @@ class Village :
                 nb_morts += 1
                 self.liste_roturier.remove(villageois)
         return nb_morts
+
+    def recuperation_bonheur(self):
+        """
+        Méthode qui permet de rajouter un point de bonheur à tous les habitants d'un village
+        """
+        for villageois in self.liste_roturier :
+            villageois.recuperation_bonheur()
