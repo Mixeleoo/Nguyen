@@ -417,6 +417,7 @@ class HUDCanvas(BaseCanvas):
 
         if v is not None:
             self.hudinfo_city_full.show()
+            return
 
         # Ajout du texte descriptif de l'action dans l'historique.
         self.add_history_text(f"Vous avez immigré {effectif} {type_v}{'s' if effectif > 1 else ''} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")
@@ -535,6 +536,14 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_start_menu.hide()
 
         # Début du tutoriel
+        # TODO Léo : tutoriel
 
     def restart(self, e):
-        pass
+        self.hudmobile_choose_taxes.choose_villages.default()
+        self.hudmobile_choose_taxes.choose_nobles.default()
+        self.hudmobile_choose_noble_vassaliser.choose_noble.default()
+        self.hudmobile_choose_village.choose_village.default()
+        self.hudcentered_choose_noble_war.choose_noble.default()
+
+        self.jeu.restart()
+        self.hudmobile_start_menu.show()

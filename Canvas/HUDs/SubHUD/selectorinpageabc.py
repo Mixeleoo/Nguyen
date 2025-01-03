@@ -348,6 +348,11 @@ class SelectorInPageABC(SubHUDABC, ABC):
         for s in self.selectors:
             s.reset()
 
+    def default(self):
+        for l in self.list_selector_choices_to_item:
+            for value in l.values():
+                self.remove_option(value)
+
     def update(self, *args):
         self.reset_selectors()
 

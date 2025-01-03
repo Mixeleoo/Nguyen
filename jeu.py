@@ -477,3 +477,7 @@ class Jeu:
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris
 
         return phrases
+
+    def restart(self):
+        # TODO Eloise : Remettre tout à zéro (village, villageois, joueurs TOUT)
+        pass
