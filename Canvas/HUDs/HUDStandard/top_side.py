@@ -74,7 +74,7 @@ class TopSide(HUDABC):
                 f"🍴 {joueur.ressources}",
                 f"🧑🏻‍🌾 {joueur.population}",
                 f"⚔🗡 {joueur.effectif_armee}",
-                f"💥 {self.canvas.jeu.nb_joueurs - 1} / {NB_NOBLE_AU_DEPART}"
+                f"💥 {self.canvas.jeu.nb_joueurs - 1} / {self.canvas.nb_nobles}"
             ]
 
         else:

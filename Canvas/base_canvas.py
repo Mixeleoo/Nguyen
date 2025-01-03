@@ -49,6 +49,16 @@ class BaseCanvas(HighlightCanvas):
         self.create_ok_button = self.buttons.create_ok_button
         self.create_cancel_button = self.buttons.create_cancel_button
 
+    def give_tag_to(self, item_id: int, tag: str, tag_index: int = -1):
+        tags = list(self.gettags(item_id))
+        if tag_index == -1:
+            tags.append(tag)
+
+        else:
+            tags[tag_index] = tag
+
+        self.itemconfigure(item_id, tags=tags)
+
     def give_active_tag(self, event: tk.Event) -> None:
         """
         Si le current est un texte, alors on donne le tag "active" au rectangle en dessous

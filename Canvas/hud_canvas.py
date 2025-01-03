@@ -16,6 +16,8 @@ class HUDCanvas(BaseCanvas):
         # Initialisation du mode de jeu
         self.game_mode = "basic"
 
+        self.nb_nobles = 0
+
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
 
@@ -167,8 +169,10 @@ class HUDCanvas(BaseCanvas):
         # Ajouter la fenêtre du village
         self.hudwindow_supervisor.add_more_info(village)
 
+        self.nb_nobles = self.hudmobile_start_menu.get_difficulty_choice()
+
         # Ajout des villages aléatoirement
-        for noble in range(NB_NOBLE_AU_DEPART):
+        for noble in range(self.nb_nobles):
 
             square_id = self.engine_build_city()
             prenom = nom_aleatoire_nobles()
@@ -316,6 +320,7 @@ class HUDCanvas(BaseCanvas):
 
                 for village in noble.dico_villages.values():
                     self.hudmobile_choose_taxes.add_village(village.nom,village.id)
+                    self.hudmobile_choose_village.add_village(village.nom,village.id)
 
                     # Les villages vaincus prennent la couleur du joueur
                     self.itemconfigure(village.id, fill=self.jeu.joueur_actuel.couleur)
