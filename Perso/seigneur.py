@@ -7,8 +7,8 @@ class Seigneur(Noble):
     Le seigneur est un noble qui a sous ses ordres d'autres nobles qu'il soumet à l'impôt
     """
 
-    def __init__(self, pnom: str, pres: int, parg: int, index: int):
-        Noble.__init__(self, pnom, pres, parg, index)
+    def __init__(self, pnom: str, pres: int, parg: int, index: int, couleur: str = None):
+        Noble.__init__(self, pnom, pres, parg, index, couleur)
 
         # Liste des vassaux du seigneur (nobles sous les ordres du seigneur)
         self._liste_nobles: list[Vassal] = []

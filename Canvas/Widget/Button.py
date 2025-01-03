@@ -73,7 +73,8 @@ class Button(ButtonABC):
     def draw(
             self: ButtonABC, x0: int | float, y0: int | float, x1: int | float, y1: int | float,
             text: str=None, text_font=None,
-            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False, fill=FILL_ACTION_BOX
+            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False, fill=FILL_ACTION_BOX,
+            justify: Literal["left", "center", "right"] = "left"
     ) -> int:
         """
         Méthode qui créerera un texte sur un rectangle, qui agira comme un bouton :
@@ -106,7 +107,7 @@ class Button(ButtonABC):
                 hud_tag=self.hud_tag
             ) + if_temp,
             text_tags=set_tags(hud_tag=self.hud_tag) + (TEXT_TAG,) + if_temp,
-            fill=fill_brighter[fill], state=state
+            fill=fill_brighter[fill], state=state, justify=justify
         )
 
         # On lie les deux rectangles

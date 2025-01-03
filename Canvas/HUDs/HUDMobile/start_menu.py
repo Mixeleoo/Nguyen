@@ -7,7 +7,8 @@ class StartMenu(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.radiobutton = self.canvas.add_radiobutton()
+        self.radiobutton_color = self.canvas.add_radiobutton()
+        self.radiobutton_difficulty = self.canvas.add_radiobutton()
 
     def create(self, geometry_width, geometry_height):
 
@@ -89,14 +90,14 @@ class StartMenu(HUDMobileABC):
             self.canvas.text_id_in_rectangle_id[t_id] = rect_id
 
             x = int(nx)
-            self.radiobutton.add_option(rect_id)
+            self.radiobutton_color.add_option(rect_id)
 
     def replace(self, *args) -> None:
         self.canvas.tag_raise(self.tag)
 
     def get_color_choice(self):
-        if self.radiobutton.currently_selected is not None:
+        if self.radiobutton_color.currently_selected is not None:
             # Quand je récupère les tags ça me renvoie même pas une liste, ça me renvoie les tags avec des espaces ?? c'est vraiment pourri tkinter
-            return self.canvas.itemcget(self.radiobutton.currently_selected, "tags").split(" ")[COLOR_TAG_INDEX]
+            return self.canvas.itemcget(self.radiobutton_color.currently_selected, "tags").split(" ")[COLOR_TAG_INDEX]
 
         else: return None

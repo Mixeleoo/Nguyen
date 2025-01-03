@@ -197,7 +197,7 @@ class Jeu:
         nobles_vassalises = [pnoble]
 
         if not(isinstance(self.joueur_actuel, Seigneur)):
-            new_seigneur = Seigneur(self.joueur_actuel.nom, self.joueur_actuel.ressources, self.joueur_actuel.argent, self.joueur_actuel.id)
+            new_seigneur = Seigneur(self.joueur_actuel.nom, self.joueur_actuel.ressources, self.joueur_actuel.argent, self.joueur_actuel.id, self.joueur_actuel.couleur)
             new_seigneur.dico_villages = self.joueur_actuel.dico_villages
             new_seigneur.liste_soldats = self.joueur_actuel.liste_soldats
 
@@ -211,7 +211,7 @@ class Jeu:
             nobles_vassalises += pnoble.liste_nobles
 
         # Transformation du Noble en Vassal
-        new_vassal = Vassal(pnoble.nom, pnoble.ressources, pnoble.argent, pnoble.id)
+        new_vassal = Vassal(pnoble.nom, pnoble.ressources, pnoble.argent, pnoble.id, pnoble.couleur)
         new_vassal.dico_villages = pnoble.dico_villages
         new_vassal.liste_soldats = pnoble.liste_soldats
 
