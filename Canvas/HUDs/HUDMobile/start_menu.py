@@ -14,10 +14,28 @@ class StartMenu(HUDMobileABC):
         center_x = geometry_width // 2
         center_y = geometry_height // 2
 
+        custom_font = font.nametofont("TkDefaultFont").copy()
+        custom_font.configure(size=18)
+
         self.canvas.create_rectangle(
             0, 0, geometry_width, geometry_height,
             fill=FILL_ACTION_BOX,
             tags=set_tags(hud_tag=self.tag)
+        )
+
+        self.canvas.create_text(
+            center_x, center_y - 120, tags=set_tags(hud_tag=self.tag),
+            text="Voilà notre jeu !!!\n",
+            fill=FILL_TEXT,
+            font=custom_font,
+            justify="center"
+        )
+
+        self.canvas.create_text(
+            center_x, center_y - 100, tags=set_tags(hud_tag=self.tag),
+            text="Hum Hum *bruit de corbeau*, un peu vide ici...",
+            fill=FILL_TEXT,
+            justify="center"
         )
 
         self.canvas.add_button(
