@@ -148,6 +148,7 @@ class Jeu:
             # récolte abondante : ressources des terres doublées
             for village in self.joueur_actuel.dico_villages.values() :
                 village.facteur_recolte = 2
+                village.recuperation_bonheur()
             return EventInfo("Récolte abondante", ("Les ressources des terres sont doublées",))
 
         elif 85 <= choix_ev <= 94:
@@ -447,11 +448,11 @@ class Jeu:
                 village.recuperer_recoltes() # récupération des récoltes en début de tour
                 village.appliquer_don() # appliquer le don associée à(aux) église(s) du village
                 village.peupler() # des villageois viennet peupler les villages
+
                 for villageois in village.liste_roturier:
                     villageois.commercer() #commerce en cas de surplus de ressource
 
-                # TODO Eloise : j'imagine qu'on a pas pensé à la méthode en dessous de ce commentaire si ?J J'imaginais une récupération en fonction des récoltes. En mode plus ils récoltent plus ils sont heureux, et également s'ils commercent, ils gagnent du bonheur.
-                # village.recuperation_bonheur()
+                village.recuperation_bonheur() # récupération d'un point de bonheur par tous les villageois
 
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris

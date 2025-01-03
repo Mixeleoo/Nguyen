@@ -52,8 +52,18 @@ class Seigneur(Noble):
         Noble.imposer(self, l_villages)
 
     def village_allie(self, village_id: int) -> bool:
-        #TODO Eloise : coucou c'est léo du 03/01/2025 à 3h du matin tu pourrais m'écrire cette méthode qui renvoie:
-        # - Vrai si le village passé en paramètre est un village allié (si c'est un village du Seigneur ou de ses vassaux)
-        # - Faux si ça ne l'est pas
-        # La méthode est aussi écrite dans Vassal si tu n'as pas vu, BISOUS
-        pass
+       """
+       Méthode qui renvoie:
+       - Vrai si le village passé en paramètre est un village allié (si c'est un village du Seigneur ou de ses vassaux)
+       - Faux si ça ne l'est pas
+       """
+       allie = False
+       if village_id in self.dico_villages.keys() :
+            allie = True
+       else :
+           for vassal in self.liste_nobles :
+               if village_id in vassal.dico_villages.keys() :
+                   allie = True
+       return allie
+
+
