@@ -78,13 +78,12 @@ class Jeu:
         return self._index_joueur_actuel
 
     def village_de(self, village_id: int) -> Vassal:
-        # TODO Eloise : Coucou tu peux me faire une méthode qui me retourne le joueur à qui appartient le village mis en paramètre
         """
-        Tu fais comme tu veux pour récupérer, tu peux faire plein de boucles ou tu peux même créer un dictionnaire avec :
-        - Comme clef l'id des villages
-        - Comme valeur l'index du joueur (ou le joueur directement) (si tu utilises l'index, il faudra utiliser _const_joueur au lieu de _joueurs car si on supprime un joueur de _joueurs, l'index sera faux)
+        Méthode qui permet de savoir à quel joueur appartient le village placé en paramètre
         """
-        pass
+        for joueur in self._const_joueurs :
+            if village_id in joueur.dico_villages.keys() :
+                return joueur
 
     def fin_de_tour(self):
         self._index_joueur_actuel = (self._index_joueur_actuel + 1) % len(self._joueurs)
