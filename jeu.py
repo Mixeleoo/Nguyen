@@ -479,5 +479,9 @@ class Jeu:
         return phrases
 
     def restart(self):
-        # TODO Eloise : Remettre tout à zéro (village, villageois, joueurs TOUT)
-        pass
+       """
+       Méthode qui permet de recommencer une partie à zéro
+       En supprimant les joueurs, on supprime également tout le reste des éléments du jeu
+       """
+       self._const_joueurs = []
+       self._joueurs = []
