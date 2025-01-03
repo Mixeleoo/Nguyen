@@ -22,7 +22,7 @@ class Vassal(Personne):
         self._taux_impot = 0.10
 
         # Cet attribut servira à différencier les couleurs entre vassaux | nobles | seigneurs
-        if not couleur:
+        if couleur is None:
             _couleur = random.choice(Vassal.couleurs)
             Vassal.couleurs.remove(_couleur)
             self.couleur = _couleur

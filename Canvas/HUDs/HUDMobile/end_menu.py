@@ -54,14 +54,16 @@ class EndMenu(HUDMobileABC):
             center_x, center_y - 120,
             tags=set_tags(hud_tag=self.tag),
             fill=FILL_TEXT,
-            font=custom_font
+            font=custom_font,
+            justify="center"
         )
 
         self._text_reason.id = self.canvas.create_text(
             center_x, center_y - 200,
             tags=set_tags(hud_tag=self.tag),
             fill=FILL_TEXT,
-            font=custom_font
+            font=custom_font,
+            justify="center"
         )
 
         self.canvas.add_button(
@@ -74,7 +76,8 @@ class EndMenu(HUDMobileABC):
             center_x + 60,
             center_y - 20,
             text="Recommencer",
-            is_temp=True
+            is_temp=True,
+            justify="center"
         )
 
         self.canvas.add_button(
@@ -87,7 +90,8 @@ class EndMenu(HUDMobileABC):
             center_x + 60,
             center_y + 40,
             text="Sortez-moi de là",
-            is_temp=True
+            is_temp=True,
+            justify="center"
         )
 
     def replace(self, *args) -> None:

@@ -80,7 +80,7 @@ class BaseCanvas(HighlightCanvas):
                                  rectangle_tags: tuple[str], text_tags: tuple[str],
                                  fill: str=FILL_ACTION_BOX, text_font: tk.font.Font=None,
                                  state: Literal["normal", "hidden", "disabled"] = "normal",
-                                 outline: str="black", radius: int = 20) -> int:
+                                 outline: str="black", justify: Literal["left", "center", "right"] = "left", radius: int = 20) -> int:
         """
         On va faire apparaître le rectangle d'action pour un carré, avant ça, il faut savoir où le placer
         La plus part du temps, ça sera sur la droite de la souris, le menu déroulant s'étalant sur le bas
@@ -125,7 +125,8 @@ class BaseCanvas(HighlightCanvas):
             font=text_font,
             tags=text_tags,
             state=state,
-            fill=FILL_TEXT
+            fill=FILL_TEXT,
+            justify=justify
         )
 
         self.text_id_in_rectangle_id[id_text] = id_rectangle
