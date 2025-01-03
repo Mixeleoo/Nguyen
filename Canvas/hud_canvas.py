@@ -317,6 +317,9 @@ class HUDCanvas(BaseCanvas):
                 for village in noble.dico_villages.values():
                     self.hudmobile_choose_taxes.add_village(village.nom,village.id)
 
+                    # Les villages vaincus prennent la couleur du joueur
+                    self.itemconfigure(village.id, fill=self.jeu.joueur_actuel.couleur)
+
                 # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
 
