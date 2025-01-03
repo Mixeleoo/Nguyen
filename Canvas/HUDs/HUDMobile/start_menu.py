@@ -162,4 +162,4 @@ class StartMenu(HUDMobileABC):
         else: return None
 
     def get_difficulty_choice(self):
-        return self.dict_difficulty[self.radiobutton_difficulty.currently_selected].
+        return self.dict_difficulty[self.radiobutton_difficulty.currently_selected].nb_nobles
