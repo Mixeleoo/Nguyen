@@ -70,7 +70,7 @@ class Jeu:
     def get_joueur_index(self, n: Noble | Seigneur) -> int:
         return self._joueurs.index(n)
 
-    def get_const_joueur(self, index: int) -> Noble:
+    def get_const_joueur(self, index: int) -> Vassal:
         return self._const_joueurs[index]
 
     @property
@@ -292,6 +292,17 @@ class Jeu:
                         chevalier.liste_soldats = chevalier.liste_soldats[:len(chevalier.liste_soldats) - ceil((perte_soldats * len(chevalier.liste_soldats)) / effectif_armee_ennemie)]  # supression des soldats perdus
 
             return False
+
+    def imposer(self, l_villages: list[int], l_nobles: list[int] = None) -> None:
+        if l_nobles is None:
+            self.joueur_actuel.imposer(l_villages)
+
+        else:
+            l = []
+            for noble_i in l_nobles:
+                l.append(self.get_const_joueur(noble_i))
+
+            self.joueur_actuel.imposer(l_villages, l)
 
     def tour_bots(self) -> ActionBotInfo:
         """

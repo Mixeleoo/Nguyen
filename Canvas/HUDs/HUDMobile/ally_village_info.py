@@ -98,7 +98,7 @@ class AllyVillageInfo(HUDMobileABC):
         """
         Méthode retournant les infos du village clické
         """
-        village = self.canvas.jeu.joueur_actuel.get_village(village_id)
+        village = self.canvas.jeu.joueur_actuel.get_village_allie(village_id)
         return [
             f"🧑🏻‍🌾 {village.population}/{village.population_max}",
             f"🍴 {village.ressources}",

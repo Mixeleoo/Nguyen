@@ -294,6 +294,10 @@ class HUDCanvas(BaseCanvas):
                 self.hudmobile_choose_noble_vassaliser.remove_noble(noble_selected_index)
                 self.hudcentered_choose_noble_war.remove_noble(noble_selected_index)
 
+                # Pour chaque village du noble vassalisé, le joueur doit avoir accès aux détails.
+                for village in noble_selected.dico_villages.values():
+                    self.hudwindow_supervisor.add_more_info(village)
+
                 # On met à jour l'HUD des caractéristiques
                 self.update_hudtop()
 
@@ -347,7 +351,7 @@ class HUDCanvas(BaseCanvas):
         Méthode appelée lors du clic gauche sur le bouton OK du choix de qui taxer.
         """
 
-        self.jeu.joueur_actuel.imposer(l_villages, l_nobles)
+        self.jeu.imposer(l_villages, l_nobles)
 
         phrase = f"vous avez imposé"
         if len(l_villages) > 0 and len(l_nobles) > 0:

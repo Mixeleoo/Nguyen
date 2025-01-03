@@ -88,7 +88,6 @@ class StartMenu(HUDMobileABC):
             )
 
             self.dict_difficulty[rect_id] = difficulty
-
             self.canvas.text_id_in_rectangle_id[t_id] = rect_id
 
             x = int(nx)

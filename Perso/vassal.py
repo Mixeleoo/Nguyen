@@ -272,7 +272,7 @@ class Vassal(Personne):
         elif type_v == "artisan":
             self.retirer_pa(effectif*2)
 
-    def imposer(self, l_villages : list[int], l_nobles: list[int] = None):
+    def imposer(self, l_villages : list[int], *args):
         """
         Methode qui permet d'imposer un village et/ou un noble suivant les choix qu'aura fait le joueur/bot
 
@@ -328,10 +328,13 @@ class Vassal(Personne):
         else:
             return None
 
-    def village_allie(self, village_id: int) -> bool:
+    def get_village_allie(self, village_id: int) -> Village | None:
         """
         Méthode qui renvoit
-          - Vrai si le village passé en paramètre est un village allié (si c'est un village du vassal)
-          - Faux si ça ne l'est pas
+          - Le village si l'index du village passé en paramètre est un village allié (si c'est un village du vassal)
+          - None si ça ne l'est pas
         """
-        return village_id in self.dico_villages.keys()
+        if village_id in self.dico_villages.keys():
+            return self.dico_villages[village_id]
+
+        else: return None

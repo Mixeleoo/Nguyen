@@ -46,8 +46,7 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
-        #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt
+        #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie NON
         #TODO Léo : Faire agrandir l'hud topside quand on agrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)
 
         joueur = self.jeu.joueur_actuel
@@ -71,7 +70,7 @@ class FunctionOnClickCanvas(AnimationCanvas):
     def before_village_info(self, event: tk.Event):
         village_id = self.find_withtag("active")[0]
 
-        if self.jeu.joueur_actuel.village_allie(village_id):
+        if self.jeu.joueur_actuel.get_village_allie(village_id) is not None:
             self.hudmobile_ally_village_info.show(event)
 
         else:
