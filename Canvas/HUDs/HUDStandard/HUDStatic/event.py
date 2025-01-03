@@ -2,7 +2,7 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 
-from .base import HUDStaticABC
+from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 from Canvas.Widget.StringVar import StringVar
 

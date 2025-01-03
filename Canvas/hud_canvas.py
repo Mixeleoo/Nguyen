@@ -29,7 +29,7 @@ class HUDCanvas(BaseCanvas):
 
         self.to_show_if_cancel = []
 
-        import Canvas.HUDs.HUDStandard.HUDStatic as HUDStandard
+        import Canvas.HUDs.HUDStandard.HUDStatic as HUDStatic
 
         self.hud_actions = HUDStatic.Actions(self)
         self.hud_history = HUDStatic.History(self)
@@ -43,7 +43,8 @@ class HUDCanvas(BaseCanvas):
 
         self.hud_end_turn = HUDStatic.EndTurn(self)
 
-        self.hudinfo_city_full = HUDStandard.CityFull(self)
+        import Canvas.HUDs.HUDStandard as HUDStandard
+
         self.hudmobile_cestpastonvillage = HUDStandard.CestPasTonVillage(self)
         self.hudmobile_ally_village_info = HUDStandard.AllyVillageInfo(self)
         self.hudmobile_enemy_village_info = HUDStandard.EnemyVillageInfo(self)
@@ -61,6 +62,7 @@ class HUDCanvas(BaseCanvas):
 
         import Canvas.HUDs.HUDStandard.HUDCentered as HUDCentered
 
+        self.hudinfo_city_full = HUDCentered.CityFull(self)
         self.hudmobile_choose_type_villager = HUDCentered.ChooseTypeVillager(self)
         self.hudmobile_choose_taxes = HUDCentered.ChooseTaxes(self)
         self.hudmobile_choose_village = HUDCentered.ChooseVillage(self)

@@ -1,5 +1,5 @@
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Canvas.HUDs.SubHUD import QuantitySelector
 from parameter import *
 

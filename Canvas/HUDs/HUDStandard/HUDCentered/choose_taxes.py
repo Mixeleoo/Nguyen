@@ -1,7 +1,7 @@
 
 from typing import Optional
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Canvas.Widget.Button import Button
 from Canvas.HUDs.SubHUD import ChooseVillages, ChooseNobles
 

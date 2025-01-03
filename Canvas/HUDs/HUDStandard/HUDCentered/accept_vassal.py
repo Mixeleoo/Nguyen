@@ -1,5 +1,5 @@
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Perso.noble import Noble
 from Canvas.Widget.StringVar import StringVar
 from parameter import *

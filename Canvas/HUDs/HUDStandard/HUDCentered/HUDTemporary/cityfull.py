@@ -1,9 +1,10 @@
 
-from .base import HUDInformativeABC
+from ...HUDCenteredABC import HUDCenteredABC
+from ...HUDTemporaryABC import HUDTemporaryABC
 from parameter import *
 
 
-class CityFull(HUDInformativeABC):
+class CityFull(HUDTemporaryABC, HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
@@ -35,4 +36,8 @@ class CityFull(HUDInformativeABC):
             x1_cadre, y1_cadre, hud_tag=self.tag, func_triggered=self.hide, is_temp=True, state="hidden"
         )
 
-    def show(self) -> None:
+    def replace(self) -> None:
+        super().replace()
+
+    def update(self, *args):
+        pass

@@ -1,8 +1,7 @@
 
 import tkinter as tk
-from typing import Literal
 
-from .base import HUDStaticABC
+from ..HUDStaticABC import HUDStaticABC
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
 

@@ -1,11 +1,11 @@
 
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDStandard.HUDInformative.base import HUDInformativeABC
+from ..HUDTemporaryABC import HUDTemporaryABC
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
-class IlFautFaireUnChoix(HUDInformativeABC):
+class IlFautFaireUnChoix(HUDTemporaryABC):
     def __init__(self, canvas: HUDCanvas):
         super().__init__(canvas)
 

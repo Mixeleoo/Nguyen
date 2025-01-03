@@ -1,5 +1,5 @@
 
-from .base import HUDStaticABC
+from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
 class EndTurn(HUDStaticABC):

@@ -2,10 +2,10 @@
 import tkinter as tk
 from typing import Optional
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Canvas.Widget.Button import Button
 import Canvas.HUDs.SubHUD as SubHUD
-from parameter import *
+
 
 class ChooseVillage(HUDCenteredABC):
     def __init__(self, canvas):

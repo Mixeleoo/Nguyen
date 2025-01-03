@@ -1,7 +1,7 @@
 
 from typing import Optional
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Canvas.Widget.Radiobutton import Radiobutton
 from Canvas.HUDs.SubHUD.quantityselector import QuantitySelector
 from parameter import *

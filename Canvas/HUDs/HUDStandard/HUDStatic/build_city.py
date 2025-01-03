@@ -2,7 +2,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
-from .base import HUDStaticABC
+from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
 class BuildCity(HUDStaticABC):

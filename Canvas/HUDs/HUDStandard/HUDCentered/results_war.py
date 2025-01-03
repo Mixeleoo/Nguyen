@@ -1,5 +1,5 @@
 
-from .base import HUDCenteredABC
+from ..HUDCenteredABC import HUDCenteredABC
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
 

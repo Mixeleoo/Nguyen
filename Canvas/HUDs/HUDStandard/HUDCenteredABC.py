@@ -20,6 +20,8 @@ class HUDCenteredABC(HUDStandardABC, ABC):
 
     def replace(self, *args) -> None:
 
+        super().replace(*args)
+
         self.update(*args)
 
         bbox = self.canvas.bbox(self.tag)

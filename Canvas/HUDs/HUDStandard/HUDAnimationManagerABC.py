@@ -2,23 +2,18 @@
 from abc import ABC, abstractmethod
 from math import ceil
 
+from Canvas.HUDs.HUDStandard import HUDStandardABC
 from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
-class HUDAnimationManager(ABC):
+class HUDAnimationManager(HUDStandardABC, ABC):
     def __init__(self, canvas: HUDCanvas):
+        super().__init__(canvas)
+
         self.canvas = canvas
         self.is_showing = False  # Indique si l'animation "show" est en cours
         self.is_hiding = False  # Indique si l'animation "hide" est en cours
         self.after_id = None    # Référence pour annuler un after en cours
-
-    @property
-    @abstractmethod
-    def tag(self):
-        """
-        Méthode pour retourner le tag de l'HUD
-        """
-        pass
 
     @property
     @abstractmethod

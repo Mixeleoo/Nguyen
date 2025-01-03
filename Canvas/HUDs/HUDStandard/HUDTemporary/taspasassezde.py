@@ -1,17 +1,21 @@
 
 from PIL import Image, ImageTk, ImageEnhance
 
-from Canvas.HUDs.HUDStandard.HUDInformative.base import HUDInformativeABC
+from ..HUDTemporaryABC import HUDTemporaryABC
+from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
-
-class CestPasTonVillage(HUDInformativeABC):
-    def __init__(self, canvas):
+class TasPasAssezDe(HUDTemporaryABC):
+    def __init__(self, canvas: HUDCanvas, title: str):
+        """
+        title: str qui suivra la phrase : "T'as pas assez d"
+        """
         super().__init__(canvas)
+        self.title = title
 
     def create(self) -> None:
 
-        text = "C'est pas ton village"
+        text = "T'as pas assez d" + self.title
 
         width = get_width_text(text)
         height = 20
@@ -60,5 +64,3 @@ class CestPasTonVillage(HUDInformativeABC):
             text=text,
             state="hidden"
         )
-
-    def replace(self, x0: float, y0: float) -> None: HUDInformativeABC.replace(self, x0 + 15, y0 + 45)

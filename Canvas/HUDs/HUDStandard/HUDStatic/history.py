@@ -1,9 +1,8 @@
 
 import tkinter as tk
-from typing import Literal
 
 from Canvas.Widget.Scrollbar import Scrollbar
-from .base import HUDStaticABC
+from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
 class History(HUDStaticABC):
