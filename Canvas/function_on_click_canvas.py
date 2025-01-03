@@ -47,7 +47,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
 
     def before_action(self, tag: str, event: tk.Event):
         #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
-        #TODO Léo : ajouter le choix de difficulté
         #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt
         #TODO Léo : Faire agrandir l'hud topside quand on agrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)
 

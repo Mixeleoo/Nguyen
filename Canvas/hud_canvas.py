@@ -253,6 +253,8 @@ class HUDCanvas(BaseCanvas):
 
     def build_church_on_village(self, e=None):
 
+        village_id = self.find_withtag("active")[0]
+
         # Même comportement que si on annulait sa construction, mais on la construit vraiment
         self.hud_build_church.cancel()
 
