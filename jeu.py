@@ -173,7 +173,7 @@ class Jeu:
         :param nom_village: nom du village
         :param l_terre: liste des terres du village
         """
-        nouveau_noble = Noble(100, 10, index=len(self._joueurs), couleur=couleur)
+        nouveau_noble = Noble(300, 300, index=len(self._joueurs), couleur=couleur)
         nouveau_noble.ajouter_village(village_id, l_terre)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)

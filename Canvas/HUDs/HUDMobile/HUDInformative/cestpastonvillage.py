@@ -11,7 +11,7 @@ class CestPasTonVillage(HUDInformativeABC):
 
     def create(self) -> None:
 
-        text = "Il faut faire un choix"
+        text = "C'est pas ton village"
 
         width = get_width_text(text)
         height = 20
@@ -20,17 +20,6 @@ class CestPasTonVillage(HUDInformativeABC):
         y0_cadre = 0
         x1_cadre = width
         y1_cadre = height
-
-        self.id = self.canvas.create_text_in_rectangle(
-            x0=x0_cadre,
-            y0=y0_cadre,
-            x1=x1_cadre,
-            y1=y1_cadre,
-            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
-            text=text,
-            state="hidden"
-        )
 
         original_image = Image.open("./assets/pointing-hand.png")
 
@@ -42,9 +31,6 @@ class CestPasTonVillage(HUDInformativeABC):
 
         # Le -1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         resized_image = original_image.resize((image_width - 1, image_height))
-
-        # Appliquer un flip vertical
-        flipped_image = resized_image.transpose(Image.FLIP_LEFT_RIGHT)
 
         # Appliquer une rotation
         rotated_image = resized_image.rotate(-45, expand=True)
@@ -58,8 +44,21 @@ class CestPasTonVillage(HUDInformativeABC):
         # Le +1 est un ajustement pck ça dépassait d'un pixel (jsp pk)
         # Image d'en haut
         self.canvas.create_image(
-            x0_cadre - ref.width() // 2 - 1, image_height // 2 + y0_cadre + 1,
+            x0_cadre, y0_cadre + 1 - image_height // 2,
             image=ref, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
         self.canvas.references += [ref]
+
+        self.id = self.canvas.create_text_in_rectangle(
+            x0=x0_cadre,
+            y0=y0_cadre,
+            x1=x1_cadre,
+            y1=y1_cadre,
+            rectangle_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text_tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            text=text,
+            state="hidden"
+        )
+
+    def replace(self, x0: float, y0: float) -> None: HUDInformativeABC.replace(self, x0 + 15, y0 + 45)

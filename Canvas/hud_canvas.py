@@ -250,7 +250,7 @@ class HUDCanvas(BaseCanvas):
 
         self.game_mode = "build_church"
 
-    def build_church_on_village(self, e=None):
+    def build_church_on_village(self, event: tk.Event):
 
         village_id = self.find_withtag("active")[0]
         village = self.jeu.joueur_actuel.get_village(village_id)
@@ -265,7 +265,7 @@ class HUDCanvas(BaseCanvas):
             self.update_hudtop()
 
         else:
-            pass
+            self.hudmobile_cestpastonvillage.show(event.x, event.y)
 
     def vassaliser(self, don_argent: int, don_ressources: int):
 

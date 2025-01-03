@@ -46,8 +46,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        #TODO Léo : Vérifier si le village sur lequel le joueur tente de construire une église est bien son village
-        #TODO Léo : Noter le prix des soldats sur le choix de l'immigration
         #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
         #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt
         #TODO Léo : Faire agrandir l'hud topside quand on agrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)

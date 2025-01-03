@@ -74,7 +74,7 @@ class Vassal(Personne):
         self._pa -= qt
 
     def reset_pa(self):
-        self._pa = 10
+        self._pa = 100
 
     @property
     def dico_villages(self):
