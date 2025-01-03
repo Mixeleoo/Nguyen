@@ -7,8 +7,6 @@ from Perso.soldat import Soldat
 from Territoire import Village, RevolteInfo
 from parameter import prenom_aleatoire, ActionCost, ACTIONS_NAME_COST
 
-# TODO Éloïse: Ajouter une méthode pour faire produire tous ses villages.
-
 class Vassal(Personne):
     couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634"]
 
