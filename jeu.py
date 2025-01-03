@@ -174,11 +174,11 @@ class Jeu:
         :param l_terre: liste des terres du village
         """
         nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs))
-        v = nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
+        nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)
 
-        return v
+        return nouveau_noble
 
     def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
         """

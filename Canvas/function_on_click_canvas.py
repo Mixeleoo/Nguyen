@@ -70,11 +70,11 @@ class FunctionOnClickCanvas(AnimationCanvas):
         if action_possible:
             self.actions[tag](event)
 
-    def before_village_info(self):
+    def before_village_info(self, event: tk.Event):
         village_id = self.find_withtag("active")[0]
 
         if self.jeu.joueur_actuel.village_allie(village_id):
-            self.hudmobile_ally_village_info.show(village_id)
+            self.hudmobile_ally_village_info.show(event)
 
         else:
-            self.hudmobile_ally_village_info.show(village_id)
+            self.hudmobile_enemy_village_info.show(event)

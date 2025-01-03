@@ -1,4 +1,5 @@
 
+import random
 from typing import Literal
 
 from Perso.personne import Personne
@@ -9,6 +10,7 @@ from parameter import prenom_aleatoire, ActionCost, ACTIONS_NAME_COST
 # TODO Éloïse: Ajouter une méthode pour faire produire tous ses villages.
 
 class Vassal(Personne):
+    __couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634"]
 
     """
     Un noble est une personne qui contôle des roturiers (sous forme d'une liste de roturiers)
@@ -20,6 +22,11 @@ class Vassal(Personne):
     def __init__(self, pnom: str, pres: int, parg: int, index: int):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
+
+        # Cet attribut servira à différencier les couleurs entre vassaux | nobles | seigneurs
+        _couleur = random.choice(Vassal.__couleurs)
+        Vassal.__couleurs.remove(_couleur)
+        self.couleur = _couleur
 
         self._pa = 0
         self.reset_pa()
@@ -308,4 +315,4 @@ class Vassal(Personne):
         # - Vrai si le village passé en paramètre est un village allié (si c'est un village du vassal)
         # - Faux si ça ne l'est pas
         # La méthode est écrasée dans Seigneur je t'invite à voir
-        pass
+        return True
