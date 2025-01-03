@@ -44,21 +44,27 @@ class StartMenu(HUDMobileABC):
             text="Sortez-moi de là"
         )
 
+        self.canvas.create_text(
+            center_x, center_y + 80, tags=set_tags(hud_tag=self.tag),
+            text="Choisissez une couleur ou on choisira pour vous.",
+            fill=FILL_TEXT
+        )
+
         x = int(center_x * 0.25)
-        xstep = center_x // len(Vassal.couleurs)
+        xstep = int(center_x * 1.5) // len(Vassal.couleurs)
         for couleur in Vassal.couleurs:
             nx = x + xstep
             rect_id = self.canvas.create_rectangle(
                 x,
-                center_y + 80,
-                nx,
                 center_y + 120,
+                nx,
+                center_y + 160,
                 tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag, color_tag=couleur),
                 fill=couleur
             )
 
             t_id = self.canvas.create_text(
-                (x + nx) // 2, (center_y + 80 + center_y + 120) // 2,
+                (x + nx) // 2, (center_y + 120 + center_y + 160) // 2,
                 text=couleur, tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,), fill=FILL_TEXT
             )
 
