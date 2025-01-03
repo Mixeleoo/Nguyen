@@ -1,14 +1,25 @@
 
+from __future__ import annotations
 import random
+from dataclasses import dataclass
 from random import randint, choice
 from typing import Literal
 
 from Perso.ecclesiastique import Ecceclesiastique
 from Perso.paysan import Paysan
 from Perso.roturier import Roturier
-from Territoire.eglise import Eglise
+from .eglise import Eglise
 from Perso.soldat import Soldat
-from parameter import Terre, capacite_prod_terre, nom_aleatoire_pretres, nom_aleatoire_eglise, RevolteInfo
+from .terre import Terre
+from parameter import nom_aleatoire_pretres, nom_aleatoire_eglise
+
+
+@dataclass
+class RevolteInfo:
+    issue: Literal[None, "Victoire", "Défaite"] = None
+    pertes: str = ""
+    village: "Village" = None
+
 
 class Village :
     """
@@ -78,11 +89,15 @@ class Village :
         """
         Retourne la moyenne du bonheur dans le village
         """
-        bonheur = 0
-        effectif = 0
-        for villageois in self.liste_roturier:
-            bonheur += villageois.bonheur
-            effectif += 1
+        if len(self.liste_roturier) == 0:
+            return 0
+
+        else:
+            bonheur = 0
+            effectif = 0
+            for villageois in self.liste_roturier:
+                bonheur += villageois.bonheur
+                effectif += 1
         return round(bonheur / effectif, 2)
 
     def recuperer_recoltes(self):
@@ -115,6 +130,7 @@ class Village :
 
         :return: nombre de place disponible dans le village si effectif souhaité trop grand
         """
+
         # Limite la taille maximale à 10 fois le nombre de terre (car 10 habitants par terre) habitants.
         if self.population + effectif > self.population_max :
             return len(self._liste_terres) * 10 - self.population
@@ -200,7 +216,7 @@ class Village :
                 elif don == 3 :
                     villageois.cdp += 1  # valeur à determiner
 
-    def revolte(self, l_soldat : list[Soldat]) -> RevolteInfo:
+    def revolte(self, l_soldat : list[Soldat]) -> "RevolteInfo":
         """
         Méthode qui gère un cas de révolte dans une village
         Si une révolte se produit.
@@ -216,7 +232,7 @@ class Village :
         if len(l_soldat) > len(self.liste_roturier)//2 :
             perte_revolutionnaires = int(len(self.liste_roturier) * 0.25)
             self._liste_roturier = self.liste_roturier[:len(self.liste_roturier)-perte_revolutionnaires]
-            return RevolteInfo("Victoire", pertes=str(perte_revolutionnaires))
+            return RevolteInfo("Victoire", pertes=str(perte_revolutionnaires), village=self)
 
         elif len(l_soldat) <= len(self.liste_roturier)//2 :
             return RevolteInfo("Défaite")
@@ -230,7 +246,7 @@ class Village :
         nb_morts = 0
         for villageois in self._liste_roturier :
             villageois.vieillir()
-            if villageois.esperance_vie >= villageois.age :
+            if villageois.esperance_vie <= villageois.age :
                 nb_morts += 1
                 self.liste_roturier.remove(villageois)
         return nb_morts

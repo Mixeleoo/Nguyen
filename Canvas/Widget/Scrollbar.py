@@ -72,6 +72,9 @@ class Scrollbar:
         Elle ajoutera le nouveau texte au groupe en lui ajoutant le tag self._text_group_tag.
         Elle refera calculer la nouvelle taille du thumb de la scrollbar.
         """
+        # Si on a pas de texte, on ne rajoute rien
+        if not text:
+            return
 
         coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
         coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
@@ -139,8 +142,6 @@ class Scrollbar:
 
         # On limite la taille du thumb de la scrollbar quand même
         longueur_thumb = longueur_thumb if longueur_thumb > 20 else 20
-
-        print(longueur_viewport, self._longueur_texte, taille_scrollbar, longueur_thumb)
 
         coords_thumb = self.canvas.coords(self._thumb_id)
         self.canvas.coords(self._thumb_id, coords_thumb[0], coords[3] - longueur_thumb - 1, coords_thumb[2], coords[3] - 1)

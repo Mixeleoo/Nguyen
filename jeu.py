@@ -11,7 +11,6 @@ from parameter import ACTIONS_NAME_COST, PAYSAN_OR_ARTISAN_TAG, BUILD_CHURCH, BU
     WAR_TAG, VASSALIZE_TAG
 from Territoire.village import Village
 
-
 @dataclass
 class EventInfo:
     type: Literal["Épidémie", "Incendie", "Pillage", "Famine", "Rien", "Récolte abondante", "Immigration", "Vassalisation"]
@@ -77,6 +76,15 @@ class Jeu:
     @property
     def index_joueur_actuel(self):
         return self._index_joueur_actuel
+
+    def village_de(self, village_id: int) -> Vassal:
+        # TODO Eloise : Coucou tu peux me faire une méthode qui me retourne le joueur à qui appartient le village mis en paramètre
+        """
+        Tu fais comme tu veux pour récupérer, tu peux faire plein de boucles ou tu peux même créer un dictionnaire avec :
+        - Comme clef l'id des villages
+        - Comme valeur l'index du joueur (ou le joueur directement) (si tu utilises l'index, il faudra utiliser _const_joueur au lieu de _joueurs car si on supprime un joueur de _joueurs, l'index sera faux)
+        """
+        pass
 
     def fin_de_tour(self):
         self._index_joueur_actuel = (self._index_joueur_actuel + 1) % len(self._joueurs)
@@ -154,7 +162,6 @@ class Jeu:
             # vassalisation : un noble se propose comme vassal
             noble = choice([j for j in self._joueurs[1:] if type(j) != Vassal])
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
-
 
     # Actions
     def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
@@ -443,8 +450,10 @@ class Jeu:
                 for villageois in village.liste_roturier:
                     villageois.commercer() #commerce en cas de surplus de ressource
 
+                # TODO Eloise : j'imagine qu'on a pas pensé à la méthode en dessous de ce commentaire si ?J J'imaginais une récupération en fonction des récoltes. En mode plus ils récoltent plus ils sont heureux, et également s'ils commercent, ils gagnent du bonheur.
+                # village.recuperation_bonheur()
+
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris
-
 
         return phrases

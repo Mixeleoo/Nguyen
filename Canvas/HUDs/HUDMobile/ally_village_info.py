@@ -69,7 +69,7 @@ class VillageInfo(HUDMobileABC):
             dy = event.y - self.canvas.coords(self.canvas.find_withtag(self.tag)[-2])[3]
 
         # Si le rectangle dépasse la longueur de la fenêtre par le bas, l'afficher par le haut
-        if event.x + 100 > self.canvas.master.winfo_width():
+        if event.x + 120 > self.canvas.master.winfo_width():
             dx = event.x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[2]
 
         # Déplacement de l'HUD là où il a été cliqué
@@ -94,16 +94,11 @@ class VillageInfo(HUDMobileABC):
 
     def _get_texts(self, village_id: int) -> list[str]:
         """
-        Méthode retournant les infos du village clické si le village appartient au joueur sinon retourne Inconnu
+        Méthode retournant les infos du village clické
         """
         village = self.canvas.jeu.joueur_actuel.get_village(village_id)
-        if village is not None:
-            return [
-                f"🧑🏻‍🌾 {village.population}/80",
-                f"🍴 {village.ressources}",
-                f"😊 {village.bonheur_general}"
-            ]
-
-        else: return [
-            "Inconnu", "Inconnu", "Inconnu"
+        return [
+            f"🧑🏻‍🌾 {village.population}/{village.population_max}",
+            f"🍴 {village.ressources}",
+            f"😊 {village.bonheur_general}"
         ]

@@ -1,8 +1,10 @@
 
 from random import randint
 
-from Perso.personne import Personne
-from parameter import *
+from .personne import Personne
+from Territoire.terre import Terre
+from parameter import prenom_aleatoire, capacite_prod_terre
+
 
 
 class Roturier(Personne):
@@ -64,4 +66,4 @@ class Roturier(Personne):
         if self.ressources <= lancer_commerce :
             echange = int(self.ressources * 0.50) # si commerce alors vente de 50% des ressources
             self.gestion_ressources(-echange)
-            self.argent(echange)
+            self.gestion_argent(echange)

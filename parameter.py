@@ -6,7 +6,6 @@ from random import randint, choice
 from tkinter import font
 from typing import Literal
 
-
 MAX_WIDTH = 1024
 MAX_HEIGHT = 600
 
@@ -85,11 +84,6 @@ OPEN_WINDOW_TAG = "OPEN_WINDOW"
 
 # si
 si = 'si'
-
-@dataclass
-class RevolteInfo:
-    issue: Literal[None, "Victoire", "Défaite"] = None
-    pertes: str = ""
 
 @dataclass
 class ActionCost:
@@ -252,12 +246,6 @@ def separer_chaine_sans_couper(chaine, n):
 
 
 Position = namedtuple('Position', ['x', 'y'])
-
-
-@dataclass
-class Terre:
-    type: Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]
-    nb_roturiers: int = 0
 
 # Quantité de ressources associée au type de terre sur la carte
 capacite_prod_terre = {"PLAIN" : 1, "MOUNTAIN" : 0.8, "LAKE" : 1, "FOREST" : 1.2}

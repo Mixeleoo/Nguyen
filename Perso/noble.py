@@ -1,5 +1,5 @@
 
-from Perso.vassal import Vassal
+from .vassal import Vassal
 
 
 class Noble(Vassal):

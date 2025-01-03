@@ -50,6 +50,7 @@ class Interface(tk.Tk):
         # Créer les HUDs
         self.canvas.create_HUDs(geometry_width, geometry_height)
         self.canvas.add_history_text(f"Année n°{self.canvas.jeu.tour}")
+        self.canvas.tag_raise(self.canvas.hudmobile_start_menu.tag)
         self.canvas.hud_history.hide_exceeding_text()
 
         """# Ajouter l'image au canvas

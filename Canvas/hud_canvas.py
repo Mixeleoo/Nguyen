@@ -2,8 +2,8 @@
 import tkinter as tk
 
 from Canvas.base_canvas import BaseCanvas
-from Perso.noble import Noble
-from jeu import EventInfo, ActionBotInfo
+from Perso import Noble
+from jeu import ActionBotInfo
 from parameter import *
 
 class HUDCanvas(BaseCanvas):
@@ -18,6 +18,10 @@ class HUDCanvas(BaseCanvas):
 
         # L'id des canvas.after qui sont lancés quand on reste clické sur les boutons de QuantitySelector
         self.after_quantity_selector_id = None
+
+        from eventmanager import EventManager
+
+        self.eventmanager = EventManager(self.jeu, self)
 
         from Canvas.HUDs.HUDWindow import HUDWindowSupervisor
 
@@ -163,10 +167,7 @@ class HUDCanvas(BaseCanvas):
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
             self.hudmobile_choose_noble_vassaliser.add_noble(prenom, noble + 1)
             self.hudcentered_choose_noble_war.add_noble(prenom, noble + 1)
-            village = self.jeu.creer_noble(square_id, prenom, nom_village, self.land_around(square_id))
-
-            # Ajouter la fenêtre du village
-            self.hudwindow_supervisor.add_more_info(village)
+            self.jeu.creer_noble(square_id, prenom, nom_village, self.land_around(square_id))
 
     def choose_plain_to_build(self, event: tk.Event):
         """
@@ -205,7 +206,10 @@ class HUDCanvas(BaseCanvas):
             self.hudmobile_choose_taxes.add_village(nom, square_id)
 
             # On lance la méthode qui influera sur le jeu
-            self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom)
+            village = self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom, l_terre=self.land_around(square_id))
+
+            # Ajouter la fenêtre du village
+            self.hudwindow_supervisor.add_more_info(village)
 
             # On change son tag de trigger de fonction
             self.engine_build_city(square_id, tags)
@@ -253,7 +257,7 @@ class HUDCanvas(BaseCanvas):
             )
 
             if self.jeu.nb_joueurs == 1:
-                self.win()
+                self.win("Vous avez vaincu ou vassalisé tous les nobles\nVous avez gagné.")
 
             else:
                 self.add_history_text("Vous avez vassalisé " + noble_selected.nom)
@@ -286,7 +290,7 @@ class HUDCanvas(BaseCanvas):
 
             # S'il est le dernier alors, il a gagné.
             if self.jeu.nb_joueurs == 1:
-                self.win()
+                self.win("Vous avez vaincu ou vassalisé tous les nobles\nVous avez gagné.")
 
             else:
                 self.add_history_text(f"Vous avez battu {noble.nom}.")
@@ -303,7 +307,11 @@ class HUDCanvas(BaseCanvas):
 
         # Si le joueur perd la guerre
         else:
-            self.lose()
+            if cause == "V":
+                self.lose(f"Votre demande de vassalisation n'a pas plu {noble.nom} et en est venu aux mains.\nVotre armée n'était pas de taille. Vous avez perdu")
+
+            else:
+                self.lose("Votre tentative est vaine, votre armée n'était pas de taille.\nVous avez perdu")
 
     def imposer(self, l_villages: list[int], l_nobles: list[int]):
         """
@@ -373,7 +381,7 @@ class HUDCanvas(BaseCanvas):
         )
 
         # Ajout du texte descriptif de l'action dans l'historique.
-        self.add_history_text(f"Vous avez immigré {effectif} {type_v} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")
+        self.add_history_text(f"Vous avez immigré {effectif} {type_v}{'s' if effectif > 1 else ''} dans le village {self.jeu.joueur_actuel.dico_villages[village_id].nom} !")
 
         # On met à jour l'HUD des caractéristiques
         self.update_hudtop()
@@ -389,11 +397,11 @@ class HUDCanvas(BaseCanvas):
             if rev.issue is not None:
                 # VICTOIRE
                 if rev.issue == "Victoire":
-                    self.hudcentered_results_war.show(rev.pertes)
+                    self.add_history_text(f"Une révolte a eu lieu dans {rev.village.nom}, mais vos soldat ont tenu bon. Les pertes s'élèvent à ", rev.pertes + " villageois.")
 
                 # DEFAITE
                 else:
-                    self.lose()
+                    self.lose("Vos villageois ont perdu votre confiance et vous fait comprendre leur souffrance.\nVous avez perdu.")
 
         # Tour des nobles, le temps que ce n'est pas le tour du joueur.
         while self.jeu.index_joueur_actuel != 0:
@@ -404,7 +412,7 @@ class HUDCanvas(BaseCanvas):
 
                 # Si le joueur est vaincu, il a perdu.
                 if actionbotinfo.noble_vaincu == self.jeu.get_joueur(0):
-                    self.lose()
+                    self.lose(f"{self.jeu.joueur_actuel.nom} vous a pris pour cible et vous a vaincu.\nVous avez perdu.")
 
                 # Si ce n'est pas le joueur qui est vaincu:
                 else:
@@ -430,51 +438,14 @@ class HUDCanvas(BaseCanvas):
             self.add_history_text(actionbotinfo.descriptif)
 
         #self.jeu.joueur_actuel.reset_pa()
-        self.event()
+        joueur_vivant = self.eventmanager.handle_event()
 
-        for p in self.jeu.fin_annee():
-            self.add_history_text(p)
+        if joueur_vivant:
+            for p in self.jeu.fin_annee():
+                self.add_history_text(p)
 
-        self.add_history_text(f"Année n°{self.jeu.tour}")
-
-    def event(self):
-        """
-        Méthode qui gère les évènements pré-tour du joueur.
-        """
-
-        # Récupération des retours.
-        eventinfo = self.jeu.evenement()
-
-        # On attribue les cas spéciaux à leurs propres méthodes.
-        events: [str, callable] = {
-            "Incendie": self.event_incendie,
-            "Vassalisation": self.event_vassalisation
-        }
-
-        self.hud_event.set_text(eventinfo.type)
-        self.hud_event.show_animation()
-
-        events.get(eventinfo.type, self.event_autre)(eventinfo)
-
-    def event_incendie(self, eventinfo: EventInfo):
-
-        # Si le joueur n'a plus qu'un village, il a perdu.
-        if not len(self.jeu.joueur_actuel.dico_villages):
-            self.lose()
-
-        else:
-            # Avant le village, il y avait forcément une plaine, donc on va transformer la case village en case plaine.
-            self.itemconfigure(eventinfo.village_incendie.id, fill=couleurs[PLAINE_TAG]())
-            self.itemconfigure(eventinfo.village_incendie.id, tags=set_tags(MAP_TAG, PLAINE_TAG, MAP_TAG))
-
-            # On retire
-            self.hudmobile_choose_taxes.remove_village(eventinfo.village_incendie.id)
-
-        self.hudmobile_more_info_event.refresh_text(eventinfo.village_incendie.nom)
-
-    def event_vassalisation(self, eventinfo: EventInfo):
-        self.hudcentered_accept_vassal.show(eventinfo.noble_vassalise)
-        self.hudmobile_more_info_event.refresh_text(eventinfo.descriptif)
+            self.add_history_text(f"Année n°{self.jeu.tour}")
+            self.update_hudtop()
 
     def event_accept_vassal(self, n: Noble):
 
@@ -482,7 +453,7 @@ class HUDCanvas(BaseCanvas):
         self.jeu.vassalisation_confirmee(n, 0, 0)
 
         if self.jeu.nb_joueurs == 1:
-            self.hudmobile_end_menu.win()
+            self.hudmobile_end_menu.win("Vous avez accepté la proposition de vassalisation du dernier Noble, sage de votre part.\nVous avez gagné.")
 
         else:
             self.add_history_text("Vous avez vassalisé " + n.nom)
@@ -496,8 +467,3 @@ class HUDCanvas(BaseCanvas):
 
             # On met à jour l'HUD des caractéristiques
             self.update_hudtop()
-
-    def event_autre(self, eventinfo: EventInfo):
-
-        self.hudmobile_more_info_event.refresh_text(eventinfo.descriptif)
-        self.update_hudtop()

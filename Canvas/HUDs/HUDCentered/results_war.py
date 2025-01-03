@@ -39,7 +39,7 @@ class ResultsWar(HUDCenteredABC):
         )
 
     def update(self, results: str) -> None:
-        self._text.set("Les résultats de la guerre sont :\n" + results)
+        self._text.set("Les résultats de la guerre sont : " + results + "perte(s).")
 
     def replace(self, results: str) -> None: HUDCenteredABC.replace(self, results)
     def show(self, results: str) -> None: HUDCenteredABC.show(self, results)

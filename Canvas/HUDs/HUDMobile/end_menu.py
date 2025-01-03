@@ -33,7 +33,8 @@ class EndMenu(HUDMobileABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self._text = StringVar(self.canvas)
+        self._text_ambience = StringVar(self.canvas)
+        self._text_reason = StringVar(self.canvas)
 
     def create(self, geometry_width, geometry_height):
 
@@ -49,9 +50,16 @@ class EndMenu(HUDMobileABC):
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.configure(size=18)
 
-        self._text.id = self.canvas.create_text(
+        self._text_ambience.id = self.canvas.create_text(
             center_x, center_y - 120,
-            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            tags=set_tags(hud_tag=self.tag),
+            fill=FILL_TEXT,
+            font=custom_font
+        )
+
+        self._text_reason.id = self.canvas.create_text(
+            center_x, center_y - 200,
+            tags=set_tags(hud_tag=self.tag),
             fill=FILL_TEXT,
             font=custom_font
         )
@@ -83,14 +91,24 @@ class EndMenu(HUDMobileABC):
         )
 
     def replace(self, *args) -> None:
-        pass
-
-    def win(self):
         self.canvas.tag_raise(self.tag)
-        self._text.set(separer_chaine_sans_couper(choice(win_phrases), 2))
+
+    def win(self, reason: str):
+        """
+        Méthode lancée pour afficher le menu de fin
+        :param reason: Phrase affichée pour expliquer la raison de la fin de partie
+        """
+        self.canvas.tag_raise(self.tag)
+        self._text_reason.set(reason)
+        self._text_ambience.set(choice(win_phrases))
         self.show()
 
-    def lose(self):
+    def lose(self, reason: str):
+        """
+        Méthode lancée pour afficher le menu de fin
+        :param reason: Phrase affichée pour expliquer la raison de la fin de partie
+        """
         self.canvas.tag_raise(self.tag)
-        self._text.set(separer_chaine_sans_couper(choice(lose_phrases), 2))
+        self._text_reason.set(reason)
+        self._text_ambience.set(choice(lose_phrases))
         self.show()

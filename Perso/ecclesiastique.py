@@ -1,5 +1,5 @@
 
-from Perso.personne import Personne
+from .personne import Personne
 from random import randint
 
 

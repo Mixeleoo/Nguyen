@@ -42,6 +42,4 @@ class StartMenu(HUDMobileABC):
         )
 
     def replace(self, *args) -> None:
-        pass
-
-
+        self.canvas.tag_raise(self.tag)

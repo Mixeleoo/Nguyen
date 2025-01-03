@@ -1,11 +1,10 @@
-from typing import Literal
 
-from PIL.ImageOps import solarize
+from typing import Literal
 
 from Perso.personne import Personne
 from Perso.soldat import Soldat
-from Territoire.village import Village, Terre
-from parameter import prenom_aleatoire, RevolteInfo, ActionCost, NB_NOBLE_AU_DEPART, ACTIONS_NAME_COST
+from Territoire import Village, RevolteInfo
+from parameter import prenom_aleatoire, ActionCost, ACTIONS_NAME_COST
 
 # TODO Éloïse: Ajouter une méthode pour faire produire tous ses villages.
 
@@ -171,7 +170,7 @@ class Vassal(Personne):
             self._liste_soldats = self._liste_soldats[:self._ressources]
 
         if deces > 0 :
-            return f"{self.nom} n'a pas pu nourrir {deces} de ses soldats"
+            return f"{deces} soldats sont morts dans les rangs de {self.nom} dû au manque de vivre."
         else :
             return f""
 
@@ -182,6 +181,7 @@ class Vassal(Personne):
         nb_morts = 0
         for village in self.dico_villages.values() :
             nb_morts += village.nourrir_population()
+
         if nb_morts > 0:
             return f"{nb_morts} roturiers est(sont) mort(s) de faim dans le(s) village(s) de {self.nom}"
         else :
@@ -218,12 +218,13 @@ class Vassal(Personne):
         :param nom: nom du village
         :param l_terre : liste des 8 terres entourant le village
         """
-        self.ajouter_village(village_id, nom, l_terre)
-        print("ID emplacement :",village_id)
 
         self.retirer_pa(8)
         self.gestion_argent(-300)
         self.gestion_ressources(-150)
+
+        print("ID emplacement :",village_id)
+        return self.ajouter_village(village_id, nom, l_terre)
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
         """
@@ -238,7 +239,6 @@ class Vassal(Personne):
         print("type_villageois :", type_v)
         print("choix village :", village_id)
 
-        print([v for v in self.dico_villages.keys()])
         self.dico_villages[village_id].ajouter_villageois(type_v, effectif)
 
         if type_v == "paysan":
@@ -266,9 +266,11 @@ class Vassal(Personne):
 
         :return: Phrase qui sera affichée dans l'historique
         """
+
         nb_morts = 0
         for village in self.dico_villages.values() :
                 village.vieillsement_population()
+
         if nb_morts > 0 :
             return f"{nb_morts} roturier(s) sont mort de vieillesse cette année dans les villages de {self.nom}"
         else :

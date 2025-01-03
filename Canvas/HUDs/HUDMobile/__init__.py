@@ -1,6 +1,6 @@
 
 from .base import HUDMobileABC
-from .village_info import VillageInfo
+from .ally_village_info import VillageInfo
 from .yaunvillage import YaUnVillage
 from Canvas.HUDs.HUDMobile.HUDInformative.ilfautfaireunchoix import IlFautFaireUnChoix
 from Canvas.HUDs.HUDMobile.HUDInformative.taspasassezde import TasPasAssezDe
