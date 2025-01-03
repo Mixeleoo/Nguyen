@@ -164,7 +164,7 @@ class Jeu:
             return EventInfo("Vassalisation", (f"Se propose comme vassal : {noble.nom}",), noble_vassalise=noble)
 
     # Actions
-    def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
+    def creer_noble(self, village_id: int, prenom: str, nom_village: str, l_terre: list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]], couleur: str = None):
         """
         Méthode qui créera un nouveau noble et lui attribuera l'id de son village
 
@@ -173,12 +173,12 @@ class Jeu:
         :param nom_village: nom du village
         :param l_terre: liste des terres du village
         """
-        nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs))
-        v = nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
+        nouveau_noble = Noble(prenom, 100, 10, index=len(self._joueurs), couleur=couleur)
+        nouveau_noble.ajouter_village(village_id, nom_village, l_terre)
         self._joueurs.append(nouveau_noble)
         self._const_joueurs.append(nouveau_noble)
 
-        return v
+        return nouveau_noble
 
     def vassalisation_confirmee(self, pnoble : Noble | Seigneur, parg : int, pres : int) -> list[Noble]:
         """

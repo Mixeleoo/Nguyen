@@ -67,7 +67,7 @@ class EndMenu(HUDMobileABC):
         self.canvas.add_button(
             self.tag,
             "SHOW_START_MENU",
-            self.hide
+            self.canvas.restart
         ).draw(
             center_x - 60,
             center_y - 40,

@@ -64,17 +64,21 @@ class TopSide(HUDABC):
         pass
 
     def _get_texts(self):
-        joueur = self.canvas.jeu.get_joueur(0)
+        if self.canvas.jeu.nb_joueurs > 0:
+            joueur = self.canvas.jeu.get_joueur(0)
 
-        return [
-            f"PA {joueur.pa}",
-            f"💰 {joueur.argent}",
-            f"😊 {joueur.bonheur_general}",
-            f"🍴 {joueur.ressources}",
-            f"🧑🏻‍🌾 {joueur.population}",
-            f"⚔🗡 {joueur.effectif_armee}",
-            f"💥 {self.canvas.jeu.nb_joueurs - 1} / {NB_NOBLE_AU_DEPART}"
-        ]
+            return [
+                f"PA {joueur.pa}",
+                f"💰 {joueur.argent}",
+                f"😊 {joueur.bonheur_general}",
+                f"🍴 {joueur.ressources}",
+                f"🧑🏻‍🌾 {joueur.population}",
+                f"⚔🗡 {joueur.effectif_armee}",
+                f"💥 {self.canvas.jeu.nb_joueurs - 1} / {NB_NOBLE_AU_DEPART}"
+            ]
+
+        else:
+            return ["", "", "", "", "", "", ""]
 
     def update(self):
         texts = self._get_texts()

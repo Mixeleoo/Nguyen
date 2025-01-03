@@ -1,4 +1,5 @@
 
+import random
 from typing import Literal
 
 from Perso.personne import Personne
@@ -7,6 +8,7 @@ from Territoire import Village, RevolteInfo
 from parameter import prenom_aleatoire, ActionCost, ACTIONS_NAME_COST
 
 class Vassal(Personne):
+    couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634"]
 
     """
     Un noble est une personne qui contôle des roturiers (sous forme d'une liste de roturiers)
@@ -15,9 +17,19 @@ class Vassal(Personne):
     en cours de partie
     Il sera réinitialisé à chaque fin de tour
     """
-    def __init__(self, pnom: str, pres: int, parg: int, index: int):
+    def __init__(self, pnom: str, pres: int, parg: int, index: int, couleur: str = None):
         Personne.__init__(self, pnom, pres, parg)
         self._taux_impot = 0.10
+
+        # Cet attribut servira à différencier les couleurs entre vassaux | nobles | seigneurs
+        if not couleur:
+            _couleur = random.choice(Vassal.couleurs)
+            Vassal.couleurs.remove(_couleur)
+            self.couleur = _couleur
+
+        else:
+            Vassal.couleurs.remove(couleur)
+            self.couleur = couleur
 
         self._pa = 0
         self.reset_pa()

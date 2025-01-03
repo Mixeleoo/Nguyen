@@ -185,7 +185,7 @@ class BaseCanvas(HighlightCanvas):
         tags.insert(GROUP_TAG_INDEX, f"pvillage_{self.id_village}")
         self.id_village += 1
 
-        self.itemconfigure(square_id, fill="orange", tags=tags)
+        self.itemconfigure(square_id, tags=tags)
 
         return square_id
 

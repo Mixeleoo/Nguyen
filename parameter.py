@@ -183,6 +183,40 @@ COLOR_TAG_INDEX = 3
 HUD_TAG_INDEX = 4
 GROUP_TAG_INDEX = 5
 
+
+def eclaircir_couleur(hex_color: str, facteur: float) -> str:
+    """
+    Éclaircit une couleur hexadécimale.
+
+    Args:
+        hex_color (str): Couleur au format hexadécimal (ex: "#123456").
+        facteur (float): Facteur d'éclaircissement (entre 0 et 1).
+                         0.1 correspond à un léger éclaircissement, 1 pour un blanc total.
+
+    Returns:
+        str: Nouvelle couleur éclaircie au format hexadécimal.
+    """
+    if not (0 <= facteur <= 1):
+        raise ValueError("Le facteur doit être compris entre 0 et 1.")
+
+    # Convertir le hex en valeurs RGB
+    hex_color = hex_color.lstrip('#')
+    r, g, b = int(hex_color[:2], 16), int(hex_color[2:4], 16), int(hex_color[4:], 16)
+
+    # Appliquer l'éclaircissement
+    r = int(r + (255 - r) * facteur)
+    g = int(g + (255 - g) * facteur)
+    b = int(b + (255 - b) * facteur)
+
+    # Retourner le nouveau hex
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+# Exemple d'utilisation
+couleur_claire = eclaircir_couleur("#123456", 0.3)
+print(couleur_claire)  # Affiche une couleur éclaircie
+
+
 def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG,
              color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):
     """
