@@ -118,13 +118,6 @@ class StartMenu(HUDMobileABC):
                 fill=couleur
             )
 
-            t_id = self.canvas.create_text(
-                (x + nx) // 2, center_y,
-                text=couleur, tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,), fill=FILL_TEXT
-            )
-
-            self.canvas.text_id_in_rectangle_id[t_id] = rect_id
-
             x = int(nx)
             self.radiobutton_color.add_option(rect_id)
 
