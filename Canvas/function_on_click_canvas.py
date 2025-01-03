@@ -48,10 +48,10 @@ class FunctionOnClickCanvas(AnimationCanvas):
     def before_action(self, tag: str, event: tk.Event):
         #TODO Léo : Afficher "village de [nom du bot]" si c'est pas un village du joueur
         #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
-        #TODO Léo : changer la couleur des villages du joueur
         #TODO Léo : ajouter le choix de difficulté
         #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt
         #TODO Léo : Faire agrandir l'hud topside quand on agrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)
+
         joueur = self.jeu.joueur_actuel
         action_possible = True
 

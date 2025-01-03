@@ -101,8 +101,6 @@ class HUDCanvas(BaseCanvas):
         self.hudcentered_accept_vassal.create()
         self.hudcentered_results_war.create()
 
-        self.init_nobles()
-
         self.hud_top_side.create(geometry_width, geometry_height)
         self.hudmobile_start_menu.create(geometry_width, geometry_height)
 
@@ -155,10 +153,16 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_village.choose_village.add_option(nom, square_id)
         self.hudmobile_choose_taxes.add_village(nom, square_id)
 
-        noble = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id))
-        village = noble.dico_villages[square_id]
+        color = self.hudmobile_start_menu.get_color_choice()
+        if color is not None:
+            noble = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id), color)
+            self.itemconfigure(square_id, fill=self.hudmobile_start_menu.get_color_choice())
 
-        self.itemconfigure(square_id, fill=noble.couleur)
+        else:
+            noble = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id))
+            self.itemconfigure(square_id, fill=noble.couleur)
+
+        village = noble.dico_villages[square_id]
 
         # Ajouter la fenêtre du village
         self.hudwindow_supervisor.add_more_info(village)
@@ -176,6 +180,8 @@ class HUDCanvas(BaseCanvas):
             noble = self.jeu.creer_noble(square_id, prenom, nom_village, self.land_around(square_id))
 
             self.itemconfigure(square_id, fill=noble.couleur)
+
+        self.update_hudtop()
 
     def choose_plain_to_build(self, event: tk.Event):
         """
@@ -221,9 +227,10 @@ class HUDCanvas(BaseCanvas):
 
             # On change son tag de trigger de fonction
             self.engine_build_city(square_id, tags)
+            self.itemconfigure(square_id, fill=self.jeu.joueur_actuel.couleur)
 
             # On affiche dans l'historique son action
-            self.hud_history.add_text("Le joueur a crée un village !")
+            self.hud_history.add_text("Vous avez créé un village !")
 
             # On met à jour l'HUD des caractéristiques
             self.update_hudtop()
@@ -442,6 +449,29 @@ class HUDCanvas(BaseCanvas):
                     # Un noble vassalisé ne peut plus être vassalisé.
                     self.hudmobile_choose_noble_vassaliser.remove_noble(actionbotinfo.noble_vaincu.id)
 
+            elif actionbotinfo.type == "Village":
+
+                square_id = self.engine_build_city()
+
+                tags = list(self.gettags(square_id))
+
+                # On lance la méthode qui influera sur le jeu
+                village = self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom_aleatoire_village(),
+                                                                    l_terre=self.land_around(square_id))
+
+                # Ajouter la fenêtre du village
+                self.hudwindow_supervisor.add_more_info(village)
+
+                # On change son tag de trigger de fonction
+                self.engine_build_city(square_id, tags)
+                self.itemconfigure(square_id, fill=self.jeu.joueur_actuel.couleur)
+
+                # On affiche dans l'historique son action
+                self.hud_history.add_text(f"{self.jeu.joueur_actuel.nom} a créé un village !")
+
+                # On met à jour l'HUD des caractéristiques
+                self.update_hudtop()
+
             # Ajout du texte
             self.add_history_text(actionbotinfo.descriptif)
 
@@ -475,3 +505,10 @@ class HUDCanvas(BaseCanvas):
 
             # On met à jour l'HUD des caractéristiques
             self.update_hudtop()
+
+    def start(self, e):
+        self.init_nobles()
+        self.hudmobile_start_menu.hide()
+
+    def restart(self, e):
+        pass

@@ -121,7 +121,13 @@ class HighlightCanvas(Canvas):
 
         self.dtag("highlight", "highlight")
 
-    def highlight_clickable(self): self.itemconfigure("highlight", fill=fill_brighter[self.gettags("highlight")[COLOR_TAG_INDEX]])
+    def highlight_clickable(self):
+        color_tag = self.gettags("highlight")[COLOR_TAG_INDEX]
+        if color_tag in fill_brighter:
+            self.itemconfigure("highlight", fill=fill_brighter[color_tag])
+        else:
+            self.itemconfigure("highlight", fill=eclaircir_couleur(color_tag, 0.3))
+
     def unhighlight_clickable(self): self.itemconfigure("highlight", fill=self.gettags("highlight")[COLOR_TAG_INDEX])
     def highlight_toggleable(self): self.radiobuttons.toggle_switch_option(self.gettags("highlight")[GROUP_TAG_INDEX], self.find_withtag("highlight")[0])
 
