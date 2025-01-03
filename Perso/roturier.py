@@ -44,7 +44,6 @@ class Roturier(Personne):
 
         if pnom is None:
             self._nom = random.choice(Roturier._prenoms_perso)
-            Roturier._prenoms_perso.remove(self._nom)
 
         self.terre = terre
         self.cdp = int(cdp * capacite_prod_terre[terre.type])
