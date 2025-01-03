@@ -545,5 +545,6 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_village.choose_village.default()
         self.hudcentered_choose_noble_war.choose_noble.default()
 
+        self.delete("all")
+        self.create_HUDs(self.winfo_width(), self.winfo_height())
         self.jeu.restart()
-        self.hudmobile_start_menu.show()
