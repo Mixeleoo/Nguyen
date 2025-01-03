@@ -8,7 +8,7 @@ from Territoire import Village, RevolteInfo
 from parameter import ActionCost, ACTIONS_NAME_COST
 
 class Vassal(Personne):
-    couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634","##6d2222","#101086","#380c69","#1a4242","#503b0e"]
+    couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634","#6d2222","#101086","#380c69","#1a4242","#503b0e"]
     _noms_nobles = [
         "Sir Guillaume", "Dame Éléonore", "Duc Geoffroy", "Comtesse Isabelle", "Baron Robert", "Seigneur Richard",
         "Princesse Béatrice", "Sir Henri", "Dame Marguerite", "Vicomte Gilbert", "Duchesse Agnès", "Baronne Catherine",
