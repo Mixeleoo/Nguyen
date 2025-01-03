@@ -28,7 +28,8 @@ class Vassal(Personne):
             self.couleur = _couleur
 
         else:
-            Vassal.couleurs.remove(couleur)
+            if couleur in Vassal.couleurs:
+                Vassal.couleurs.remove(couleur)
             self.couleur = couleur
 
         self._pa = 0
