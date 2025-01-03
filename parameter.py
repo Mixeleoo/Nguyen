@@ -33,9 +33,6 @@ PA = 10
 
 DELTA_MS_ANIMATION = 1000 // 60  # 1000 ms = 1s / 60 (pour avoir 60 images par secondes)
 
-# UNIQUEMENT POUR LES TESTS
-NB_NOBLE_AU_DEPART = 4
-
 # RIEN
 NOTHING_TAG = "NOTHING"
 
