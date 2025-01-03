@@ -241,7 +241,15 @@ def get_width_text(text: str):
 
     # Mesurer la largeur et la hauteur du texte
     # Ici, ajout d'un pad sur la largeur pour éviter d'avoir un rectangle PARFAITEMENT à la largeur du texte
-    return text_font.measure(text) + pad_from_borders
+
+    texts = text.split("\n")
+    max_width = 0
+
+    for text in texts:
+        if max_width < text_font.measure(text):
+            max_width = text_font.measure(text)
+
+    return max_width + pad_from_borders
 
 def separer_chaine_sans_couper(chaine, n):
     # Vérifie que n est un entier positif

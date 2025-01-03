@@ -46,7 +46,6 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        #TODO Léo : Afficher "village de [nom du bot]" si c'est pas un village du joueur
         #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie
         #TODO Léo : ajouter le choix de difficulté
         #TODO Léo : vérifier les id de nobles renvoyé dans la liste de choix du joueur pour les impôt

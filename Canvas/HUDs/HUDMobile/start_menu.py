@@ -33,7 +33,7 @@ class StartMenu(HUDMobileABC):
 
         self.canvas.create_text(
             center_x, center_y - 100, tags=set_tags(hud_tag=self.tag),
-            text="Hum Hum *bruit de corbeau*, un peu vide ici...",
+            text="Hum hum *bruit de corbeau*, un peu vide ici...",
             fill=FILL_TEXT,
             justify="center"
         )
