@@ -24,7 +24,7 @@ class AllyVillageInfo(HUDMobileABC):
         ystep = 40
         for i in range(3):
             ny = y + ystep
-            self.canvas.create_rectangle(
+            rect_id = self.canvas.create_rectangle(
                 0,
                 y,
                 width,
@@ -42,6 +42,8 @@ class AllyVillageInfo(HUDMobileABC):
                 fill=FILL_TEXT,
                 state="hidden"
             )
+
+            self.canvas.text_id_in_rectangle_id[t.id] = rect_id
 
             self.texts.append(t)
 

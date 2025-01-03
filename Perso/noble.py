@@ -11,8 +11,8 @@ class Noble(Vassal):
     en cours de partie
     Il sera réinitialisé à chaque fin de tour
     """
-    def __init__(self, pnom: str, pres: int, parg: int, index: int, couleur: str = None):
-        Vassal.__init__(self, pnom, pres, parg, index, couleur)
+    def __init__(self, pres: int, parg: int, index: int, pnom: str = None, couleur: str = None):
+        Vassal.__init__(self, pres, parg, index, pnom, couleur)
 
     def soumettre(self, pnoble: 'Noble', pargent : int, press : int):
         """

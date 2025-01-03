@@ -45,6 +45,7 @@ class HUDCanvas(BaseCanvas):
 
         import Canvas.HUDs.HUDMobile as HUDMobile
 
+        self.hudmobile_cestpastonvillage = HUDMobile.CestPasTonVillage(self)
         self.hudmobile_ally_village_info = HUDMobile.AllyVillageInfo(self)
         self.hudmobile_enemy_village_info = HUDMobile.EnemyVillageInfo(self)
         self.hudmobile_yavillage = HUDMobile.YaUnVillage(self)
@@ -84,6 +85,7 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_end_menu.create(geometry_width, geometry_height)
 
         # HUDs mobile
+        self.hudmobile_cestpastonvillage.create()
         self.hudmobile_ally_village_info.create()
         self.hudmobile_enemy_village_info.create()
         self.hudmobile_yavillage.create()
@@ -151,20 +153,19 @@ class HUDCanvas(BaseCanvas):
         # Ajouter un village au joueur
         square_id = self.engine_build_city()
 
-        nom = nom_aleatoire_village()
-        self.hudmobile_choose_village.choose_village.add_option(nom, square_id)
-        self.hudmobile_choose_taxes.add_village(nom, square_id)
-
         color = self.hudmobile_start_menu.get_color_choice()
         if color is not None:
-            noble = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id), color)
+            noble = self.jeu.creer_noble(square_id, self.land_around(square_id), color)
             self.itemconfigure(square_id, fill=self.hudmobile_start_menu.get_color_choice())
 
         else:
-            noble = self.jeu.creer_noble(square_id, nom_aleatoire_nobles(), nom, self.land_around(square_id))
+            noble = self.jeu.creer_noble(square_id, self.land_around(square_id))
             self.itemconfigure(square_id, fill=noble.couleur)
 
         village = noble.dico_villages[square_id]
+
+        self.hudmobile_choose_village.choose_village.add_option(village.nom, square_id)
+        self.hudmobile_choose_taxes.add_village(village.nom, square_id)
 
         # Ajouter la fenêtre du village
         self.hudwindow_supervisor.add_more_info(village)
@@ -172,16 +173,15 @@ class HUDCanvas(BaseCanvas):
         self.nb_nobles = self.hudmobile_start_menu.get_difficulty_choice()
 
         # Ajout des villages aléatoirement
-        for noble in range(self.nb_nobles):
+        for noble_i in range(self.nb_nobles):
 
             square_id = self.engine_build_city()
-            prenom = nom_aleatoire_nobles()
-            nom_village = nom_aleatoire_village()
+
+            noble = self.jeu.creer_noble(square_id, self.land_around(square_id))
 
             # + 1 Pour ne pas compter le premier noble (qui est le joueur)
-            self.hudmobile_choose_noble_vassaliser.add_noble(prenom, noble + 1)
-            self.hudcentered_choose_noble_war.add_noble(prenom, noble + 1)
-            noble = self.jeu.creer_noble(square_id, prenom, nom_village, self.land_around(square_id))
+            self.hudmobile_choose_noble_vassaliser.add_noble(noble.nom, noble_i + 1)
+            self.hudcentered_choose_noble_war.add_noble(noble.nom, noble_i + 1)
 
             self.itemconfigure(square_id, fill=noble.couleur)
 
@@ -218,13 +218,12 @@ class HUDCanvas(BaseCanvas):
 
             tags = list(self.gettags(square_id))
 
-            # Comme il y a un nouveau village, il faut update les HUDs qui permet de choisir le village
-            nom = nom_aleatoire_village()
-            self.hudmobile_choose_village.add_village(nom, square_id)
-            self.hudmobile_choose_taxes.add_village(nom, square_id)
-
             # On lance la méthode qui influera sur le jeu
-            village = self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom, l_terre=self.land_around(square_id))
+            village = self.jeu.joueur_actuel.construire_village(village_id=square_id, l_terre=self.land_around(square_id))
+
+            # Comme il y a un nouveau village, il faut update les HUDs qui permet de choisir le village
+            self.hudmobile_choose_village.add_village(village.nom, square_id)
+            self.hudmobile_choose_taxes.add_village(village.nom, square_id)
 
             # Ajouter la fenêtre du village
             self.hudwindow_supervisor.add_more_info(village)
@@ -251,17 +250,22 @@ class HUDCanvas(BaseCanvas):
 
         self.game_mode = "build_church"
 
-    def build_church_on_village(self, e=None):
+    def build_church_on_village(self, event: tk.Event):
 
         village_id = self.find_withtag("active")[0]
+        village = self.jeu.joueur_actuel.get_village(village_id)
 
-        # Même comportement que si on annulait sa construction, mais on la construit vraiment
-        self.hud_build_church.cancel()
+        if village is not None:
+            # Même comportement que si on annulait sa construction, mais on la construit vraiment
+            self.hud_build_church.cancel()
 
-        self.jeu.joueur_actuel.construire_eglise(self.find_withtag("active")[0])
+            self.jeu.joueur_actuel.construire_eglise(self.find_withtag("active")[0])
 
-        # On met à jour l'HUD des caractéristiques
-        self.update_hudtop()
+            # On met à jour l'HUD des caractéristiques
+            self.update_hudtop()
+
+        else:
+            self.hudmobile_cestpastonvillage.show(event.x, event.y)
 
     def vassaliser(self, don_argent: int, don_ressources: int):
 
@@ -466,8 +470,9 @@ class HUDCanvas(BaseCanvas):
                 tags = list(self.gettags(square_id))
 
                 # On lance la méthode qui influera sur le jeu
-                village = self.jeu.joueur_actuel.construire_village(village_id=square_id, nom=nom_aleatoire_village(),
-                                                                    l_terre=self.land_around(square_id))
+                village = self.jeu.joueur_actuel.construire_village(
+                    village_id=square_id, l_terre=self.land_around(square_id)
+                )
 
                 # Ajouter la fenêtre du village
                 self.hudwindow_supervisor.add_more_info(village)

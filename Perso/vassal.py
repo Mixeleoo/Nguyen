@@ -5,10 +5,21 @@ from typing import Literal
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire import Village, RevolteInfo
-from parameter import prenom_aleatoire, ActionCost, ACTIONS_NAME_COST
+from parameter import ActionCost, ACTIONS_NAME_COST
 
 class Vassal(Personne):
     couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634"]
+    _noms_nobles = [
+        "Sir Guillaume", "Dame Éléonore", "Duc Geoffroy", "Comtesse Isabelle", "Baron Robert", "Seigneur Richard",
+        "Princesse Béatrice", "Sir Henri", "Dame Marguerite", "Vicomte Gilbert", "Duchesse Agnès", "Baronne Catherine",
+        "Seigneur Thomas", "Comte Baudouin", "Princesse Alice", "Duc Philippe", "Dame Mathilde", "Sir Bertrand",
+        "Comtesse Marie", "Seigneur Hugues", "Baronne Alice", "Sir Eustache", "Duchesse Jeanne", "Seigneur Édouard",
+        "Comtesse Blanche", "Baron Guillaume", "Dame Cécile", "Duc Édouard", "Sir Thomas", "Princesse Hélène",
+        "Seigneur Alexandre", "Comtesse Éléonore", "Baron Richard", "Duchesse Mathilde", "Sir Jean", "Dame Isabelle",
+        "Vicomte Robert", "Duc Henri", "Comtesse Sibylle", "Seigneur Simon", "Princesse Marguerite", "Baronne Jeanne",
+        "Sir Robert", "Duchesse Agnès", "Dame Alice", "Comtesse Jeanne", "Seigneur Raymond", "Baronne Isabelle",
+        "Sir Guy"
+    ]
 
     """
     Un noble est une personne qui contôle des roturiers (sous forme d'une liste de roturiers)
@@ -17,8 +28,8 @@ class Vassal(Personne):
     en cours de partie
     Il sera réinitialisé à chaque fin de tour
     """
-    def __init__(self, pnom: str, pres: int, parg: int, index: int, couleur: str = None):
-        Personne.__init__(self, pnom, pres, parg)
+    def __init__(self, pres: int, parg: int, index: int, pnom: str = None, couleur: str = None):
+        Personne.__init__(self, pres, parg, pnom)
         self._taux_impot = 0.10
 
         # Cet attribut servira à différencier les couleurs entre vassaux | nobles | seigneurs
@@ -31,6 +42,10 @@ class Vassal(Personne):
             if couleur in Vassal.couleurs:
                 Vassal.couleurs.remove(couleur)
             self.couleur = couleur
+
+        if pnom is None:
+            self._nom = random.choice(Vassal._noms_nobles)
+            Vassal._noms_nobles.remove(self._nom)
 
         self._pa = 0
         self.reset_pa()
@@ -59,7 +74,7 @@ class Vassal(Personne):
         self._pa -= qt
 
     def reset_pa(self):
-        self._pa = 10
+        self._pa = 100
 
     @property
     def dico_villages(self):
@@ -147,12 +162,12 @@ class Vassal(Personne):
 
         return impot_total_arg, impot_total_res
 
-    def ajouter_village(self, pid: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
+    def ajouter_village(self, pid: int, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Crée un village et l'ajoute à la liste des villages dirigés par le seigneur (dictionnaire)
         """
 
-        v = Village(pid, nom, l_terre)
+        v = Village(pid, l_terre)
         self._dico_villages[pid] = v
         return v
 
@@ -163,7 +178,7 @@ class Vassal(Personne):
         :param peffectif:
         """
         for _ in range(peffectif):
-            self._liste_soldats += [Soldat(prenom_aleatoire())]
+            self._liste_soldats += [Soldat()]
 
             self.gestion_argent(-ACTIONS_NAME_COST["Soldat"].argent)
             self.retirer_pa(2)
@@ -221,12 +236,11 @@ class Vassal(Personne):
         self.gestion_argent(-100)
         self.gestion_ressources(-50)
 
-    def construire_village(self, village_id: int, nom: str, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
+    def construire_village(self, village_id: int, l_terre : list[Literal["PLAIN", "MOUNTAIN", "LAKE", "FOREST"]]):
         """
         Méthode qui va ajouter un village dans la liste de villages du joueur
 
         :param village_id : l'id du village (id du carré sur la map que le joueur aura selectionné
-        :param nom: nom du village
         :param l_terre : liste des 8 terres entourant le village
         """
 
@@ -235,7 +249,7 @@ class Vassal(Personne):
         self.gestion_ressources(-150)
 
         print("ID emplacement :",village_id)
-        return self.ajouter_village(village_id, nom, l_terre)
+        return self.ajouter_village(village_id, l_terre)
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int):
         """

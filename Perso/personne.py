@@ -7,9 +7,11 @@ class Personne:
     son espérence de vie (entre 30 et 100 ans), son indice de bonheur (entre 0 et 10, initialisé à 5)
     """
 
-    def __init__(self, pnom: str, pres: int, parg: int):
+    def __init__(self, pres: int, parg: int, pnom: str = None):
         self._statut = type(self)
-        self._nom = pnom
+        if pnom is not None:
+            self._nom = pnom
+
         self._ressources = pres
         self._argent = parg
         self._age = 20

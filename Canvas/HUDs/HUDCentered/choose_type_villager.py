@@ -69,7 +69,8 @@ class ChooseTypeVillager(HUDCenteredABC):
             text="Paysan 1 PA",
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG),
-            state="hidden"
+            state="hidden",
+            justify="center"
         )
 
         # Artisan choix
@@ -81,7 +82,8 @@ class ChooseTypeVillager(HUDCenteredABC):
             text="Artisan 2 PA",
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
-            state="hidden"
+            state="hidden",
+            justify="center"
         )
 
         # Soldat choix
@@ -90,10 +92,11 @@ class ChooseTypeVillager(HUDCenteredABC):
             y0_cadre + pad_from_borders + 40,
             x1_cadre - pad_from_borders,
             y1_cadre - 20,
-            text="Soldat 2 PA",
+            text="Soldat 2 PA\n💰 : 20",
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag) + (TEMP_TAG,),
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG, TEMP_TAG,),
-            state="hidden"
+            state="hidden",
+            justify="center"
         )
 
         self.radiobutton_choice = self.canvas.add_radiobutton(
@@ -205,7 +208,7 @@ class ChooseTypeVillager(HUDCenteredABC):
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.artisan_choice_id],
                        text=f"Artisan {qt * 2} PA")
         self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.soldat_choice_id],
-                       text=f"Soldat {qt * 2} PA")
+                       text=f"Soldat {qt * 2} PA\n💰 : {qt * 20}")
 
     def griser(self, button_id: int):
         tags = list(self.canvas.gettags(button_id))
