@@ -2,6 +2,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
+from ..HUDHideable import HUDHideableABC
 from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
@@ -97,7 +98,7 @@ class BuildCity(HUDStaticABC):
         pass
 
     def cancel(self, e=None):
-        self.canvas.show_hidden_permanant_huds()
+        HUDHideableABC.show_all_hidden()
 
         self.hide_animation()
         self.canvas.game_mode = "basic"

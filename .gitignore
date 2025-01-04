@@ -1,2 +1,6 @@
 venv/
 .gitignore
+/.~lock.Compte_rendu_projet.odt#
+/classes.dot
+/Compte_rendu_projet.odt
+test2.py

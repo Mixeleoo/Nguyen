@@ -229,7 +229,8 @@ class SelfMadeCanvas(BaseCanvas):
         for item_id in self.find_withtag(TEMP_TAG):
             self.itemconfigure(item_id, state="hidden")
 
-        self.hide_all_permanant_huds()
+        from Canvas.HUDs.HUDStandard.HUDHideable import HUDHideableABC
+        HUDHideableABC.hide_all()
 
     def on_motion(self, event: tk.Event) -> None:
 
@@ -318,24 +319,6 @@ class SelfMadeCanvas(BaseCanvas):
         else:
             self.hud_enemy_village_info.show(event)
 
-    def hide_all_permanant_huds(self):
-        # On simule un clic sur le bouton qui cache les pages d'actions
-        if self.hud_actions.state == "normal":
-            self.hud_actions.bhide()
-            self.to_show_if_cancel += [self.hud_actions.bshow]
-
-        # On simule un clic sur le bouton qui cache l'historique
-        if self.hud_history.state == "normal":
-            self.hud_history.bhide()
-            self.to_show_if_cancel += [self.hud_history.bshow]
-
-    def show_hidden_permanant_huds(self):
-        # Réafficher les HUDs cachés lorsque le joueur a cliqué sur l'action pour construire un village
-        for f in self.to_show_if_cancel:
-            f()
-
-        self.to_show_if_cancel = []
-
     def land_around(self, square_id: int) -> tuple[str, ...]:
         l = ()
 
@@ -400,7 +383,8 @@ class SelfMadeCanvas(BaseCanvas):
         votre village ? Passage en mode citybuilding mgl
         """
         # On eclaircit la zone
-        self.hide_all_permanant_huds()
+        from Canvas.HUDs.HUDStandard.HUDHideable import HUDHideableABC
+        HUDHideableABC.hide_all()
 
         # On affiche le rectangle de construction
         self.hud_build_city.show_animation()
@@ -450,7 +434,8 @@ class SelfMadeCanvas(BaseCanvas):
         Uniquement s'il y a la possibilité, on cache les HUDs, et on affiche le texte disant : Où voulez-vous construire
         votre eglise ? Passage en mode churchbuilding mgl
         """
-        self.hide_all_permanant_huds()
+        from Canvas.HUDs.HUDStandard.HUDHideable import HUDHideableABC
+        HUDHideableABC.hide_all()
 
         # On affiche le rectangle de construction
         self.hud_build_church.show_animation()

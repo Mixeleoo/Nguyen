@@ -5,7 +5,8 @@ from typing import Literal
 from Canvas.self_made_canvas import SelfMadeCanvas
 
 class HUDHideableABC(ABC):
-    _instances = []
+    _instances: list["HUDHideableABC"] = []
+    _instances_hidden_to_show: list["HUDHideableABC"] = []
 
     @classmethod
     def all_hidden(cls):
@@ -15,6 +16,18 @@ class HUDHideableABC(ABC):
                 hidden = True
 
         return hidden
+
+    @classmethod
+    def hide_all(cls):
+        for instance in cls._instances:
+            if instance.state == "normal":
+                cls._instances_hidden_to_show.append(instance)
+                instance.bhide()
+
+    @classmethod
+    def show_all_hidden(cls):
+        for instance in cls._instances_hidden_to_show:
+            instance.bshow()
 
     def __init__(self, canvas: SelfMadeCanvas):
         self.canvas = canvas
