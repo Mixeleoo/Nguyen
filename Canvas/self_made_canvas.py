@@ -778,10 +778,10 @@ class SelfMadeCanvas(BaseCanvas):
             self.highlight_tag_on_click[MAP_TAG] = self.highlight_square
 
     def replace_static_hud(self, event: tk.Event):
-        self.hud_actions.replace(event)
-        self.hud_history.replace(event)
-        self.hud_top_side.replace(event)
-        self.hud_end_turn.replace(event)
+
+        from .HUDs.HUDStandard.HUDStaticABC import HUDStaticABC
+        HUDStaticABC.replace_all(event)
+
         self.hud_end_menu.replace(event)
         self.hud_start_menu.replace(event)
         self.move_back_square()
