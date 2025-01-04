@@ -1,12 +1,12 @@
 
 from .base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from parameter import *
 
 class QuantitySelector(SubHUDABC):
     _instance_counter = 0
-    def __init__(self, canvas: HUDCanvas, hud_tag: str, quantity_labeled: str,
+    def __init__(self, canvas: SelfMadeCanvas, hud_tag: str, quantity_labeled: str,
                  min_quantity: int, max_quantity: int, callback: callable = None):
         super().__init__(canvas, hud_tag)
         self._quantity_labeled = quantity_labeled

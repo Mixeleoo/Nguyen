@@ -1,11 +1,11 @@
 
 from abc import ABC, abstractmethod
 
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 
 class HUDStandardABC(ABC):
     _instance_counter = 0
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         self.canvas = canvas
         self._index = HUDStandardABC._instance_counter
         HUDStandardABC._instance_counter += 1
@@ -47,3 +47,13 @@ class HUDStandardABC(ABC):
         """
         for item_id in self.canvas.find_withtag(self.tag):
             self.canvas.itemconfigure(item_id, state="hidden")
+
+    def bbox(self):
+        return self.canvas.bbox(self.tag)
+
+
+def replace_coords(self: HUDStandardABC, x: int, y: int) -> None:
+    dx = x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
+    dy = y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
+
+    self.canvas.move(self.tag, dx, dy)

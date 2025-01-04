@@ -7,6 +7,7 @@ from .HUDTemporary import *
 from .start_menu import StartMenu
 from .end_menu import EndMenu
 from .more_info_event import MoreInfoEvent
+from .tutorial import Tutorial
 
 __all__ = [
     name for name, obj in globals().items() if not name.startswith('_')

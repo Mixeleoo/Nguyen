@@ -141,7 +141,7 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         else:
             bbox = self.canvas.bbox(self.tag)
-            self.canvas.hudmobile_ilfautfaireunchoix.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.canvas.hud_ilfautfaireunchoix.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
             self.shake()
 
     def cancel(self, e=None):

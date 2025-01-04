@@ -2,11 +2,13 @@
 from PIL import Image, ImageTk, ImageEnhance
 
 from ..HUDTemporaryABC import HUDTemporaryABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from parameter import *
+from ..base import replace_coords
+
 
 class IlFautFaireUnChoix(HUDTemporaryABC):
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         super().__init__(canvas)
 
     def create(self) -> None:
@@ -57,3 +59,7 @@ class IlFautFaireUnChoix(HUDTemporaryABC):
         )
 
         self.canvas.references += [ref]
+
+    def replace(self, x: int, y: int) -> None:
+        replace_coords(self, x, y)
+        super().replace()

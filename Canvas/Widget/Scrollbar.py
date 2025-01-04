@@ -1,7 +1,7 @@
 
 import tkinter as tk
 
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from parameter import *
 
 class Scrollbar:
@@ -13,7 +13,7 @@ class Scrollbar:
         for instance in cls._instances:
             instance.default()
 
-    def __init__(self, canvas: HUDCanvas, hud_tag: str, text_group_tag: str):
+    def __init__(self, canvas: SelfMadeCanvas, hud_tag: str, text_group_tag: str):
 
         self.canvas = canvas
         self.tag = hud_tag
@@ -139,6 +139,7 @@ class Scrollbar:
         self.resize_thumb()
 
     def resize_thumb(self):
+
         coords1 = self.canvas.coords(self._rect_hiding_top_text_id)
         coords2 = self.canvas.coords(self._rect_hiding_bottom_text_id)
         coords = [coords1[0], coords1[3], coords2[2], coords2[1]]

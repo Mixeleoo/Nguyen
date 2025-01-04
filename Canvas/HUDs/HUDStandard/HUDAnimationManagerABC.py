@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 from math import ceil
 
 from Canvas.HUDs.HUDStandard import HUDStandardABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from parameter import *
 
 class HUDAnimationManager(HUDStandardABC, ABC):
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         super().__init__(canvas)
 
         self.canvas = canvas

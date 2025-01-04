@@ -1,8 +1,8 @@
 
-from Canvas.highlight_canvas import HighlightCanvas
+from Canvas.base_canvas import BaseCanvas
 
 class StringVar:
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: BaseCanvas):
         self._canvas = canvas
         self._content = ""
         self._id = None

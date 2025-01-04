@@ -123,6 +123,10 @@ class Village :
                 effectif += 1
         return round(bonheur / effectif, 2)
 
+    @property
+    def nb_eglises(self):
+        return len(self._liste_eglises)
+
     def recuperer_recoltes(self):
         """
         Méthode qui permet de gérer la récupération des ressources sur les terres autour du village par chacun des villageois

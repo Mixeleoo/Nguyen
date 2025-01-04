@@ -1,10 +1,10 @@
 
 from abc import ABC, abstractmethod
 
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 
 class SubHUDABC(ABC):
-    def __init__(self, canvas: HUDCanvas, tag: str):
+    def __init__(self, canvas: SelfMadeCanvas, tag: str):
         self.canvas = canvas
         self.tag = tag
 

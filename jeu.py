@@ -94,7 +94,7 @@ class Jeu:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
-        choix_ev = 6#randint(1,100)
+        choix_ev = randint(1,100)
 
         if 1 <= choix_ev <= 5:
             # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent

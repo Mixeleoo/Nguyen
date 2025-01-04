@@ -1,11 +1,11 @@
 
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from jeu import Jeu, EventInfo
 from parameter import couleurs, PLAINE_TAG, MAP_TAG, set_tags
 
 
 class EventManager:
-    def __init__(self, jeu: Jeu, canvas: HUDCanvas):
+    def __init__(self, jeu: Jeu, canvas: SelfMadeCanvas):
         self.jeu = jeu
         self.canvas = canvas
 

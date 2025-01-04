@@ -2,11 +2,11 @@
 from abc import ABC, abstractmethod
 
 from Canvas.HUDs.HUDStandard.base import HUDStandardABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from Canvas.HUDs.HUDStandard.HUDAnimationManagerABC import HUDAnimationManager
 
 class HUDStaticABC(HUDAnimationManager, ABC):
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         super().__init__(canvas)
 
     @abstractmethod

@@ -50,7 +50,7 @@ class CestPasTonVillage(HUDTemporaryABC):
 
         self.canvas.references += [ref]
 
-        self.id = self.canvas.create_text_in_rectangle(
+        self.canvas.create_text_in_rectangle(
             x0=x0_cadre,
             y0=y0_cadre,
             x1=x1_cadre,
@@ -61,4 +61,10 @@ class CestPasTonVillage(HUDTemporaryABC):
             state="hidden"
         )
 
-    def replace(self, x0: float, y0: float) -> None: HUDInformativeABC.replace(self, x0 + 15, y0 + 45)
+    def replace(self, x: float, y: float) -> None:
+        dx = x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
+        dy = y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
+
+        self.canvas.move(self.tag, dx, dy)
+
+        super().replace()

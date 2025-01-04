@@ -46,7 +46,7 @@ class ChooseTaxes(HUDCenteredABC):
 
         if not self.choose_nobles.selected_option and not self.choose_villages.selected_option:
             bbox = self.canvas.bbox(self.tag)
-            self.canvas.hudmobile_ilfautfaireunchoix.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
+            self.canvas.hud_ilfautfaireunchoix.show(bbox[2] + 60, (bbox[3] + bbox[1]) // 2)
             self.shake()
 
         else:

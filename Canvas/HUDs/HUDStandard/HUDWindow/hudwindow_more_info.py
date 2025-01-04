@@ -1,7 +1,7 @@
 
 from Territoire.village import Village
 from .base import HUDWindowABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from Canvas.Widget.Scrollbar import Scrollbar
 
 
@@ -14,11 +14,10 @@ En fait on peut :
 
 
 class HUDMoreInfoWindow(HUDWindowABC):
-    def __init__(self, canvas: HUDCanvas, village: Village):
+    def __init__(self, canvas: SelfMadeCanvas, village: Village):
         super().__init__(canvas)
 
         self._village = village
-        self.scrollbar = Scrollbar(self.canvas, self.tag, "MoreInfoText")
 
     @property
     def title(self):
@@ -32,19 +31,19 @@ class HUDMoreInfoWindow(HUDWindowABC):
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = super().create()
         y0_cadre += 20
 
-        self.scrollbar.create(x0_cadre, y0_cadre, x1_cadre, y1_cadre, is_temp=True, state="hidden")
-
         return x0_cadre, y0_cadre, x1_cadre, y1_cadre
 
     def replace(self, *args) -> None:
         t = f"🧑🏻‍🌾 {self._village.population}/{self._village.population_max}\n"\
             f"🍴 {self._village.ressources}\n"\
-            f"😊 {self._village.bonheur_general}\n(vachement plus d'info ici n'est ce pas)"
+            f"😊 {self._village.bonheur_general}\n"\
+            f"⛪ {self._village.nb_eglises}\n"\
+            f"(vachement plus d'info ici n'est ce pas)"
 
         self._text.set(t)
 
 class HUDWindowSupervisor:
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         self.canvas = canvas
 
         self.windows: dict[str: HUDWindowABC] = {}

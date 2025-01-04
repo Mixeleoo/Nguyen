@@ -2,11 +2,13 @@
 from PIL import Image, ImageTk, ImageEnhance
 
 from ..HUDTemporaryABC import HUDTemporaryABC
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from parameter import *
+from ..base import replace_coords
+
 
 class TasPasAssezDe(HUDTemporaryABC):
-    def __init__(self, canvas: HUDCanvas, title: str):
+    def __init__(self, canvas: SelfMadeCanvas, title: str):
         """
         title: str qui suivra la phrase : "T'as pas assez d"
         """
@@ -66,9 +68,5 @@ class TasPasAssezDe(HUDTemporaryABC):
         )
 
     def replace(self, x: int, y: int) -> None:
-        dx = x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
-        dy = y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
-
-        self.canvas.move(self.tag, dx, dy)
-
+        replace_coords(self, x, y)
         super().replace()

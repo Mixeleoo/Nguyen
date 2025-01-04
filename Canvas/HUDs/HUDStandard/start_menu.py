@@ -32,6 +32,7 @@ class StartMenu(HUDStandardABC):
         self.no_id = 0
 
         self.dict_difficulty: [int, Difficulty] = {}
+        self.dict_tutoriel: [int, bool] = {}
 
     def create(self, geometry_width, geometry_height):
 
@@ -146,7 +147,7 @@ class StartMenu(HUDStandardABC):
             center_x + 200, center_y + 100, tags=set_tags(hud_tag=self.tag), fill=FILL_TEXT, text="Voulez-vous du tutoriel ?"
         )
 
-        self.radiobutton_tutoriel.add_option(self.canvas.create_text_in_rectangle(
+        rect_id = self.canvas.create_text_in_rectangle(
             center_x + 160,
             center_y + 120,
             center_x + 200,
@@ -154,7 +155,10 @@ class StartMenu(HUDStandardABC):
             text="Oui",
             text_tags=set_tags(hud_tag=self.tag) + (TEXT_TAG,),
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag),
-        ))
+        )
+
+        self.radiobutton_tutoriel.add_option(rect_id)
+        self.dict_tutoriel[rect_id] = True
 
         self.no_id = self.canvas.create_text_in_rectangle(
             center_x + 200,
@@ -166,7 +170,8 @@ class StartMenu(HUDStandardABC):
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag),
         )
 
-        self.radiobutton_tutoriel.add_option(rect_id)
+        self.radiobutton_tutoriel.add_option(self.no_id)
+        self.dict_tutoriel[self.no_id] = False
 
     def replace(self, *args) -> None:
         self.canvas.tag_raise(self.tag)
@@ -181,11 +186,14 @@ class StartMenu(HUDStandardABC):
         self.radiobutton_difficulty.toggle_switch_option(self.diff_id)
         self.canvas.dtag("highlight", "highlight")
 
-    def get_color_choice(self):
+    def get_color_choice(self) -> str | None:
         if self.radiobutton_color.currently_selected is not None:
             return self.canvas.gettags(self.radiobutton_color.currently_selected)[COLOR_TAG_INDEX]
 
         else: return None
 
-    def get_difficulty_choice(self):
+    def get_difficulty_choice(self) -> int:
         return self.dict_difficulty[self.radiobutton_difficulty.currently_selected].nb_nobles
+
+    def get_tutoriel_choice(self) -> bool:
+        return self.dict_tutoriel[self.radiobutton_tutoriel.currently_selected]

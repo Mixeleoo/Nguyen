@@ -1,11 +1,11 @@
 
 from abc import ABC
 
-from Canvas.hud_canvas import HUDCanvas
+from Canvas.self_made_canvas import SelfMadeCanvas
 from Canvas.HUDs.HUDStandard.base import HUDStandardABC
 
 class HUDTemporaryABC(HUDStandardABC, ABC):
-    def __init__(self, canvas: HUDCanvas):
+    def __init__(self, canvas: SelfMadeCanvas):
         super().__init__(canvas)
 
         self.after_hide_id = None

@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 
 from parameter import *
-from Canvas.highlight_canvas import HighlightCanvas
+from Canvas.base_canvas import BaseCanvas
 
 
 class SelectorsABC(ABC):
@@ -14,7 +14,7 @@ class SelectorsABC(ABC):
         for instance in cls._instances:
             instance.default()
 
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: BaseCanvas):
 
         self.canvas = canvas
 
@@ -40,9 +40,12 @@ class SelectorsABC(ABC):
         self.canvas.itemconfigure(option_id, tags=tags)
         self.nb_options += 1
 
+    @abstractmethod
     def default(self):
-        self.nb_options = 0
-        self.currently_selected = None
+        """
+        Méthode appelée lors du reset des choix par défaut
+        """
+        pass
 
     @abstractmethod
     def reset(self) -> None:
@@ -85,8 +88,12 @@ class SelectorsABC(ABC):
 
 
 class Radiobutton(SelectorsABC):
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: BaseCanvas):
         super().__init__(canvas)
+
+    def default(self):
+        self.nb_options = 0
+        self.reset()
 
     def reset(self):
         self.griser()
@@ -122,10 +129,14 @@ class Radiobutton(SelectorsABC):
 
 
 class Checkbutton(SelectorsABC):
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: BaseCanvas):
         super().__init__(canvas)
 
         self.currently_selected = []
+
+    def default(self):
+        self.nb_options = 0
+        self.reset()
 
     def reset(self) -> None:
 
@@ -176,7 +187,7 @@ class SelectorSupervisor:
     """
     Cette classe servira à gérer les différents radiobutton sur le canvas
     """
-    def __init__(self, canvas: HighlightCanvas):
+    def __init__(self, canvas: BaseCanvas):
         self.canvas = canvas
         self.selectors: dict[str, Radiobutton | Checkbutton] = {}
 
