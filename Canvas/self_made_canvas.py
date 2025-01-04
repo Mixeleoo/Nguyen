@@ -57,10 +57,6 @@ class SelfMadeCanvas(BaseCanvas):
         self.hud_taspasassezdePA = HUDStandard.TasPasAssezDe(self, "e PA")
         self.hud_taspasassezdargent = HUDStandard.TasPasAssezDe(self, "'argent")
         self.hud_taspasassezderessources = HUDStandard.TasPasAssezDe(self, "e ressources")
-        self.hud_start_menu = HUDStandard.StartMenu(self)
-        self.hud_end_menu = HUDStandard.EndMenu(self)
-        self.lose = self.hud_end_menu.lose
-        self.win = self.hud_end_menu.win
 
         self.hudmobile_more_info_event = HUDStandard.MoreInfoEvent(self)
 
@@ -77,6 +73,11 @@ class SelfMadeCanvas(BaseCanvas):
         self.hudcentered_results_war = HUDCentered.ResultsWar(self)
 
         self.hudwindow_supervisor = HUDWindowSupervisor(self)
+
+        self.hud_end_menu = HUDStandard.EndMenu(self)
+        self.lose = self.hud_end_menu.lose
+        self.win = self.hud_end_menu.win
+        self.hud_start_menu = HUDStandard.StartMenu(self)
 
 
         """
@@ -249,39 +250,8 @@ class SelfMadeCanvas(BaseCanvas):
     def create_HUDs(self, geometry_width: int, geometry_height: int):
 
         # HUDs permanants
-        self.hud_actions.create(geometry_width, geometry_height)
-        self.hud_history.create(geometry_width, geometry_height)
-        self.hud_build_city.create(geometry_width, geometry_height)
-        self.hud_build_church.create(geometry_width, geometry_height)
-        self.hud_event.create(geometry_width, geometry_height)
-        self.hud_end_turn.create(geometry_width, geometry_height)
-        self.hud_end_menu.create(geometry_width, geometry_height)
-
-        # HUDs
-        self.hud_tutoriel.create()
-        self.hudinfo_city_full.create()
-        self.hud_cestpastonvillage.create()
-        self.hud_ally_village_info.create()
-        self.hud_enemy_village_info.create()
-        self.hud_yavillage.create()
-        self.hud_ilfautfaireunchoix.create()
-        self.hud_taspasassezdePA.create()
-        self.hud_taspasassezdargent.create()
-        self.hud_taspasassezderessources.create()
-        self.hudmobile_more_info_event.create(geometry_width, geometry_height)
-
-        # HUD centrés
-        self.hudmobile_choose_type_villager.create()
-        self.hudmobile_choose_village.create()
-        self.hudmobile_choose_noble_vassaliser.create()
-        self.hudmobile_choose_taxes.create()
-        self.hudmobile_choose_arg_res.create()
-        self.hudcentered_choose_noble_war.create()
-        self.hudcentered_accept_vassal.create()
-        self.hudcentered_results_war.create()
-
-        self.hud_top_side.create(geometry_width, geometry_height)
-        self.hud_start_menu.create(geometry_width, geometry_height)
+        from .HUDs.HUDStandard.base import HUDStandardABC
+        HUDStandardABC.create_all(geometry_width, geometry_height)
         self.hud_start_menu.show()
 
     def on_drag_map(self, event: tk.Event):

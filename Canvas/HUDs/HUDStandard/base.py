@@ -5,10 +5,18 @@ from Canvas.self_made_canvas import SelfMadeCanvas
 
 class HUDStandardABC(ABC):
     _instance_counter = 0
+    _instances: list["HUDStandardABC"] = []
+
+    @classmethod
+    def create_all(cls, geometry_width: int, geometry_height: int) -> None:
+        for instance in cls._instances:
+            instance.create(geometry_width, geometry_height)
+
     def __init__(self, canvas: SelfMadeCanvas):
         self.canvas = canvas
         self._index = HUDStandardABC._instance_counter
         HUDStandardABC._instance_counter += 1
+        HUDStandardABC._instances.append(self)
 
     @property
     def tag(self):

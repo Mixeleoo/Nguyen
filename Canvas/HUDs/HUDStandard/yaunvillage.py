@@ -9,7 +9,7 @@ class YaUnVillage(HUDStandardABC):
 
         self.triangle_id = 0
 
-    def create(self) -> None:
+    def create(self, *args) -> None:
         # On va créer l'HUDs sur la première case
         village_coords = self.canvas.coords(self.canvas.find_withtag(MAP_TAG)[0])
 

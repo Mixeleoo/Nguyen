@@ -12,7 +12,7 @@ class AcceptVassal(HUDCenteredABC):
         self._text = StringVar(self.canvas)
         self.noble_proposal: Noble | None = None
 
-    def create(self):
+    def create(self, *args):
 
         width = 380
         height = 60

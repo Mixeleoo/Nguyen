@@ -35,7 +35,7 @@ class Tutorial(HUDStandardABC):
             self._end
         ]
 
-    def create(self) -> None:
+    def create(self, *args) -> None:
 
         width = get_width_text("salut comment ça va ")
         height = 20

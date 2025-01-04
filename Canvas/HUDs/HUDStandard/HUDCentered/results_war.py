@@ -10,7 +10,7 @@ class ResultsWar(HUDCenteredABC):
 
         self._text = StringVar(self.canvas)
 
-    def create(self):
+    def create(self, *args):
 
         width = 380
         height = 60

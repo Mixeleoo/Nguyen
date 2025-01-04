@@ -19,7 +19,7 @@ class ChooseNobleVassaliser(HUDCenteredABC):
         self.ok_button: Optional[Button] = None
         self.cancel_button: Optional[Button] = None
 
-    def create(self):
+    def create(self, *args):
 
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = self.choose_noble.create(0, 0)
 

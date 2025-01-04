@@ -15,7 +15,7 @@ class TasPasAssezDe(HUDTemporaryABC):
         super().__init__(canvas)
         self.title = title
 
-    def create(self) -> None:
+    def create(self, *args) -> None:
 
         text = "T'as pas assez d" + self.title
 

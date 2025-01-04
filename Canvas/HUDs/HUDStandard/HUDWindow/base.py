@@ -50,7 +50,7 @@ class HUDWindowABC(HUDStandardABC, ABC):
         """
         pass
 
-    def create(self) -> tuple[int, int, int, int]:
+    def create(self, *args) -> tuple[int, int, int, int]:
 
         width = 300
         height = 150

@@ -14,7 +14,7 @@ class EnemyVillageInfo(HUDStandardABC):
         self.text = StringVar(self.canvas)
         self._rect_id = 0
 
-    def create(self):
+    def create(self, *args):
 
         self._rect_id = self.canvas.create_rectangle(
             0,

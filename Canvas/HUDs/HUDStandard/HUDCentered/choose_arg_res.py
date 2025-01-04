@@ -18,7 +18,7 @@ class ChooseArgRes(HUDCenteredABC):
             max_quantity=0
         )
 
-    def create(self):
+    def create(self, *args):
 
         width = 500
         height = 100

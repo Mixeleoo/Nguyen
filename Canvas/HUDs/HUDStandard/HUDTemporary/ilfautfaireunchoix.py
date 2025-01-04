@@ -11,7 +11,7 @@ class IlFautFaireUnChoix(HUDTemporaryABC):
     def __init__(self, canvas: SelfMadeCanvas):
         super().__init__(canvas)
 
-    def create(self) -> None:
+    def create(self, *args) -> None:
 
         text = "Il faut faire un choix"
 

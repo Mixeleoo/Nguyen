@@ -14,7 +14,7 @@ class AllyVillageInfo(HUDStandardABC):
         self.more_info_button_id = 0
         self.texts: list[StringVar] = []
 
-    def create(self):
+    def create(self, *args):
 
         width = 120
 

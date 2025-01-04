@@ -24,7 +24,7 @@ class ChooseTypeVillager(HUDCenteredABC):
 
         self.radiobutton_choice: Optional[Radiobutton] = None
 
-    def create(self):
+    def create(self, *args):
 
         height = 150
         width = 400

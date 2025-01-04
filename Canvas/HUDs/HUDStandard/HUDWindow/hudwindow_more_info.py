@@ -27,7 +27,7 @@ class HUDMoreInfoWindow(HUDWindowABC):
     def id(self) -> int:
         return self._village.id
 
-    def create(self) -> tuple[int, int, int, int]:
+    def create(self, *args) -> tuple[int, int, int, int]:
         x0_cadre, y0_cadre, x1_cadre, y1_cadre = super().create()
         y0_cadre += 20
 
