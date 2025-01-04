@@ -1,16 +1,17 @@
 
 import tkinter as tk
 
+from Canvas.Widget.Button import Button
 from Canvas.Widget.Scrollbar import Scrollbar
+from ..HUDHideable import HUDHideableABC
 from ..HUDStaticABC import HUDStaticABC
-from parameter import *
+from parameter import HISTORY_TEXT, Position, HEIGHT_BOTTOM_HUD, WIDTH_HISTORY_HUD, SHOW_OR_HIDE_HISTORY_TAG, PADY_BUILD_CITY_HUD, FILL_ACTION_BOX, set_tags
 
-class History(HUDStaticABC):
+class History(HUDStaticABC, HUDHideableABC):
     def __init__(self, canvas):
-        super().__init__(canvas)
+        HUDHideableABC.__init__(self, canvas)
+        HUDStaticABC.__init__(self, canvas)
 
-        self.state: Literal["normal", "hidden"] = "normal"
-        self.hide_button_id = None
         self.background_rect_id = None
 
         self.scrollbar = Scrollbar(self.canvas, self.tag, HISTORY_TEXT)
@@ -25,6 +26,10 @@ class History(HUDStaticABC):
     def arrival_pos_hide(self) -> Position: return Position(self.canvas.master.winfo_width() - 5, 0)
     @property
     def curr_hide_pos(self) -> Position: return Position(self.canvas.coords(SHOW_OR_HIDE_HISTORY_TAG)[2], 0)
+    @property
+    def hide_symbol(self) -> str: return "►"
+    @property
+    def show_symbol(self) -> str: return "◄"
 
     def create(self, geometry_width: int, geometry_height: int):
 
@@ -45,7 +50,8 @@ class History(HUDStaticABC):
         )
 
         # Rectangle pour ranger l'historique
-        self.hide_button_id = self.canvas.add_button(
+        self.hide_button_id = Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name=SHOW_OR_HIDE_HISTORY_TAG,
             func_triggered=self.show_or_hide
@@ -69,28 +75,5 @@ class History(HUDStaticABC):
         self.canvas.move(
             self.tag,
             event.width - self.canvas.master.previous_geometry[0],
-            PADY_BUILD_CITY_HUD - self.canvas.coords(self.background_rect_id)[1]
+            0
         )
-
-    def bhide(self):
-        """
-        La phase before hide, qui consiste à changer l'état du HUDs en "hidden" et lancer l'animation
-        """
-        self.state = "hidden"
-        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="◄")
-        self.hide_animation()
-
-    def bshow(self):
-        """
-        La phase before show, qui consiste à changer l'état du HUDs en "normal" et lancer l'animation
-        """
-        self.state = "normal"
-        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="►")
-        self.show_animation()
-
-    def show_or_hide(self, e=None):
-        if self.state == "normal":
-            self.bhide()
-
-        else:
-            self.bshow()

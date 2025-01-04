@@ -64,7 +64,7 @@ class ButtonABC(ABC):
 
 
 class Button(ButtonABC):
-    def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str,
+    def __init__(self, canvas: BaseCanvas, hud_tag: str, trigger_name: str = NOTHING_TAG,
                  func_triggered: callable = dummy,
                  for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")):
 
@@ -129,72 +129,3 @@ class Button(ButtonABC):
 
         self.canvas.itemconfigure(self.id, tags=tags)
         self.canvas.itemconfigure(self.id, fill=fill_brighter[tags[COLOR_TAG_INDEX]])
-
-class ButtonSupervisor:
-    def __init__(self, canvas: BaseCanvas):
-        self.canvas = canvas
-
-    def add(
-            self, hud_tag: str, trigger_name: str = NOTHING_TAG,
-            func_triggered: callable = dummy,
-            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
-    ) -> Button:
-        """
-        Méthode qui servira à ajouter des boutons
-        """
-
-        b = Button(
-            self.canvas,
-            hud_tag,
-            trigger_name,
-            func_triggered,
-            for_which_game_mode
-        )
-
-        return b
-
-    def create_ok_button(
-            self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
-            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
-            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
-    ) -> Button:
-        """
-        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
-        Emplacement
-        """
-        text_width = get_width_text("OK")
-
-        b = self.add(
-            hud_tag=hud_tag,
-            trigger_name="ok_" + hud_tag,
-            func_triggered=func_triggered,
-            for_which_game_mode=for_which_game_mode
-        )
-        b.draw(
-            x1_cadre - text_width + 5, y1_cadre - 15, x1_cadre + 5, y1_cadre + 5,
-            text="OK", fill=FILL_OK, state=state, is_temp=is_temp
-        )
-        return b
-
-    def create_cancel_button(
-            self, x0_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
-            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
-            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
-    ) -> Button:
-        """
-        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
-        Emplacement
-        """
-        text_width = get_width_text("Annuler")
-
-        b = self.add(
-            hud_tag=hud_tag,
-            trigger_name="cancel_" + hud_tag,
-            func_triggered=func_triggered,
-            for_which_game_mode=for_which_game_mode
-        )
-        b.draw(
-            x0_cadre - 5, y1_cadre - 15, x0_cadre + text_width - 5, y1_cadre + 5,
-            text="Annuler", fill=FILL_CANCEL, state=state, is_temp=is_temp
-        )
-        return b

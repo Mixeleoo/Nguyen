@@ -34,6 +34,8 @@ class Interface(tk.Tk):
         self.canvas.pack()
 
         # Quand on redimensionne la fenêtre, on veut que les carrés se replacent en fonction de la nouvelle taille
+
+        print(geometry_width, geometry_height)
         self.previous_geometry = (geometry_width, geometry_height)
         self.bind("<Configure>", self.on_configure_screen)
 

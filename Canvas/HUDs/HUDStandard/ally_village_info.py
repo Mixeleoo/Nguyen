@@ -3,6 +3,7 @@ import tkinter as tk
 
 from .base import HUDStandardABC
 from parameter import *
+from ...Widget.Button import Button
 from ...Widget.StringVar import StringVar
 
 
@@ -12,9 +13,6 @@ class AllyVillageInfo(HUDStandardABC):
 
         self.more_info_button_id = 0
         self.texts: list[StringVar] = []
-
-        # PYREVERSE
-        #self.texts = StringVar()
 
     def create(self):
 
@@ -49,7 +47,8 @@ class AllyVillageInfo(HUDStandardABC):
 
             y = int(ny)
 
-        self.more_info_button_id = self.canvas.add_button(
+        self.more_info_button_id = Button(
+            self.canvas,
             hud_tag=self.tag
         ).draw(
             x0=0,

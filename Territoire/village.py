@@ -56,22 +56,13 @@ class Village :
         # Les roturiers que possède le noble
         self._liste_roturier : list[Roturier] = []
 
-        # PYREVERSE
-        #self._liste_roturier = Roturier()
-
         # Liste des églises dans le village
         self._liste_eglises : list[Eglise] = []
-
-        # PYREVERSE
-        #self._liste_eglises = Eglise()
 
         # Liste du type des 8 terres entourant le village
         self._liste_terres: list[Terre] = []
 
         self.facteur_recolte = 1
-
-        # PYREVERSE
-        #self._liste_terres = Terre()
 
         for type_terre in l_terres:
             self._liste_terres.append(Terre(type_terre))

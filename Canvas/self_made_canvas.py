@@ -1,6 +1,8 @@
 
 import tkinter as tk
+from typing import Literal
 
+from Canvas.Widget.Button import Button
 from Canvas.base_canvas import BaseCanvas
 from Perso import Noble
 from jeu import ActionBotInfo
@@ -128,7 +130,7 @@ class SelfMadeCanvas(BaseCanvas):
 
         # Fonction lancée lors d'un relâchement du click gauche, ne se lance que si la souris n'a pas été déplacée
         # Pendant le clic (grâce à la variable self.has_mouse_moved)
-        self.bind("<ButtonRelease-1>", self.on_release)  # Relâchement
+        self.bind("<ButtonRelease-1>", self.on_release_left)  # Relâchement
 
 
     #                                               CLIC GAUCHE #
@@ -178,7 +180,7 @@ class SelfMadeCanvas(BaseCanvas):
         self.mouse_coor = (event.x, event.y)
 
     #                                          RELACHEMENT CLIC GAUCHE                                           #
-    def on_release(self, event: tk.Event) -> None:
+    def on_release_left(self, event: tk.Event) -> None:
 
         tags = self.gettags("active")
 
@@ -221,10 +223,13 @@ class SelfMadeCanvas(BaseCanvas):
 
     #                                                 CLIC DROIT                                                 #
     def on_click_right(self, event: tk.Event) -> None:
+        """
+        Méthode appelée lors de l'évènement clic droit, "efface" tout HUD sur l'écran.
+        """
         for item_id in self.find_withtag(TEMP_TAG):
             self.itemconfigure(item_id, state="hidden")
 
-        self.hud_event.show_animation()
+        self.hide_all_permanant_huds()
 
     def on_motion(self, event: tk.Event) -> None:
 
@@ -323,9 +328,6 @@ class SelfMadeCanvas(BaseCanvas):
         if self.hud_history.state == "normal":
             self.hud_history.bhide()
             self.to_show_if_cancel += [self.hud_history.bshow]
-
-        self.hud_end_turn.hide_animation()
-        self.to_show_if_cancel += [self.hud_end_turn.show_animation]
 
     def show_hidden_permanant_huds(self):
         # Réafficher les HUDs cachés lorsque le joueur a cliqué sur l'action pour construire un village
@@ -619,7 +621,7 @@ class SelfMadeCanvas(BaseCanvas):
         )
 
         if v is not None:
-            self.hudinfo_city_full.show()
+            self.hudinfo_city_full.show(v)
             return
 
         # Ajout du texte descriptif de l'action dans l'historique.
@@ -825,4 +827,54 @@ class SelfMadeCanvas(BaseCanvas):
         self.hud_history.replace(event)
         self.hud_top_side.replace(event)
         self.hud_end_turn.replace(event)
+        self.hud_end_menu.replace(event)
+        self.hud_start_menu.replace(event)
         self.move_back_square()
+
+    def create_ok_button(
+            self, x1_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
+            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
+            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
+    ) -> Button:
+        """
+        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
+        Emplacement
+        """
+        text_width = get_width_text("OK")
+
+        b = Button(
+            self,
+            hud_tag=hud_tag,
+            trigger_name="ok_" + hud_tag,
+            func_triggered=func_triggered,
+            for_which_game_mode=for_which_game_mode
+        )
+        b.draw(
+            x1_cadre - text_width + 5, y1_cadre - 15, x1_cadre + 5, y1_cadre + 5,
+            text="OK", fill=FILL_OK, state=state, is_temp=is_temp
+        )
+        return b
+
+    def create_cancel_button(
+            self, x0_cadre: int | float, y1_cadre: int | float, hud_tag: str, func_triggered: callable = None,
+            state: Literal["normal", "hidden", "disabled"] = "normal", is_temp: bool = False,
+            for_which_game_mode: tuple[str] = ("basic", "build_city", "build_church")
+    ) -> Button:
+        """
+        Méthode qui créera un bouton, avec le comportement, l'emplacement et la couleur d'un OK bouton
+        Emplacement
+        """
+        text_width = get_width_text("Annuler")
+
+        b = Button(
+            self,
+            hud_tag=hud_tag,
+            trigger_name="cancel_" + hud_tag,
+            func_triggered=func_triggered,
+            for_which_game_mode=for_which_game_mode
+        )
+        b.draw(
+            x0_cadre - 5, y1_cadre - 15, x0_cadre + text_width - 5, y1_cadre + 5,
+            text="Annuler", fill=FILL_CANCEL, state=state, is_temp=is_temp
+        )
+        return b

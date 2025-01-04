@@ -11,9 +11,6 @@ class RadiobuttonInPageABC(SelectorInPageABC, ABC):
         self.last_radiobutton_index_choice = None
         self.radiobuttons: list[Radiobutton] = [self.canvas.add_radiobutton()]
 
-        # PYREVERSE
-        #self.radiobuttons = Radiobutton()
-
     @property
     def selectors(self) -> list[Radiobutton]:
         return self.radiobuttons

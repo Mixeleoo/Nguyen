@@ -1,6 +1,7 @@
 
 import tkinter as tk
 import random
+from typing import Literal
 
 from parameter import *
 from Canvas.create_biome_map import create_biome_map
@@ -42,13 +43,6 @@ class BaseCanvas(tk.Canvas):
         # Vairblae test
         self.id_village = 0
 
-        from Canvas.Widget.Button import ButtonSupervisor
-
-        self.buttons = ButtonSupervisor(self)
-        self.add_button = self.buttons.add
-        self.create_ok_button = self.buttons.create_ok_button
-        self.create_cancel_button = self.buttons.create_cancel_button
-
         from Canvas.Widget.Radiobutton import SelectorSupervisor
 
         self.radiobuttons = SelectorSupervisor(self)
@@ -58,7 +52,6 @@ class BaseCanvas(tk.Canvas):
         """
                                                 HIGHLIGHT
         """
-
 
         self.highlight_tag_on_click = {
             MAP_TAG: self.highlight_square,
@@ -387,4 +380,3 @@ class BaseCanvas(tk.Canvas):
         self.highlight_tag_on_click[tag] = on_click
         self.highlight_tag_on_drag[tag] = on_drag
         self.highlight_tag_on_release[tag] = on_release
-

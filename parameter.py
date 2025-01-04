@@ -2,9 +2,8 @@ from collections import namedtuple
 from dataclasses import dataclass
 # -*- coding: utf-8 -*-
 
-from random import randint, choice
+from random import randint
 from tkinter import font
-from typing import Literal
 
 MAX_WIDTH = 1024
 MAX_HEIGHT = 600
@@ -207,12 +206,6 @@ def eclaircir_couleur(hex_color: str, facteur: float) -> str:
 
     # Retourner le nouveau hex
     return f"#{r:02x}{g:02x}{b:02x}"
-
-
-# Exemple d'utilisation
-couleur_claire = eclaircir_couleur("#123456", 0.3)
-print(couleur_claire)  # Affiche une couleur éclaircie
-
 
 def set_tags(highlight_tag=NOTHING_TAG, trigger_tag=NOTHING_TAG, drag_tag=NOTHING_TAG,
              color_tag=FILL_ACTION_BOX, hud_tag=NOTHING_TAG, group_tag=""):

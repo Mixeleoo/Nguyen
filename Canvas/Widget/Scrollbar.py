@@ -1,8 +1,10 @@
 
 import tkinter as tk
+from typing import Literal
 
 from Canvas.self_made_canvas import SelfMadeCanvas
-from parameter import *
+from parameter import (TEMP_TAG, FILL_ACTION_BOX, set_tags, DRAGGABLE_TAG, SCROLLBAR_TAG, get_width_text,
+                       separer_chaine_sans_couper, WIDTH_HISTORY_HUD, FILL_TEXT, GROUP_TAG_INDEX)
 
 class Scrollbar:
     _instance_counter = 0

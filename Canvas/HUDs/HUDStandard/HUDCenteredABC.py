@@ -21,15 +21,14 @@ class HUDCenteredABC(HUDStandardABC, ABC):
     def replace(self, *args) -> None:
 
         super().replace(*args)
-
         self.update(*args)
 
-        bbox = self.canvas.bbox(self.tag)
+        bbox = self.bbox()
+        if bbox is not None:
+            dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+            dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
 
-        dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
-        dy = self.canvas.master.winfo_height() // 2 - (bbox[3] + bbox[1]) // 2
-
-        self.canvas.move(self.tag, dx, dy)
+            self.canvas.move(self.tag, dx, dy)
 
     def shake(self):
         self.canvas.move(self.tag, randint(-3, 3), randint(-3, 3))

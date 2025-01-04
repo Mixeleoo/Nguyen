@@ -1,34 +1,27 @@
 
 import tkinter as tk
 
+from Canvas.Widget.Button import Button
+from ..HUDHideable import HUDHideableABC
 from ..HUDStaticABC import HUDStaticABC
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
 
-class Actions(HUDStaticABC):
+class Actions(HUDStaticABC, HUDHideableABC):
     def __init__(self, canvas):
-        super().__init__(canvas)
+        HUDHideableABC.__init__(self, canvas)
+        HUDStaticABC.__init__(self, canvas)
+
         self.num_page = 1
 
-        self.state: Literal["normal", "hidden"] = "normal"
-        self.hide_button_id = 0
         self.actions_rectangle_ids = []
 
         self.t_page = StringVar(canvas)
         self.ts_title_action: list[StringVar] = []
 
-        # PYREVERSE
-        #self.ts_title_action = StringVar()
-
         self.ts_additionnal_cost: list[StringVar] = []
 
-        # PYREVERSE
-        #self.ts_additionnal_cost = StringVar()
-
         self.ts_PA: list[StringVar] = []
-
-        # PYREVERSE
-        #self.ts_PA = StringVar()
 
         self.title_font = self.canvas.font.copy()
         self.title_font.config(weight="bold")
@@ -43,6 +36,10 @@ class Actions(HUDStaticABC):
     def arrival_pos_show(self) -> Position: return Position(0, self.canvas.master.winfo_height() - PADY_BOTTOM_HUD - 10)
     @property
     def arrival_pos_hide(self) -> Position: return Position(0, self.canvas.master.winfo_height() - 5)
+    @property
+    def hide_symbol(self) -> str: return "▼"
+    @property
+    def show_symbol(self) -> str: return "▲"
 
     def create(self, geometry_width, geometry_height):
 
@@ -123,7 +120,8 @@ class Actions(HUDStaticABC):
         self.t_page.set(f"page : 1 / {len(ACTION_FOR_YOUR_TURN) // 2}")
 
         # Bouton pour changer de page (précédente)
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name=CHANGE_PAGE_MINUS,
             func_triggered=self.on_change_page,
@@ -137,7 +135,8 @@ class Actions(HUDStaticABC):
         )
 
         # Bouton pour changer de page (suivante)
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name=CHANGE_PAGE_PLUS,
             func_triggered=self.on_change_page,
@@ -151,7 +150,8 @@ class Actions(HUDStaticABC):
         )
 
         # Bouton pour cacher l'hud du bas
-        self.hide_button_id = self.canvas.add_button(
+        self.hide_button_id = Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name=SHOW_OR_HIDE_PAGE_TAG,
             func_triggered=self.show_or_hide,
@@ -177,37 +177,23 @@ class Actions(HUDStaticABC):
             event.height - self.canvas.master.previous_geometry[1]
         )
 
-    def bhide(self):
-        """
-        La phase before hide, qui consiste à changer l'état du HUDs en "hidden" et lancer l'animation
-        """
-        self.state = "hidden"
-        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▲")
-        self.hide_animation()
+    def next_page(self):
+        self.num_page = (self.num_page + 1) if self.num_page + 1 <= NB_ACTIONS // NB_ACTION_PER_PAGE else NB_ACTIONS // NB_ACTION_PER_PAGE
 
-    def bshow(self):
-        """
-        La phase before show, qui consiste à changer l'état du HUDs en "normal" et lancer l'animation
-        """
-        self.state = "normal"
-        self.canvas.itemconfigure(self.canvas.text_id_in_rectangle_id[self.hide_button_id], text="▼")
-        self.show_animation()
-
-    def show_or_hide(self, e=None):
-        if self.state == "normal":
-            self.bhide()
-
-        else:
-            self.bshow()
+    def previous_page(self):
+        self.num_page = (self.num_page - 1) if self.num_page - 1 >= 1 else 1
 
     def on_change_page(self, event: tk.Event):
-        # Différienciation entre page précédente (M) et page suivante (P)
+        # Différenciation entre page précédente (M) et page suivante (P)
         if self.canvas.gettags("active")[TRIGGER_TAG_INDEX][-1] == "M":
-            self.num_page = (self.num_page - 1) if self.num_page - 1 >= 1 else 1
+            self.previous_page()
 
         else:
-            self.num_page = (self.num_page + 1) if self.num_page + 1 <= NB_ACTIONS // NB_ACTION_PER_PAGE else NB_ACTIONS // NB_ACTION_PER_PAGE
+            self.next_page()
 
+        self.change_page()
+
+    def change_page(self):
         for action_rect_id_i in range(len(self.actions_rectangle_ids)):
 
             action_i = (self.num_page - 1) * NB_ACTION_PER_PAGE + action_rect_id_i

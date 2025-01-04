@@ -20,7 +20,7 @@ class ChooseArgRes(HUDCenteredABC):
 
     def create(self):
 
-        width = 300
+        width = 500
         height = 100
 
         x0_cadre = 0
@@ -29,20 +29,25 @@ class ChooseArgRes(HUDCenteredABC):
         y1_cadre = y0_cadre + height
 
         center_x = (x0_cadre + x1_cadre) // 2
+        center_y = (y0_cadre + y1_cadre) // 2
 
         self.canvas.create_rectangle(
             x0_cadre, y0_cadre, x1_cadre, y1_cadre, fill=FILL_ACTION_BOX, tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,), state="hidden"
         )
 
-        custom_font = font.nametofont("TkDefaultFont").copy()
-        custom_font.config(size=6)
+        self.canvas.create_text(
+            center_x, center_y - 20,
+            tags=set_tags(hud_tag=self.tag) + (TEMP_TAG,),
+            fill=FILL_TEXT,
+            text="Veuillez choisir la quantité d'argent et de ressources offertes au noble."
+        )
 
         self.quantity_selector_arg.create(
-            center_x - 40, y0_cadre + pad_from_borders
+            center_x - 40, center_y + 20
         )
 
         self.quantity_selector_res.create(
-            center_x + 40, y0_cadre + pad_from_borders
+            center_x + 40, center_y + 20
         )
 
         # Bouton OK qui lance l'immigration

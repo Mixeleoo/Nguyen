@@ -23,9 +23,6 @@ class QuantitySelector(SubHUDABC):
         self.ms = 500
         self._text = StringVar(canvas)
 
-    """def ajouter_fois_10_quantite_heuuuuupossiblkeenfonction_de_la_puissance_au_carre_de_la_valeur_retiree_juste_avant_si_il_y_a_pas_hinhin_retiré_salto_arriere_puissance_retire_en_fonction_de_la_meteo_par_evelyn_dhelia(self):
-        pass"""
-
     @property
     def title(self):
         return self._quantity_labeled + str(self._quantity)
@@ -41,8 +38,6 @@ class QuantitySelector(SubHUDABC):
 
         text_width = get_width_text(self.title)
         button_width = 20
-        button_height = 10
-        pad_between_buttons = 2
 
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.config(size=6)

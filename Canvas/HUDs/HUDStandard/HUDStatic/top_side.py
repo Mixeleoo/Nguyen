@@ -12,9 +12,6 @@ class TopSide(HUDStaticABC):
 
         self.texts: list[StringVar] = []
 
-        # PYREVERSE
-        #self.texts = StringVar()
-
         self.rect_ids: list[int] = []
 
     @property

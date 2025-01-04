@@ -5,6 +5,8 @@ from .base import SubHUDABC
 from Canvas.Widget.StringVar import StringVar
 from Canvas.Widget.Radiobutton import SelectorsABC
 from parameter import *
+from ...Widget.Button import Button
+
 
 class SelectorInPageABC(SubHUDABC, ABC):
     _instance_counter = 0
@@ -29,9 +31,6 @@ class SelectorInPageABC(SubHUDABC, ABC):
         # Liste des choix (rectangles et textes dessus)
         self.choices_id: list[int] = []
         self.choices_texts: list[StringVar] = []
-
-        # PYREVERSE
-        #self.choices_texts = StringVar()
 
         # Dictionnaire des index des checkbutton qui mènent vers leurs différentes catégories qui mènent vers
         # L'id des villages
@@ -155,7 +154,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
             self.choices_id.append(new_category_id)
 
         # Bouton pour changer de page (précédente)
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name="CHANGE_PAGE_" + str(self._index) + "_M",
             func_triggered=self.change_page,
@@ -171,7 +171,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
         )
 
         # Bouton pour changer de page (suivante)
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name="CHANGE_PAGE_" + str(self._index) + "_P",
             func_triggered=self.change_page,

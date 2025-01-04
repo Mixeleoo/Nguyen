@@ -1,10 +1,14 @@
+from typing import Literal
 
+from Canvas.Widget.Button import Button
 from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
 class EndTurn(HUDStaticABC):
     def __init__(self, canvas):
         super().__init__(canvas)
+
+        self.state: Literal["hidden", "normal"] = "normal"
 
     @property
     def curr_show_pos(self) -> Position:
@@ -26,7 +30,8 @@ class EndTurn(HUDStaticABC):
         width = WIDTH_HISTORY_HUD
         height = HEIGHT_BOTTOM_HUD + PADY_BOTTOM_HUD
 
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name="end_turn",
             func_triggered=self.trigger,
@@ -40,7 +45,7 @@ class EndTurn(HUDStaticABC):
         )
 
     def replace(self, *args) -> None:
-        bbox = self.canvas.bbox(self.tag)
+        bbox = self.bbox()
         dx = self.canvas.winfo_width() - bbox[2]
         dy = self.canvas.winfo_height() - bbox[3]
 
@@ -48,3 +53,11 @@ class EndTurn(HUDStaticABC):
 
     def trigger(self, *args):
         self.canvas.end_turn_trigger()
+
+    def bhide(self):
+        self.state = "hidden"
+        self.hide_animation()
+
+    def bshow(self):
+        self.state = "normal"
+        self.show_animation()

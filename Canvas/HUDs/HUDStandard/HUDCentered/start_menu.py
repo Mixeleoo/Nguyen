@@ -1,9 +1,11 @@
-
+import tkinter as tk
 from dataclasses import dataclass
 from decimal import DivisionImpossible
 from tkinter import font
 
-from Canvas.HUDs.HUDStandard.base import HUDStandardABC
+from Canvas.HUDs.HUDStandard.HUDCenteredABC import HUDCenteredABC
+from Canvas.Widget.Button import Button
+from Canvas.Widget.Radiobutton import Radiobutton
 from Perso import Vassal
 from parameter import set_tags, FILL_ACTION_BOX, FILL_TEXT, TOGGLEABLE_TAG, TEXT_TAG, COLOR_TAG_INDEX
 
@@ -15,24 +17,26 @@ class Difficulty:
     color: str
 
 ldifficulties: list[Difficulty] = [
-    Difficulty("Facile", 3, "3 nobles à vaincre", "#4bb02c"),
-    Difficulty("Normal", 5, "5 nobles à vaincre", "#b06c2c"),
-    Difficulty("Difficile", 10, "10 nobles à vaincre", "#ad2128")
+    Difficulty("Facile", 3, "3 nobles à vaincre", "#31821a"),
+    Difficulty("Normal", 5, "5 nobles à vaincre", "#7d3c00"),
+    Difficulty("Difficile", 10, "10 nobles à vaincre", "#780000")
 ]
 
-class StartMenu(HUDStandardABC):
+class StartMenu(HUDCenteredABC):
     def __init__(self, canvas):
         super().__init__(canvas)
 
-        self.radiobutton_color = self.canvas.add_radiobutton()
-        self.radiobutton_difficulty = self.canvas.add_radiobutton()
+        self.radiobutton_color: Radiobutton = self.canvas.add_radiobutton()
+        self.radiobutton_difficulty: Radiobutton = self.canvas.add_radiobutton()
         self.diff_id = 0
 
-        self.radiobutton_tutoriel = self.canvas.add_radiobutton()
+        self.radiobutton_tutoriel: Radiobutton = self.canvas.add_radiobutton()
         self.no_id = 0
 
         self.dict_difficulty: [int, Difficulty] = {}
         self.dict_tutoriel: [int, bool] = {}
+
+        self._background_id = 0
 
     def create(self, geometry_width, geometry_height):
 
@@ -42,7 +46,7 @@ class StartMenu(HUDStandardABC):
         custom_font = font.nametofont("TkDefaultFont").copy()
         custom_font.configure(size=18)
 
-        self.canvas.create_rectangle(
+        self._background_id = self.canvas.create_rectangle(
             0, 0, geometry_width, geometry_height,
             fill=FILL_ACTION_BOX,
             tags=set_tags(hud_tag=self.tag)
@@ -99,7 +103,7 @@ class StartMenu(HUDStandardABC):
 
         self.canvas.create_text(
             center_x, center_y - 40, tags=set_tags(hud_tag=self.tag),
-            text="Choisissez une couleur ou on choisira pour vous.",
+            text="Choisissez une couleur pour vos villages.",
             fill=FILL_TEXT
         )
 
@@ -119,7 +123,8 @@ class StartMenu(HUDStandardABC):
             x = int(nx)
             self.radiobutton_color.add_option(rect_id)
 
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             self.tag,
             "HIDE_START_MENU",
             self.canvas.start
@@ -131,7 +136,8 @@ class StartMenu(HUDStandardABC):
             text="Commencer"
         )
 
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             self.tag,
             "QUIT",
             lambda e: self.canvas.quit()
@@ -140,7 +146,7 @@ class StartMenu(HUDStandardABC):
             center_y + 120,
             center_x + 60,
             center_y + 160,
-            text="Sortez-moi de là"
+            text="Quitter le jeu"
         )
 
         self.canvas.create_text(
@@ -173,7 +179,7 @@ class StartMenu(HUDStandardABC):
         self.radiobutton_tutoriel.add_option(self.no_id)
         self.dict_tutoriel[self.no_id] = False
 
-    def replace(self, *args) -> None:
+    def show(self, *args):
         self.canvas.tag_raise(self.tag)
 
         # On simule un clic sur Non
@@ -185,6 +191,16 @@ class StartMenu(HUDStandardABC):
         self.canvas.give_tag_to(self.diff_id, "highlight")
         self.radiobutton_difficulty.toggle_switch_option(self.diff_id)
         self.canvas.dtag("highlight", "highlight")
+
+        self.canvas.tag_raise(self.tag)
+        super().show(*args)
+
+    def replace(self, *args) -> None:
+        super().replace(*args)
+        self.canvas.coords(self._background_id, 0, 0, self.canvas.master.winfo_width(), self.canvas.master.winfo_height())
+
+    def update(self, *args):
+        pass
 
     def get_color_choice(self) -> str | None:
         if self.radiobutton_color.currently_selected is not None:

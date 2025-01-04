@@ -2,6 +2,7 @@
 import tkinter as tk
 from abc import ABC, abstractmethod
 
+from Canvas.Widget.Button import Button
 from Canvas.Widget.StringVar import StringVar
 from parameter import *
 from Canvas.HUDs.HUDStandard.base import HUDStandardABC
@@ -74,7 +75,8 @@ class HUDWindowABC(HUDStandardABC, ABC):
         self._text.id = self.canvas.text_id_in_rectangle_id[rect_id]
 
         # Bouton pour fermer
-        self.canvas.add_button(
+        Button(
+            self.canvas,
             hud_tag=self.tag,
             trigger_name="close_" + self.tag + "_window",
             func_triggered=self.cancel,
