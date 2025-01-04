@@ -5,21 +5,30 @@ from typing import Literal
 from Perso.personne import Personne
 from Perso.soldat import Soldat
 from Territoire import Village, RevolteInfo
-from parameter import ActionCost, ACTIONS_NAME_COST
+from parameter import ActionCost, ACTIONS_NAME_COST, couleurs
+
+noms_noble = [
+    "Sir Guillaume", "Dame Éléonore", "Duc Geoffroy", "Comtesse Isabelle", "Baron Robert", "Seigneur Richard",
+    "Princesse Béatrice", "Sir Henri", "Dame Marguerite", "Vicomte Gilbert", "Duchesse Agnès", "Baronne Catherine",
+    "Seigneur Thomas", "Comte Baudouin", "Princesse Alice", "Duc Philippe", "Dame Mathilde", "Sir Bertrand",
+    "Comtesse Marie", "Seigneur Hugues", "Baronne Alice", "Sir Eustache", "Duchesse Jeanne", "Seigneur Édouard",
+    "Comtesse Blanche", "Baron Guillaume", "Dame Cécile", "Duc Édouard", "Sir Thomas", "Princesse Hélène",
+    "Seigneur Alexandre", "Comtesse Éléonore", "Baron Richard", "Duchesse Mathilde", "Sir Jean", "Dame Isabelle",
+    "Vicomte Robert", "Duc Henri", "Comtesse Sibylle", "Seigneur Simon", "Princesse Marguerite", "Baronne Jeanne",
+    "Sir Robert", "Duchesse Agnès", "Dame Alice", "Comtesse Jeanne", "Seigneur Raymond", "Baronne Isabelle",
+    "Sir Guy"
+]
+
+couleurs_joueurs = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634","#6d2222","#101086","#380c69","#1a4242","#503b0e"]
 
 class Vassal(Personne):
-    couleurs: list[str] = ["#125ee0", "#b01288", "#b01241", "#680b7d", "#0b7d7d", "#d98634","#6d2222","#101086","#380c69","#1a4242","#503b0e"]
-    _noms_nobles = [
-        "Sir Guillaume", "Dame Éléonore", "Duc Geoffroy", "Comtesse Isabelle", "Baron Robert", "Seigneur Richard",
-        "Princesse Béatrice", "Sir Henri", "Dame Marguerite", "Vicomte Gilbert", "Duchesse Agnès", "Baronne Catherine",
-        "Seigneur Thomas", "Comte Baudouin", "Princesse Alice", "Duc Philippe", "Dame Mathilde", "Sir Bertrand",
-        "Comtesse Marie", "Seigneur Hugues", "Baronne Alice", "Sir Eustache", "Duchesse Jeanne", "Seigneur Édouard",
-        "Comtesse Blanche", "Baron Guillaume", "Dame Cécile", "Duc Édouard", "Sir Thomas", "Princesse Hélène",
-        "Seigneur Alexandre", "Comtesse Éléonore", "Baron Richard", "Duchesse Mathilde", "Sir Jean", "Dame Isabelle",
-        "Vicomte Robert", "Duc Henri", "Comtesse Sibylle", "Seigneur Simon", "Princesse Marguerite", "Baronne Jeanne",
-        "Sir Robert", "Duchesse Agnès", "Dame Alice", "Comtesse Jeanne", "Seigneur Raymond", "Baronne Isabelle",
-        "Sir Guy"
-    ]
+    couleurs: list[str] = couleurs_joueurs.copy()
+    _noms_nobles = noms_noble.copy()
+
+    @classmethod
+    def default(cls):
+        cls.couleurs = couleurs_joueurs.copy()
+        cls._noms_nobles = noms_noble.copy()
 
     """
     Un noble est une personne qui contôle des roturiers (sous forme d'une liste de roturiers)

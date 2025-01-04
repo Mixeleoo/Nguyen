@@ -7,6 +7,12 @@ from Canvas.highlight_canvas import HighlightCanvas
 
 class SelectorsABC(ABC):
     _instance_counter = 0
+    _instances = []
+
+    @classmethod
+    def reset_all(cls):
+        for instance in cls._instances:
+            instance.default()
 
     def __init__(self, canvas: HighlightCanvas):
 
@@ -15,6 +21,7 @@ class SelectorsABC(ABC):
         self._index = SelectorsABC._instance_counter
         SelectorsABC._instance_counter += 1
         self.group_tag = "selector" + str(self._index)
+        SelectorsABC._instances.append(self)  # Ajouter chaque instance à la liste
 
         # L'option actuellement selectionnée
         self.currently_selected = None
@@ -32,6 +39,10 @@ class SelectorsABC(ABC):
         tags[GROUP_TAG_INDEX] = self.group_tag
         self.canvas.itemconfigure(option_id, tags=tags)
         self.nb_options += 1
+
+    def default(self):
+        self.nb_options = 0
+        self.currently_selected = None
 
     @abstractmethod
     def reset(self) -> None:

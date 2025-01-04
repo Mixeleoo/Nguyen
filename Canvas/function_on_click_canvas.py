@@ -1,11 +1,11 @@
 
 import tkinter as tk
 
-from Canvas.animation_canvas import AnimationCanvas
+from Canvas.hud_canvas import HUDCanvas
 from parameter import *
 
 
-class FunctionOnClickCanvas(AnimationCanvas):
+class FunctionOnClickCanvas(HUDCanvas):
     """
     Class squelette qui servira à d'autres class à en hériter des fonctions et à en spécifier les actions
     en fonction du mode de jeu
@@ -46,22 +46,19 @@ class FunctionOnClickCanvas(AnimationCanvas):
         self.build_church_mode_tag_foc[NOTHING_TAG] = dummy
 
     def before_action(self, tag: str, event: tk.Event):
-        #TODO Léo : faire que le bouton "recommencer" fasse vraiment recommencer une partie NON
-        #TODO Léo : Faire agrandir l'hud topside quand on agrandit la fenêtre + créer une méthode qui renvoie la moitié de l'abscisse de la case demandée (pour l'affichage des HUD taspasassezde)
-
         joueur = self.jeu.joueur_actuel
         action_possible = True
 
         if not joueur.action_possible_pa(ACTIONS_NAME_COST[tag]):
-            self.hudmobile_taspasassezdePA.show(80, 100)
+            self.hudmobile_taspasassezdePA.show(self.hud_top_side.get_abscissa_square(0), HEIGHT_HUD_TOP_SIDE + 30)
             action_possible = False
 
         if not joueur.action_possible_argent(ACTIONS_NAME_COST[tag]):
-            self.hudmobile_taspasassezdargent.show(250, 100)
+            self.hudmobile_taspasassezdargent.show(self.hud_top_side.get_abscissa_square(1), HEIGHT_HUD_TOP_SIDE + 30)
             action_possible = False
 
         if not joueur.action_possible_ressources(ACTIONS_NAME_COST[tag]):
-            self.hudmobile_taspasassezderessources.show(550, 100)
+            self.hudmobile_taspasassezderessources.show(self.hud_top_side.get_abscissa_square(2), HEIGHT_HUD_TOP_SIDE + 30)
             action_possible = False
 
         if action_possible:

@@ -1,10 +1,10 @@
 
 import tkinter as tk
 
+from Canvas.hud_canvas import HUDCanvas
 from parameter import *
-from Canvas.animation_canvas import AnimationCanvas
 
-class FunctionOnDragCanvas(AnimationCanvas):
+class FunctionOnDragCanvas(HUDCanvas):
     def __init__(self, master=None, cnf=None, **kw):
         # C'est PyCharm qui me dit de mettre ça au lieu de cnf={} directement dans les arguments donc...
         if cnf is None:

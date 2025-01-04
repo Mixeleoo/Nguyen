@@ -8,12 +8,19 @@ from parameter import *
 
 class SelectorInPageABC(SubHUDABC, ABC):
     _instance_counter = 0
+    _instances = []
+
+    @classmethod
+    def reset_all(cls):
+        for instance in cls._instances:
+            instance.default()
 
     def __init__(self, canvas, hud_tag: str):
         super().__init__(canvas, hud_tag)
 
         self._index = SelectorInPageABC._instance_counter
         SelectorInPageABC._instance_counter += 1
+        SelectorInPageABC._instances.append(self)  # Ajouter chaque instance à la liste
 
         # Gestion des pages
         self.num_page = 1
@@ -349,8 +356,8 @@ class SelectorInPageABC(SubHUDABC, ABC):
             s.reset()
 
     def default(self):
-        for l in self.list_selector_choices_to_item:
-            for value in l.values():
+        for l in self.list_selector_choices_to_item.copy():
+            for value in l.copy().values():
                 self.remove_option(value)
 
     def update(self, *args):

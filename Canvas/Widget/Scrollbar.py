@@ -6,6 +6,13 @@ from parameter import *
 
 class Scrollbar:
     _instance_counter = 0
+    _instances = []
+
+    @classmethod
+    def all_default(cls):
+        for instance in cls._instances:
+            instance.default()
+
     def __init__(self, canvas: HUDCanvas, hud_tag: str, text_group_tag: str):
 
         self.canvas = canvas
@@ -13,6 +20,7 @@ class Scrollbar:
         self._text_group_tag = text_group_tag
         self._index = Scrollbar._instance_counter
         Scrollbar._instance_counter += 1
+        Scrollbar._instances.append(self)
 
         self._rect_hiding_top_text_id = 0
         self._rect_hiding_bottom_text_id = 0
@@ -23,6 +31,11 @@ class Scrollbar:
 
         # Pour savoir où couper le texte qu'il ne dépasse pas
         self._width_hud = 0
+
+    def default(self):
+        self.canvas.delete(self._text_group_tag)
+        self._last_text_id = 0
+        self._longueur_texte = 0
 
     def create(self, x0: float, y0: float, x1: float, y1: float, is_temp: bool=False, state: Literal["normal", "hidden"] = "normal"):
 

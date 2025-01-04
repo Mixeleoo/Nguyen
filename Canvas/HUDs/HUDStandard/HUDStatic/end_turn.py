@@ -40,7 +40,11 @@ class EndTurn(HUDStaticABC):
         )
 
     def replace(self, *args) -> None:
-        pass
+        bbox = self.canvas.bbox(self.tag)
+        dx = self.canvas.winfo_width() - bbox[2]
+        dy = self.canvas.winfo_height() - bbox[3]
+
+        self.canvas.move(self.tag, dx, dy)
 
     def trigger(self, *args):
         self.canvas.end_turn_trigger()

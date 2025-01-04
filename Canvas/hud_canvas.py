@@ -109,6 +109,7 @@ class HUDCanvas(BaseCanvas):
 
         self.hud_top_side.create(geometry_width, geometry_height)
         self.hudmobile_start_menu.create(geometry_width, geometry_height)
+        self.hudmobile_start_menu.show()
 
     def hide_all_permanant_huds(self):
         # On simule un clic sur le bouton qui cache les pages d'actions
@@ -544,7 +545,77 @@ class HUDCanvas(BaseCanvas):
         self.hudmobile_choose_noble_vassaliser.choose_noble.default()
         self.hudmobile_choose_village.choose_village.default()
         self.hudcentered_choose_noble_war.choose_noble.default()
+        self.hud_event.hide_animation()
 
-        self.delete("all")
-        self.create_HUDs(self.winfo_width(), self.winfo_height())
+        from .Widget.Scrollbar import Scrollbar
+        Scrollbar.all_default()
+
+        from .HUDs.SubHUD import SelectorInPageABC
+        from .Widget.Radiobutton import SelectorsABC
+        SelectorsABC.reset_all()
+        SelectorInPageABC.reset_all()
+
+        self.delete(MAP_TAG)
         self.jeu.restart()
+
+        self.generate_game_grid((CARRE_PAR_COLONNE, CARRE_PAR_LIGNE))
+        self.tag_lower(MAP_TAG)
+
+        self.add_history_text(f"Année n°{self.jeu.tour}")
+        self.tag_raise(self.hudmobile_start_menu.tag)
+        self.hud_history.hide_exceeding_text()
+        self.hudmobile_end_menu.hide()
+        self.hudmobile_start_menu.show()
+
+    def move_back_square(self):
+        # On prend les coordonnées en haut (y0) à gauche (x0) du carré le plus en haut à gauche
+        # Pour avoir le point le plus en haut à gauche de la totalité de la grille de carrés
+        coor_square_top_left = self.coords(MAP_SQUARE_TOP_LEFT_TAG)
+        x0 = coor_square_top_left[0]
+        y0 = coor_square_top_left[1] - HEIGHT_HUD_TOP_SIDE
+
+        # On prend les coordonnées en bas (y1) à droite (x1) du carré le plus en bas à droite
+        # Pour avoir le point le plus en bas à droite de la totalité de la grille de carrés
+        coor_square_bottom_right = self.coords(MAP_SQUARE_BOTTOM_RIGHT_TAG)
+        x1 = coor_square_bottom_right[2]
+        y1 = coor_square_bottom_right[3]
+
+        dx, dy = 0, 0
+
+        # Si les carrés sont trop à droite, on les remet vers la gauche
+        if x0 > 0:
+            dx = -1 * (x0 // 5 + 1)
+
+        # Si les carrés sont trop à gauche, on les remet vers la droite
+        # La distance entre (donc la valeur absolue de) le bord droit de la fenêtre et les carrés les plus à droite
+        # // 10 Pour dire qu'à chaque pixel, on augmente la vélocité d'un pixel
+        # + 1 pour que quand la distance est < 10, qu'il y ait quand même un déplacement d'un pixel pour bien replacer
+        # Les carrés au pixel près.
+        elif x1 < self.master.winfo_width():
+            dx = 1 * (abs(self.master.winfo_width() - x1) // 5 + 1)
+
+        # Si les carrés sont trop en bas, on les remet vers le haut
+        if y0 > 0:
+            dy = -1 * (y0 // 5 + 1)
+
+        # Si les carrés sont trop en haut, on les remet vers le bas
+        elif y1 < self.master.winfo_height():
+            dy = 1 * (abs(self.master.winfo_height() - y1) // 5 + 1)
+
+        # S'il y a un décalage à faire, alors on le répète toutes les 50ms le temps que nécessaire
+        # En accelérant la vélocité à chaque répétition
+        if dx or dy:
+            # Déplace tous les carrés avec le tag "square"
+            self.move(MAP_TAG, dx, dy)
+            self.after(DELTA_MS_ANIMATION, self.move_back_square)
+
+        else:
+            # On rerend le highlight aux carrés de la MAP.
+            self.highlight_tag_on_click[MAP_TAG] = self.highlight_square
+
+    def replace_static_hud(self, event: tk.Event):
+        self.hud_actions.replace(event)
+        self.hud_history.replace(event)
+        self.hud_top_side.replace(event)
+        self.hud_end_turn.replace(event)
+        self.move_back_square()

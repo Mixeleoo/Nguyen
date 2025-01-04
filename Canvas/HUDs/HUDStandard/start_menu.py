@@ -26,7 +26,10 @@ class StartMenu(HUDStandardABC):
 
         self.radiobutton_color = self.canvas.add_radiobutton()
         self.radiobutton_difficulty = self.canvas.add_radiobutton()
+        self.diff_id = 0
+
         self.radiobutton_tutoriel = self.canvas.add_radiobutton()
+        self.no_id = 0
 
         self.dict_difficulty: [int, Difficulty] = {}
 
@@ -68,10 +71,9 @@ class StartMenu(HUDStandardABC):
 
         x = int(center_x * 0.5)
         xstep = int(center_x) // len(ldifficulties)
-        rect_id = 0
         for difficulty in ldifficulties:
             nx = x + xstep
-            rect_id = self.canvas.create_rectangle(
+            self.diff_id = self.canvas.create_rectangle(
                 x,
                 center_y - 110,
                 nx,
@@ -88,16 +90,11 @@ class StartMenu(HUDStandardABC):
                 justify="center"
             )
 
-            self.dict_difficulty[rect_id] = difficulty
-            self.canvas.text_id_in_rectangle_id[t_id] = rect_id
+            self.dict_difficulty[self.diff_id] = difficulty
+            self.canvas.text_id_in_rectangle_id[t_id] = self.diff_id
 
             x = int(nx)
-            self.radiobutton_difficulty.add_option(rect_id)
-
-        # On simule un clic sur la difficulté Facile
-        self.canvas.give_tag_to(rect_id, "highlight")
-        self.radiobutton_difficulty.toggle_switch_option(rect_id)
-        self.canvas.dtag("highlight", "highlight")
+            self.radiobutton_difficulty.add_option(self.diff_id)
 
         self.canvas.create_text(
             center_x, center_y - 40, tags=set_tags(hud_tag=self.tag),
@@ -159,7 +156,7 @@ class StartMenu(HUDStandardABC):
             rectangle_tags=set_tags(TOGGLEABLE_TAG, hud_tag=self.tag),
         ))
 
-        rect_id = self.canvas.create_text_in_rectangle(
+        self.no_id = self.canvas.create_text_in_rectangle(
             center_x + 200,
             center_y + 120,
             center_x + 240,
@@ -171,13 +168,18 @@ class StartMenu(HUDStandardABC):
 
         self.radiobutton_tutoriel.add_option(rect_id)
 
-        # On simule un clic sur Non
-        self.canvas.give_tag_to(rect_id, "highlight")
-        self.radiobutton_tutoriel.toggle_switch_option(rect_id)
-        self.canvas.dtag("highlight", "highlight")
-
     def replace(self, *args) -> None:
         self.canvas.tag_raise(self.tag)
+
+        # On simule un clic sur Non
+        self.canvas.give_tag_to(self.no_id, "highlight")
+        self.radiobutton_tutoriel.toggle_switch_option(self.no_id)
+        self.canvas.dtag("highlight", "highlight")
+
+        # On simule un clic sur la difficulté Facile
+        self.canvas.give_tag_to(self.diff_id, "highlight")
+        self.radiobutton_difficulty.toggle_switch_option(self.diff_id)
+        self.canvas.dtag("highlight", "highlight")
 
     def get_color_choice(self):
         if self.radiobutton_color.currently_selected is not None:

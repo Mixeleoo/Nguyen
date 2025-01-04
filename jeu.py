@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from random import randint, choice
 from math import ceil
 
+from Perso import Roturier
 from Perso.noble import Noble
 from Perso.seigneur import Seigneur
 from Perso.vassal import Vassal
@@ -93,7 +94,7 @@ class Jeu:
         """
         Cette méthode permet de gérer les évenment en début de partie à l'aide d'un système de tirage de dés à 100 faces
         """
-        choix_ev = randint(1,100)
+        choix_ev = 6#randint(1,100)
 
         if 1 <= choix_ev <= 5:
             # épidémie : tous les villageois qui ont une espérance de vie inférieure à esp meurent
@@ -479,9 +480,11 @@ class Jeu:
         return phrases
 
     def restart(self):
-       """
-       Méthode qui permet de recommencer une partie à zéro
-       En supprimant les joueurs, on supprime également tout le reste des éléments du jeu
-       """
-       self._const_joueurs = []
-       self._joueurs = []
+        """
+        Méthode qui permet de recommencer une partie à zéro
+        En supprimant les joueurs, on supprime également tout le reste des éléments du jeu
+        """
+        self.__init__()
+        Village.default()
+        Roturier.default()
+        Vassal.default()

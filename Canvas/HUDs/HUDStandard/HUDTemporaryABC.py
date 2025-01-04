@@ -14,6 +14,8 @@ class HUDTemporaryABC(HUDStandardABC, ABC):
 
         super().replace(*args)
 
+        self.canvas.tag_raise(self.tag)
+
         # On cache après trois seconde
         if self.after_hide_id is not None:
             self.canvas.after_cancel(self.after_hide_id)

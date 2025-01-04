@@ -64,3 +64,11 @@ class TasPasAssezDe(HUDTemporaryABC):
             text=text,
             state="hidden"
         )
+
+    def replace(self, x: int, y: int) -> None:
+        dx = x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
+        dy = y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
+
+        self.canvas.move(self.tag, dx, dy)
+
+        super().replace()

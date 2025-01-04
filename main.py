@@ -63,9 +63,7 @@ class Interface(tk.Tk):
         self.canvas.create_image(423, 16, image=self.reference, tags=(HUD_TAG, NOTHING_TAG))"""
 
     def on_configure_screen(self, event: tk.Event):
-        self.canvas.hud_actions.replace(event)
-        self.canvas.hud_history.replace(event)
-        self.canvas.move_back_square()
+        self.canvas.replace_static_hud(event)
         self.previous_geometry = (event.width, event.height)
 
     def lancer_partie(self):
