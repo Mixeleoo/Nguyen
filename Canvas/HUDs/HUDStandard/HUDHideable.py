@@ -9,6 +9,15 @@ class HUDHideableABC(ABC):
     _instances_hidden_to_show: list["HUDHideableABC"] = []
 
     @classmethod
+    def all_shown(cls):
+        shown = False
+        for instance in cls._instances:
+            if instance.state == "normal":
+                shown = True
+
+        return shown
+
+    @classmethod
     def all_hidden(cls):
         hidden = False
         for instance in cls._instances:
@@ -28,6 +37,12 @@ class HUDHideableABC(ABC):
     def show_all_hidden(cls):
         for instance in cls._instances_hidden_to_show:
             instance.bshow()
+
+    @classmethod
+    def show_all(cls):
+        for instance in cls._instances:
+            if instance.state == "hidden":
+                instance.bshow()
 
     def __init__(self, canvas: SelfMadeCanvas):
         self.canvas = canvas

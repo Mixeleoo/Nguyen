@@ -231,7 +231,8 @@ class SelfMadeCanvas(BaseCanvas):
             self.itemconfigure(item_id, state="hidden")
 
         from Canvas.HUDs.HUDStandard.HUDHideable import HUDHideableABC
-        HUDHideableABC.hide_all()
+        if HUDHideableABC.all_shown(): HUDHideableABC.hide_all()
+        else: HUDHideableABC.show_all()
 
     def on_motion(self, event: tk.Event) -> None:
 

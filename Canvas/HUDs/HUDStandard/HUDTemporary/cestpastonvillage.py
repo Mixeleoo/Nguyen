@@ -3,6 +3,7 @@ from PIL import Image, ImageTk, ImageEnhance
 
 from ..HUDTemporaryABC import HUDTemporaryABC
 from parameter import *
+from ..base import replace_coords
 
 
 class CestPasTonVillage(HUDTemporaryABC):
@@ -61,10 +62,6 @@ class CestPasTonVillage(HUDTemporaryABC):
             state="hidden"
         )
 
-    def replace(self, x: float, y: float) -> None:
-        dx = x - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[0]
-        dy = y - self.canvas.coords(self.canvas.find_withtag(self.tag)[0])[1]
-
-        self.canvas.move(self.tag, dx, dy)
-
+    def replace(self, x: int, y: int) -> None:
+        replace_coords(self, x, y)
         super().replace()

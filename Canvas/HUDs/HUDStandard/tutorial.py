@@ -30,7 +30,7 @@ class Tutorial(HUDStandardABC):
             self._vassaliser,
             self._imposer,
             self._build_city,
-            self.build_church,
+            self._build_church,
             self._event,
             self._end
         ]
@@ -128,7 +128,7 @@ class Tutorial(HUDStandardABC):
         self.show(self.canvas.winfo_width() // 2, bbox[3] + HEIGHT_HUD_TOP_SIDE * 2,
           "Ici est l'HUD qui vous indique que vous êtes en mode construction de village.")
 
-    def build_church(self):
+    def _build_church(self):
         self.canvas.hud_build_city.hide_animation()
         self.canvas.hud_build_church.show_animation()
         bbox = self.canvas.hud_event.bbox()

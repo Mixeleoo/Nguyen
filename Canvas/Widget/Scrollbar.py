@@ -98,7 +98,8 @@ class Scrollbar:
         # On doit savoir combien de fois, il faut séparer le texte de \n pour qu'il rentre dans l'historique
         fractions = 1
         length = get_width_text(text)
-        while length / fractions > WIDTH_HISTORY_HUD:
+        print(self.canvas.coords(self._thumb_id))
+        while length / fractions > self.canvas.coords(self._thumb_id)[0] - coords[0]:
             fractions += 1
 
         text = separer_chaine_sans_couper(text, fractions)
@@ -187,8 +188,8 @@ class Scrollbar:
 
         dy = event.y - self.canvas.mouse_coor[1]
 
-        if self.canvas.coords(self._thumb_id)[1] + dy < self.canvas.coords(self._rect_hiding_top_text_id)[1] + 25 or \
-            self.canvas.coords(self._thumb_id)[3] + dy > self.canvas.coords(self._rect_hiding_bottom_text_id)[3] - 25:
+        if self.canvas.coords(self._thumb_id)[1] + dy < self.canvas.coords(self._rect_hiding_top_text_id)[3] + 1 or \
+            self.canvas.coords(self._thumb_id)[3] + dy > self.canvas.coords(self._rect_hiding_bottom_text_id)[1] - 1:
             dy = 0
 
         # Déplace tous les carrés avec le tag "square"
