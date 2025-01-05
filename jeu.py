@@ -99,6 +99,7 @@ class Jeu:
                     if villageois.esperance_vie < esp :
                         nb_morts += 1
                         village.liste_roturier.remove(villageois)
+                    villageois.gerer_bonheur(-1)
 
             return EventInfo("Épidémie", (f"Morts : {nb_morts}",))
 
@@ -118,7 +119,7 @@ class Jeu:
             for villageois in self.joueur_actuel.dico_villages[id_village_pie].liste_roturier:
                 qt_res += villageois.ressources
                 qt_arg += villageois.argent
-
+                villageois.gerer_bonheur(-1)
 
                 villageois.reset_resssources()
                 villageois.reset_argent()
@@ -133,6 +134,8 @@ class Jeu:
             # famine : les ressources des terres sont divisées par 2
             for village in self.joueur_actuel.dico_villages.values():
                 village.facteur_recolte = 0.5
+                for villageois in village.liste_roturier :
+                    villageois.gerer_bonheur(-1)
             return EventInfo("Famine", ("Les ressources des terres sont divisées par 2",))
 
         elif 41 <= choix_ev <= 64:
@@ -142,7 +145,7 @@ class Jeu:
             # récolte abondante : ressources des terres doublées
             for village in self.joueur_actuel.dico_villages.values() :
                 village.facteur_recolte = 2
-                village.recuperation_bonheur()
+                village.gerer_bonheur(1)
             return EventInfo("Récolte abondante", ("Les ressources des terres sont doublées",))
 
         elif 85 <= choix_ev <= 94:
@@ -466,7 +469,7 @@ class Jeu:
                 for villageois in village.liste_roturier:
                     villageois.commercer() #commerce en cas de surplus de ressource
 
-                village.recuperation_bonheur() # récupération d'un point de bonheur par tous les villageois
+                village.gerer_bonheur(1) # récupération d'un point de bonheur par tous les villageois
 
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris
