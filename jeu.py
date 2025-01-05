@@ -458,6 +458,7 @@ class Jeu:
                 village.recuperer_recoltes() # récupération des récoltes en début de tour
                 village.appliquer_don() # appliquer le don associée à(aux) église(s) du village
                 village.peupler() # des villageois viennet peupler les villages
+                village.facteur_recolte = 1
 
                 for villageois in village.liste_roturier:
                     villageois.commercer() #commerce en cas de surplus de ressource
