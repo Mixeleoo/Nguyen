@@ -254,7 +254,7 @@ class Vassal(Personne):
         self.gestion_argent(-300)
         self.gestion_ressources(-150)
 
-        print("ID emplacement :",village_id)
+        #print("ID emplacement :",village_id)
         return self.ajouter_village(village_id, l_terre)
 
     def immigrer(self, village_id: int, type_v: Literal["paysan", "artisan"], effectif: int) -> int | None:
@@ -266,9 +266,9 @@ class Vassal(Personne):
         :param village_id : l'id du village dans lequel les futurs villageois habiteront
         """
 
-        print("choix nombre :", effectif)
-        print("type_villageois :", type_v)
-        print("choix village :", village_id)
+        #print("choix nombre :", effectif)
+        #print("type_villageois :", type_v)
+        #print("choix village :", village_id)
 
         v = self.dico_villages[village_id].ajouter_villageois(type_v, effectif)
         if v is not None:

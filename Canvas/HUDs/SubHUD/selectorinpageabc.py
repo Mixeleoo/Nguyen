@@ -257,7 +257,7 @@ class SelectorInPageABC(SubHUDABC, ABC):
 
         # Si le choix sur lequel on est tombé est le dernier, c'est que ce choix n'existe pas, il faut arrêter la méthode.
         if selector_index == len(self.selectors) - 1 and choix_index == self.selectors[selector_index].nb_options:
-            print("Le choix qui tenté d'être supprimé n'existe pas")
+            #print("Le choix qui tenté d'être supprimé n'existe pas")
             return
 
         next_choice_index = int(choix_index)

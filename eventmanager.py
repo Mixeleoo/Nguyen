@@ -39,6 +39,7 @@ class EventManager:
             eventinfo.village_incendie.id, tags=set_tags(MAP_TAG, PLAINE_TAG, MAP_TAG)
         )
         self.canvas.hudmobile_choose_taxes.remove_village(eventinfo.village_incendie.id)
+        self.canvas.hudmobile_choose_village.remove_village(eventinfo.village_incendie.id)
         self.canvas.hudmobile_more_info_event.refresh_text(eventinfo.village_incendie.nom)
         return True
 

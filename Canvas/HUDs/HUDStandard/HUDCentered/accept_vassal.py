@@ -14,7 +14,7 @@ class AcceptVassal(HUDCenteredABC):
 
     def create(self, *args):
 
-        width = 380
+        width = 450
         height = 60
 
         x0_cadre = 0

@@ -105,7 +105,7 @@ class SelfMadeCanvas(BaseCanvas):
         self.basic_mode_tag_foc[WAR_TAG] = lambda e: self.before_action(WAR_TAG, e)
 
         self.build_city_mode_tag_foc[PLAINE_TAG] = self.build_city_on_plain
-        self.build_city_mode_tag_foc[VILLAGE_TAG] = lambda e: print("Y'a déjà un village ici ?")
+        self.build_city_mode_tag_foc[VILLAGE_TAG] = lambda e: self.hud_yavillage.show(self.find_withtag("active")[0])
 
         self.build_church_mode_tag_foc[VILLAGE_TAG] = self.build_church_on_village
 
@@ -144,9 +144,9 @@ class SelfMadeCanvas(BaseCanvas):
         self.give_active_tag(event)
 
         # Pour du débug, on print sur ce qu'on clique
-        print("Tags de l'élément clické :", self.gettags("current"))
-        print("Tags de l'élément gardé :", self.gettags("active"))
-        print("Id de l'élément gardé :", self.find_withtag("active")[0])
+        #print("Tags de l'élément clické :", self.gettags("current"))
+        #print("Tags de l'élément gardé :", self.gettags("active"))
+        #print("Id de l'élément gardé :", self.find_withtag("active")[0])
 
         # On initialise les coordonnées de départ de la souris
         self.mouse_coor = (event.x, event.y)
@@ -195,7 +195,7 @@ class SelfMadeCanvas(BaseCanvas):
         if not self.has_mouse_moved:
             try:
                 # On lance le trigger associé
-                print("Mode de jeu :", self.game_mode)
+                #print("Mode de jeu :", self.game_mode)
                 self.tag_foc[self.game_mode].get(tags[TRIGGER_TAG_INDEX], dummy)(event)
 
             except Exception as e:
@@ -443,6 +443,9 @@ class SelfMadeCanvas(BaseCanvas):
                 don_argent,
                 don_ressources
             )
+            # Le joueur a accès aux villages du bot vassalisé
+            for village in noble_selected.dico_villages.values():
+                self.hudwindow_supervisor.add_more_info(village)
 
             if self.jeu.nb_joueurs == 1:
                 self.win("Vous avez vaincu ou vassalisé tous les nobles\nVous avez gagné.")
@@ -620,11 +623,19 @@ class SelfMadeCanvas(BaseCanvas):
                     self.hudcentered_choose_noble_war.remove_noble(actionbotinfo.noble_vaincu.id)
                     self.hudmobile_choose_noble_vassaliser.remove_noble(actionbotinfo.noble_vaincu.id)
 
+                    for village in actionbotinfo.noble_vaincu.dico_villages.values():
+                        # Transforme le village en plaine
+                        self.itemconfigure(village.id, fill=couleurs[PLAINE_TAG]())
+                        self.itemconfigure(
+                            village.id, tags=set_tags(MAP_TAG, PLAINE_TAG, MAP_TAG)
+                        )
+
             # Si le bot choisit de vassaliser
             elif actionbotinfo.type == "Vassaliser":
 
                 # Si le joueur est choisi
                 if actionbotinfo.noble_vassalise == self.jeu.get_joueur(0):
+                    # Oups oublié de faire (pas eu le temps)
                     """On permet vraiment au joueur d'accepter de se faire vassaliser ? ça serait marrant"""
                     pass
 
@@ -661,7 +672,6 @@ class SelfMadeCanvas(BaseCanvas):
             # Ajout du texte
             self.add_history_text(actionbotinfo.descriptif)
 
-        #self.jeu.joueur_actuel.reset_pa()
         joueur_vivant = self.eventmanager.handle_event()
 
         if joueur_vivant:

@@ -13,7 +13,7 @@ CARRE_PAR_COLONNE = 40
 SPS = 25
 
 # nombre maximum de choix de villages pour changer de page
-RBTN_MAX_VIL = 2
+RBTN_MAX_VIL = 3
 
 HEIGHT_HUD_TOP_SIDE = 60
 HEIGHT_BOTTOM_HUD = 80

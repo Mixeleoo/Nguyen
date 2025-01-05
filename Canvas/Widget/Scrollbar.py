@@ -98,7 +98,7 @@ class Scrollbar:
         # On doit savoir combien de fois, il faut séparer le texte de \n pour qu'il rentre dans l'historique
         fractions = 1
         length = get_width_text(text)
-        print(self.canvas.coords(self._thumb_id))
+        #print(self.canvas.coords(self._thumb_id))
         while length / fractions > self.canvas.coords(self._thumb_id)[0] - coords[0]:
             fractions += 1
 

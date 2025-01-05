@@ -162,9 +162,6 @@ class Village :
             elif type_v == "paysan":
                 self._liste_roturier += [Paysan(terre)]
 
-            else:
-                print("ERREUR OMG ERREUR")
-
             terre.nb_roturiers += 1
 
     def peupler(self):

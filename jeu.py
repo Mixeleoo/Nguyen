@@ -1,6 +1,6 @@
 
 from typing import Literal
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from random import randint, choice
 from math import ceil
 
@@ -19,7 +19,6 @@ class EventInfo:
     noble_vassalise: Noble = None
     village_incendie: Village = None
 
-
 @dataclass
 class ActionBotInfo:
     type: Literal["Immigration", "Soldat", "Eglise", "Village", "Impôt", "Guerre", "Vassalisation", ""]
@@ -27,6 +26,11 @@ class ActionBotInfo:
     noble_vassalise: Noble = None
     noble_vaincu: Noble = None
 
+@dataclass
+class EventBotInfo:
+    l_village_incendie: list[Village] = field(default_factory=list)
+    l_noble_mort: list[Vassal] = field(default_factory=list)
+    l_phrases: list[str] = field(default_factory=list)
 
 class Jeu:
     def __init__(self):
@@ -147,7 +151,7 @@ class Jeu:
             nb_immigres = randint(1,3)
             type_imigres = choice(["artisan","paysan"])
             self.joueur_actuel.dico_villages[id_village_peuple].ajouter_villageois(type_imigres, nb_immigres)
-            return EventInfo("Immigration", (f"Effectif : {nb_immigres}\nType : {type_imigres}",))
+            return EventInfo("Immigration", (f"Effectif : {nb_immigres}", "Type : {type_imigres}",))
 
         elif 95 <= choix_ev <= 100:
             # vassalisation : un noble se propose comme vassal
@@ -323,7 +327,6 @@ class Jeu:
         action_liste = [a for a in action_liste if self.joueur_actuel.action_possible(ACTIONS_NAME_COST[a])]
 
         if self.joueur_actuel.pa == 0 or action_liste == []:
-            #self.joueur_actuel.reset_pa()
             self.fin_de_tour()
             return ActionBotInfo("", "")
 

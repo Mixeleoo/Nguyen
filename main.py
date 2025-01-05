@@ -34,17 +34,8 @@ class Interface(tk.Tk):
         self.canvas.pack()
 
         # Quand on redimensionne la fenêtre, on veut que les carrés se replacent en fonction de la nouvelle taille
-
-        print(geometry_width, geometry_height)
         self.previous_geometry = (geometry_width, geometry_height)
         self.bind("<Configure>", self.on_configure_screen)
-
-        """Cette variable servira à savoir dans quel mode de jeu on se trouve
-        Par exemple si on est en simple vue de carte (par exemple en fin de tour), alors on sera limité dans les actions
-        Alors que si on est en mode construction (village, église, etc...), alors les clics sur la map seront gérés
-        Différements, car si en mode construction d'eglise on clique sur un village alors une église sera construite
-        Sur le village cliqué, alors que si nous étions en simple vue, les données de ce village se seraient affichées
-        """
 
         # Fonction qui va générer tous les carrés aléatoirement
         self.canvas.generate_game_grid(game_grid_geometry)
@@ -54,15 +45,6 @@ class Interface(tk.Tk):
         self.canvas.add_history_text(f"Année n°{self.canvas.jeu.tour}")
         self.canvas.tag_raise(self.canvas.hud_start_menu.tag)
         self.canvas.hud_history.hide_exceeding_text()
-
-        """# Ajouter l'image au canvas
-        # Je mets un self pour éviter que le garbage collector ne supprime la photo
-        original_image = Image.open("./assets/shrek.jpg")
-        resized_image = original_image.resize((149 - 5, 20))
-
-        # Convertir l'image redimensionnée en format Tkinter
-        self.reference = ImageTk.PhotoImage(resized_image)
-        self.canvas.create_image(423, 16, image=self.reference, tags=(HUD_TAG, NOTHING_TAG))"""
 
     def on_configure_screen(self, event: tk.Event):
         self.canvas.replace_static_hud(event)
