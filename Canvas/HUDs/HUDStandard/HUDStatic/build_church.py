@@ -2,6 +2,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
+from ..HUDHideable import HUDHideableABC
 from ..HUDStaticABC import HUDStaticABC
 from parameter import *
 
@@ -70,10 +71,14 @@ class BuildChurch(HUDStaticABC):
         )
 
     def replace(self, event: tk.Event) -> None:
-        pass
+        bbox = self.bbox()
+        if bbox is not None:
+            dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+
+            self.canvas.move(self.tag, dx, 0)
 
     def cancel(self, e=None):
-        self.canvas.show_hidden_permanant_huds()
+        HUDHideableABC.show_all_hidden()
 
         self.hide_animation()
         self.canvas.game_mode = "basic"

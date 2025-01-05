@@ -95,7 +95,11 @@ class BuildCity(HUDStaticABC):
         )
 
     def replace(self, event: tk.Event) -> None:
-        pass
+        bbox = self.bbox()
+        if bbox is not None:
+            dx = self.canvas.master.winfo_width() // 2 - (bbox[2] + bbox[0]) // 2
+
+            self.canvas.move(self.tag, dx, 0)
 
     def cancel(self, e=None):
         HUDHideableABC.show_all_hidden()
