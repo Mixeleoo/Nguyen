@@ -145,7 +145,8 @@ class Jeu:
             # récolte abondante : ressources des terres doublées
             for village in self.joueur_actuel.dico_villages.values() :
                 village.facteur_recolte = 2
-                village.gerer_bonheur(1)
+                for villageois in village.liste_roturier :
+                    villageois.gerer_bonheur(1)
             return EventInfo("Récolte abondante", ("Les ressources des terres sont doublées",))
 
         elif 85 <= choix_ev <= 94:
@@ -469,7 +470,7 @@ class Jeu:
                 for villageois in village.liste_roturier:
                     villageois.commercer() #commerce en cas de surplus de ressource
 
-                village.gerer_bonheur(1) # récupération d'un point de bonheur par tous les villageois
+                    villageois.gerer_bonheur(1) # récupération d'un point de bonheur par tous les villageois
 
             phrases += [joueur.nourrir_soldats()] # vérifier que tous les soldats peuvent être nourris
             phrases += [joueur.nourrir_peuple()]  # vérifier que tous les villageois peuvent être nourris

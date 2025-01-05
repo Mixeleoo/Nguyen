@@ -272,10 +272,3 @@ class Village :
                 villageois.terre.nb_roturiers -= 1
 
         return nb_morts
-
-    def recuperation_bonheur(self):
-        """
-        Méthode qui permet de rajouter un point de bonheur à tous les habitants d'un village
-        """
-        for villageois in self.liste_roturier :
-            villageois.gerer_bonheur(1)
